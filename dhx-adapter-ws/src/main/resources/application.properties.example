@@ -1,0 +1,40 @@
+##application configuration
+dhx.capsule-validate=true
+dhx.wsdl-file=dhx.wsdl
+dhx.endpoint-path=ws
+dhx.send-retry-count=3
+dhx.marshall-context=ee.riik.schemas.deccontainer.vers_2_1:eu.x_road.dhx.producer:eu.x_road.xsd.identifiers:eu.x_road.xsd.xroad
+##in MB
+dhx.max-file-size=100
+dhx.check-recipient=true
+dhx.check-filesize=false
+dhx.check-duplicate=true
+dhx.parse-capsule=true
+
+##xsd configuration
+dhx.xsd.capsule-xsd-file21=jar://Dvk_kapsel_vers_2_1_eng_est.xsd
+dhx.xsd.xsd-file=dhx.xsd
+dhx.xsd.current-capsule-version=V21
+
+##soap
+soap.targetnamespace=http://dhx.x-road.eu/producer
+soap.security-server=http://10.0.13.198
+soap.security-server-appender=/cgi-bin/consumer_proxy
+soap.xroad-instance=ee-dev
+soap.member-class=COM
+soap.subsystem=DHX
+soap.user-id=38605150320
+soap.protocol-version=4.0
+soap.member-code=30000001
+soap.global-conf-location=verificationconf
+soap.global-conf-filename=shared-params.xml
+soap.dhx-representation-group-name=DHX vahendajad
+
+soap.service-xroad-instance=ee-dev
+soap.service-subsystem=DHX
+soap.send-document-service-code=sendDocument
+soap.representatives-service-code=representationList
+soap.send-document-service-version=v1
+soap.representatives-service-version=v1
+soap.connection-timeout=60000
+soap.read-timeout=60000

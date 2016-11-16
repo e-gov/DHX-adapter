@@ -1,0 +1,13 @@
+2016-07-05 15:33:52,967 ERROR e.b.d.u.FileUtilTest [main] ----- decoded: <?xml version="1.0" encoding="utf-8"?>
+<saveDocumentFileAttachmentV1>
+<file>
+    <name>File2.txt</name>
+    <content_type>text/plain</content_type>
+    <description>SaveDocumentFile update osa testimine</description>
+    <data>
+        Q291cmFnZSBpcyByZXNpc3RhbmNlIHRvIGZlYXIsIG1hc3Rlcnkgb2YgZmVhciAt
+        IG5vdCBhYnNlbmNlIG9mIGZlYXIuDQotLSBNYXJrIFR3YWluDQo=
+    </data>
+</file>
+</saveDocumentFileAttachmentV1>
+

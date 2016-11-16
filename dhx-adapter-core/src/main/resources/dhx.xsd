@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema elementFormDefault="qualified" targetNamespace="http://dhx.x-road.eu/producer"
+	xmlns:wsdl="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dhx.x-road.eu/producer"
+	xmlns:xrd="http://x-road.eu/xsd/xroad.xsd" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:ref="http://ws-i.org/profiles/basic/1.1/xsd"
+	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+	<import namespace="http://ws-i.org/profiles/basic/1.1/xsd"
+		schemaLocation="http://ws-i.org/profiles/basic/1.1/swaref.xsd" />
+	<import namespace="http://x-road.eu/xsd/xroad.xsd"
+		schemaLocation="http://x-road.eu/xsd/xroad.xsd" />
+	<element name="sendDocument">
+		<complexType>
+			<sequence>
+				<element name="DHXVersion" type="string" maxOccurs="1"
+					minOccurs="1">
+					<annotation>
+						<appinfo>
+							<xrd:title>Version of the DHX protocol which sender uses.
+							</xrd:title>
+						</appinfo>
+					</annotation>
+				</element>
+				<element name="recipient" type="string" maxOccurs="1"
+					minOccurs="0">
+					<annotation>
+						<appinfo>
+							<xrd:title>Recipient code. Needed if representative is used.
+							</xrd:title>
+						</appinfo>
+					</annotation>
+				</element>
+				<element name="recipientSystem" type="string" maxOccurs="1"
+					minOccurs="0">
+					<annotation>
+						<appinfo>
+							<xrd:title>Recipient subSystem name. Needed if representee is
+								used and document is sent to representees subsystem.
+							</xrd:title>
+						</appinfo>
+					</annotation>
+				</element>
+				<element name="consignmentId" type="string" maxOccurs="1"
+					minOccurs="1">
+					<annotation>
+						<appinfo>
+							<xrd:title>Unique package id.
+								If same document is sent several
+								times(if failed for the first
+								time for example) then package id
+								must stay the same
+							</xrd:title>
+						</appinfo>
+					</annotation>
+				</element>
+				<element name="documentAttachment" type="ref:swaRef"
+					maxOccurs="1" minOccurs="1">
+					<annotation>
+						<appinfo>
+							<xrd:title>Attachment (with swaRef
+								description)
+							</xrd:title>
+						</appinfo>
+					</annotation>
+				</element>
+				<any namespace="##any" processContents="skip" minOccurs="0"
+							maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="sendDocumentResponse">
+		<complexType>
+			<sequence>
+				<element name="fault" type="tns:fault" maxOccurs="1"
+					minOccurs="0" />
+				<element name="receiptId" type="string" maxOccurs="1"
+					minOccurs="1" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="representationList">
+		<complexType>
+			<sequence>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="representationListResponse">
+		<complexType>
+			<sequence>
+				<element name="representees" type="tns:representees" />
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="representees">
+		<sequence>
+			<element name="representee" type="tns:representee" maxOccurs="unbounded"
+				minOccurs="0" />
+		</sequence>
+	</complexType>
+	<complexType name="representee">
+		<sequence>
+			<element name="memberCode" type="string" maxOccurs="1"
+				minOccurs="1" />
+			<element name="representeeName" type="string" maxOccurs="1"
+				minOccurs="1" />
+			<element name="representeeSystem" type="string" maxOccurs="1"
+				minOccurs="0">
+				<annotation>
+					<appinfo>
+						<xrd:title>Recipient subSystem name.
+						</xrd:title>
+					</appinfo>
+				</annotation>
+			</element>
+			<element name="startDate" type="dateTime" maxOccurs="1"
+				minOccurs="1" />
+			<element name="endDate" type="dateTime" maxOccurs="1"
+				minOccurs="0" />
+		</sequence>
+	</complexType>
+	<complexType name="fault">
+		<sequence>
+			<element name="faultCode" type="string">
+				<annotation>
+					<appinfo>
+						<xrd:title>Fault Code</xrd:title>
+					</appinfo>
+				</annotation>
+			</element>
+			<element name="faultString" type="string">
+				<annotation>
+					<appinfo>
+						<xrd:title>Fault explanation</xrd:title>
+					</appinfo>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
