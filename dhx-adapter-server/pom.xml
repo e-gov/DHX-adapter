@@ -4,13 +4,12 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>ee.bpw.dhx</groupId>
+		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
-		<version>0.9.10</version>
+		<version>0.10.0</version>
 	</parent>
-	<groupId>ee.bpw.dhx</groupId>
 	<artifactId>dhx-adapter-server</artifactId>
-	<version>0.1</version>
+	<version>0.2</version>
 	<name>dhx-adapter-server</name>
 	<packaging>war</packaging>
 	<properties>
@@ -20,9 +19,9 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>ee.bpw.dhx</groupId>
+			<groupId>ee.ria.dhx</groupId>
 			<artifactId>dhx-adapter-ws</artifactId>
-			<version>0.9.10</version>
+			<version>0.10.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

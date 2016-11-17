@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>ee.bpw.dhx</groupId>
+		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
-		<version>0.9.10</version>
+		<version>0.10.0</version>
 	</parent>
 	<artifactId>dhx-adapter-core</artifactId>
 	<name>dhx-adapter-core</name>

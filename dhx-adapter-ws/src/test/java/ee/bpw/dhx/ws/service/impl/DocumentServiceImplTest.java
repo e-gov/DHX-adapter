@@ -1,21 +1,24 @@
 package ee.bpw.dhx.ws.service.impl;
 
-import ee.bpw.dhx.exception.DhxException;
-import ee.bpw.dhx.model.CapsuleAdressee;
-import ee.bpw.dhx.model.DhxPackage;
-import ee.bpw.dhx.model.OutgoingDhxPackage;
-import ee.bpw.dhx.model.InternalXroadMember;
-import ee.bpw.dhx.util.CapsuleVersionEnum;
-import ee.bpw.dhx.ws.config.DhxConfig;
-import ee.bpw.dhx.ws.config.CapsuleConfig;
-import ee.bpw.dhx.ws.config.SoapConfig;
-import ee.bpw.dhx.ws.service.AddressService;
-import ee.bpw.dhx.ws.service.DhxImplementationSpecificService;
-import ee.bpw.dhx.ws.service.DhxMarshallerService;
-import ee.bpw.dhx.ws.service.DhxPackageService;
-import ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
+import ee.ria.dhx.exception.DhxException;
 
-import eu.x_road.dhx.producer.SendDocumentResponse;
+import ee.ria.dhx.types.CapsuleAdressee;
+import ee.ria.dhx.types.DhxPackage;
+import ee.ria.dhx.types.InternalXroadMember;
+import ee.ria.dhx.types.OutgoingDhxPackage;
+import ee.ria.dhx.util.CapsuleVersionEnum;
+import ee.ria.dhx.ws.config.CapsuleConfig;
+import ee.ria.dhx.ws.config.DhxConfig;
+import ee.ria.dhx.ws.config.SoapConfig;
+import ee.ria.dhx.ws.service.AddressService;
+import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
+import ee.ria.dhx.ws.service.DhxMarshallerService;
+import ee.ria.dhx.ws.service.DhxPackageService;
+import ee.ria.dhx.ws.service.impl.DhxGateway;
+import ee.ria.dhx.ws.service.impl.DhxPackageServiceImpl;
+import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
+
+import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 
 import org.junit.Before;
 import org.junit.Ignore;

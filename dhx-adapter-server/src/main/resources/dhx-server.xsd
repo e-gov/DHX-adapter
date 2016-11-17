@@ -294,7 +294,13 @@
 				minOccurs="0" maxOccurs="1" />
 		</sequence>
 	</complexType>
-	<element name="getSendingOptionsResponse" type="tns:getSendingOptionsV2ResponseType" />
+	<element name="getSendingOptionsResponse">
+		<complexType>
+		<sequence>
+			<element name="keha" type="tns:institutionArrayType" />
+		</sequence>
+		</complexType>
+	</element>
 	<complexType name="institutionRefsArrayType">
 		<sequence>
 			<element name="asutus" type="string" maxOccurs="unbounded">
@@ -342,11 +348,7 @@
 			</element>
 		</sequence>
 	</complexType>
-	<complexType name="getSendingOptionsV2ResponseType">
-		<sequence>
-			<element name="keha" type="tns:institutionArrayType" />
-		</sequence>
-	</complexType>
+	
 	<element name="getSendStatus">
 		<complexType>
 			<sequence>
@@ -373,12 +375,13 @@
 			<element name="staatuse_ajalugu" type="boolean" />
 		</sequence>
 	</complexType>
-	<element name="getSendStatusResponse" type="tns:getSendStatusV2ResponseType" />
-	<complexType name="getSendStatusV2ResponseType">
+	<element name="getSendStatusResponse">
+		<complexType>
 		<sequence>
 			<element name="keha" type="tns:base64BinaryType" />
 		</sequence>
-	</complexType>
+		</complexType>
+	</element>
 	<complexType name="getSendStatusV2ResponseTypeUnencoded">
 		<sequence>
 			<element name="item" maxOccurs="unbounded">

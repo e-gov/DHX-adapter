@@ -1,6 +1,9 @@
 package ee.bpw.dhx.model;
 
+import ee.ria.dhx.types.DhxRecipient;
+
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class RecipientTest {

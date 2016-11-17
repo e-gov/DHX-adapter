@@ -4,10 +4,10 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="dhx-adapter-ws-0.9.10.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dhx-adapter-ws/dhx-adapter-ws">
+        <dependent-module archiveName="dhx-adapter-ws-0.10.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dhx-adapter-ws/dhx-adapter-ws">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="dhx-adapter-core-0.9.10.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dhx-adapter-core/dhx-adapter-core">
+        <dependent-module archiveName="dhx-adapter-core-0.10.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dhx-adapter-core/dhx-adapter-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="dhx-adapter-server"/>

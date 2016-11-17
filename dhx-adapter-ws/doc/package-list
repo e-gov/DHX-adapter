@@ -1,7 +1,7 @@
-ee.bpw.dhx.ws
-ee.bpw.dhx.ws.beanconfig
-ee.bpw.dhx.ws.config
-ee.bpw.dhx.ws.endpoint
-ee.bpw.dhx.ws.schedule
-ee.bpw.dhx.ws.service
-ee.bpw.dhx.ws.service.impl
+ee.ria.dhx.ws
+ee.ria.dhx.ws.beanconfig
+ee.ria.dhx.ws.config
+ee.ria.dhx.ws.endpoint
+ee.ria.dhx.ws.schedule
+ee.ria.dhx.ws.service
+ee.ria.dhx.ws.service.impl

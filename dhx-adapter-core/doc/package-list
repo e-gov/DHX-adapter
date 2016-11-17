@@ -1,8 +1,8 @@
-ee.bpw.dhx.exception
-ee.bpw.dhx.model
-ee.bpw.dhx.util
-ee.riik.schemas.deccontainer.vers_2_1
-eu.x_road.dhx.producer
-eu.x_road.xsd.identifiers
-eu.x_road.xsd.representation
-eu.x_road.xsd.xroad
+ee.ria.dhx.exception
+ee.ria.dhx.types
+ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1
+ee.ria.dhx.types.eu.x_road.dhx.producer
+ee.ria.dhx.types.eu.x_road.xsd.identifiers
+ee.ria.dhx.types.eu.x_road.xsd.representation
+ee.ria.dhx.types.eu.x_road.xsd.xroad
+ee.ria.dhx.util
