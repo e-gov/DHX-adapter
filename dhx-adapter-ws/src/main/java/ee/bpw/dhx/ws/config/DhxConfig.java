@@ -122,6 +122,7 @@ public class DhxConfig {
    * Sets marshaller bean.
    * 
    * @return marshaller
+   * @throws JAXBException - thrown if error occurs
    */
   @Bean
   public JAXBContext getJaxbContext() throws JAXBException {
