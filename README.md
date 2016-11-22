@@ -1,11 +1,16 @@
-![](docs/DHX.PNG)  ![](docs/X-ROAD.PNG)
+![](docs/EL_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg)
 
 # DHX-adapter
 
+![](docs/DHX.PNG)  ![](docs/X-ROAD.PNG)
+
 #### ET
 
-Tarkvarakomponendid DHX-i rakendajatele avaldatakse hiljemalt 1. märtsil 2017.
+Tarkvarakomponendid DHX-i rakendajatele. 
+[Kasutamise juhend](docs/JUHEND.md)
 
 #### EN
 
-Software components for DHX implementors will be published by March 1, 2017.
+Software components for DHX implementors
+[Usage Guide](docs/GUIDE.md)
+
