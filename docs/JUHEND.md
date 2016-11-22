@@ -387,6 +387,7 @@ public class CustomDhxImplementationSpecificService
 ```
 
 Adressaati [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) identifitseerivad DHX protokollis järgmised väljad
+
 Väli | Näide | Kirjeldus
 ------------ | ------------- | -------------
 xroadInstance | EE | Riik EE
