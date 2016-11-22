@@ -205,3 +205,89 @@ soap.member-code=40000001
 document-resend-template=5,10,15
 address-renew-timeout=*/20 * * * * ?
 ```
+
+##Funktsionaalsuse üldpõhimõtted
+
+DHX adapteri Java teegi põhifunktsionaalsus on dokumendi saatmine, dokumendi vastuvõtmine ja aadressiraamatu koostamine.
+ 
+Põhiline osa, mis DHX adapteri teegi kasutajat (arendajat) huvitab, asub pakettides
+- [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – java teenuste liidesed (service interfaces)
+- [ee.ria.dhx.ws.service.impl](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/impl/package-summary.html) – java teenuste realisatsioonid (service interface implementations)
+
+Nendes pakettides asuvad teenused on:
+Klass/liides | Kirjeldus 
+------------ | -------------
+[AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html) | Teenus aadressiraamatu koostamiseks ja uuendamiseks
+[DhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html) | Teenused dokumendi vastuvõtmiseks ja sünkroonseks saatmiseks
+[AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) | Teenus dokumendi asünkroonseks saatmiseks
+[DhxMarshallerService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxMarshallerService.html) | Teenus XML objektide (Kapsli) koostamiseks 
+[DhxPackageProviderService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) | Teenus SOAP päringu XML objekti koostamiseks
+[DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) | Realisatsiooni spetsiifilised callback liidesed. Selle liidese implementatsiooni peaks DHX adapteri arendaja ise realiseerima.
+
+Arendaja jaoks kõike tähtsam neist on [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html), mille meetodid peab arendaja peab ise realiseerima.
+
+Näiteks:
+
+```java
+package com.example.service.impl;
+import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
+
+@Service("dhxImplementationSpecificService")
+public class CustomDhxImplementationSpecificService 
+                implements DhxImplementationSpecificService {
+   . . . 
+}
+```
+
+Siin `@Service` tag määrab et DHX adapteri sest kasutav teenus `dhxImplementationSpecificService` on nüüd omatehtud klass. 
+Seega nüüd kasutab dokumendi vastuvõtmise ja saatmise automaatloogika „callback“ liidesena arendaja enda loodud klassi `CustomDhxImplementationSpecificService`.
+
+##Dokumendi saatmine (sünkroonselt)
+
+Dokumendi sünkroonseks saatmiseks tuleb välja kutsuda teenuse `ee.ria.dhx.ws.service.DhxPackageService` meetodit [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-). 
+
+**NB!** Dokumendi sünkroonselt saatmine saadab dokumendi ainult üks kord, oodates ära saatmise tulemuse (success/fail). Üldjuhul tuleks dokumendi saatmiseks kasutada asünkroonset saatjat [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html), mis teostab mitu saatmisüritust.
+
+Saadetava XML paketi koostamiseks tuleb kasutada teenuse  `ee.ria.dhx.ws.service.DhxPackageProviderService ` meetodeid [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-).
+
+
+Näide
+```java
+package com.example.service;
+import ee.ria.dhx.ws.service.DhxPackageService;
+import ee.ria.dhx.ws.service.DhxPackageProviderService;
+import ee.ria.dhx.types.DhxSendDocumentResult;
+
+public class Sender { 
+  @Autowired
+  DhxPackageService dhxPackageService;
+
+  @Autowired
+  DhxPackageProviderService dhxPackageProviderService;
+
+  public void sendExample() throws DhxException {
+
+     // genereerime saadetise
+     OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
+         new File("saadetav-dokumendi-kapsel.xml"),
+         UUID.randomUUID().toString(), // unikaalne ise genereeritud saadetise id
+         "70000001",  // adressaadi registrikood
+         ""); // adressaadi alamsüsteem üldjuhul puudub
+
+    // saadame dokumendi üle X-tee ja ootame sünkroonselt vastust
+    DhxSendDocumentResult result = dhxPackageService.sendPackage(dhxPackage);
+
+    // check result error
+    if (result.occuredException !=  null 
+       || result.getResponse().getFault() != null) {
+      // saatmisel ilmnes viga
+    }
+  }
+}
+```
+
+
+
+
+
+ 
