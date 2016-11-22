@@ -214,7 +214,8 @@ Põhiline osa, mis DHX adapteri teegi kasutajat (arendajat) huvitab, asub pakett
 - [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – java teenuste liidesed (service interfaces)
 - [ee.ria.dhx.ws.service.impl](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/impl/package-summary.html) – java teenuste realisatsioonid (service interface implementations)
 
-Nendes pakettides asuvad teenused on:
+Nendes pakettides asuvad teenused on
+
 Klass/liides | Kirjeldus 
 ------------ | -------------
 [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html) | Teenus aadressiraamatu koostamiseks ja uuendamiseks
