@@ -287,8 +287,69 @@ public class Sender {
 }
 ```
 
+Kui soovitakse sama kapslit saata korraga mitme DHX adressaadile, siis tuleb see igale adressaadile saata eraldi. Selle lihtsustamiseks on loodud `ee.ria.dhx.ws.service.DhxPackageService` meetod [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendMultiplePackages-java.util.List-). 
 
+##Dokumendi saatmine (asünkroonselt)
 
+Dokumendi asünkroonselt saatmise liides on sarnane sünkroonselt saatmise liidesele.
+ 
+Erinevus on selles et liidese [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) meetod [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-) käivitatakse asünkroonselt (eraldi threadis) ja käivitavas threadis selle meetodi väljakutse lõppeb/tagastab koheselt (ei jää vastust ära ootama).
 
+Asünkroonselt käivitamine püüab tehnilise vea korral uuesti saatmist (saatmisürituste arv ja sagedus on määratud `dhx-application.properties` parameeteriga `document-resend-template=5,10,15`).
+
+Pärast saatmise õnnestumist (või kui viimane lõplik saatmisüritus ebaõnnestus) kutsutakse välja meetod [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) klassi meetod [saveSendResult](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveSendResult-ee.ria.dhx.types.DhxSendDocumentResult-java.util.List-). 
+Selles meetodi peab arendaja ise implementeerima, salvestades vastuse näiteks oma DHS andmebaasi vms.
+
+Callback liidese meetodi `saveSendResult` realisatsiooni näide
+```java
+@Service("dhxImplementationSpecificService")
+public class CustomDhxImplementationSpecificService 
+                implements DhxImplementationSpecificService {
+
+  @Override
+  public void saveSendResult(DhxSendDocumentResult finalResult,
+      List<AsyncDhxSendDocumentResult> retryResults) {
+     if (finalResult.occuredException !=  null 
+        || finalResult.getResponse().getFault() != null) {
+      // saatmisel ilmnes viga
+     } else {
+       // success
+       String id = finalResult.getResponse().getReceiptId();
+     }
+  }
+
+  ...
+}
+```
+
+Asünkroonse saatmise meetodi [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-) väljakutsumise näide
+```java
+package com.example.service;
+import ee.ria.dhx.ws.service.AsyncDhxPackageService;
+import ee.ria.dhx.ws.service.DhxPackageProviderService;
+public class Sender { 
+  @Autowired
+  AsyncDhxPackageService asyncDhxPackageService;
+
+  @Autowired
+  DhxPackageProviderService dhxPackageProviderService;
+
+  public void sendExample() throws DhxException {
+     // genereerime saadetise
+     OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
+         new File("saadetav-dokumendi-kapsel.xml"),
+         UUID.randomUUID().toString(), // unikaalne ise genereeritud saadetise id
+         "70000001",  // adressaadi registrikood
+         ""); // adressaadi alamsüsteem üldjuhul puudub
+
+    // saadame dokumendi üle X-tee 
+    // tulemust kohe ei saa, vaid tagastatakse koheselt
+    // siis kui satmine tehtud kutsutakse asünkrppnses threadis välja    
+    // DhxImplementationSpecificService.saveSendResult
+    asyncDhxPackageService.sendPackage(dhxPackage);
+  }
+  
+}
+```
 
  
