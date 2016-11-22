@@ -362,7 +362,7 @@ Kui soovitakse sama kapslit saata korraga mitme DHX adressaadile, siis tuleb see
 Aadressiraamatu koostamiseks ja küsimiseks tuleb kasutada liidest [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html).
 
 Sellel on kaks meetodit. 
-Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab puhverdatud (eelnev alt koostatud) aadressiraamatu.
+Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab puhverdatud (eelnevalt koostatud) aadressiraamatu.
 Meetod [renewAddressList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#renewAddressList--) käivitab uuesti aadressiraamatu koostamise algoritmi. Viimane käivitatakse soovi korral timer jobi poolt perioodiliselt (perioodi määrab `dhx-application.properties` parameeter `address-renew-timeout=0 */20 * * * ?`).
 
 Aadressiraamatu pikemaajaliseks säilitamiseks (näideks andmebaasis või failisüsteemis) võib üle kirjutada DhxImplementationSpecificService meetodid [saveAddresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveAddresseeList-java.util.List-) ja [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). 
