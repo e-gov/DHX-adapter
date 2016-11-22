@@ -399,17 +399,19 @@ representee.representeeCode | 70012121 | Esindatava registrikood
 representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui esindataval on mitu alamsüsteemi, siis alamsüsteemi kood
 representee.representeeName | Lasteaed Pallipõnn | Esindatava nimi või esindatava alamsüsteemi nimi
 
-Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember]((https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html)) objektide massiivi, mis on DHX adressaatide list.
+Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objektide massiivi, mis on DHX adressaatide list.
+
 Adressaate on mitut tüüpi
 - Otse DHX võimekusega (alamsüsteem DHX)
 - Otse DHX võimekusega (mitu alamsüsteemi „DHX.subsystem1“ ja „DHX.subsystem2“ jne)
-- Vahendaja kaudu DHX võimekusega (alamsüsteem tühi üldjuhul)
+- Vahendaja kaudu DHX võimekusega (alamsüsteem on üldjuhul tühi)
 - Vahendaja kaudu DHX võimekusega (mitu alamsüsteemi „DHX.subsystem1“ ja „DHX.subsystem2“ jne)
 
-**NB!** Dokumendi saatmisel saadetise loomisel ülaltoodud [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) meetoditega tuleb kindlasti ette anda kõik `InternalXroadMember` eksemplari atribuudid. 
-See tähendab, et kui adressaat omab `subsystemCode` väärtustm siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
-Kui adressaat omas `representeeCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
-Kõide kindlam on kasutada [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variatsioone, kus sisendis on paramaater  `InternalXroadMember recipient `,  võttes selle väärtuse  `getAdresseeList() ` massiivist.
+**NB!** Dokumendi saatmisel, saadetise loomisel ülaltoodud [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) meetoditega, tuleb kindlasti ette anda kõik `InternalXroadMember` eksemplari atribuudid. 
+See tähendab, et kui adressaat omab `subsystemCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
+Kui adressaat omab `representeeCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
+
+**Kõide kindlam on kasutada [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variatsioone, kus sisendis on paramaater  `InternalXroadMember recipient `,  võttes selle väärtuse  `getAdresseeList() ` massiivist.**
 
 
 ##Dokumendi vastuvõtmise liides
