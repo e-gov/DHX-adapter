@@ -386,6 +386,31 @@ public class CustomDhxImplementationSpecificService
 }
 ```
 
+Adressaati [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) identifitseerivad DHX protokollis järgmised väljad
+Väli | Näide | Kirjeldus
+------------ | ------------- | -------------
+xroadInstance | EE | Riik EE
+memberClass | GOV | GOV- Valitsus, COM - eraettevõte
+memberCode | 70000001 | Asutuse registrikood
+subsystemCode | DHX või DHX.adit | Alamsüsteemi kood. Peab algama DHX prefiksiga. Üldjuhul lihtsalt DHX
+Name | Riigi infosüsteemide keskus | Asutuse või alamsüsteemi nimi
+representee.representeeCode | 70012121 | Esindatava registrikood
+representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui esindataval on mitu alamsüsteemi, siis alamsüsteemi kood
+representee.representeeName | Lasteaed Pallipõnn | Esindatava nimi või esindatava alamsüsteemi nimi
+
+Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember]((https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html)) objektide massiivi, mis on DHX adressaatide list.
+Adressaate on mitut tüüpi
+- Otse DHX võimekusega (alamsüsteem DHX)
+- Otse DHX võimekusega (mitu alamsüsteemi „DHX.subsystem1“ ja „DHX.subsystem2“ jne)
+- Vahendaja kaudu DHX võimekusega (alamsüsteem tühi üldjuhul)
+- Vahendaja kaudu DHX võimekusega (mitu alamsüsteemi „DHX.subsystem1“ ja „DHX.subsystem2“ jne)
+
+**NB!** Dokumendi saatmisel saadetise loomisel ülaltoodud [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) meetoditega tuleb kindlasti ette anda kõik `InternalXroadMember` eksemplari atribuudid. 
+See tähendab, et kui adressaat omab `subsystemCode` väärtustm siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
+Kui adressaat omas `representeeCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
+Kõide kindlam on kasutada [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variatsioone, kus sisendis on paramaater  `InternalXroadMember recipient `,  võttes selle väärtuse  `getAdresseeList() ` massiivist.
+
+
 ##Dokumendi vastuvõtmise liides
 
 Ülaltoodud `web.xml` häälestuse kasutamisel registreeritakse serverisse automaatselt web service endpoint.  
