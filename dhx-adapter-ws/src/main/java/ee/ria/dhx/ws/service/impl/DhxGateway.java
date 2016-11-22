@@ -231,7 +231,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
       ee.ria.dhx.types.eu.x_road.xsd.representation.ObjectFactory factory =
           new ee.ria.dhx.types.eu.x_road.xsd.representation.ObjectFactory();
       XRoadRepresentedPartyType party = new XRoadRepresentedPartyType();
-      party.setPartyCode(rpresentee.getMemberCode());
+      party.setPartyCode(rpresentee.getRepresenteeCode());
       return factory.createRepresentedParty(party);
     }
 
@@ -307,7 +307,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
       SendDocument request = new SendDocument();
       if (document.getService().getRepresentee() != null) {
         request.setRecipient(document.getService().getRepresentee()
-            .getMemberCode());
+            .getRepresenteeCode());
       }
       request.setDocumentAttachment(document.getDocumentFile());
       if (document.getInternalConsignmentId() != null

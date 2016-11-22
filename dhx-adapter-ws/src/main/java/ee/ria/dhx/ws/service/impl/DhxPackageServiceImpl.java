@@ -342,7 +342,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
             && (representee.getEndDate() == null || representee
                 .getEndDate().getTime() >= curDate.getTime())) {
           recipientList.add(new DhxRecipient(representee
-              .getMemberCode(), representee.getSystem()));
+              .getRepresenteeCode(), representee.getRepresenteeSystem()));
         }
       }
     }
@@ -392,8 +392,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     log.info("Checking sender.");
     DhxRecipient sender = new DhxRecipient();
     if (client.getRepresentee() != null) {
-      sender.setCode(client.getRepresentee().getMemberCode());
-      sender.setSystem(client.getRepresentee().getSystem());
+      sender.setCode(client.getRepresentee().getRepresenteeCode());
+      sender.setSystem(client.getRepresentee().getRepresenteeSystem());
     } else {
       sender.setCode(client.getMemberCode());
       sender.setSystem(client.getSubsystemCode());

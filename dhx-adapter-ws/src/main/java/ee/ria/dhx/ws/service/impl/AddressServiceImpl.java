@@ -311,7 +311,7 @@ public class AddressServiceImpl implements AddressService {
       for (InternalXroadMember member : members) {
         if (member.getMemberCode().equals(memberCode)
             && (member.getRepresentee() == null || member
-                .getRepresentee().getMemberCode() == null)
+                .getRepresentee().getRepresenteeCode() == null)
             // check if adressees system is also chosen and is right
             && ((system == null && config.addPrefixIfNeeded(
                 member.getSubsystemCode()).equals(
@@ -320,7 +320,7 @@ public class AddressServiceImpl implements AddressService {
                 .addPrefixIfNeeded(member.getSubsystemCode()))))) {
           return member;
         } else if (member.getRepresentee() != null
-            && member.getRepresentee().getMemberCode()
+            && member.getRepresentee().getRepresenteeCode()
                 .equals(memberCode)
             && (member.getRepresentee().getStartDate().getTime() <= curDate
                 .getTime() && (member.getRepresentee()
@@ -328,34 +328,14 @@ public class AddressServiceImpl implements AddressService {
                 .getRepresentee().getEndDate().getTime() >= curDate
                 .getTime()))
             && ((system == null && member.getRepresentee()
-                .getSystem() == null) || (system != null
-                && member.getRepresentee().getSystem() != null && config
+                .getRepresenteeSystem() == null) || (system != null
+                && member.getRepresentee().getRepresenteeSystem() != null && config
                 .addPrefixIfNeeded(
-                    member.getRepresentee().getSystem())
+                    member.getRepresentee().getRepresenteeSystem())
                 .equals(config.addPrefixIfNeeded(system))))) {
           return member;
         }
       }
-      // as an exception searching by system, using memberCode as system.
-      // In older DVK packages adresssee might be adressees system, not
-      // real adressee
-      /*
-       * InternalXroadMember memberToReturn = null; for (InternalXroadMember member : members) { if
-       * (config.addPrefixIfNeeded (memberCode).equals(config.addPrefixIfNeeded(member
-       * .getSubsystemCode())) && (member.getRepresentee() == null ||
-       * member.getRepresentee().getMemberCode() == null) ) { //because we are searching by system,
-       * not involving memberCode, then return found member ONLY if single member found. if (
-       * memberToReturn == null) { memberToReturn = member; } else{ memberToReturn = null; break; }
-       * } else if (member.getRepresentee() != null &&
-       * (member.getRepresentee().getStartDate().getTime() <= curDate.getTime() && (member
-       * .getRepresentee().getEndDate() == null || member.getRepresentee().getEndDate() .getTime()
-       * >= curDate.getTime())) && ( (member.getRepresentee().getSystem() != null &&
-       * config.addPrefixIfNeeded(member.getRepresentee().getSystem())
-       * .equals(config.addPrefixIfNeeded(memberCode))))) { //because we are searching by system,
-       * not involving memberCode, then return found member ONLY if single member found. if (
-       * memberToReturn == null) { memberToReturn = member; } else{ memberToReturn = null; break; }
-       * } } if (memberToReturn != null) { return memberToReturn; }
-       */
     }
     log.info(
         "Membercode not found in local adressee list memberCode: {}, system: {}",

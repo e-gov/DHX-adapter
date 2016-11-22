@@ -1,4 +1,4 @@
-package ee.bpw.dhx.soapui;
+package ee.ria.dhx.soapui;
 
 public class SoapUiTest {
 

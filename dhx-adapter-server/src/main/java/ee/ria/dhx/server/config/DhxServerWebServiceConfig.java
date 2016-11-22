@@ -48,7 +48,7 @@ public class DhxServerWebServiceConfig {
     applicationAnnotationContext.register(DhxEndpointConfig.class);
     servlet.setApplicationContext(applicationAnnotationContext);
     servlet.setTransformWsdlLocations(true);
-    servlet.setContextConfigLocation("ee.bpw.dhx.ws.beanconfig.DhxEndpointConfig");
+  //  servlet.setContextConfigLocation("ee.ria.dhx.ws.beanconfig.DhxEndpointConfig");
     ServletRegistrationBean servletBean =  new ServletRegistrationBean(servlet, "/" + "ws" + "/*");
     servletBean.setName("dhx");
     return servletBean;
@@ -70,7 +70,7 @@ public class DhxServerWebServiceConfig {
     applicationAnnotationContext.register(DhxServerEndpointConfig.class);
     servlet.setApplicationContext(applicationAnnotationContext);
     servlet.setTransformWsdlLocations(true);
-    servlet.setContextConfigLocation("ee.bpw.dhx.server.endpoint.config.DhxServerEndpointConfig");
+  //  servlet.setContextConfigLocation("ee.ria.dhx.server.endpoint.config.DhxServerEndpointConfig");
     ServletRegistrationBean servletBean = new ServletRegistrationBean(servlet, "/" + "wsServer" + "/*");
     servletBean.setName("dhxServer");
     return servletBean;

@@ -21,12 +21,12 @@ import java.util.Date;
 @Setter
 public class DhxRepresentee {
 
-  private String memberCode;
+  private String representeeCode;
   private Date startDate;
   private Date endDate;
 
-  private String name;
-  private String system;
+  private String representeeName;
+  private String representeeSystem;
 
   /**
    * Create Representee from member(which is representationList service output).
@@ -34,7 +34,7 @@ public class DhxRepresentee {
    * @param representee - member from which to create representee
    */
   public DhxRepresentee(Representee representee) {
-    this.memberCode = representee.getMemberCode();
+    this.representeeCode = representee.getMemberCode();
     if (representee.getStartDate() != null) {
       this.startDate = ConversionUtil.toDate(representee.getStartDate());
     }
@@ -42,10 +42,10 @@ public class DhxRepresentee {
       this.endDate = ConversionUtil.toDate(representee.getEndDate());
     }
     if (representee.getRepresenteeName() != null) {
-      this.name = representee.getRepresenteeName();
+      this.representeeName = representee.getRepresenteeName();
     }
     if (representee.getRepresenteeSystem() != null) {
-      this.system = representee.getRepresenteeSystem();
+      this.representeeSystem = representee.getRepresenteeSystem();
     }
   }
 
@@ -60,17 +60,17 @@ public class DhxRepresentee {
    */
   public DhxRepresentee(String memberCode, Date startDate, Date endDate, String name,
       String system) {
-    this.memberCode = memberCode;
+    this.representeeCode = memberCode;
     this.startDate = startDate;
     this.endDate = endDate;
-    this.name = name;
-    this.system = system;
+    this.representeeName = name;
+    this.representeeSystem = system;
   }
 
   @Override
   public String toString() {
-    return "memberCode: " + memberCode + " startDate: " + startDate + " endDate: " + endDate
-        + "name: " + name + " system: " + system;
+    return "memberCode: " + representeeCode + " startDate: " + startDate + " endDate: " + endDate
+        + "name: " + representeeName + " system: " + representeeSystem;
   }
 
   /**
@@ -81,11 +81,11 @@ public class DhxRepresentee {
    */
   public Representee convertToRepresentee() throws DhxException {
     Representee representee = new Representee();
-    representee.setMemberCode(memberCode);
+    representee.setMemberCode(representeeCode);
     representee.setStartDate(ConversionUtil.toGregorianCalendar(this.getStartDate()));
     representee.setEndDate(ConversionUtil.toGregorianCalendar(this.getEndDate()));
-    representee.setRepresenteeSystem(system);
-    representee.setRepresenteeName(name);
+    representee.setRepresenteeSystem(representeeSystem);
+    representee.setRepresenteeName(representeeName);
     return representee;
   }
 

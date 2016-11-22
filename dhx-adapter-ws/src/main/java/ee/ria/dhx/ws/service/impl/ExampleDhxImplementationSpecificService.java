@@ -49,7 +49,7 @@ public class ExampleDhxImplementationSpecificService implements
                 consignmentId)
             && (document.getClient().toString()
                 .equals(from.toString()) || document
-                .getClient().getRepresentee().getMemberCode()
+                .getClient().getRepresentee().getRepresenteeCode()
                 .equals(from.toString()))) {
           return true;
         }

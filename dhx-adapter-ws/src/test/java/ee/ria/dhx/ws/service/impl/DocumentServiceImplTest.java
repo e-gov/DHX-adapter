@@ -1,4 +1,4 @@
-package ee.bpw.dhx.ws.service.impl;
+package ee.ria.dhx.ws.service.impl;
 
 import ee.ria.dhx.exception.DhxException;
 
