@@ -52,10 +52,10 @@
 	</dependencies>
 	<build>
 		<resources>
-			<resource>
+			<!-- <resource>
 				<directory>../src/main/resources/${resourceDir}/ws</directory>
 				<targetPath>${basedir}/target/classes</targetPath>
-			</resource>
+			</resource> -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<targetPath>${basedir}/target/classes</targetPath>
