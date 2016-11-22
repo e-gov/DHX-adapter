@@ -29,7 +29,7 @@ DHX adapteri teekide kasutamisel tuleb arvestada et DHX adapter sõltub allpool 
 
 Kompileerimiseks ja käivitamiseks on vajalik [Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
 
-Kuna DHX adapteri teek pakub väljapoole veebiteenust (ei ole ainult teenuse klient), siis sõltutakse J2EE [Java Servlet API](https://en.wikipedia.org/wiki/Java_servlet) teegist, läbi [Spring Web Services](https://en.wikipedia.org/wiki/Java_servlet) mooduli).
+Kuna DHX adapteri teek pakub väljapoole veebiteenust (ei ole ainult teenuse klient), siis sõltutakse J2EE [Java Servlet API](https://en.wikipedia.org/wiki/Java_servlet) teegist, läbi [Spring Web Services](http://projects.spring.io/spring-ws/) mooduli).
 
 XML töötluseks kasutatakse [Java Architecture for XML Binding - JAXB](https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/package-summary.html) teeki, mis on Java SE 7 osa.
 
@@ -45,10 +45,60 @@ Grupp | Moodul | Versioon | Märkused
 org.springframework | spring-core | 4.3.3.RELEASE | Spring Core
 org.springframework | spring-aop | 4.2.7.RELEASE | Spring AOP
 org.springframework | spring-beans | 4.2.7.RELEASE | Spring Beans
+org.springframework | spring-context | 4.2.7.RELEASE | Spring Context
+org.springframework | spring-expression | 4.2.7.RELEASE | Spring Expression Language (SpEL)
+org.springframework | spring-oxm | 4.2.7.RELEASE | Spring Object/XML Marshalling
+org.springframework | spring-web | 4.2.7.RELEASE | Spring Web
+org.springframework | spring-webmvc | 4.2.7.RELEASE | Spring Web MVC
+org.springframework.ws | spring-ws-core   | 2.4.0.RELEASE | Spring WS Core
+org.springframework.ws | spring-xml | 2.4.0.RELEASE | Spring XML
+org.springframework.boot | spring-boot-starter-log4j2 | 1.3.5.RELEASE | Spring Boot starter Log4j2
+commons-logging | commons-logging | 1.1.3, 1.2 | Apache commons login pakett logimiseks
+commons-codec | commons-codec | 1.9 | Apache Commons Codec
+aopalliance | aopalliance | 1.0 | AOP alliance
+org.hamcrest | hamcrest-core | 1.3 | Hamcrest Core
+org.apache.httpcomponents | httpclient | 4.5.2 | Apache HttpClient
+org.apache.httpcomponents | httpcore | 4.4.4 | Apache HttpCore
+org.slf4j | jcl-over-slf4j | 1.7.21 | JCL 1.1.1 implemented over SLF4J
+org.slf4j | jul-to-slf4j | 1.7.21 | JUL to SLF4J bridge
+org.apache.logging.log4j | log4j-api | 2.4.1 | Apache Log4j API
+org.apache.logging.log4j | log4j-core | 2.4.1 | Apache Log4j Core
+org.apache.logging.log4j | log4j-slf4j-impl | 2.4.1 | Apache Log4j SLF4J Binding
+org.projectlombok | lombok | 1.16.6 | Project Lombok
+org.slf4j | slf4j-api | 1.7.12 | SLF4J API Module
+wsdl4j | wsdl4j | 1.6.3 | WSDL4J
+javax.activation | activation | 1.1 | JavaBeans Activation Framework (JAF)
+javax.mail | mail | 1.4 | JavaMail API
+javax.servlet | javax.servlet-api | 3.0.1 | Java Servlet API
+javax.validation | validation-api | 1.1.0.Final | Bean Validation API
+org.aspectj | aspectjrt | 1.8.2 | AspectJ runtime
+com.jcabi | jcabi-aspects | 0.19 | jcabi-aspects
+com.jcabi | jcabi-log | 0.15 | jcabi-log
+org.mockito | mockito-all | 1.10.19 | Mockito
+junit | junit | 4.12 | JUnit
 
+##Ehitamine
 
+Alljärgnevalt on toodud näide, kuidas kaasata DHX adapteri teegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
 
+Ülaltoodud välised sõltuvused laetakse Maveni kasutamise korral automaatselt alla.
 
+Lisada oma DHS tarkvara ehitamise Maven pom.xml sisse järgmised sõltuvused:
+```xml
+		<dependency>
+			<groupId>ee.ria.dhx</groupId>
+			<artifactId>dhx-adapter-core</artifactId>
+			<version>1.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ee.ria.dhx</groupId>
+			<artifactId>dhx-adapter-ws</artifactId>
+			<version>1.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+```
+##Teadaolevad probleemid (sõltuvuste konfliktid)
 
 
 
