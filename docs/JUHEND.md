@@ -15,9 +15,9 @@ Antud juhend on mõeldud kasutamiseks tarkvara arendajatele, kes soovivad hakata
 DHX adapteri lähtekood asub aadressil https://github.com/e-gov/DHX-adapter
 
 Selles asuvad kolm alamteeki
-- **dhx-adapter-core** – selles asuvad klassid XML (Kaplsi) ja SOAP objektide koostamiseks ja töötlemiseks,  vigade klassid ning mõned üldkasutatavad utiliit klassid
-- **dhx-adapter-ws** – selles asuvad klassid dokumendi saatmiseks (SOAP client), aadressiraamatu koostamiseks (SOAP client) ja dokumendi vastuvõtmiseks (SOAP Service Endpoint)
-- **dhx-adapter-server** – eraldiseisev adapter server (Variant C), mis puhverdab saabunud dokumendid vahe andmebaasis ja pakub vana [DVK liidese]((https://github.com/e-gov/DVK)) sarnaseid SOAP teenuseid
+- [dhx-adapter-core](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/) – selles asuvad klassid XML (Kaplsi) ja SOAP objektide koostamiseks ja töötlemiseks,  vigade klassid ning mõned üldkasutatavad utiliit klassid
+- [dhx-adapter-ws](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/) – selles asuvad klassid dokumendi saatmiseks (SOAP client), aadressiraamatu koostamiseks (SOAP client) ja dokumendi vastuvõtmiseks (SOAP Service Endpoint)
+- [dhx-adapter-server](https://e-gov.github.io/DHX-adapter/dhx-adapter-server/doc/) – eraldiseisev adapter server (Variant C), mis puhverdab saabunud dokumendid vahe andmebaasis ja pakub vana [DVK liidese]((https://github.com/e-gov/DVK)) sarnaseid SOAP teenuseid
 
 DHS-iga otse liidestamiseks tuleb kasutada 2 esimest teeki **dhx-adapter-core** ja **dhx-adapter-ws**.
 
@@ -100,7 +100,108 @@ Lisada oma DHS tarkvara ehitamise Maven pom.xml sisse järgmised sõltuvused:
 ```
 ##Teadaolevad probleemid (sõltuvuste konfliktid)
 
+**axiom-dom** ja **axis2-saaj** teekide kasutamisel Java classpathis ei tööta korrektselt XML objektide marshallimine/unmrashallimine (JAXB probleem). Nimelt manused jäävad tühjaks.
 
+Soovitatav on eemaldada need teegid Java classpath seest. 
 
- 
+Maven-ga, juhul kui mingi muu kasutatav teek (näiteks axis2-codegen) sõltub nendest teekides, siis võib seda eemaldada järgmiselt:
+```xml
+	<dependency>
+		<groupId>org.apache.axis2</groupId>
+		<artifactId>axis2-codegen</artifactId>
+		<version>1.4</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.apache.ws.commons.axiom</groupId>
+				<artifactId>axiom-dom</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>org.apache.axis2</groupId>
+				<artifactId>axis2-saaj</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+```
 
+##Teegi laadimise häälestamine (web.xml ja applicationContext.xml)
+
+Kõige lihtsam on DHX adapteri teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees, kasutades laadimiseks SpringFramework klasse [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) ja [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
+
+Selleks tuleb `web.xml` häälestusfaili lisada sektsioonid:
+```xml
+  <listener>
+      <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>	
+```
+
+```xml
+<servlet>
+  <servlet-name>spring-ws-dhx</servlet-name>
+  <servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
+  <init-param>
+     <param-name>transformWsdlLocations</param-name>
+     <param-value>true</param-value>
+  </init-param>
+  <init-param>
+    <param-name>contextClass</param-name>
+    <param-value>
+      org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+    </param-value>
+  </init-param>
+  <init-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>ee.ria.dhx.ws.beanconfig.DhxEndpointConfig</param-value>
+  </init-param>
+  <load-on-startup>1</load-on-startup>
+</servlet>
+```
+
+```xml
+<servlet-mapping>
+   <servlet-name>spring-ws-dhx</servlet-name>
+   <url-pattern>/ws/*</url-pattern>
+</servlet-mapping>
+```
+
+Lisaks tuleb ehitatava WAR-i sisse lisada fail `/WEB-INF/applicationContext.xml`
+Selle sisu peaks olema järgmine:
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	http://www.springframework.org/schema/task  
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+    
+        <context:annotation-config />
+        <context:component-scan base-package="ee.ria.dhx.*" />
+        <task:annotation-driven scheduler="myScheduler" />
+        <task:scheduler id="myScheduler" pool-size="10" />
+        <context:property-placeholder location="WEB-INF/classes/dhx-application.properties" />
+</beans>
+```
+
+##Häälestus fail (dhx-application.properties)
+
+Servleti laadimisel otsitakse Servleti classpathist faili nimega `dhx-application.properties`.
+
+Ehitamisel on soovitav see näiteks paigalda WAR-i sisse `/WEB-INF/classes` alamataloogi.
+
+Selle näide on toodud failis [dhx-application.properties](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/development/ws/dhx-application.properties)
+
+Selle sisu on näiteks:
+```properites
+soap.security-server=http://10.0.13.198
+soap.xroad-instance=ee-dev
+soap.member-class=GOV
+soap.user-id=38605150320
+soap.protocol-version=4.0
+soap.member-code=40000001
+document-resend-template=5,10,15
+address-renew-timeout=*/20 * * * * ?
+```
