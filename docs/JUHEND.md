@@ -297,8 +297,8 @@ Erinevus on selles et liidese [AsyncDhxPackageService](https://e-gov.github.io/D
 
 Asünkroonselt käivitamine püüab tehnilise vea korral uuesti saatmist (saatmisürituste arv ja sagedus on määratud `dhx-application.properties` parameeteriga `document-resend-template=5,10,15`).
 
-Pärast saatmise õnnestumist (või kui viimane lõplik saatmisüritus ebaõnnestus) kutsutakse välja meetod [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) klassi meetod [saveSendResult](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveSendResult-ee.ria.dhx.types.DhxSendDocumentResult-java.util.List-). 
-Selles meetodi peab arendaja ise implementeerima, salvestades vastuse näiteks oma DHS andmebaasi vms.
+Pärast saatmise õnnestumist (või kui viimane lõplik saatmisüritus ebaõnnestus) kutsutakse välja [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) klassi meetod [saveSendResult](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveSendResult-ee.ria.dhx.types.DhxSendDocumentResult-java.util.List-). 
+Selle meetodi peab arendaja ise implementeerima, salvestades vastuse näiteks oma DHS andmebaasi vms.
 
 Callback liidese meetodi `saveSendResult` realisatsiooni näide
 ```java
@@ -327,7 +327,9 @@ Asünkroonse saatmise meetodi [sendPackage](https://e-gov.github.io/DHX-adapter/
 package com.example.service;
 import ee.ria.dhx.ws.service.AsyncDhxPackageService;
 import ee.ria.dhx.ws.service.DhxPackageProviderService;
+
 public class Sender { 
+
   @Autowired
   AsyncDhxPackageService asyncDhxPackageService;
 
@@ -343,8 +345,8 @@ public class Sender {
          ""); // adressaadi alamsüsteem üldjuhul puudub
 
     // saadame dokumendi üle X-tee 
-    // tulemust kohe ei saa, vaid tagastatakse koheselt
-    // siis kui satmine tehtud kutsutakse asünkrppnses threadis välja    
+    // tulemust kohe ei saa, vaid meetodi väljakutse tagastab tööjärje koheselt kehtivale threadile  
+    // siis kui saatmine on tehtud kutsutakse asünkroonses threadis välja    
     // DhxImplementationSpecificService.saveSendResult
     asyncDhxPackageService.sendPackage(dhxPackage);
   }
@@ -352,4 +354,74 @@ public class Sender {
 }
 ```
 
- 
+Kui soovitakse sama kapslit saata korraga mitme DHX adressaadile, siis tuleb see igale adressaadile saata eraldi. Selle lihtsustamiseks on loodud `ee.ria.dhx.ws.service.AsyncDhxPackageService` meetod [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendMultiplePackages-java.util.List-).
+
+
+##Aadressiraamatu koostamise ja kasutamise liides
+
+Aadressiraamatu koostamiseks ja küsimiseks tuleb kasutada liidest [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html).
+
+Sellel on kaks meetodit. 
+Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab puhverdatud (eelnev alt koostatud) aadressiraamatu.
+Meetod [renewAddressList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#renewAddressList--) käivitab uuesti aadressiraamatu koostamise algoritmi. Viimane käivitatakse soovi korral timer jobi poolt perioodiliselt (perioodi määrab `dhx-application.properties` parameeter `address-renew-timeout=0 */20 * * * ?`).
+
+Aadressiraamatu pikemaajaliseks säilitamiseks (näideks andmebaasis või failisüsteemis) võib üle kirjutada DhxImplementationSpecificService meetodid [saveAddresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveAddresseeList-java.util.List-) ja [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). 
+
+Näide
+```java
+@Service("dhxImplementationSpecificService")
+public class CustomDhxImplementationSpecificService 
+                implements DhxImplementationSpecificService {
+  @Override
+  public List<InternalXroadMember> getAdresseeList() {
+    // retrieve from database or filesystem
+  }
+
+  @Override
+  public void saveAddresseeList(List<InternalXroadMember> members) {
+    // store to database or filesystem
+  }
+
+  ...
+}
+```
+
+##Dokumendi vastuvõtmise liides
+
+Ülaltoodud `web.xml` häälestuse kasutamisel registreeritakse serverisse automaatselt web service endpoint.  
+Selle aadress on `http://<hostname>:<port>/ws/dhx.wsdl`
+
+Sellelt aadressilt pakutav DHX sendDocument jt teenused tuleb registreerida X-tee turvaserveris.
+
+Arendaja poolt tuleb dokumendi vastuvõtmiseks ja andmebaasi salvestamiseks realiseerida [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) meetodid [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) ja [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-).
+
+Dokumendi serverisse saabumisel kutsutakse kõigepealt välja [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-), millega kontrollitakse kas see on topelt saatmine (sama dokumendi saadetis on DHS-ile saabunud teist või enamat korda).
+Kui on topelt saatmine, siis tagastatakse saatjale SOAP päringu vastuse viga [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md).
+Kui ei olnud topelt saatmine siis kutsutakse välja meetod [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-), mis peaks salvestama dokumendi DHS andmebaasi (näiteks "Saabunud dokumendid" kausta).
+
+Näide
+```java
+@Service("dhxImplementationSpecificService")
+public class CustomDhxImplementationSpecificService 
+                implements DhxImplementationSpecificService {
+  @Override
+  public boolean isDuplicatePackage(InternalXroadMember from,
+      String consignmentId) {
+    // check for duplicate: same consignmentId from the same sender (from)  
+  }
+
+  @Override
+  public String receiveDocument(IncomingDhxPackage document,
+      MessageContext context) throws DhxException {
+    String receiptId = UUID.randomUUID().toString();
+    // get document Capsule XML
+    DataHandler kapsel = document.getDocumentFile();
+    // store Capsule to database
+     ...
+    return receiptId;
+  }
+  
+  ...
+}
+```
+
