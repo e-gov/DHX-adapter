@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" packages="ee.bpw.dhx">
+<Configuration status="WARN" packages="ee.ria.dhx">
 <CustomLevels>
     <CustomLevel name="EVENT" intLevel="0" />
   </CustomLevels>
   <Appenders>
-    <CustomAppender name="CUSTOM">
-    	<PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%rEx{none}%n"/>
-    	 <filters>
-            <LevelRangeFilter minLevel="EVENT" maxLevel="EVENT" onMatch="ACCEPT" onMismatch="DENY" />
-		</filters>
-    </CustomAppender>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
-    <RollingFile name="RollingFile" fileName="logs/event.log"
+    <RollingFile name="RollingFile" fileName="c://logs/event.log"
                  filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
       <PatternLayout>
         <Pattern>%d %p %c{1.} [%t] ----- %m%n</Pattern>
@@ -28,10 +22,9 @@
     </RollingFile>
   </Appenders>
   <Loggers>
-    <Logger name="ee.bpw" level="debug" additivity="false">
+    <Logger name="ee.ria" level="debug" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
-      <AppenderRef ref="CUSTOM"/>
     </Logger>
      <Logger name="org.springframework.ws.client.MessageTracing" level="trace" additivity="false">
       <AppenderRef ref="Console"/>

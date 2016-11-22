@@ -5,7 +5,7 @@
 
 	<groupId>ee.ria.dhx</groupId>
 	<artifactId>DHX-adapter</artifactId>
-	<version>0.10.0</version>
+	<version>0.10.1</version>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,6 +28,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

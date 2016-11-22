@@ -1,4 +1,4 @@
-package ee.bpw.dhx.model;
+package ee.ria.dhx.model;
 
 import ee.ria.dhx.types.DhxRecipient;
 

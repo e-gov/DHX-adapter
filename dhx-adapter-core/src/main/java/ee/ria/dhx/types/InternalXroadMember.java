@@ -118,13 +118,7 @@ public class InternalXroadMember {
   public String toString() {
     return "X-road member " + xroadInstance + "/" + memberClass + "/" + memberCode + "/"
         + subsystemCode + (representee == null ? "" : ", representee: "
-            + representee.getMemberCode() + ", system:" + representee.getSystem());
-
-    /*
-     * "addressee: " + (representee == null ? memberCode : representee.getMemberCode()) +
-     * ", X-road member: " + xroadInstance + "/" + memberClass + "/" + memberCode + "/" +
-     * subsystemCode + ", is representee: " + (representee == null ? false : true);
-     */
+            + representee.getRepresenteeCode() + ", system:" + representee.getRepresenteeSystem());
   }
 
 }

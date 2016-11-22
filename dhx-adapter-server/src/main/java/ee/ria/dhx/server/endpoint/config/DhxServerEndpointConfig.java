@@ -41,19 +41,6 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
 
   @Autowired
   DhxConfig config;
-
- 
-  /**
-   * Defines WSDL.
-   * 
-   * @return SimpleWsdl11Definition
-   */
-  @Bean(name = "dhxServer")
-  public SimpleWsdl11Definition defaultWsdl11Definition() {
-    Resource wsdlResource = new ClassPathResource(config.getWsdlFile());
-    SimpleWsdl11Definition wsdlDef = new SimpleWsdl11Definition(wsdlResource);
-    return wsdlDef;
-  }
   
   /**
    * Injects DefaultMethodEndpointAdapter which supports SOAP message attachments. Sets proper
@@ -62,11 +49,10 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
    * 
    * @return DefaultMethodEndpointAdapter
    */
-  @Bean(name="dhxServerMethodEndpointAdapter")
+  @Bean(name = "dhxServerMethodEndpointAdapter")
   public DefaultMethodEndpointAdapter dhxMethodEndpointAdapter() {
     List<MethodArgumentResolver> argumentResolvers = null;
-    List<MethodReturnValueHandler> returnValueHandlers =
-        null;
+    List<MethodReturnValueHandler> returnValueHandlers = null;
     if (argumentResolvers == null) {
       argumentResolvers = new ArrayList<MethodArgumentResolver>();
     }
@@ -82,26 +68,33 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
     return adapter;
   }
 
-
   /**
    * Method returns bean List of MarshallingPayloadMethodProcessors.
    * 
    * @return bean List of MarshallingPayloadMethodProcessors
    */
-  @Bean(name="dhxServerMethodProcessors")
+  @Bean(name = "dhxServerMethodProcessors")
   public List<MarshallingPayloadMethodProcessor> methodProcessors() {
     List<MarshallingPayloadMethodProcessor> retVal =
         new ArrayList<MarshallingPayloadMethodProcessor>();
-    Jaxb2Marshaller dhxJaxb2Marshaller = new Jaxb2Marshaller();
-    dhxJaxb2Marshaller.setMtomEnabled(true);
-    log.debug("Creating marshaller for folowing paths: " + "");
-    String[] context = {"ee.riik.xrd.dhl.producers.producer.dhl"};
-    dhxJaxb2Marshaller.setContextPaths(context);
     Jaxb2Marshaller marshallerMtom = config.getDhxJaxb2Marshaller();
     retVal.add(new MarshallingPayloadMethodProcessor(marshallerMtom));
 
     return retVal;
   }
-  
 
+ 
+  /**
+   * Defines WSDL.
+   * 
+   * @return SimpleWsdl11Definition
+   */
+  @Bean(name = "dhxServer")
+  public SimpleWsdl11Definition defaultWsdl11Definition() {
+    Resource wsdlResource = new ClassPathResource(config.getWsdlFile());
+    SimpleWsdl11Definition wsdlDef = new SimpleWsdl11Definition(wsdlResource);
+    return wsdlDef;
+  }
+  
+ 
 }
