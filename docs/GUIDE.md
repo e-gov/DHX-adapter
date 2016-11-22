@@ -1,6 +1,6 @@
 ![](EL_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg)
 
-ET(JUHEND.md) | EN
+[ET](JUHEND.md) | EN
 
 # DHX-adapter usage guide
 
