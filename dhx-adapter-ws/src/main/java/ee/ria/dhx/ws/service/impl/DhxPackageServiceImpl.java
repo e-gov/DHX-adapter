@@ -358,6 +358,12 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       }
     }
     if (!found) {
+      if (log.isDebugEnabled() && recipientList != null){
+        log.debug("Recipient not found in representativesList and own member code. recipientList:");
+        for(DhxRecipient recipientFromList : recipientList) {
+          log.debug("Recipient: " + recipientFromList.toString());
+        }
+      }
       throw new DhxException(DhxExceptionEnum.WRONG_RECIPIENT,
           "Recipient not found in representativesList and own member code. recipient:"
               + recipient.toString());
@@ -378,8 +384,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
   }
 
   /**
-   * Checks if sender is defined as capsule sender. Needed to be sure if document is sent to from
-   * right sender. R
+   * Checks if sender is defined as capsule sender. Needed to be sure if document is sent from
+   * right sender.
    * 
    * @param client - Xroad client from service input.(e.g. representee who sent document is sent or
    *        the direct sender)
