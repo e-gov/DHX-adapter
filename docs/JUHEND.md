@@ -218,8 +218,8 @@ soap.default-subsystem | DHX |  | Asutuse enda X-tee DHX alamsüssteem. Määrat
 soap.security-server-appender | /cgi-bin/consumer_proxy |  | Turvaserveri URL-i path 
 soap.targetnamespace | `http://dhx.x-road.eu/producer` |  | SOAP X-tee päringute nimeruum
 soap.protocol-version | 4.0 |  | X-tee protokolli versioon. Määratakse saatmisel X-tee päise `Header/protocolVersion` väärtuseks.
-soap.global-conf-location | verificationconf |  | Määrab millisest X-tee serveri URL-i kataloogist laetakse alla X-tee Globaalkonfiguratsioon. Üldjuhul asub see `/verificationconf/ee/shared-params.xml`
-soap.global-conf-filename | shared-params.xml |  | Määrab millisest X-tee serveri URL-i failist laetakse alla X-tee Globaalkonfiguratsioon. Üldjuhul asub see `/verificationconf/ee/shared-params.xml`
+soap.global-conf-location | verificationconf |  | Määrab millisest X-tee turvaserveri URL-i kataloogist laetakse alla X-tee Globaalkonfiguratsioon. Üldjuhul asub see `/verificationconf/ee/shared-params.xml`
+soap.global-conf-filename | shared-params.xml |  | Määrab millisest X-tee turvaserveri URL-i failist laetakse alla X-tee Globaalkonfiguratsioon. Üldjuhul asub see `/verificationconf/ee/shared-params.xml`
 soap.dhx-representation-group-name | DHX vahendajad |  | Määrab DHX vahendajate grupi nime, mille järgi otsitakse vahendajaid X-tee globaalkonfiguratsioonist
 soap.accepted-subsystems | DHX |  | Määrab milliste alamsüsteemidega võtab asutus dokumente vastu. Komaga eraldatud list. Näiteks kui RIA omab mitut alamsüsteemi DHX.dvk ja DHX.adit, ning kui ta sooviks mõlema alamsüsteemi dokumente vastu võtta ühe serveri teenuse kaudu, siis ta peaks väärtustama `soap.accepted-subsystems=DHX.dvk,DHX.adit`
 soap.send-document-service-code | sendDocument |  | Teenuse nimi. DHX protokoll nõuab et see peab olema alati `sendDocument`. Määratakse dokumendi saatmisel X-tee päise `Header/service/serviceCode` väärtuseks
