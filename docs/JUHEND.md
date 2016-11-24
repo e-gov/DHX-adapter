@@ -246,7 +246,7 @@ dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Määra
 
 ##Funktsionaalsuse üldpõhimõtted
 
-DHX adapteri Java teegi põhifunktsionaalsus on dokumendi saatmine, dokumendi vastuvõtmine ja aadressiraamatu koostamine.
+DHX adapteri Java teegi põhifunktsionaalsus on dokumendi saatmine, dokumendi vastuvõtmine ja [lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamine.
  
 Põhiline osa, mis DHX adapteri teegi kasutajat (arendajat) huvitab, asub pakettides
 - [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – java teenuste liidesed (service interfaces)
