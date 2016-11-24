@@ -206,7 +206,7 @@ address-renew-timeout=*/20 * * * * ?
 ```
 
 Allpool tabelis on toodud `dhx-application.properties` võimalike parameetrite kirjeldused. 
-Neid parameetreid, millel on vaikimisi väärtus, ei pea properties faili lisama, juhul kui vaikimisi väärtust muuta ei soovita.
+Neid parameetreid, millel on vaikimisi väärtus, ei pea properties faili lisama, juhul kui ei soovita väärtust muuta.
 
 Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 ------------ | ------------- | ------------- | -------------
