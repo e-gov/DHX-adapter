@@ -373,6 +373,9 @@ public class Sender {
   DhxPackageService dhxPackageService;
 
   @Autowired
+  AddressService addressService;
+
+  @Autowired
   DhxPackageProviderService dhxPackageProviderService;
 
   public void sendExample() throws DhxException {
