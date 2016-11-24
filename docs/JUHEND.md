@@ -216,7 +216,7 @@ Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 **soap.member-code** |  | 40000001 | Asutuse enda registrikood. Määratakse saatmisel X-tee päise `Header/client/memberCode` väärtuseks
 soap.default-subsystem | DHX |  | Asutuse enda X-tee DHX alamsüssteem. Määratakse saatmisel X-tee päise `Header/client/subsystemCode` väärtuseks. Näiteks ADIT kasutab alamsüsteemi, ning kui ta saadab dokumente välja, siis ta peaks selleks väärtustama `DHX.adit`
 soap.security-server-appender | /cgi-bin/consumer_proxy |  | Turvaserveri URL-i path 
-soap.targetnamespace | http://dhx.x-road.eu/producer |  | SOAP X-tee päringute nimeruum
+soap.targetnamespace | `http://dhx.x-road.eu/producer` |  | SOAP X-tee päringute nimeruum
 soap.protocol-version | 4.0 |  | X-tee protokolli versioon. Määratakse saatmisel X-tee päise `Header/protocolVersion` väärtuseks.
 soap.global-conf-location | verificationconf |  | Määrab millisest X-tee serveri URL-i kataloogist laetakse alla X-tee Globaalkonfiguratsioon. Üldjuhul asub see `/verificationconf/ee/shared-params.xml`
 soap.global-conf-filename | shared-params.xml |  | Määrab millisest X-tee serveri URL-i failist laetakse alla X-tee Globaalkonfiguratsioon. Üldjuhul asub see `/verificationconf/ee/shared-params.xml`
@@ -227,7 +227,6 @@ soap.send-document-service-version | v1 |  | Määratakse dokumendi saatmisel X-
 soap.representatives-service-code | representationList |  | Määratakse vahendatavate nimekirja päringu saatmisel X-tee päise `Header/service/serviceCode` väärtuseks.
 soap.representatives-service-version | v1 |  | Määratakse vahendatavate nimekirja päringu saatmisel X-tee päise `Header/service/serviceVersion` väärtuseks.
 soap.connection-timeout | 60000 |  | SOAP päringute tegemisel kasutatav HTTP ühenduse avamise timeout väärtus millisekundites. Vaikimisi 1 minut
- 
 soap.read-timeout | 120000 |  | SOAP päringute tegemisel kasutatav HTTP päringu vastuse ootamise timeout väärtus millisekundites. Vaikimisi 2 minutit. Kui saadetavad failid on suured, siis võib suurendada.
 soap.dhx-subsystem-prefix | DHX |  | DHX Alamsüsteemide prefiks, mille järgi otsitakse X-tee globaalkonfiguratsioonist DHX adressaate. DHX protokoll nõuab et see oleks alati konstant `DHX`
 dhx.capsule-validate | true |  | Määrab kas valideerida saabunud ja saadetava dokumendi XML kapsel XSD schema vastu või mitte. Kui dokument ei valideeru, siis vastatakse saatjale veaga [DHX.Validation](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid). [Kapsli 2.1 Schema](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd)
@@ -235,6 +234,7 @@ dhx.parse-capsule | true |  | Määrab kas parsida saabunud või saadetava dokum
 dhx.check-recipient | true |  | Määrab kas kontrollida saabunud dokumendi adressaadi korrektsust. Kontrollitakse kas Kapsli sees oleva adressaat vastab vastuvõtja registrikoodile. Kui adressaat on vale, siis vastatakse saatjale veaga [DHX.InvalidAddressee](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid)
 dhx.check-sender | false |  | Määrab kas kontrollida saabunud dokumendi saatja korrektsust. Kas Kapsli XML-is asuv saatja vastab X-tee client headeri saatja andmetele.
 dhx.check-duplicate | true |  | Määrab kas kontrollida saabunud saadetise topelt saabumist. Kui true, siis kutsutakse välja [DhxImplementationSpecificService.isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-)
+
 dhx.document-resend-template | 30,120,1200 |  | Määrab uuesti saatmise ürituste arvu ja oote ajad [Crontab pattern](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) fromaadis. Kasutatakse ainult asünkroonsel saatmisel. Antud näide määrab kokku tehakse 4 saatmisüritust ning uuesti saatmist üritatakse kõigepealt 30 sekundi järel, seejärel 120 sekundi (2 minuti) järel ning seejärel 1200 sekundi (20 minuti) järel. Kui ka viimane saatmine ebaõnnestus, siis lõpetatakse üritamine.
 dhx.wsdl-file | dhx.wsdl |  | Asutuse poolt pakutava DHX teenuse [WSDL faili](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) nimi. Selle nimelist faili otsitakse käivitamisel Java Classpathist. WSDL fail on kõikide DHX rakendajate jaoks konstantne ja seda muuta ei ole vaja
 dhx.protocol-version | 1.0 |  | DHX protokolli versiooni number, mis saadetakse `sendDocument` päringu [DHXVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#p%C3%A4ringu-sisend) parameetrina. 
