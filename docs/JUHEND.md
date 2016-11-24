@@ -8,7 +8,7 @@ ET | [EN](GUIDE.md)
 
 ## Sissejuhatus
 
-DHX adapter on Java teek, milles on realiseeritud dokumendi saatmise, vastuvõtmise ja aadressiraamatu koostamise funktsionaalsus vastavalt [DHX protokolli](https://e-gov.github.io/DHX/) nõuetele.
+DHX adapter on Java teek, milles on realiseeritud [dokumendi saatmise](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmise](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [aadressiraamatu koostamise](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) funktsionaalsus vastavalt [DHX protokolli](https://e-gov.github.io/DHX/) nõuetele.
 
 Antud juhend on mõeldud kasutamiseks tarkvara arendajatele (DHX rakendajatele), kes soovivad hakata oma Dokumendihaldussüsteemis (DHS) kasutama DHX protokolli.
 
@@ -246,7 +246,7 @@ dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Määra
 
 ##Funktsionaalsuse üldpõhimõtted
 
-DHX adapteri Java teegi põhifunktsionaalsus on dokumendi saatmine, dokumendi vastuvõtmine ja [lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamine.
+DHX adapteri Java teegi põhifunktsionaalsus on [dokumendi saatmine](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmine](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamine.
  
 Põhiline osa, mis DHX adapteri teegi kasutajat (arendajat) huvitab, asub pakettides
 - [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – java teenuste liidesed (service interfaces)
