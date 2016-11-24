@@ -503,13 +503,16 @@ public class CustomDhxImplementationSpecificService
   public boolean isDuplicatePackage(InternalXroadMember from,
       String consignmentId) {
     // check for duplicate: same consignmentId from the same sender (from) 
+    
+    // generate unique sender key
     String uniqueKey = from.getXroadInstance + "/" + from.getMemberClass()
       + "/" + from.getMemberCode() + "/" + from.getSubsystemCode();
     if (from.getRepresentee() != null) {
       uniqueKey = uniqueKey  + "/" + getRepresentee().getRepresenteeCode()
          + "/" + getRepresentee().getRepresenteeSystem();
     }
-    // check from databse whether combination "uniqueKey + consignmentId" has been previously saved? 
+    
+    // check from database whether combination "uniqueKey + consignmentId" has been previously saved? 
     . . .
   }
 
