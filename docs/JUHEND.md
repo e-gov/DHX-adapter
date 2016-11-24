@@ -492,7 +492,7 @@ Arendaja poolt tuleb dokumendi vastuvõtmiseks ja andmebaasi salvestamiseks real
 
 Dokumendi serverisse saabumisel kutsutakse kõigepealt välja [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-), millega kontrollitakse kas see on topelt saatmine (sama dokumendi saadetis on DHS-ile saabunud teist või enamat korda).
 Kui on topelt saatmine, siis tagastatakse saatjale SOAP päringu vastuse viga [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid).
-Kui ei olnud topelt saatmine siis kutsutakse välja meetod [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-), mis peaks salvestama dokumendi DHS andmebaasi (näiteks "Saabunud dokumendid" kausta).
+Kui ei olnud topelt saatmine, siis kutsutakse välja meetod [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-), mis peaks salvestama dokumendi DHS andmebaasi (näiteks "Saabunud dokumendid" kausta).
 
 Näide
 ```java
