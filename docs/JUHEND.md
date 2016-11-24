@@ -263,7 +263,7 @@ Klass/liides | Kirjeldus
 [DhxPackageProviderService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) | Teenus SOAP päringu XML objekti koostamiseks
 [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) | Realisatsiooni spetsiifilised callback liidesed. Selle liidese implementatsiooni peaks DHX adapterit kasutav arendaja ise realiseerima.
 
-Arendaja jaoks kõike tähtsam neist on [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html), mille meetodid peab arendaja peab ise realiseerima.
+Arendaja jaoks kõige tähtsam neist on [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html), mille meetodid peab arendaja peab ise realiseerima.
 
 Näiteks:
 
