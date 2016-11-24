@@ -410,7 +410,7 @@ Dokumendi asünkroonselt saatmise liides on sarnane sünkroonselt saatmise liide
  
 Erinevus on selles et liidese [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) meetod [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-) käivitatakse asünkroonselt (eraldi threadis) ja käivitavas threadis selle meetodi väljakutse lõppeb/tagastab koheselt (ei jää vastust ära ootama).
 
-Asünkroonselt käivitamine püüab tehnilise vea korral uuesti saatmist (saatmisürituste arv ja sagedus on määratud `dhx-application.properties` parameeteriga `document-resend-template=5,10,15`).
+Asünkroonselt käivitamine püüab tehnilise vea korral uuesti saatmist (saatmisürituste arv ja sagedus on määratud `dhx-application.properties` parameeteriga `document-resend-template=30,120,1200`).
 
 Pärast saatmise õnnestumist (või kui viimane lõplik saatmisüritus ebaõnnestus) kutsutakse välja [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) klassi meetod [saveSendResult](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveSendResult-ee.ria.dhx.types.DhxSendDocumentResult-java.util.List-). 
 Selle meetodi peab arendaja ise implementeerima, salvestades vastuse näiteks oma DHS andmebaasi vms.
