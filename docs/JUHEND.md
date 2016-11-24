@@ -512,7 +512,7 @@ public class CustomDhxImplementationSpecificService
          + "/" + from.getRepresentee().getRepresenteeSystem();
     }
     
-    // otsime andmebaasist kas kombinatsion "uniqueKey + consignmentId" on varem salvestatud (saabunud) 
+    // otsime andmebaasist kas kombinatsioon "uniqueKey + consignmentId" on varem salvestatud (saabunud) 
     . . .
   }
 
