@@ -210,7 +210,7 @@ Neid parameetreid, millel on vaikimisi väärtus, ei pea properties faili lisama
 
 Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 ------------ | ------------- | ------------- | -------------
-**soap.security-server** |  | http://10.0.13.198 | Turvaserveri aadress
+**soap.security-server** |  | http://10.0.13.198 | X-tee turvaserveri aadress
 **soap.xroad-instance** |  | ee | `ee-dev` arenduses, `ee` toodangus. Määratakse saatmisel X-tee päise `Header/client/xRoadInstance` väärtuseks
 **soap.member-class** |  | GOV | Asutuse enda X-tee kuuluvuse klass (`COM` või `GOV`). Määratakse saatmisel X-tee päise `Header/client/memberClass` väärtuseks
 **soap.member-code** |  | 40000001 | Asutuse enda registrikood. Määratakse saatmisel X-tee päise `Header/client/memberCode` väärtuseks
