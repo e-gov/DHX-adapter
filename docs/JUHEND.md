@@ -362,8 +362,11 @@ Näide
 ```java
 package com.example.service;
 import ee.ria.dhx.ws.service.DhxPackageService;
+import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxPackageProviderService;
 import ee.ria.dhx.types.DhxSendDocumentResult;
+import ee.ria.dhx.types.InternalXroadMember;
+
 
 public class Sender { 
   @Autowired
@@ -373,13 +376,16 @@ public class Sender {
   DhxPackageProviderService dhxPackageProviderService;
 
   public void sendExample() throws DhxException {
+     // leiame adressaadi tehnilised andmed
+     InternalXroadMember recipient = addressService.getClientForMemberCode(
+        "70000001",  // adressaadi registrikood
+        "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHS.sybsystem)
 
      // genereerime saadetise
      OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
          new File("saadetav-dokumendi-kapsel.xml"),
          UUID.randomUUID().toString(), // unikaalne ise genereeritud saadetise id
-         "70000001",  // adressaadi registrikood
-         "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHS.sybsystem)
+         recipient);
 
     // saadame dokumendi üle X-tee ja ootame sünkroonselt vastust
     DhxSendDocumentResult result = dhxPackageService.sendPackage(dhxPackage);
@@ -432,7 +438,9 @@ Asünkroonse saatmise meetodi [sendPackage](https://e-gov.github.io/DHX-adapter/
 ```java
 package com.example.service;
 import ee.ria.dhx.ws.service.AsyncDhxPackageService;
+import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxPackageProviderService;
+import ee.ria.dhx.types.InternalXroadMember;
 
 public class Sender { 
 
@@ -440,15 +448,22 @@ public class Sender {
   AsyncDhxPackageService asyncDhxPackageService;
 
   @Autowired
+  AddressService addressService;
+
+  @Autowired
   DhxPackageProviderService dhxPackageProviderService;
 
   public void sendExample() throws DhxException {
+     // leiame adressaadi tehnilised andmed
+     InternalXroadMember recipient = addressService.getClientForMemberCode(
+        "70000001",  // adressaadi registrikood
+        "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHS.sybsystem)
+
      // genereerime saadetise
      OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
          new File("saadetav-dokumendi-kapsel.xml"),
          UUID.randomUUID().toString(), // unikaalne ise genereeritud saadetise id
-         "70000001",  // adressaadi registrikood
-         "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHS.sybsystem)
+         recipient);
 
     // saadame dokumendi üle X-tee 
     // tulemust kohe ei saa, vaid meetodi väljakutse tagastab tööjärje koheselt kehtivale threadile  
