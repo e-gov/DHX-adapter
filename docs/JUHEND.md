@@ -508,11 +508,11 @@ public class CustomDhxImplementationSpecificService
     String uniqueKey = from.getXroadInstance + "/" + from.getMemberClass()
       + "/" + from.getMemberCode() + "/" + from.getSubsystemCode();
     if (from.getRepresentee() != null) {
-      uniqueKey = uniqueKey  + "/" + getRepresentee().getRepresenteeCode()
-         + "/" + getRepresentee().getRepresenteeSystem();
+      uniqueKey = uniqueKey  + "/" + from.getRepresentee().getRepresenteeCode()
+         + "/" + from.getRepresentee().getRepresenteeSystem();
     }
     
-    // check from database whether combination "uniqueKey + consignmentId" has been previously saved? 
+    // query from database whether combination "uniqueKey + consignmentId" has been previously saved? 
     . . .
   }
 
