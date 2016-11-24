@@ -181,7 +181,7 @@ Selle sisu peaks olema järgmine:
         <context:annotation-config />
         <context:component-scan base-package="ee.ria.dhx.*" />
         <task:annotation-driven scheduler="myScheduler" />
-        <task:scheduler id="myScheduler" pool-size="10" />
+        <task:scheduler id="myScheduler" pool-size="3" />
         <context:property-placeholder location="WEB-INF/classes/dhx-application.properties" />
 </beans>
 ```
