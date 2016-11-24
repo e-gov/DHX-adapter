@@ -508,11 +508,16 @@ public class CustomDhxImplementationSpecificService
   @Override
   public String receiveDocument(IncomingDhxPackage document,
       MessageContext context) throws DhxException {
-    String receiptId = UUID.randomUUID().toString();
+    
     // get document Capsule XML
-    DataHandler kapsel = document.getDocumentFile();
+    DataHandler kapselHandler = document.getDocumentFile();
+    InputStream kapselStream = kapselHandler.getInputStream();
+
     // store Capsule to database
      ...
+    
+    // tagastame unikaalse vastuvõtmise id
+    String receiptId = UUID.randomUUID().toString();
     return receiptId;
   }
   
