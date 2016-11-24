@@ -10,7 +10,7 @@ ET | [EN](GUIDE.md)
 
 DHX adapter on Java teek, milles on realiseeritud dokumendi saatmise, vastuvõtmise ja aadressiraamatu koostamise funktsionaalsus vastavalt [DHX protokolli](https://e-gov.github.io/DHX/) nõuetele.
 
-Antud juhend on mõeldud kasutamiseks tarkvara arendajatele, kes soovivad hakata oma Dokumendihaldussüsteemis (DHS) kasutama DHX protokolli.
+Antud juhend on mõeldud kasutamiseks tarkvara arendajatele (DHX rakendajatele), kes soovivad hakata oma Dokumendihaldussüsteemis (DHS) kasutama DHX protokolli.
 
 DHX adapteri lähtekood asub aadressil https://github.com/e-gov/DHX-adapter
 
