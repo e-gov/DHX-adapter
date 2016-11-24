@@ -512,7 +512,7 @@ public class CustomDhxImplementationSpecificService
          + "/" + from.getRepresentee().getRepresenteeSystem();
     }
     
-    // query from database whether combination "uniqueKey + consignmentId" has been previously saved? 
+    // query database whether combination "uniqueKey + consignmentId" has been previously saved? 
     . . .
   }
 
