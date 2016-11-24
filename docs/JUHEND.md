@@ -340,7 +340,7 @@ Adressaate on mitut tüüpi
 - Vahendaja kaudu DHX võimekusega (alamsüsteem on üldjuhul tühi)
 - Vahendaja kaudu DHX võimekusega (mitu alamsüsteemi `DHX.subsystem1` ja `DHX.subsystem2` jne)
 
-**NB!** Dokumendi saatmisel, saadetise loomisel ülaltoodud [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) meetoditega, tuleb kindlasti ette anda kõik `InternalXroadMember` eksemplari atribuudid. 
+**NB!** Dokumendi saatmisel, saadetise loomisel allpool toodud [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) meetoditega, tuleb kindlasti ette anda kõik `InternalXroadMember` eksemplari atribuudid. 
 See tähendab, et kui adressaat omab `subsystemCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
 Kui adressaat omab `representeeCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
 
