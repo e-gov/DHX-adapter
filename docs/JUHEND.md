@@ -332,7 +332,7 @@ representee.representeeCode | 70012121 | Esindatava registrikood
 representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui esindataval on mitu alamsüsteemi, siis alamsüsteemi kood
 representee.representeeName | Lasteaed Pallipõnn | Esindatava nimi või esindatava alamsüsteemi nimi
 
-Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objektide massiivi, mis on DHX adressaatide list.
+Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objektide massiivi, mis on kõikide DHX adressaatide nimekiri.
 
 Adressaate on mitut tüüpi
 - Otse DHX võimekusega (alamsüsteem DHX)
