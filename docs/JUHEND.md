@@ -449,7 +449,7 @@ Adressaate on mitut tüüpi
 See tähendab, et kui adressaat omab `subsystemCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
 Kui adressaat omab `representeeCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
 
-**Kõide kindlam on kasutada [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variatsioone, kus sisendis on paramaater  `InternalXroadMember recipient `,  võttes selle väärtuse  `getAdresseeList() ` massiivist.**
+**Kõide kindlam on kasutada [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variatsioone, kus sisendis on parameeter  `InternalXroadMember recipient `,  võttes selle väärtuse  `getAdresseeList() ` massiivist.**
 
 
 ##Dokumendi vastuvõtmise liides
