@@ -214,7 +214,6 @@ Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 **soap.xroad-instance** |  | ee | `ee-dev` arenduses, `ee` toodangus. Määratakse saatmisel X-tee päise `Header/client/xRoadInstance` väärtuseks
 **soap.member-class** |  | GOV | Asutuse enda X-tee kuuluvuse klass (`COM` või `GOV`). Määratakse saatmisel X-tee päise `Header/client/memberClass` väärtuseks
 **soap.member-code** |  | 40000001 | Asutuse enda registrikood. Määratakse saatmisel X-tee päise `Header/client/memberCode` väärtuseks
-
 soap.default-subsystem | DHX |  | Asutuse enda X-tee DHX alamsüssteem. Määratakse saatmisel X-tee päise `Header/client/subsystemCode` väärtuseks. Näiteks ADIT kasutab alamsüsteemi, ning kui ta saadab dokumente välja, siis ta peaks selleks väärtustama `DHX.adit`
 soap.security-server-appender | /cgi-bin/consumer_proxy |  | Turvaserveri URL-i path 
 soap.targetnamespace | http://dhx.x-road.eu/producer |  | SOAP X-tee päringute nimeruum
@@ -227,7 +226,8 @@ soap.send-document-service-code | sendDocument |  | Teenuse nimi. DHX protokolli
 soap.send-document-service-version | v1 |  | Määratakse dokumendi saatmisel X-tee päise `Header/service/serviceVersion` väärtuseks.
 soap.representatives-service-code | representationList |  | Määratakse vahendatavate nimekirja päringu saatmisel X-tee päise `Header/service/serviceCode` väärtuseks.
 soap.representatives-service-version | v1 |  | Määratakse vahendatavate nimekirja päringu saatmisel X-tee päise `Header/service/serviceVersion` väärtuseks.
-soap.connection-timeout | 60000 |  | SOAP päringute tegemisel kasutatav HTTP ühenduse avamise timeout väärtus millisekundites. Vaikimisi 1 minut 
+soap.connection-timeout | 60000 |  | SOAP päringute tegemisel kasutatav HTTP ühenduse avamise timeout väärtus millisekundites. Vaikimisi 1 minut
+ 
 soap.read-timeout | 120000 |  | SOAP päringute tegemisel kasutatav HTTP päringu vastuse ootamise timeout väärtus millisekundites. Vaikimisi 2 minutit. Kui saadetavad failid on suured, siis võib suurendada.
 soap.dhx-subsystem-prefix | DHX |  | DHX Alamsüsteemide prefiks, mille järgi otsitakse X-tee globaalkonfiguratsioonist DHX adressaate. DHX protokoll nõuab et see oleks alati konstant `DHX`
 dhx.capsule-validate | true |  | Määrab kas valideerida saabunud ja saadetava dokumendi XML kapsel XSD schema vastu või mitte. Kui dokument ei valideeru, siis vastatakse saatjale veaga [DHX.Validation](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid). [Kapsli 2.1 Schema](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd)
