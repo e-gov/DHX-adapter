@@ -281,6 +281,73 @@ public class CustomDhxImplementationSpecificService
 Siin `@Service` tag määrab et DHX adapteri sest kasutav teenus `dhxImplementationSpecificService` on nüüd omatehtud klass. 
 Seega nüüd kasutab dokumendi vastuvõtmise ja saatmise automaatloogika „callback“ liidesena arendaja enda loodud klassi `CustomDhxImplementationSpecificService`.
 
+##Aadressiraamatu koostamise ja kasutamise liides
+
+DHX adresseerimisel tuleb silmas pidada, et ainuüksi asutuse registrikoodi kasutamine ei taga korrektset adresseerimist. 
+Üheseks adresseerimiseks tuleb kasutada kombinatsiooni `registrikood + alamsüsteem`. Näiteks kui dokument adresseeritakse Lääne Ringkonnaprokuratuurile, siis adresseerimiseks piisab kombinatsioonist `code=70000906 + subsystem=DHX.laane`.
+Kui adresseeritakse Lõuna Ringkonnaprokuratuurile, siis adresseerimiseks piisab `code=70000906 + subsystem=DHX.louna`.
+
+Aadressiraamatu koostamiseks ja küsimiseks tuleb kasutada liidest [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html).
+
+Sellel on kolm meetodit. 
+
+Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab puhverdatud (eelnevalt koostatud) aadressiraamatu.
+
+Meetod [renewAddressList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#renewAddressList--) käivitab uuesti aadressiraamatu koostamise algoritmi. Viimane käivitatakse soovi korral timer jobi poolt perioodiliselt (perioodi määrab `dhx-application.properties` parameeter `address-renew-timeout=0 */20 * * * ?`).
+
+Meetod [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-) hõlbustab dokumendi saatmiseks vajaliku adressaadi tehniliste andmete leidmist asutuse unikaalse kombinatsiooni  `registrkood + alamsüsteem ` järgi.
+
+Aadressiraamatu pikemaajaliseks säilitamiseks (näiteks andmebaasis või failisüsteemis) võib üle kirjutada DhxImplementationSpecificService meetodid [saveAddresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveAddresseeList-java.util.List-) ja [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--).
+Kui neid kasutatakse, siis need peaks salvestama ja tagastama kõik [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) atribuudid (mis on allpool tabelis kirjas).
+
+Näide
+```java
+@Service("dhxImplementationSpecificService")
+public class CustomDhxImplementationSpecificService 
+                implements DhxImplementationSpecificService {
+  @Override
+  public List<InternalXroadMember> getAdresseeList() {
+    // retrieve from database or filesystem
+  }
+
+  @Override
+  public void saveAddresseeList(List<InternalXroadMember> members) {
+    // store to database or filesystem
+  }
+
+  ...
+}
+```
+
+Adressaati [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) identifitseerivad DHX protokollis järgmised väljad
+
+Väli | Näide | Kirjeldus
+------------ | ------------- | -------------
+xroadInstance | EE | Riik EE
+memberClass | GOV | GOV- Valitsus, COM - eraettevõte
+memberCode | 70000001 | Asutuse registrikood
+subsystemCode | DHX või DHX.adit | Alamsüsteemi kood. Peab algama DHX prefiksiga. Üldjuhul lihtsalt DHX
+Name | Riigi infosüsteemide keskus | Asutuse või alamsüsteemi nimi
+representee.representeeCode | 70012121 | Esindatava registrikood
+representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui esindataval on mitu alamsüsteemi, siis alamsüsteemi kood
+representee.representeeName | Lasteaed Pallipõnn | Esindatava nimi või esindatava alamsüsteemi nimi
+
+Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objektide massiivi, mis on DHX adressaatide list.
+
+Adressaate on mitut tüüpi
+- Otse DHX võimekusega (alamsüsteem DHX)
+- Otse DHX võimekusega (mitu alamsüsteemi `DHX.subsystem1` ja `DHX.subsystem2` jne)
+- Vahendaja kaudu DHX võimekusega (alamsüsteem on üldjuhul tühi)
+- Vahendaja kaudu DHX võimekusega (mitu alamsüsteemi `DHX.subsystem1` ja `DHX.subsystem2` jne)
+
+**NB!** Dokumendi saatmisel, saadetise loomisel ülaltoodud [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) meetoditega, tuleb kindlasti ette anda kõik `InternalXroadMember` eksemplari atribuudid. 
+See tähendab, et kui adressaat omab `subsystemCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
+Kui adressaat omab `representeeCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
+
+**Kõide kindlam** on kasutada [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variatsioone, kus sisendis on parameeter  `InternalXroadMember recipient `.
+Vajaliku **eelväärtustatud `InternalXroadMember` objekti leidmiseks** saab kasutada `AddressService` meetodit  [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-), mis leiab lokaalsest aadressiraamatust korrektse kirje unikaalse kombinatsiooni `registrikood + subsystem` järgi.
+
+
 ##Dokumendi saatmine (sünkroonselt)
 
 Dokumendi sünkroonseks saatmiseks tuleb välja kutsuda teenuse `ee.ria.dhx.ws.service.DhxPackageService` meetodit [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-). 
@@ -393,63 +460,6 @@ public class Sender {
 ```
 
 Kui soovitakse sama kapslit saata korraga mitme DHX adressaadile, siis tuleb see igale adressaadile saata eraldi. Selle lihtsustamiseks on loodud `ee.ria.dhx.ws.service.AsyncDhxPackageService` meetod [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendMultiplePackages-java.util.List-).
-
-
-##Aadressiraamatu koostamise ja kasutamise liides
-
-Aadressiraamatu koostamiseks ja küsimiseks tuleb kasutada liidest [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html).
-
-Sellel on kaks meetodit. 
-Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab puhverdatud (eelnevalt koostatud) aadressiraamatu.
-Meetod [renewAddressList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#renewAddressList--) käivitab uuesti aadressiraamatu koostamise algoritmi. Viimane käivitatakse soovi korral timer jobi poolt perioodiliselt (perioodi määrab `dhx-application.properties` parameeter `address-renew-timeout=0 */20 * * * ?`).
-
-Aadressiraamatu pikemaajaliseks säilitamiseks (näiteks andmebaasis või failisüsteemis) võib üle kirjutada DhxImplementationSpecificService meetodid [saveAddresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveAddresseeList-java.util.List-) ja [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). 
-
-Näide
-```java
-@Service("dhxImplementationSpecificService")
-public class CustomDhxImplementationSpecificService 
-                implements DhxImplementationSpecificService {
-  @Override
-  public List<InternalXroadMember> getAdresseeList() {
-    // retrieve from database or filesystem
-  }
-
-  @Override
-  public void saveAddresseeList(List<InternalXroadMember> members) {
-    // store to database or filesystem
-  }
-
-  ...
-}
-```
-
-Adressaati [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) identifitseerivad DHX protokollis järgmised väljad
-
-Väli | Näide | Kirjeldus
------------- | ------------- | -------------
-xroadInstance | EE | Riik EE
-memberClass | GOV | GOV- Valitsus, COM - eraettevõte
-memberCode | 70000001 | Asutuse registrikood
-subsystemCode | DHX või DHX.adit | Alamsüsteemi kood. Peab algama DHX prefiksiga. Üldjuhul lihtsalt DHX
-Name | Riigi infosüsteemide keskus | Asutuse või alamsüsteemi nimi
-representee.representeeCode | 70012121 | Esindatava registrikood
-representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui esindataval on mitu alamsüsteemi, siis alamsüsteemi kood
-representee.representeeName | Lasteaed Pallipõnn | Esindatava nimi või esindatava alamsüsteemi nimi
-
-Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objektide massiivi, mis on DHX adressaatide list.
-
-Adressaate on mitut tüüpi
-- Otse DHX võimekusega (alamsüsteem DHX)
-- Otse DHX võimekusega (mitu alamsüsteemi „DHX.subsystem1“ ja „DHX.subsystem2“ jne)
-- Vahendaja kaudu DHX võimekusega (alamsüsteem on üldjuhul tühi)
-- Vahendaja kaudu DHX võimekusega (mitu alamsüsteemi „DHX.subsystem1“ ja „DHX.subsystem2“ jne)
-
-**NB!** Dokumendi saatmisel, saadetise loomisel ülaltoodud [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) meetoditega, tuleb kindlasti ette anda kõik `InternalXroadMember` eksemplari atribuudid. 
-See tähendab, et kui adressaat omab `subsystemCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
-Kui adressaat omab `representeeCode` väärtust, siis see tuleb kindlasti määratleda ka `getOutgoingPackage()` väljakutsel.
-
-**Kõide kindlam on kasutada [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variatsioone, kus sisendis on parameeter  `InternalXroadMember recipient `,  võttes selle väärtuse  `getAdresseeList() ` massiivist.**
 
 
 ##Dokumendi vastuvõtmise liides
