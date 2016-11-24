@@ -393,7 +393,7 @@ public class Sender {
     // saadame dokumendi üle X-tee ja ootame sünkroonselt vastust
     DhxSendDocumentResult result = dhxPackageService.sendPackage(dhxPackage);
 
-    // check result error
+    // kontrollime satmise viga
     if (result.occuredException !=  null 
        || result.getResponse().getFault() != null) {
       // saatmisel ilmnes viga
@@ -428,7 +428,7 @@ public class CustomDhxImplementationSpecificService
         || finalResult.getResponse().getFault() != null) {
       // saatmisel ilmnes viga
      } else {
-       // success
+       // õnnestus
        String id = finalResult.getResponse().getReceiptId();
      }
   }
@@ -502,9 +502,9 @@ public class CustomDhxImplementationSpecificService
   @Override
   public boolean isDuplicatePackage(InternalXroadMember from,
       String consignmentId) {
-    // check for duplicate: same consignmentId from the same sender (from) 
+    // kontrollme duplikaate: sama consignmentId saabus samalt saatjalt (from) 
     
-    // generate unique sender key
+    // genereerime saatja unikaalse võtme
     String uniqueKey = from.getXroadInstance + "/" + from.getMemberClass()
       + "/" + from.getMemberCode() + "/" + from.getSubsystemCode();
     if (from.getRepresentee() != null) {
@@ -512,7 +512,7 @@ public class CustomDhxImplementationSpecificService
          + "/" + from.getRepresentee().getRepresenteeSystem();
     }
     
-    // query database whether combination "uniqueKey + consignmentId" has been previously saved? 
+    // otsime andmebaasist kas kombinatsion "uniqueKey + consignmentId" on varem salvestatud (saabunud) 
     . . .
   }
 
@@ -520,11 +520,11 @@ public class CustomDhxImplementationSpecificService
   public String receiveDocument(IncomingDhxPackage document,
       MessageContext context) throws DhxException {
     
-    // get document Capsule XML
+    // Leiame dokumendi Kapsli XML-i
     DataHandler kapselHandler = document.getDocumentFile();
     InputStream kapselStream = kapselHandler.getInputStream();
 
-    // store Capsule to database
+    // salvestame Kapsli andmebaasi
      ...
     
     // tagastame unikaalse vastuvõtmise id
