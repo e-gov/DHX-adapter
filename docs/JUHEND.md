@@ -486,7 +486,7 @@ Kui soovitakse sama kapslit saata korraga mitme DHX adressaadile, siis tuleb see
 Ülaltoodud `web.xml` häälestuse kasutamisel registreeritakse serverisse automaatselt web service endpoint.  
 Selle aadress on `http://<hostname>:<port>/ws/dhx.wsdl`
 
-Sellelt aadressilt pakutav DHX sendDocument jt teenused tuleb registreerida X-tee turvaserveris.
+Sellelt aadressilt pakutavad DHX sendDocument jt teenused tuleb registreerida X-tee turvaserveris.
 
 Arendaja poolt tuleb dokumendi vastuvõtmiseks ja andmebaasi salvestamiseks realiseerida [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) meetodid [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) ja [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-).
 
