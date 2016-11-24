@@ -279,7 +279,7 @@ public class CustomDhxImplementationSpecificService
 ```
 
 Siin `@Service` tag määrab, et DHX adapteri seest kasutav teenus `dhxImplementationSpecificService` on nüüd ülekirjutatud omatehtud klassiga. 
-Seega nüüd kasutab dokumendi vastuvõtmise ja saatmise automaatloogika „callback“ liidesena arendaja enda loodud klassi `CustomDhxImplementationSpecificService`.
+Seega dokumendi vastuvõtmise ja saatmise automaatloogika kasutab nüüd „callback“ liidesena arendaja endaloodud klassi `CustomDhxImplementationSpecificService`.
 
 ##Aadressiraamatu koostamise ja kasutamise liides
 
