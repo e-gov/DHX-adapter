@@ -1,88 +1,90 @@
 package ee.ria.dhx.server.entity;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
+import javax.persistence.*;
+
+import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
 
+/**
+ * The persistent class for the asutus database table.
+ * 
+ */
 @Entity
 @Table(name="asutus")
 @Getter
 @Setter
-public class Organisation extends BaseEntity{
-  
+public class Organisation  extends BaseEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-  public Organisation () {
-    
-  }
-  
-  public Organisation(Long id, String memberCode, String memberClass, String name,
-      String capsuleVersion, String subsystem, Boolean isActive, Organisation representor,
-      List<Organisation> representees) {
-    super();
-    this.id = id;
-    this.memberCode = memberCode;
-    this.memberClass = memberClass;
-    this.name = name;
-    this.capsuleVersion = capsuleVersion;
-    this.subsystem = subsystem;
-    this.isActive = isActive;
-    this.representor = representor;
-   // this.representees = representees;
-  }
+	@Id
+	@Column(name="asutus_id")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer organisationId;
 
-  @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
-  @Column(nullable = false, name = "asutus_id")
-  private Long id;
-  
-  @Column(nullable = false, name="registrikood")
-  private String memberCode;
-  
-  @Column(nullable = true, name="liikme_klass")
-  private String memberClass;
-    
-  @Column(nullable = false, name="nimetus")
-  private String name;
-  
-  @Column(nullable = true, name="kapsel_versioon")
-  private String capsuleVersion;
-  
-  @Column(nullable = true, name="registrikood2") 
-  private String subsystem;
-  
-  @Column(nullable = false, name="dhl_saatmine") 
-  private Boolean isActive;
-  
-  @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
-  @JoinColumn(name="troop_fk")
-  private Organisation representor;
-  
-  /*@OneToMany
-  @JoinColumn(name="troop_fk") 
-  private List<Organisation> representees;*/
+	
+	@Column(name="dhl_saatmine")
+	private Boolean isActive;
 
-  @Override
-  public String toString() {
-    return "Organisation [id=" + id + ", memberCode=" + memberCode + ", memberClass="
-        + memberClass + ", name=" + name + ", capsuleVersion=" + capsuleVersion + ", subsystem="
-        + subsystem + ", isActive=" + isActive + ", representor=" + representor
-        + /*", representees=" + representees + */"]";
-  }
+	@Column(name="kapsel_versioon")
+	private String capsuleVersion;
 
+	@Column(name="nimetus")
+	private String name;
+
+	@Column(name="registrikood")
+	private String registrationCode;
+
+	@Column(name="subsystem")
+	private String subSystem;
+	
+	@Column(name="member_class")
+	private String memberClass;
+	
+	@Column(name="xroad_instance")
+	private String xroadInstance;
+	
+	@Column(name="representee_start")
+	private Timestamp representeeStart;
+	
+	@Column(name="representee_end")
+	private Timestamp representeeEnd;
+
+	
+	//bi-directional many-to-one association to Organisation
+	@ManyToOne
+	@JoinColumn(name="vahendaja_asutus_id")
+	private Organisation representor;
+
+	//bi-directional many-to-one association to Organisation
+	@OneToMany(mappedBy="representor")
+	private List<Organisation> representees;
+
+	//bi-directional many-to-one association to Dokument
+	/*@OneToMany(mappedBy="asutus")
+	private List<Dokument> dokuments;*/
+
+
+	public Organisation() {
+	}
+
+
+	public Organisation addRepresentee(Organisation organisation) {
+		getRepresentees().add(organisation);
+		organisation.setRepresentor(this);
+
+		return organisation;
+	}
+
+	public Organisation removeRepresentee(Organisation organisation) {
+	  getRepresentees().remove(organisation);
+	  organisation.setRepresentor(null);
+		return organisation;
+	}
 
 }
