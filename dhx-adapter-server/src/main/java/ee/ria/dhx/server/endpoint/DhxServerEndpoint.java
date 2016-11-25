@@ -3,9 +3,12 @@ package ee.ria.dhx.server.endpoint;
 import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.server.service.DhxDocumentService;
 import ee.ria.dhx.server.service.util.AttachmentUtil;
 import ee.ria.dhx.types.InternalXroadMember;
+import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
+import ee.ria.dhx.ws.service.DhxMarshallerService;
 import ee.ria.dhx.ws.service.DhxPackageService;
 import ee.ria.dhx.ws.service.impl.DhxGateway;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
@@ -18,7 +21,9 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDoc
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocumentsV4RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.SendDocuments;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.SendDocumentsResponse;
+import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.Fault;
+import ee.ria.dhx.util.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,14 +52,12 @@ public class DhxServerEndpoint {
   public static final String NAMESPACE_URI = "http://producers.dhl.xrd.riik.ee/producer/dhl";
 
 
-  @Autowired
-  DhxPackageService documentService;
-
-  @Autowired
-  DhxImplementationSpecificService dhxImplementationSpecificService;
 
   @Autowired
   DhxGateway dhxGateway;
+
+  @Autowired
+  DhxDocumentService dhxDocumentService;
 
   /**
    * X-road SOAP service sendDocuments.
@@ -77,33 +80,21 @@ public class DhxServerEndpoint {
         log.debug("Got sendDocument request from: " + client.toString());
         log.debug("Got sendDocument request to: " + service.toString());
       }
-      try{
-       InputStream attachment = /*AttachmentUtil.base64decodeAndUnzip(*/request.getKeha().getDokumendid().getHref().getInputStream()/*)*/;
-       int ch;
-       StringBuilder sb = new StringBuilder();
-       while((ch = attachment.read()) != -1)
-           sb.append((char)ch);
-       log.info("Got attachemnt:" +  sb.toString());
-      }catch(IOException ex) {
-        log.error("Error ocured." + ex.getMessage(), ex);
-      }
-      /*response =
-          documentService.receiveDocumentFromEndpoint(request, client, service, messageContext);*/
-      //TODO: add to DB useing service
+      dhxDocumentService.receiveDocuments(request, client, service);
+      // TODO: add to DB useing service
     } catch (DhxException ex) {
-    //  log.error(ex.getMessage(), ex);
-      if (ex.getExceptionCode().isBusinessException()) {
+      // log.error(ex.getMessage(), ex);
+      /*if (ex.getExceptionCode().isBusinessException()) {
         Fault fault = new Fault();
         fault.setFaultCode(ex.getExceptionCode().getCodeForService());
         fault.setFaultString(ex.getMessage());
-       // response.setFault(fault);
-      } else {
+        // response.setFault(fault);
+      } else {*/
         throw ex;
-      }
+      //}
     }
     return response;
   }
-
 
   /**
    * X-road SOAP service sendDocuments.
@@ -116,32 +107,36 @@ public class DhxServerEndpoint {
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "receiveDocuments")
   @ResponsePayload
   @Loggable
-  public ReceiveDocumentsResponse receiveDocuments(@RequestPayload ReceiveDocumentsV4RequestType request,
+  public ReceiveDocumentsResponse receiveDocuments(
+      @RequestPayload ReceiveDocumentsV4RequestType request,
       MessageContext messageContext) throws DhxException {
     ReceiveDocumentsResponse response = new ReceiveDocumentsResponse();
     try {
       InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
       InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-     /* if (log.isDebugEnabled()) {
-        log.debug("Got sendDocument request from: " + client.toString());
-      }*/
-      /*response =
-          documentService.receiveDocumentFromEndpoint(request, client, service, messageContext);*/
-      //TODO: add to DB useing service
+      /*
+       * if (log.isDebugEnabled()) { log.debug("Got sendDocument request from: " +
+       * client.toString()); }
+       */
+      /*
+       * response = documentService.receiveDocumentFromEndpoint(request, client, service,
+       * messageContext);
+       */
+      // TODO: add to DB useing service
     } catch (DhxException ex) {
-     // log.error(ex.getMessage(), ex);
+      // log.error(ex.getMessage(), ex);
       if (ex.getExceptionCode().isBusinessException()) {
         Fault fault = new Fault();
         fault.setFaultCode(ex.getExceptionCode().getCodeForService());
         fault.setFaultString(ex.getMessage());
-       // response.setFault(fault);
+        // response.setFault(fault);
       } else {
         throw ex;
       }
     }
     return response;
   }
-  
+
   /**
    * X-road SOAP service sendDocuments.
    * 
@@ -153,32 +148,36 @@ public class DhxServerEndpoint {
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "markDocumentsReceived")
   @ResponsePayload
   @Loggable
-  public MarkDocumentsReceivedResponse markDocumentsReceived(@RequestPayload MarkDocumentsReceived request,
+  public MarkDocumentsReceivedResponse markDocumentsReceived(
+      @RequestPayload MarkDocumentsReceived request,
       MessageContext messageContext) throws DhxException {
     MarkDocumentsReceivedResponse response = new MarkDocumentsReceivedResponse();
     try {
       InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
       InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-     /* if (log.isDebugEnabled()) {
-        log.debug("Got sendDocument request from: " + client.toString());
-      }*/
-      /*response =
-          documentService.receiveDocumentFromEndpoint(request, client, service, messageContext);*/
-      //TODO: add to DB useing service
+      /*
+       * if (log.isDebugEnabled()) { log.debug("Got sendDocument request from: " +
+       * client.toString()); }
+       */
+      /*
+       * response = documentService.receiveDocumentFromEndpoint(request, client, service,
+       * messageContext);
+       */
+      // TODO: add to DB useing service
     } catch (DhxException ex) {
-     // log.error(ex.getMessage(), ex);
+      // log.error(ex.getMessage(), ex);
       if (ex.getExceptionCode().isBusinessException()) {
         Fault fault = new Fault();
         fault.setFaultCode(ex.getExceptionCode().getCodeForService());
         fault.setFaultString(ex.getMessage());
-       // response.setFault(fault);
+        // response.setFault(fault);
       } else {
         throw ex;
       }
     }
     return response;
   }
-  
+
   /**
    * X-road SOAP service sendDocuments.
    * 
@@ -196,26 +195,29 @@ public class DhxServerEndpoint {
     try {
       InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
       InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-     /* if (log.isDebugEnabled()) {
-        log.debug("Got sendDocument request from: " + client.toString());
-      }*/
-      /*response =
-          documentService.receiveDocumentFromEndpoint(request, client, service, messageContext);*/
-      //TODO: add to DB useing service
+      /*
+       * if (log.isDebugEnabled()) { log.debug("Got sendDocument request from: " +
+       * client.toString()); }
+       */
+      /*
+       * response = documentService.receiveDocumentFromEndpoint(request, client, service,
+       * messageContext);
+       */
+      // TODO: add to DB useing service
     } catch (DhxException ex) {
-     // log.error(ex.getMessage(), ex);
+      // log.error(ex.getMessage(), ex);
       if (ex.getExceptionCode().isBusinessException()) {
         Fault fault = new Fault();
         fault.setFaultCode(ex.getExceptionCode().getCodeForService());
         fault.setFaultString(ex.getMessage());
-       // response.setFault(fault);
+        // response.setFault(fault);
       } else {
         throw ex;
       }
     }
     return response;
   }
-  
+
   /**
    * X-road SOAP service sendDocuments.
    * 
@@ -233,24 +235,27 @@ public class DhxServerEndpoint {
     try {
       InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
       InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-     /* if (log.isDebugEnabled()) {
-        log.debug("Got sendDocument request from: " + client.toString());
-      }*/
-      /*response =
-          documentService.receiveDocumentFromEndpoint(request, client, service, messageContext);*/
-      //TODO: add to DB useing service
+      /*
+       * if (log.isDebugEnabled()) { log.debug("Got sendDocument request from: " +
+       * client.toString()); }
+       */
+      /*
+       * response = documentService.receiveDocumentFromEndpoint(request, client, service,
+       * messageContext);
+       */
+      // TODO: add to DB useing service
     } catch (DhxException ex) {
-     // log.error(ex.getMessage(), ex);
+      // log.error(ex.getMessage(), ex);
       if (ex.getExceptionCode().isBusinessException()) {
         Fault fault = new Fault();
         fault.setFaultCode(ex.getExceptionCode().getCodeForService());
         fault.setFaultString(ex.getMessage());
-       // response.setFault(fault);
+        // response.setFault(fault);
       } else {
         throw ex;
       }
     }
     return response;
   }
- 
+
 }

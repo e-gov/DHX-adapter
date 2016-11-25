@@ -43,7 +43,7 @@ public class IncomingDhxPackage extends DhxPackage {
    * external ID of the package.(for package receiving)
    */
   private String externalConsignmentId;
-  private DhxRecipient recipient;
+  private DhxOrganisation recipient;
 
 
 
@@ -70,12 +70,12 @@ public class IncomingDhxPackage extends DhxPackage {
    * @return - For incoming document. Contains recipient data. If document is sent to representee
    *         then object contains representees data, otherwise object contains direct recipient
    */
-  public DhxRecipient getRecipient() {
+  public DhxOrganisation getRecipient() {
     return recipient;
   }
 
-  private DhxRecipient getRecipient(SendDocument document, InternalXroadMember service) {
-    DhxRecipient recipient = new DhxRecipient();
+  private DhxOrganisation getRecipient(SendDocument document, InternalXroadMember service) {
+    DhxOrganisation recipient = new DhxOrganisation();
     if (!StringUtil.isNullOrEmpty(document.getRecipient())) {
       recipient.setCode(document.getRecipient());
       recipient.setSystem(document.getRecipientSystem());
@@ -92,7 +92,7 @@ public class IncomingDhxPackage extends DhxPackage {
    * @param recipient - For incoming document. Must contain recipient data(either representee or
    *        direct recipient)
    */
-  public void setRecipient(DhxRecipient recipient) {
+  public void setRecipient(DhxOrganisation recipient) {
     this.recipient = recipient;
   }
 

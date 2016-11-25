@@ -1,0 +1,41 @@
+package ee.ria.dhx.server.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the saatja database table.
+ * 
+ */
+@Entity
+@Table(name = "saatja")
+@Getter
+@Setter
+public class Sender  extends BaseEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name="saatja_id")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer senderId;
+
+	//bi-directional many-to-one association to Asutus
+	@ManyToOne
+	@JoinColumn(name="asutus_id")
+	private Organisation organisation;
+
+	//bi-directional many-to-one association to Transport
+	@ManyToOne
+	@JoinColumn(name="transport_id")
+	private Transport transport;
+
+	public Sender() {
+	}
+
+	
+}

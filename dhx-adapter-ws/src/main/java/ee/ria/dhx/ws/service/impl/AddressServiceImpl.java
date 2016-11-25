@@ -83,7 +83,7 @@ public class AddressServiceImpl implements AddressService {
     List<InternalXroadMember> adressees = dhxImplementationSpecificService
         .getAdresseeList();
     // obviously not initialized yet
-    if (adressees == null) {
+    if (adressees == null || adressees.size() == 0) {
       renewAddressList();
       adressees = dhxImplementationSpecificService.getAdresseeList();
     }

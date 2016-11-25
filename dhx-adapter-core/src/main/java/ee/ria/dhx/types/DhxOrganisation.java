@@ -3,19 +3,29 @@ package ee.ria.dhx.types;
 import lombok.Setter;
 
 /**
- * Represents recipient of the document. Helps to easily define to whom the document is really sent.
+ * Represents document sender or recipient organisation. Helps to easily define to whom or from who the document is really sent.
  * Recipient might be not obvious if document is sent to representee. This class contains
- * representees data if document is sent to representee and direct reciever data if it is sent
- * directly, not to representee.
+ * representees data if document is sent to/from representee and direct reciever data if it is sent
+ * directly, not to/from representee.
  * 
  * @author Aleksei Kokarev
  *
  */
 @Setter
-public class DhxRecipient {
+public class DhxOrganisation {
 
   private String code;
   private String system;
+  
+  public DhxOrganisation(InternalXroadMember member){
+    if(member.getRepresentee() != null ) {
+      this.code = member.getRepresentee().getRepresenteeCode();
+      this.system = member.getRepresentee().getRepresenteeSystem();
+    } else {
+      this.code = member.getMemberCode();
+      this.system = member.getSubsystemCode();
+    }
+  }
 
   /**
    * Recipient consctructor.
@@ -24,7 +34,7 @@ public class DhxRecipient {
    * @param system - system of the recipient. migth be either X-road subSystemCode or representees
    *        system
    */
-  public DhxRecipient(String code, String system) {
+  public DhxOrganisation(String code, String system) {
     this.code = code;
     this.system = system;
   }
@@ -33,7 +43,7 @@ public class DhxRecipient {
    * Recipient consctructor.
    * 
    */
-  public DhxRecipient() {}
+  public DhxOrganisation() {}
 
   public String getCodeUpper() {
     return code.toUpperCase();
@@ -63,13 +73,13 @@ public class DhxRecipient {
    * @return - returns true if both recipients are equal
    */
   public boolean equals(Object obj, String dhxSubsystemPrefix) {
-    if (!(obj instanceof DhxRecipient)) {
+    if (!(obj instanceof DhxOrganisation)) {
       return false;
     }
     if (obj == this) {
       return true;
     }
-    DhxRecipient recipient = (DhxRecipient) obj;
+    DhxOrganisation recipient = (DhxOrganisation) obj;
     if (recipient.getCodeUpper().equals(this.getCodeUpper())
         && recipient.getAdaptedSystem(dhxSubsystemPrefix).equals(
             this.getAdaptedSystem(dhxSubsystemPrefix))) {
