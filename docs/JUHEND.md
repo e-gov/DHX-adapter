@@ -234,7 +234,7 @@ dhx.parse-capsule | true |  | Määrab kas parsida saabunud või saadetava dokum
 dhx.check-recipient | true |  | Määrab kas kontrollida saabunud dokumendi adressaadi korrektsust. Kontrollitakse kas Kapsli sees olev adressaat vastab vastuvõtja registrikoodile. Kui adressaat on vale, siis vastatakse saatjale veaga [DHX.InvalidAddressee](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid)
 dhx.check-sender | false |  | Määrab kas kontrollida saabunud dokumendi saatja korrektsust. Kas Kapsli XML-is asuv saatja vastab X-tee client päises määratletud saatja andmetele.
 dhx.check-duplicate | true |  | Määrab kas kontrollida saabunud saadetise topelt saabumist. Kui true, siis kutsutakse välja `DhxImplementationSpecificService` [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-). Topelt korral väljastatakse saatjale viga [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid)
-**dhx.document-resend-template** | 30,120,1200 |  | Määrab uuesti saatmise ürituste arvu ja oote ajad [Crontab pattern](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) formaadis. Kasutatakse ainult asünkroonsel saatmisel. Antud näide määrab, et kokku tehakse 4 saatmisüritust. Uuesti saatmist üritatakse kõigepealt 30 sekundi järel, seejärel 120 sekundi (2 minuti) järel ning seejärel 1200 sekundi (20 minuti) järel. Kui ka viimane saatmine ebaõnnestus, siis lõpetatakse üritamine.
+**dhx.document-resend-template** | 30,120,1200 |  | Määrab uuesti saatmise ürituste arvu ja oote ajad. Kasutatakse ainult asünkroonsel saatmisel. Antud näide määrab, et kokku tehakse 4 saatmisüritust. Uuesti saatmist üritatakse kõigepealt 30 sekundi järel, seejärel 120 sekundi (2 minuti) järel ning seejärel 1200 sekundi (20 minuti) järel. Kui ka viimane saatmine ebaõnnestus, siis lõpetatakse üritamine.
 dhx.wsdl-file | dhx.wsdl |  | Asutuse poolt pakutava DHX teenuse [WSDL faili](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) nimi. Selle nimelist faili otsitakse käivitamisel Java Classpathist. WSDL fail on kõikide DHX rakendajate jaoks konstantne ja seda muuta ei ole vaja
 dhx.protocol-version | 1.0 |  | DHX protokolli versiooni number, mis saadetakse `sendDocument` päringu [DHXVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#p%C3%A4ringu-sisend) parameetrina. 
 dhx.check-dhx-version | true |  | Kas dokumendi saabumisel kontrollida ka saatja poolt määratud DHX versiooni vastavust. Kui versioon ei ole õige siis tagastatakse saatjale DHX viga [DHX.UnsupportedVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid)
@@ -324,13 +324,13 @@ Adressaati [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter
 Väli | Näide | Kirjeldus
 ------------ | ------------- | -------------
 xroadInstance | EE | Riik EE
-memberClass | GOV | GOV- Valitsus, COM - eraettevõte
-memberCode | 70000001 | Asutuse registrikood
-subsystemCode | DHX või DHX.adit | Alamsüsteemi kood. Peab algama DHX prefiksiga. Üldjuhul lihtsalt DHX
-Name | Riigi infosüsteemide keskus | Asutuse või alamsüsteemi nimi
-representee.representeeCode | 70012121 | Esindatava registrikood
-representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui esindataval on mitu alamsüsteemi, siis alamsüsteemi kood
-representee.representeeName | Lasteaed Pallipõnn | Esindatava nimi või esindatava alamsüsteemi nimi
+memberClass | GOV | GOV- Valitsus, COM - eraettevõte. Vahendaja korral vahendaja enda memberClass
+memberCode | 70000001 | Asutuse registrikood. Vahendaja korral vahendaja enda registrikood (mitte vahendatava registrikood)
+subsystemCode | DHX või DHX.adit | Alamsüsteemi kood. Peab algama DHX prefiksiga. Üldjuhul lihtsalt DHX. Vahendaja korral vahendaja enda alamsüsteemi kood (mitte vahendatava alamsüsteemi kood)
+Name | Riigi infosüsteemide keskus | Asutuse või alamsüsteemi nimi. Vahendaja korral vahendaja enda nimi (mitte vahendatava nimi)
+representee.representeeCode | 70012121 | Vahendatava registrikood (kasutatakse ainult vahendaja kaudu dokumendi saatmisel)
+representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui vahendataval on mitu alamsüsteemi, siis alamsüsteemi kood
+representee.representeeName | Lasteaed Pallipõnn | Vahendatava nimi või vahendatava alamsüsteemi nimi
 
 Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objektide massiivi, mis on kõikide DHX adressaatide nimekiri.
 
