@@ -5,7 +5,7 @@ import com.jcabi.aspects.Loggable;
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.types.CapsuleAdressee;
-import ee.ria.dhx.types.DhxRecipient;
+import ee.ria.dhx.types.DhxOrganisation;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.DhxSendDocumentResult;
 import ee.ria.dhx.types.IncomingDhxPackage;
@@ -329,10 +329,10 @@ public class DhxPackageServiceImpl implements DhxPackageService {
    * @throws DhxException throws if recipient not found. Means that document recipient if faulty
    */
   @Loggable
-  protected void checkRecipient(DhxRecipient recipient,
+  protected void checkRecipient(DhxOrganisation recipient,
       List<CapsuleAdressee> capsuleRecipients) throws DhxException {
     log.info("Checking recipient.");
-    List<DhxRecipient> recipientList = new ArrayList<DhxRecipient>();
+    List<DhxOrganisation> recipientList = new ArrayList<DhxOrganisation>();
     List<DhxRepresentee> representees = dhxImplementationSpecificService
         .getRepresentationList();
     Date curDate = new Date();
@@ -341,17 +341,17 @@ public class DhxPackageServiceImpl implements DhxPackageService {
         if (representee.getStartDate().getTime() <= curDate.getTime()
             && (representee.getEndDate() == null || representee
                 .getEndDate().getTime() >= curDate.getTime())) {
-          recipientList.add(new DhxRecipient(representee
+          recipientList.add(new DhxOrganisation(representee
               .getRepresenteeCode(), representee.getRepresenteeSystem()));
         }
       }
     }
     for (String subSystem : soapConfig.getAcceptedSubsystemsAsList()) {
-      recipientList.add(new DhxRecipient(soapConfig.getMemberCode(),
+      recipientList.add(new DhxOrganisation(soapConfig.getMemberCode(),
           subSystem));
     }
     Boolean found = false;
-    for (DhxRecipient rec : recipientList) {
+    for (DhxOrganisation rec : recipientList) {
       if (rec.equals(recipient, soapConfig.getDhxSubsystemPrefix())) {
         found = true;
         break;
@@ -360,7 +360,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     if (!found) {
       if (log.isDebugEnabled() && recipientList != null){
         log.debug("Recipient not found in representativesList and own member code. recipientList:");
-        for(DhxRecipient recipientFromList : recipientList) {
+        for(DhxOrganisation recipientFromList : recipientList) {
           log.debug("Recipient: " + recipientFromList.toString());
         }
       }
@@ -396,7 +396,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
   protected void checkSender(InternalXroadMember client,
       CapsuleAdressee capsuleSender) throws DhxException {
     log.info("Checking sender.");
-    DhxRecipient sender = new DhxRecipient();
+    DhxOrganisation sender = new DhxOrganisation();
     if (client.getRepresentee() != null) {
       sender.setCode(client.getRepresentee().getRepresenteeCode());
       sender.setSystem(client.getRepresentee().getRepresenteeSystem());

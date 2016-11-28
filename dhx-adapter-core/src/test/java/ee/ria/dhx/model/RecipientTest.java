@@ -1,6 +1,6 @@
 package ee.ria.dhx.model;
 
-import ee.ria.dhx.types.DhxRecipient;
+import ee.ria.dhx.types.DhxOrganisation;
 
 import org.junit.Test;
 
@@ -11,8 +11,8 @@ public class RecipientTest {
   
   @Test
   public void testEquals () {
-    DhxRecipient first = new DhxRecipient ("code", "system");
-    DhxRecipient second = new DhxRecipient ("code", "system");
+    DhxOrganisation first = new DhxOrganisation ("code", "system");
+    DhxOrganisation second = new DhxOrganisation ("code", "system");
     assertTrue(first.equals(second, "DHX"));
     assertTrue(second.equals(first, "DHX"));
     
@@ -39,7 +39,7 @@ public class RecipientTest {
   
   @Test
   public void testEqualsToCapsuleRecipient () {
-    DhxRecipient first = new DhxRecipient ("code", "system");
+    DhxOrganisation first = new DhxOrganisation ("code", "system");
     String capsuleRecipient = "code";
     
     assertTrue(first.equalsToCapsuleRecipient(capsuleRecipient, "DHX"));

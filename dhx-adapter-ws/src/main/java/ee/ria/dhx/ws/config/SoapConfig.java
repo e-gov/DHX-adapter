@@ -76,9 +76,9 @@ public class SoapConfig {
   String representativesServiceVersion = "v1";
 
   @Value("${soap.connection-timeout:60000}")
-  Integer connectionTimeout = 60000;
+  Integer connectionTimeout;
 
-  @Value("${soap.read-timeout:60000}")
+  @Value("${soap.read-timeout:120000}")
   Integer readTimeout;
 
   @Value("${soap.dhx-subsystem-prefix:DHX}")

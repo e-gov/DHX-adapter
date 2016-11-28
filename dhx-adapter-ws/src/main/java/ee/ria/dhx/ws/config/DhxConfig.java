@@ -36,7 +36,7 @@ public class DhxConfig {
   @Value("${dhx.check-recipient:true}")
   private Boolean checkRecipient = true;
 
-  @Value("${dhx.check-sernder:true}")
+  @Value("${dhx.check-sender:true}")
   private Boolean checkSender = true;
 
   @Value("${dhx.check-filesize:false}")

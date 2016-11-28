@@ -80,13 +80,13 @@ public class ExampleDhxImplementationSpecificService implements
 
   @Override
   @Deprecated
-  public List<InternalXroadMember> getAdresseeList() {
+  public List<InternalXroadMember> getAdresseeList() throws DhxException{
     return members;
   }
 
   @Override
   @Deprecated
-  public void saveAddresseeList(List<InternalXroadMember> members) {
+  public void saveAddresseeList(List<InternalXroadMember> members) throws DhxException{
     this.members = members;
   }
 

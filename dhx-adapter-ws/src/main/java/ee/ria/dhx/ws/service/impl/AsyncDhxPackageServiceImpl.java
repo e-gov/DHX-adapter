@@ -62,7 +62,7 @@ public class AsyncDhxPackageServiceImpl implements AsyncDhxPackageService {
     DhxSendDocumentResult result;
     try {
       do {
-        log.info("Trying to send package in async mode");
+        log.info("Trying to send package in async mode. currentRetry = " + currentRetry);
         result = sendPackageTry(outgoingPackage);
         results.add(new AsyncDhxSendDocumentResult(result));
         if (result.getOccuredException() != null

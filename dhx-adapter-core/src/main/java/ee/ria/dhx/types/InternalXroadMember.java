@@ -116,8 +116,15 @@ public class InternalXroadMember {
 
   @Override
   public String toString() {
-    return "X-road member " + xroadInstance + "/" + memberClass + "/" + memberCode + "/"
-        + subsystemCode + (representee == null ? "" : ", representee: "
+    return "X-road member "
+        + xroadInstance
+        + "/"
+        + memberClass
+        + "/"
+        + memberCode
+        + "/"
+        + subsystemCode
+        + (representee == null ? "" : ", representee: "
             + representee.getRepresenteeCode() + ", system:" + representee.getRepresenteeSystem());
   }
 
