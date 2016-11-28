@@ -324,13 +324,13 @@ Adressaati [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter
 Väli | Näide | Kirjeldus
 ------------ | ------------- | -------------
 xroadInstance | EE | Riik EE
-memberClass | GOV | GOV- Valitsus, COM - eraettevõte
-memberCode | 70000001 | Asutuse registrikood
-subsystemCode | DHX või DHX.adit | Alamsüsteemi kood. Peab algama DHX prefiksiga. Üldjuhul lihtsalt DHX
-Name | Riigi infosüsteemide keskus | Asutuse või alamsüsteemi nimi
-representee.representeeCode | 70012121 | Esindatava registrikood
-representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui esindataval on mitu alamsüsteemi, siis alamsüsteemi kood
-representee.representeeName | Lasteaed Pallipõnn | Esindatava nimi või esindatava alamsüsteemi nimi
+memberClass | GOV | GOV- Valitsus, COM - eraettevõte. Vahendaja korral vahendaja enda memberClass
+memberCode | 70000001 | Asutuse registrikood. Vahendaja korral vahendaja enda registrikood (mitte vahendatava registrikood)
+subsystemCode | DHX või DHX.adit | Alamsüsteemi kood. Peab algama DHX prefiksiga. Üldjuhul lihtsalt DHX. Vahendaja korral vahendaja enda alamsüsteemi kood (mitte vahendatava alamsüsteemi kood)
+Name | Riigi infosüsteemide keskus | Asutuse või alamsüsteemi nimi. Vahendaja korral vahendaja enda nimi (mitte vahendatava nimi)
+representee.representeeCode | 70012121 | Vahendatava registrikood (kasutatakse ainult vahendaja kaudu dokumendi saatmisel)
+representee.representeeSystem |  DHX.subsystem | Üldjuhul tühi, aga erijuhul kui vahendataval on mitu alamsüsteemi, siis alamsüsteemi kood
+representee.representeeName | Lasteaed Pallipõnn | Vahendatava nimi või vahendatava alamsüsteemi nimi
 
 Meetod [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) tagastab [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objektide massiivi, mis on kõikide DHX adressaatide nimekiri.
 
