@@ -308,6 +308,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
       if (document.getService().getRepresentee() != null) {
         request.setRecipient(document.getService().getRepresentee()
             .getRepresenteeCode());
+        request.setRecipientSystem(document.getService().getRepresentee().getRepresenteeSystem());
       }
       request.setDocumentAttachment(document.getDocumentFile());
       if (document.getInternalConsignmentId() != null
