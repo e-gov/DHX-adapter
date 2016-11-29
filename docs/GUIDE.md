@@ -280,12 +280,12 @@ public class CustomDhxImplementationSpecificService
 }
 ```
 
-Above, the `@Service` tag specifies that DHX adapter uses now `dhxImplementationSpecificService` costom implementation. 
-Therefore document receiving and sending internal functionality now uses `CustomDhxImplementationSpecificService` as callback interfase.
+Above, the `@Service` tag specifies that DHX adapter uses now `dhxImplementationSpecificService` custom implementation. 
+Therefore the document receiving and sending internal functionality now uses `CustomDhxImplementationSpecificService` as callback interface.
 
 ##Address book creation and renewal interface
 
-In DHX addressing, the developer needs to bear in mind that, it is not sufficint to use registration code of an organisation only. 
+In DHX addressing, the developer needs to bear in mind that, it is not sufficint to use only the registration code of an organization. 
 For unique addressing combination `registrationCode + subsystem` should be used. 
 For excample if document addressee is `Lääne Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.laane` is sufficient.
 If document addressee is `Lõuna Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.louna` is sufficient.
@@ -329,12 +329,12 @@ Attrinute | Sample value | Description
 ------------ | ------------- | -------------
 xroadInstance | EE | Country EE
 memberClass | GOV | GOV- Goverment, COM - commercial. In case of intermediary, it contains mediator memberClass.
-memberCode | 70000001 | Organisation registration code. In case of intermediary, it contains mediator's registration code, not mediated organisation (representee) registration code.
-subsystemCode | DHX or DHX.adit |Sub-system code. Must start with DHX. In general just `DHX`. In case of intermediary, it contains mediator's subsystem code, not mediated organisation (representee) subsystem code.
-name | Riigi infosüsteemide keskus | Organization or sub-system name.In case of intermediary, it contains mediator's name, not mediated organisation (representee) name.
-representee.representeeCode | 70012121 | Mediated organisation (representee) registration code. (used in case if document is sended through intermediary)
-representee.representeeSystem |  DHX.subsystem | Mediated organisation (representee) syb-system code. In general it is empty. IF mediated organization has several subsystems, then subsystem code.
-representee.representeeName | Lasteaed Pallipõnn | Mediated organisation (representee) name or its sub-system name
+memberCode | 70000001 | organization registration code. In case of intermediary, it contains mediator's registration code, not mediated organization (representee) registration code.
+subsystemCode | DHX or DHX.adit |Sub-system code. Must start with DHX. In general just `DHX`. In case of intermediary, it contains mediator's subsystem code, not mediated organization (representee) subsystem code.
+name | Riigi infosüsteemide keskus | Organization or sub-system name.In case of intermediary, it contains mediator's name, not mediated organization (representee) name.
+representee.representeeCode | 70012121 | Mediated organization (representee) registration code. (used in case if document is sended through intermediary)
+representee.representeeSystem |  DHX.subsystem | Mediated organization (representee) syb-system code. In general it is empty. IF mediated organization has several subsystems, then subsystem code.
+representee.representeeName | Lasteaed Pallipõnn | Mediated organization (representee) name or its sub-system name
 
 Method [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) returns [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objects array. It contains all DHX addressees (recipients).
 
