@@ -31,14 +31,14 @@ DHX adapter packages depends on the components shown below.
 
 As DHX adapter package provides web services (is not only web client), it depends on J2EE [Java Servlet API](https://en.wikipedia.org/wiki/Java_servlet), by using [Spring Web Services](http://projects.spring.io/spring-ws/).
 
-[Java Architecture for XML Binding - JAXB](https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/package-summary.html) API is used for XML marshalling teeki (is part of Java SE 7).
+[Java Architecture for XML Binding - JAXB](https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/package-summary.html) API is used for XML marshalling (is part of Java SE 7).
 
-DHX adapter Java package is based on Spring Framework architecture, by using extensively ist modules:
+DHX adapter Java package is based on Spring Framework architecture by using extensively its sub-modules:
 - For configuraton and initializing (Spring AOP, Spring Context, etc)
 - For making HTTP SOAP client request (Spring WS Client, Apache HttpClient)
 - For providing HTTP SOAP web service (Spring WS Server Endpoint, Java Servlet API)
 
-Direct and indirect external API-s used by DHX adapter are following
+Direct and indirect external references (dependencies) of DHX adapter are following
 
 Group | Package | Version | Notes
 ------------ | ------------- | ------------- | -------------
@@ -79,11 +79,11 @@ junit | junit | 4.12 | JUnit
 
 ##Building
 
-The following Example is given on how to involve the DHX adapter package in existing (or new) software project, by using [Apache Maven](https://maven.apache.org/).
+The following example is given on how to involve the DHX adapter package in existing (or new) software project, by using [Apache Maven](https://maven.apache.org/).
 
-The above external dependencies downloaded automatically by Maven.
+The above external dependencies are downloaded automatically by Maven.
 
-The following dependencies should be appended into Maven pom.xml:
+The following dependencies should be appended into Maven pom.xml
 ```xml
 		<dependency>
 			<groupId>ee.ria.dhx</groupId>
@@ -101,11 +101,11 @@ The following dependencies should be appended into Maven pom.xml:
 
 ##Known issues (dependency conflicts)
 
-In case **axiom-dom** or **axis2-saaj** are used in Java classpath, the XML marshalling/unmarshalling will not work properly - attachments remain empty. It is known JAXB issue.
+In case **axiom-dom** or **axis2-saaj** are in Java classpath, the XML marshalling/unmarshalling will not work properly (attachments remain empty). It is known JAXB issue.
 
-It is recommended to remove these libraries from within Java classpath. 
+It is recommended to remove these libraries from Java classpath. 
 
-With Maven, if third library (for axample axis2-codegen) depends on these, it could be done like this:
+With Maven, if third library (for axample axis2-codegen) depends on these, it could be removed like this:
 
 ```xml
 	<dependency>
@@ -127,7 +127,7 @@ With Maven, if third library (for axample axis2-codegen) depends on these, it co
 
 ##Loading setup (web.xml and applicationContext.xml)
 
-The simpliest way is to use DHX adapter inside Web (Servlet) Container (Tomcat, Jetty, etc), by using SpringFramework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
+The simpliest way is to use DHX adapter inside Web (Servlet) Container (Tomcat, Jetty, etc), by using Spring Framework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
 The `web.xml` must be supplemented with sections:
 ```xml
@@ -190,14 +190,51 @@ It should look like the following:
 
 ##Configuration properties (dhx-application.properties)
 
+On servlet initialization, the file named `dhx-application.properties` is searched from Servlet classpath. 
 
+Ehitamisel on soovitav see näiteks paigalda WAR-i sisse `/WEB-INF/classes` alamataloogi.
+Building processs should include it into WAR `/WEB-INF/classes` catalog.
 
+Example is in file [dhx-application.properties](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/development/ws/dhx-application.properties)
 
+Example content:
+```properites
+soap.security-server=http://10.0.13.198
+soap.xroad-instance=ee-dev
+soap.member-class=GOV
+soap.member-code=40000001
 
+document-resend-template=30,120,1200
+address-renew-timeout=*/20 * * * * ?
+```
 
+All possible `dhx-application.properties` property names are described in table below. 
+The parameters with default value do not have to be added into proprties file (if you do not want to change the value).
 
-
-
-
-
+Parameter | Default value | Example value | Description
+------------ | ------------- | ------------- | -------------
+**soap.security-server** |  | http://10.0.13.198 | X-road security server network address
+**soap.xroad-instance** |  | ee | Country code. `ee-dev` in develepment, `ee` in production. Assigned to X-road header `Header/client/xRoadInstance` value in SOAP request. 
+**soap.member-class** |  | GOV | Organization X-road member class (`COM` or `GOV`). Assigned to X-road header `Header/client/memberClass` value in SOAP request.
+**soap.member-code** |  | 40000001 | Organization registration code. Assigned to X-road header `Header/client/memberCode` value in SOAP request.
+soap.default-subsystem | DHX |  | Organization X-road DHX subsystem code. Assigned to X-road header `Header/client/subsystemCode` value in SOAP request. If organization has multiple DHX subsystems, it could be different (like `DHX.adit`)
+soap.security-server-appender | /cgi-bin/consumer_proxy |  | X-road security server URL path 
+soap.targetnamespace | `http://dhx.x-road.eu/producer` |  | SOAP X-road namespace
+soap.protocol-version | 4.0 |  | X-road protocol version. Assigned to X-road header `Header/protocolVersion` value in SOAP request.
+soap.global-conf-location | verificationconf |  | The path prefix, that determines X-road Global configuration download URL. In general it is `/verificationconf/ee/shared-params.xml`
+soap.global-conf-filename | shared-params.xml |  | The filename suffix, that determines X-road Global configuration download URL. In general it is `/verificationconf/ee/shared-params.xml`
+soap.dhx-representation-group-name | DHX vahendajad |  | DHX intermediary group name. Used for searching mediators from X-road global configuration.
+soap.accepted-subsystems | DHX |  | Specifies organization DHX sub-systems (for document receival). Comma separated list. Example: In case organization has several DHX sub-systems DHX.dvk and DHX.adit (served by single DHX endpoint), it could be assigned as `soap.accepted-subsystems=DHX.dvk,DHX.adit`
+soap.send-document-service-code | sendDocument |  | Service operation name. DHX protocol requires constant `sendDocument`. Assigned to X-road header `Header/service/serviceCode` value in SOAP request.
+soap.send-document-service-version | v1 |  | Assigned to X-road header `Header/service/serviceVersion` value in SOAP request.
+soap.representatives-service-code | representationList |  | Representee list operation name. Assigned to X-road header `Header/service/serviceCode` value in SOAP request.
+soap.representatives-service-version | v1 |  | Representee list operation version. Assigned to X-road header `Header/service/serviceVersion` value in SOAP request.
+soap.connection-timeout | 60000 |  | HTTP connection opening timeout (when making SOAP requests). Milliseconds. Default is 1 minute.
+soap.read-timeout | 120000 |  | HTTP response waiting timeout (when making SOAP requests). Milliseconds. Default is 2 minute. Could be increased, in case document files are large. 
+soap.dhx-subsystem-prefix | DHX |  | DHX sub-system prefix. Used for searching DHX addressee form X-road global configuration. DHX protocol requires it to be constant `DHX`
+dhx.capsule-validate | true |  | Specifies whether to validate the document (both received and sended) Capsule XML against its XSD schema. If document does not validate, then respond with error [DHX.Validation](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender. [Capsule 2.1 XSD Schema](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd)  
+dhx.parse-capsule | true |  | Specifies whether to marshall (parse) the incoming document Capsule XML into Java objects. 
+dhx.check-recipient | true |  | Specifies whether to validate incoming document addressees. Validation checks whether addressee inside Capsule XML is the same as receiver (our own) organization code. If addressee is invalid, then respond with error [DHX.InvalidAddressee](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
+dhx.check-sender | false |  | Specifies whether to check sender of the incoming document.  Validation checks whether the sender inside Capsule XML is the same as sender (client) in X-road header.
+dhx.check-duplicate | true |  | Specifies whether to execute duplication cheks on incoming documents consignments.  If true, the  `DhxImplementationSpecificService` [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called. If it is duplicate consingment, then respond with error [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
 
