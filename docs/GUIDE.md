@@ -412,12 +412,12 @@ Asynchronous sending interface is similar to synchronous interface.
  
 The difference is that the interface [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) method [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-) is executed asynchronously (in separate thread) and the current thread continues immediately (not waiting for response).
 
-In case there occurs an technical error then Asynchronous execution re-attempts sending (see `dhx-application.properties` parameter `document-resend-template=30,120,1200`).
+In case there occurs an technical error, then Asynchronous execution re-attempts sending (see `dhx-application.properties` parameter `document-resend-template=30,120,1200`).
 
 After sending success (or final failure) tha callback interface [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) method [saveSendResult](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveSendResult-ee.ria.dhx.types.DhxSendDocumentResult-java.util.List-) is called. 
 It is developer's responsibility to implement it, by storing response to DMS database, etc.
 
-Callback interfacee method `saveSendResult` implementation example
+Callback interface method `saveSendResult` implementation example
 ```java
 @Service("dhxImplementationSpecificService")
 public class CustomDhxImplementationSpecificService 
@@ -484,17 +484,17 @@ If sender wants to send the same document capsule to multiple recipients, then h
 
 ##Document receiving interface
 
-By using the `web.xml` described above web service endpoint is registered and created automatically in web server.  
+By using the `web.xml` described above the web service endpoint is registered and created automatically (in web servlet container).  
 It's URL is `http://<hostname>:<port>/ws/dhx.wsdl`
 
 Services provided on that URL should be registered in X-road security server. 
 
-For receiving and storing incoming document, the developer must implement [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) methods [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) and [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-).
+For receiving and storing incoming documents, the developer must implement [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) methods [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) and [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-).
 
-An arrival at first the method [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called.
+On arrival, at first the method [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called.
 It must check if it is duplicate sending attempt (the same document consignment is sended to our DMS twice or more times).
 If it is duplicate, then response with error [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) is generated.
-If it's not duplicate,, then method [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-) is called, that should store document (into DMS's "Incoming documents" folder).
+If it's not duplicate,, then method [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-) is called. It should store document (into DMS's "Incoming documents" folder).
 
 Example
 ```java
