@@ -105,7 +105,7 @@ In case **axiom-dom** or **axis2-saaj** are in Java classpath, the XML marshalli
 
 It is recommended to remove these libraries from Java classpath. 
 
-With Maven, if third library (for axample axis2-codegen) depends on these, it could be removed like this:
+With Maven, if third party library (for axample axis2-codegen) depends on these, it could be removed like this:
 
 ```xml
 	<dependency>
@@ -192,8 +192,7 @@ It should look like the following:
 
 On servlet initialization, the file named `dhx-application.properties` is searched from Servlet classpath. 
 
-Ehitamisel on soovitav see näiteks paigalda WAR-i sisse `/WEB-INF/classes` alamataloogi.
-Building processs should include it into WAR `/WEB-INF/classes` catalog.
+Building processs should include it into WAR `/WEB-INF/classes` directory.
 
 Example is in file [dhx-application.properties](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/development/ws/dhx-application.properties)
 
@@ -208,7 +207,7 @@ document-resend-template=30,120,1200
 address-renew-timeout=*/20 * * * * ?
 ```
 
-All possible `dhx-application.properties` property names are described in table below. 
+Possible `dhx-application.properties` property names are described in table below. 
 The parameters with default value do not have to be added into proprties file (if you do not want to change the value).
 
 Parameter | Default value | Example value | Description
@@ -230,11 +229,20 @@ soap.send-document-service-version | v1 |  | Assigned to X-road header `Header/s
 soap.representatives-service-code | representationList |  | Representee list operation name. Assigned to X-road header `Header/service/serviceCode` value in SOAP request.
 soap.representatives-service-version | v1 |  | Representee list operation version. Assigned to X-road header `Header/service/serviceVersion` value in SOAP request.
 soap.connection-timeout | 60000 |  | HTTP connection opening timeout (when making SOAP requests). Milliseconds. Default is 1 minute.
-soap.read-timeout | 120000 |  | HTTP response waiting timeout (when making SOAP requests). Milliseconds. Default is 2 minute. Could be increased, in case document files are large. 
-soap.dhx-subsystem-prefix | DHX |  | DHX sub-system prefix. Used for searching DHX addressee form X-road global configuration. DHX protocol requires it to be constant `DHX`
+soap.read-timeout | 120000 |  | HTTP response waiting timeout (when making SOAP requests). Milliseconds. Default is 2 minutes. Could be increased in case document files are large. 
+soap.dhx-subsystem-prefix | DHX |  | DHX sub-system prefix. Used for searching DHX addressees from X-road global configuration. DHX protocol requires it to be constant `DHX`
 dhx.capsule-validate | true |  | Specifies whether to validate the document (both received and sended) Capsule XML against its XSD schema. If document does not validate, then respond with error [DHX.Validation](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender. [Capsule 2.1 XSD Schema](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd)  
 dhx.parse-capsule | true |  | Specifies whether to marshall (parse) the incoming document Capsule XML into Java objects. 
 dhx.check-recipient | true |  | Specifies whether to validate incoming document addressees. Validation checks whether addressee inside Capsule XML is the same as receiver (our own) organization code. If addressee is invalid, then respond with error [DHX.InvalidAddressee](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
 dhx.check-sender | false |  | Specifies whether to check sender of the incoming document.  Validation checks whether the sender inside Capsule XML is the same as sender (client) in X-road header.
-dhx.check-duplicate | true |  | Specifies whether to execute duplication cheks on incoming documents consignments.  If true, the  `DhxImplementationSpecificService` [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called. If it is duplicate consingment, then respond with error [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
+dhx.check-duplicate | true |  | Specifies whether to execute duplication checks on incoming documents consignments.  If true, the  `DhxImplementationSpecificService` [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called. If it is duplicate consingment, then respond with error [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
+**dhx.document-resend-template** | 30,120,1200 |  | Specifies sending re-attempting count and wait times. Used only when sending asynchronously. This example determines that total 4 sending attepts are made. Re-attempt are made at first after 30 seconds, then after 120 seconds (2 minutes) and finally after 1200 sconds (20 minutes). If final attempt fails, then finish.
+dhx.wsdl-file | dhx.wsdl |  | DHX web service [WSDL file](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) name. This wsdl file is searched from Java Classpath on server restart. WSDL file is same for all DHX implementers and needs no changes.
+dhx.protocol-version | 1.0 |  | DHX protocol version number. Sended inside `sendDocument` request as paramater [DHXVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#p%C3%A4ringu-sisend) value. 
+dhx.check-dhx-version | true |  | Specifies whether to check DHXVersion validity on document arrival. If version is not right, then respond with error [DHX.UnsupportedVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
+dhx.accepted-dhx-protocol-versions | 1.0 |  | Specifies what DHX protocol versions we accept on document arrival. Comma sparated list. In future it might be `1.0,2.0`. Works together with previous `dhx.check-dhx-version` parameter.
+dhx.marshall-context | `ee.ria.dhx. types.ee.riik.schemas. deccontainer.vers_2_1: ee.ria.dhx.types.eu. x_road.dhx.producer: ee.ria.dhx.types.eu. x_road.xsd.identifiers: ee.ria.dhx.types.eu. x_road.xsd. representation: ee.ria.dhx.types.eu. x_road.xsd.xroad` |  | Specifies Java package names that contain XML type objects (marshalled/unmarshalled by JAXB). If SOAP request or Capsule XML contains additional extension elements from third party namespaces, then new types could be added. Capsule XML contains extenison point inside [RecordTypeSpecificMetadata](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd#L426) element (`<xs:any namespace="##any">`)
+dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Specifies location to search for Capsule XSD schema file. In general it is inside `dhx-adapter-core` jar.
+**dhx.renew-address-list-on-startup** | true |  | Specifies whether to start adress book renewal job on server restart. Address book renewal could take long time in special case (if a DHX mediator has its servers down). Therefore it is reasonable to cache address list in local database and implement `DhxImplementationSpecificService` method [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). In this case use `dhx.renew-address-list-on-startup=false`
+**address-renew-timeout** |  | 0 */20 * * * ? | Specifies [local adress boook](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) renewal frequency. [Crontab](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) format: `<second> <minute> <hour> <day> <month> <weekday>`. Value `*/20` means on every 20-th unit. Therefore `0 */20 * * * ?` means after every 20 minutes. Every day at 7:00 a clock is `0 0 7 * * *`
 
