@@ -286,8 +286,8 @@ Therefore the document receiving and sending internal functionality now uses `Cu
 ##Address book creation and renewal interface
 
 In DHX addressing, the developer needs to bear in mind that, it is not sufficint to use only the registration code of an organization. 
-For unique addressing combination `registrationCode + subsystem` should be used. 
-For excample if document addressee is `Lääne Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.laane` is sufficient.
+For unique addressing, the combination `registrationCode + subsystem` should be used. 
+For excample, if document addressee is `Lääne Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.laane` is sufficient.
 If document addressee is `Lõuna Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.louna` is sufficient.
 
 Service [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html) is intended for creating and renewing the address book.
@@ -298,7 +298,7 @@ It has three methods
 
 - Method [renewAddressList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#renewAddressList--) executes address book creation algorithm. It is executed also by timer jobi (`dhx-application.properties` parameter `address-renew-timeout=0 */20 * * * ?`).
 
-- Method [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-) helps to find techincal addressee (recipient) data, by using unique combination  `registriationCode + sybsystem `.
+- Method [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-) helps to find addressee (recipient) techincal data, by using unique combination  `registrationCode + sybsystem ` as input.
 
 For long-term preservation of address book (in database or in filesystem), the developer may implement  `DhxImplementationSpecificService ` methods [saveAddresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveAddresseeList-java.util.List-) and [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--).
 If implemented, then these methods must store and reload all [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) attributes (see table below).
@@ -332,8 +332,8 @@ memberClass | GOV | GOV- Goverment, COM - commercial. In case of intermediary, i
 memberCode | 70000001 | organization registration code. In case of intermediary, it contains mediator's registration code, not mediated organization (representee) registration code.
 subsystemCode | DHX or DHX.adit |Sub-system code. Must start with DHX. In general just `DHX`. In case of intermediary, it contains mediator's subsystem code, not mediated organization (representee) subsystem code.
 name | Riigi infosüsteemide keskus | Organization or sub-system name.In case of intermediary, it contains mediator's name, not mediated organization (representee) name.
-representee.representeeCode | 70012121 | Mediated organization (representee) registration code. (used in case if document is sended through intermediary)
-representee.representeeSystem |  DHX.subsystem | Mediated organization (representee) syb-system code. In general it is empty. IF mediated organization has several subsystems, then subsystem code.
+representee.representeeCode | 70012121 | Mediated organization (representee) registration code. (used in case document is sended through intermediary)
+representee.representeeSystem |  DHX.subsystem | Mediated organization (representee) syb-system code. In general it is empty. If mediated organization has several subsystems, then subsystem code.
 representee.representeeName | Lasteaed Pallipõnn | Mediated organization (representee) name or its sub-system name
 
 Method [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getAdresseeList--) returns [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) objects array. It contains all DHX addressees (recipients).
@@ -345,8 +345,8 @@ There are several types of recipients
 - With DHX capability through intermediary (several sub-systems `DHX.subsystem1` and `DHX.subsystem2` etc)
 
 **NB!** When sending document and generating consingment with [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) methods, all the `InternalXroadMember` instance attributes must be specified. 
-If recipeint (addressee) has `subsystemCode` value, then it must be spcified on  `getOutgoingPackage()` mehtod call.
-If recipeint (addressee) has `representeeCode` value, then it must be spcified on  `getOutgoingPackage()` mehtod call.
+If recipeint (addressee) has `subsystemCode` value, then it must be specified on  `getOutgoingPackage()` mehtod call.
+If recipeint (addressee) has `representeeCode` value, then it must be specified on  `getOutgoingPackage()` mehtod call.
 
 **The surest way** is to use [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variations, that have  `InternalXroadMember recipient ` input parameter.
 
@@ -398,21 +398,21 @@ public class Sender {
     // check error
     if (result.occuredException !=  null 
        || result.getResponse().getFault() != null) {
-      // saatmisel ilmnes viga
+      // sending error occurred
     }
   }
 }
 ```
 
-If sending the same document capsule to multiple recipients, then it must be sended to every recipient separately. For that use `ee.ria.dhx.ws.service.DhxPackageService` method [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendMultiplePackages-java.util.List-).
+If sender wants to send the same document capsule to multiple recipients, then he must send it to every recipient separately. For that use `ee.ria.dhx.ws.service.DhxPackageService` method [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendMultiplePackages-java.util.List-).
 
 ##Document sending (asynchronous)
 
 Asynchronous sending interface is similar to synchronous interface.
  
-The difference is that the interface [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) method [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-) is executed asynchronously (in separate thread) and the current thread continues immediately (not witing for response).
+The difference is that the interface [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) method [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-) is executed asynchronously (in separate thread) and the current thread continues immediately (not waiting for response).
 
-Asynchronous execution re-attempts sending, if there occurs an technical error (see `dhx-application.properties` parameter `document-resend-template=30,120,1200`).
+In case there occurs an technical error then Asynchronous execution re-attempts sending (see `dhx-application.properties` parameter `document-resend-template=30,120,1200`).
 
 After sending success (or final failure) tha callback interface [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) method [saveSendResult](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveSendResult-ee.ria.dhx.types.DhxSendDocumentResult-java.util.List-) is called. 
 It is developer's responsibility to implement it, by storing response to DMS database, etc.
@@ -480,7 +480,7 @@ public class Sender {
 }
 ```
 
-If sending the same document capsule to multiple recipients, then it must be sended to every recipient separately. For that use `ee.ria.dhx.ws.service.AsyncDhxPackageService` method [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendMultiplePackages-java.util.List-).
+If sender wants to send the same document capsule to multiple recipients, then he must send it to every recipient separately. For that use `ee.ria.dhx.ws.service.AsyncDhxPackageService` method [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendMultiplePackages-java.util.List-).
 
 ##Document receiving interface
 
