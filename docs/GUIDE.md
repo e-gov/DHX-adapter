@@ -514,7 +514,7 @@ public class CustomDhxImplementationSpecificService
          + "/" + from.getRepresentee().getRepresenteeSystem();
     }
     
-    // search database if the combination "uniqueKey + consignmentId" is previously stored (arrived previously) 
+    // search database if the combination "uniqueKey + consignmentId" is previously stored 
     . . .
   }
 
