@@ -236,13 +236,54 @@ dhx.parse-capsule | true |  | Specifies whether to marshall (parse) the incoming
 dhx.check-recipient | true |  | Specifies whether to validate incoming document addressees. Validation checks whether addressee inside Capsule XML is the same as receiver (our own) organization code. If addressee is invalid, then respond with error [DHX.InvalidAddressee](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
 dhx.check-sender | false |  | Specifies whether to check the sender validity of the incoming document.  Validation checks whether the sender inside Capsule XML is the same as sender (client) in X-road header.
 dhx.check-duplicate | true |  | Specifies whether to perform duplication checks on incoming documents consignments.  If true, the  `DhxImplementationSpecificService` [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called. If it is duplicate consingment, then respond with error [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
-**dhx.document-resend-template** | 30,120,1200 |  | Specifies sending re-attempting count and wait times. Used only when sending asynchronously. This example determines that total 4 sending attepts are made. Re-attempt are made at first after 30 seconds, then after 120 seconds (2 minutes) and finally after 1200 sconds (20 minutes). If final attempt fails, then finish.
+**dhx.document-resend-template** | 30,120,1200 |  | Specifies sending re-attempting count and wait times. Used only when sending asynchronously. This example determines that total 4 sending attepts are made. Re-attempt are made at first after 30 seconds, then after 120 seconds (2 minutes) and finally after 1200 seconds (20 minutes). If final attempt fails, then abort sending thread.
 dhx.wsdl-file | dhx.wsdl |  | DHX web service [WSDL file](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) name. This wsdl file is searched from Java Classpath on server restart. WSDL file is same for all DHX implementers and needs no changes.
 dhx.protocol-version | 1.0 |  | DHX protocol version number. Sended inside `sendDocument` request as paramater [DHXVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#p%C3%A4ringu-sisend) value. 
 dhx.check-dhx-version | true |  | Specifies whether to check DHXVersion validity on document arrival. If version is not right, then respond with error [DHX.UnsupportedVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
 dhx.accepted-dhx-protocol-versions | 1.0 |  | Specifies what DHX protocol versions we accept on document arrival. Comma sparated list. In future it might be `1.0,2.0`. Works together with previous `dhx.check-dhx-version` parameter.
 dhx.marshall-context | `ee.ria.dhx. types.ee.riik.schemas. deccontainer.vers_2_1: ee.ria.dhx.types.eu. x_road.dhx.producer: ee.ria.dhx.types.eu. x_road.xsd.identifiers: ee.ria.dhx.types.eu. x_road.xsd. representation: ee.ria.dhx.types.eu. x_road.xsd.xroad` |  | Specifies Java package names that contain XML type objects (marshalled/unmarshalled by JAXB). If SOAP request or Capsule XML contains additional extension elements from third party namespaces, then new types could be added. Capsule XML contains extenison point inside [RecordTypeSpecificMetadata](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd#L426) element (`<xs:any namespace="##any">`)
 dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Specifies location to search for Capsule XSD schema file. In general it is inside `dhx-adapter-core` jar.
-**dhx.renew-address-list-on-startup** | true |  | Specifies whether to start adress book renewal job on server restart. Address book renewal could take long time in special case (if a DHX mediator has its servers down). Therefore it is reasonable to cache address list in local database and implement `DhxImplementationSpecificService` method [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). In this case use `dhx.renew-address-list-on-startup=false`
+**dhx.renew-address-list-on-startup** | true |  | Specifies whether to start address book renewal job on server restart. Address book renewal could take long time in special case (if a DHX mediator has its servers down). Therefore it is reasonable to cache address list in local database and implement `DhxImplementationSpecificService` method [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). In this case use `dhx.renew-address-list-on-startup=false`
 **address-renew-timeout** |  | 0 */20 * * * ? | Specifies [local adress boook](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) renewal frequency. [Crontab](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) format: `<second> <minute> <hour> <day> <month> <weekday>`. Value `*/20` means on every 20-th unit. Therefore `0 */20 * * * ?` means after every 20 minutes. Every day at 7:00 a clock is `0 0 7 * * *`
+
+##General prinicples
+
+Main functions of DHX adapter Java library are [sending documents](https://e-gov.github.io/DHX/#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat).
+ 
+Main functionality, that are of interest to developer (DHX implementer), are in packages 
+- [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – Java service interfaces
+- [ee.ria.dhx.ws.service.impl](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/impl/package-summary.html) – Java service implementations
+
+Service interfaces are
+
+Interface | Description 
+------------ | -------------
+[AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html) | Services for generating and renewing the address book.
+[DhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html) | Services for synchronous sending and receiving
+[AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) | Services for asynchronous sending
+[DhxMarshallerService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxMarshallerService.html) | Services for marshalling/unmarshalling XML objects (Capsule) 
+[DhxPackageProviderService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) | Services for creating document consingments (packages).
+[DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) | Implementation specific callback interfaces.  
+
+The most important is  [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html), that needs to be implemented by developers.
+
+Example:
+
+```java
+package com.example.service.impl;
+import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
+
+@Service("dhxImplementationSpecificService")
+public class CustomDhxImplementationSpecificService 
+                implements DhxImplementationSpecificService {
+   . . . 
+}
+```
+
+Above, the `@Service` tag specifies, that DHX adapter uses now `dhxImplementationSpecificService` costom implementation. 
+Therefore document receiving and sending functionality now uses `CustomDhxImplementationSpecificService` as callback interfase.
+
+##Address book creation and renewal interface
+
+
 
