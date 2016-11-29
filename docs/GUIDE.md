@@ -246,7 +246,7 @@ dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Specifi
 **dhx.renew-address-list-on-startup** | true |  | Specifies whether to start address book renewal job on server restart. Address book renewal could take long time in special case (if a DHX mediator has its servers down). Therefore it is reasonable to cache address list in local database and implement `DhxImplementationSpecificService` method [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). In this case use `dhx.renew-address-list-on-startup=false`
 **address-renew-timeout** |  | 0 */20 * * * ? | Specifies [local adress boook](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) renewal frequency. [Crontab](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) format: `<second> <minute> <hour> <day> <month> <weekday>`. Value `*/20` means on every 20-th unit. Therefore `0 */20 * * * ?` means after every 20 minutes. Every day at 7:00 a clock is `0 0 7 * * *`
 
-##General prinicples
+##General principles
 
 Main functions of DHX adapter Java library are [sending documents](https://e-gov.github.io/DHX/#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat).
  
