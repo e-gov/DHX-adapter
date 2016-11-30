@@ -12,7 +12,7 @@ DHX adpater is Java software library that implements [DHX protocol](https://e-go
 
 This guide is intended for software developers (DHX implementers), who wish to use DHX protocol in their document management system (DMS).
 
-Source code of DHX Adapter is located in the url https://github.com/e-gov/DHX-adapter
+Source code of DHX Adapter is located at https://github.com/e-gov/DHX-adapter
 
 It contains three sub-packages
 - [dhx-adapter-core](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/) – contains classes for creating and parsing XML objects (Capsule and SOAP), exception classes and some general utility classes
@@ -34,7 +34,7 @@ As DHX adapter package provides web services (is not only web client), it depend
 [Java Architecture for XML Binding - JAXB](https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/package-summary.html) API is used for XML marshalling (is part of Java SE 7).
 
 DHX adapter Java package is based on Spring Framework architecture by using extensively its sub-modules:
-- For configuraton and initializing (Spring AOP, Spring Context, etc)
+- For configuration and initializing (Spring AOP, Spring Context, etc)
 - For making HTTP SOAP client request (Spring WS Client, Apache HttpClient)
 - For providing HTTP SOAP web service (Spring WS Server Endpoint, Java Servlet API)
 
@@ -127,9 +127,9 @@ With Maven, if third party library (for axample axis2-codegen) depends on these,
 
 ##Loading setup (web.xml and applicationContext.xml)
 
-The simpliest way is to use DHX adapter inside Web (Servlet) Container (Tomcat, Jetty, etc), by using Spring Framework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
+The simplest way is to use DHX adapter inside Web (Servlet) Container (Tomcat, Jetty, etc), by using Spring Framework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
-The `web.xml` must be supplemented with sections:
+The [web.xml](https://cloud.google.com/appengine/docs/java/config/webxml) must be supplemented with sections:
 ```xml
   <listener>
       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -208,7 +208,7 @@ address-renew-timeout=*/20 * * * * ?
 ```
 
 Possible `dhx-application.properties` property names are described in table below. 
-The parameters with default value do not have to be added into proprties file (if you do not want to change the value).
+The parameters with default value do not have to be added into properties file (if you do not want to change the value).
 
 Parameter | Default value | Example value | Description
 ------------ | ------------- | ------------- | -------------
@@ -281,13 +281,13 @@ public class CustomDhxImplementationSpecificService
 ```
 
 Above, the `@Service` tag specifies that DHX adapter uses now `dhxImplementationSpecificService` custom implementation. 
-Therefore the document receiving and sending internal functionality now uses `CustomDhxImplementationSpecificService` as callback interface.
+Therefore the document receiving and sending internal functionality uses `CustomDhxImplementationSpecificService` as callback interface now.
 
 ##Address book creation and renewal interface
 
 In DHX addressing, the developer needs to bear in mind that, it is not sufficint to use only the registration code of an organization. 
 For unique addressing, the combination `registrationCode + subsystem` should be used. 
-For excample, if document addressee is `Lääne Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.laane` is sufficient.
+For example, if document addressee is `Lääne Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.laane` is sufficient.
 If document addressee is `Lõuna Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.louna` is sufficient.
 
 Service [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html) is intended for creating and renewing the address book.
@@ -301,7 +301,7 @@ It has three methods
 - Method [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-) helps to find addressee (recipient) techincal data, by using unique combination  `registrationCode + sybsystem ` as input.
 
 For long-term preservation of address book (in database or in filesystem), the developer may implement  `DhxImplementationSpecificService ` methods [saveAddresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveAddresseeList-java.util.List-) and [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--).
-If implemented, then these methods must store and reload all [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) attributes (see table below).
+If implemented, these methods must store and reload all [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) attributes (see table below).
 
 Example
 ```java
