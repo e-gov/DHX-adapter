@@ -8,7 +8,7 @@
 
 ## Introduction
 
-DHX adpater is Java software library that implements [DHX protocol](https://e-gov.github.io/DHX/EN.html) functionality for [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat). 
+DHX adapter is Java software library that implements [DHX protocol](https://e-gov.github.io/DHX/EN.html) functionality for [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat). 
 
 This guide is intended for software developers (DHX implementers), who wish to use DHX protocol in their document management system (DMS).
 
