@@ -1,11 +1,14 @@
 package ee.ria.dhx.ws.service;
 
+import com.jcabi.aspects.Loggable;
+
 import ee.ria.dhx.exception.DhxException;
 
 import org.w3c.dom.Node;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
 
 import javax.xml.bind.Marshaller;
@@ -67,6 +70,20 @@ public interface DhxMarshallerService {
       InputStream schemaStream) throws DhxException;
 
   /**
+   * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
+   * present.
+   * 
+   * @param capsuleFile - file to parse
+   * @param schemaStream - stream on XSD schema against which to validate. No validation is done if
+   *        stream is NULL
+   * @return - parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  @Loggable
+  public <T> T unmarshallAndValidate(File capsuleFile,
+      InputStream schemaStream) throws DhxException;
+  
+  /**
    * Marshalls object to file.
    * 
    * @param container - object to marshall
@@ -74,6 +91,25 @@ public interface DhxMarshallerService {
    * @throws DhxException - thrown if error occurs while marshalling object
    */
   public File marshall(Object container) throws DhxException;
+  
+  /**
+   * Marshalls object to outputStream.
+   * 
+   * @param container - object to marshall
+   * @param stream - containing marshalled object
+   * @throws DhxException - thrown if error occurs while marshalling object
+   */
+  public void marshallToOutputStream(Object container, OutputStream stream) throws DhxException;
+  
+  
+  /**
+   * Marshalls object to outputStream. Written XML is without namespace prefixes.
+   * 
+   * @param container - object to marshall
+   * @param stream - containing marshalled object
+   * @throws DhxException - thrown if error occurs while marshalling object
+   */
+  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream) throws DhxException;
 
   /**
    * Marshalls object to result.
@@ -145,5 +181,14 @@ public interface DhxMarshallerService {
    * @throws DhxException thrown if filesize is bigger that maximum filesize
    */
   public void checkFileSize(InputStream streamToCheck) throws DhxException;
+  
+  /**
+   * Method checks filesize againts maximum filesize. NOT IMPLEMENTED!
+   * 
+   * @param fileToCheck - file that needs to be checked
+   * @throws DhxException thrown if filesize is bigger that maximum filesize
+   */
+  @Loggable
+  public void checkFileSize(File fileToCheck) throws DhxException;
 
 }

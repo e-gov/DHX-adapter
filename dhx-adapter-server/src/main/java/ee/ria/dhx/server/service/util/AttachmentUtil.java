@@ -13,8 +13,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
+import java.util.Base64;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import javax.mail.MessagingException;
 
@@ -29,14 +32,24 @@ public class AttachmentUtil {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Error occured whle unzipping file. " + ex.getMessage(), ex);
     }
   }
+  
+  public static GZIPOutputStream getGZipCompressStream (OutputStream stream) throws DhxException{
+    try {
+      GZIPOutputStream gzis = new GZIPOutputStream(stream);
+      return gzis;
+    } catch(IOException ex) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Error occured whle unzipping file. " + ex.getMessage(), ex);
+    }
+  }
 
   public static InputStream base64Decode (InputStream stream) throws DhxException{
-    try {
-    InputStream base64DecoderStream = javax.mail.internet.MimeUtility.decode(stream, "base64");
+    InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);
     return base64DecoderStream;
-    }catch (MessagingException ex) {
-      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Error occured whle decoding base64 file. " + ex.getMessage(), ex);
-    }
+  }
+  
+  public static OutputStream getBase64EncodeStream (OutputStream stream) throws DhxException{
+    OutputStream base64EncoderStream = Base64.getEncoder().wrap(stream);
+    return base64EncoderStream;
   }
   
   public static InputStream base64decodeAndUnzip (InputStream stream) throws DhxException{
@@ -48,6 +61,8 @@ public class AttachmentUtil {
     }
     return gZipDecompress(decoded);
   }
+  
+
   
   public static String readInput(InputStream fileStream) {
     StringBuffer buffer = new StringBuffer();

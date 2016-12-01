@@ -39,7 +39,7 @@ public class ExampleDhxImplementationSpecificService implements
   @Deprecated
   @Loggable
   public boolean isDuplicatePackage(InternalXroadMember from,
-      String consignmentId) {
+      String consignmentId)throws DhxException{
     log.debug("Checking for duplicates. from memberCode: {}",
         from.toString() + " from consignmentId:" + consignmentId);
     if (documents != null && documents.size() > 0) {

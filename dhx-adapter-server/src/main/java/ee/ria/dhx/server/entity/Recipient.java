@@ -8,6 +8,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -65,9 +66,12 @@ public class Recipient  extends BaseEntity implements Serializable {
 
 	@Column(name="saatmise_lopp")
 	private Timestamp sendingEnd;
+	
+	   @Column(name="staatuse_muutmise_aeg")
+	    private Timestamp statusChangeDate;
 
 	//bi-directional many-to-one association to StaatuseAjalugu
-	@OneToMany(mappedBy="vastuvotja")
+	@OneToMany(mappedBy="vastuvotja", cascade = {CascadeType.ALL})
 	private List<StaatuseAjalugu> statusHistory;
 
 	//bi-directional many-to-one association to Asutus
@@ -94,12 +98,34 @@ public class Recipient  extends BaseEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="vastuvotja_staatus_id")
 	private RecipientStatus recipientStatus;
+	
+	private String metaxml;
 
 	public Recipient() {
 	}
 
+	@PrePersist
+	@PreUpdate
+	public void beforeInsertUpdate(){
+	  StaatuseAjalugu history = new StaatuseAjalugu();
+	  if(this.getRecipientStatus() != null) {
+	    history.setVastuvotjaStaatusId(this.getRecipientStatus().getRecipientStatusId());
+	  }
+	  history.setVastuvotja(this);
+	  history.setStaatuseMuutmiseAeg(this.getStatusChangeDate());
+	  history.setMetaxml(this.getMetaxml());
+	  history.setKlassifikaator(this.getStatus());
+	  history.setFaultString(this.getFaultString());
+	  history.setFaultDetail(this.getFaultDetail());
+	  history.setFaultCode(this.getFaultCode());
+	  history.setFaultActor(this.getFaultActor());
+	  this.addStatusHistory(history);
+	}
 
 	public StaatuseAjalugu addStatusHistory(StaatuseAjalugu statusHistory) {
+	    if (getStatusHistory() == null) {
+	      setStatusHistory(new ArrayList<StaatuseAjalugu>());
+	    }
 		getStatusHistory().add(statusHistory);
 		statusHistory.setVastuvotja(this);
 

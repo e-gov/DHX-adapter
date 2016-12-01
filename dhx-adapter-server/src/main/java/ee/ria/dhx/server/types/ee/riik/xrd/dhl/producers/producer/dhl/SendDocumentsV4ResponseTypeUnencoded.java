@@ -11,6 +11,7 @@ package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -91,6 +92,7 @@ public class SendDocumentsV4ResponseTypeUnencoded {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlRootElement(name = "keha")
     @XmlType(name = "")
     public static class Keha
         extends DocumentRefsArrayType

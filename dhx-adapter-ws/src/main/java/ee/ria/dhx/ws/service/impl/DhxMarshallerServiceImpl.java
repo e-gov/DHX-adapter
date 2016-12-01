@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
+import java.util.Iterator;
 
 import javax.annotation.PostConstruct;
 import javax.xml.XMLConstants;
@@ -30,6 +32,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -176,7 +182,38 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       // unmarshaller.setSchema(null);
     }
   }
-
+  
+  /**
+   * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
+   * present.
+   * 
+   * @param capsuleFile - file to parse
+   * @param schemaStream - stream on XSD schema against which to validate. No validation is done if
+   *        stream is NULL
+   * @return - parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  @Loggable
+  public <T> T unmarshallAndValidate(File capsuleFile,
+      InputStream schemaStream) throws DhxException {
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("unmarshalling file");
+      }
+      Unmarshaller unmarshaller = getUnmarshaller();
+      setSchemaForUnmarshaller(schemaStream, unmarshaller);
+      return unmarshallNoValidation(new FileInputStream(capsuleFile), unmarshaller);
+    } catch (FileNotFoundException ex) {
+      log.error(ex.getMessage(), ex);
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while creating object from capsule. "
+              + ex.getMessage(), ex);
+    } finally {
+      // wont set single schema for unmarshaller
+      // unmarshaller.setSchema(null);
+    }
+  }
+  
   @Loggable
   protected <T> T unmarshallNoValidation(final InputStream capsuleStream,
       Unmarshaller unmarshaller) throws DhxException {
@@ -226,6 +263,67 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
 
       return outputFile;
     } catch (IOException | JAXBException ex) {
+      log.error(ex.getMessage(), ex);
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while creating object from capsule. "
+              + ex.getMessage(), ex);
+    }
+  }
+  
+  /**
+   * Marshalls object to outputStream.
+   * 
+   * @param container - object to marshall
+   * @param stream - containing marshalled object
+   * @throws DhxException - thrown if error occurs while marshalling object
+   */
+  @Loggable
+  @Override
+  public void marshallToOutputStream(Object container, OutputStream stream) throws DhxException {
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("marshalling container");
+      }
+      getMarshaller().marshal(container, stream);
+    } catch ( JAXBException ex) {
+      log.error(ex.getMessage(), ex);
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while creating object from capsule. "
+              + ex.getMessage(), ex);
+    }
+  }
+  
+  /**
+   * Marshalls object to outputStream.
+   * 
+   * @param container - object to marshall
+   * @param stream - containing marshalled object
+   * @throws DhxException - thrown if error occurs while marshalling object
+   */
+  @Loggable
+  @Override
+  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream) throws DhxException {
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("marshalling container");
+      }
+      XMLOutputFactory outputFactory = XMLOutputFactory.newFactory();
+      XMLStreamWriter writer = outputFactory.createXMLStreamWriter(stream);
+      writer.setNamespaceContext(new NamespaceContext() {
+        public Iterator getPrefixes(String namespaceURI) {
+            return null;
+        }
+
+        public String getPrefix(String namespaceURI) {
+            return "";
+        }
+
+        public String getNamespaceURI(String prefix) {
+            return null;
+        }
+    });
+      getMarshaller().marshal(container, writer);
+    } catch ( JAXBException | XMLStreamException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
@@ -359,6 +457,25 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.info("Checking filesize is disabled in configuration.");
     }
   }
+  
+  /**
+   * Method checks filesize againts maximum filesize. NOT IMPLEMENTED!
+   * 
+   * @param fileToCheck - stream that needs to be checked
+   * @throws DhxException thrown if filesize is bigger that maximum filesize
+   */
+  @Loggable
+  public void checkFileSize(File fileToCheck) throws DhxException {
+    if (config.getCheckFilesize()) {
+      log.info("Checking filesize.");
+      log.info("File size check not done because check is not implemented.");
+      throw new DhxException(DhxExceptionEnum.NOT_IMPLEMENTED,
+          "No filesize check is implemented!");
+    } else {
+      log.info("Checking filesize is disabled in configuration.");
+    }
+  }
+
 
   public void readBig(InputStream fileStream) {
 

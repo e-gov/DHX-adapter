@@ -15,20 +15,16 @@ public class DhxException extends Exception {
 
   private DhxExceptionEnum exceptionCode;
 
-  /*
-   * public DhxException() { super(); }
-   * 
-   * public DhxException(String message) { super(message); }
-   */
-
   public DhxException(DhxExceptionEnum exceptionCode, String message) {
     super(message);
     this.setExceptionCode(exceptionCode);
   }
+  
+  public DhxException(String message, Exception cause) {
+    super(message, cause);
+    this.setExceptionCode(DhxExceptionEnum.TECHNICAL_ERROR);
+  }
 
-  /*
-   * public DhxException (String message, Exception cause) { super(message, cause); }
-   */
 
   public DhxException(DhxExceptionEnum exceptionCode, String message, Exception cause) {
     super(message, cause);

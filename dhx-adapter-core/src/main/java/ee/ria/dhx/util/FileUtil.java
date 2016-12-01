@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+
 // import javax.mail.MessagingException;
 
 
@@ -284,6 +287,31 @@ public class FileUtil {
           "Extracting zipped XML file failed!" + ex.getMessage(), ex);
     }
 
+  }
+
+  /**
+   * Method creates datahandler from file.
+   * 
+   * @param file - file to create datahandler from
+   * @return
+   */
+  public static DataHandler getDatahandlerFromFile(File file) {
+    FileDataSource datasource = new FileDataSource(file);
+    DataHandler handler = new DataHandler(datasource);
+    return handler;
+  }
+
+  /**
+   * Method creates datahandler from file.
+   * 
+   * @param stream - stream to create datahandler from
+   * @return
+   */
+  public static DataHandler getDatahandlerFromStream(InputStream stream) throws DhxException {
+    File file = createFileAndWrite(stream);
+    FileDataSource datasource = new FileDataSource(file);
+    DataHandler handler = new DataHandler(datasource);
+    return handler;
   }
 
 }

@@ -41,6 +41,7 @@ public class Base64BinaryType {
 
     @XmlAttribute(name = "href")
     @XmlAttachmentRef
+    @XmlSchemaType(name = "anyURI")
     protected DataHandler href;
     
     

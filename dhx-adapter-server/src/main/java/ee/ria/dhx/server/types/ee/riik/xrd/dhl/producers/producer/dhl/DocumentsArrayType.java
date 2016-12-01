@@ -9,13 +9,15 @@
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
 import java.util.ArrayList;
-
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.DhlDokumentType;
+import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 
 
 /**
@@ -46,7 +48,7 @@ import ee.ria.dhx.server.types.ee.riik.schemas.dhl.DhlDokumentType;
 })
 public class DocumentsArrayType {
 
-    protected List<DhlDokumentType> dokument;
+    protected List<DecContainer> dokument;
 
     /**
      * Gets the value of the dokument property.
@@ -70,9 +72,9 @@ public class DocumentsArrayType {
      * 
      * 
      */
-    public List<DhlDokumentType> getDokument() {
+    public List<DecContainer> getDokument() {
         if (dokument == null) {
-            dokument = new ArrayList<DhlDokumentType>();
+            dokument = new ArrayList<DecContainer>();
         }
         return this.dokument;
     }

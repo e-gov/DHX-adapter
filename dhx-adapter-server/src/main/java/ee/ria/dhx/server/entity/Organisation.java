@@ -54,6 +54,9 @@ public class Organisation  extends BaseEntity implements Serializable {
 	
 	@Column(name="representee_end")
 	private Timestamp representeeEnd;
+	
+	@Column(name="dhx_asutus")
+	private Boolean dhxOrganisation;
 
 	
 	//bi-directional many-to-one association to Organisation

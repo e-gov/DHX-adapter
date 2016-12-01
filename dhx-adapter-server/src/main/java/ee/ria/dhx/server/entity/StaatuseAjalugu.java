@@ -1,7 +1,9 @@
 package ee.ria.dhx.server.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -17,6 +19,7 @@ public class StaatuseAjalugu implements Serializable {
 
 	@Id
 	@Column(name="staatuse_ajalugu_id")
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer staatuseAjaluguId;
 
 	@Column(name="fault_actor")

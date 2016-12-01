@@ -16,6 +16,7 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.config.SoapConfig;
@@ -341,18 +342,18 @@ public class DhxPackageServiceImpl implements DhxPackageService {
         if (representee.getStartDate().getTime() <= curDate.getTime()
             && (representee.getEndDate() == null || representee
                 .getEndDate().getTime() >= curDate.getTime())) {
-          recipientList.add(new DhxOrganisation(representee
+          recipientList.add(DhxOrganisationFactory.createDhxOrganisation(representee
               .getRepresenteeCode(), representee.getRepresenteeSystem()));
         }
       }
     }
     for (String subSystem : soapConfig.getAcceptedSubsystemsAsList()) {
-      recipientList.add(new DhxOrganisation(soapConfig.getMemberCode(),
+      recipientList.add(DhxOrganisationFactory.createDhxOrganisation(soapConfig.getMemberCode(),
           subSystem));
     }
     Boolean found = false;
     for (DhxOrganisation rec : recipientList) {
-      if (rec.equals(recipient, soapConfig.getDhxSubsystemPrefix())) {
+      if (rec.equals(recipient)) {
         found = true;
         break;
       }
@@ -370,9 +371,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     }
     if (capsuleRecipients != null) {
       for (CapsuleAdressee capsuleRecipient : capsuleRecipients) {
-        if (recipient.equalsToCapsuleRecipient(
-            capsuleRecipient.getAdresseeCode(),
-            soapConfig.getDhxSubsystemPrefix())) {
+        if (recipient.equalsToCapsuleOrganisation(
+            capsuleRecipient.getAdresseeCode())) {
           return;
         }
       }
@@ -396,26 +396,18 @@ public class DhxPackageServiceImpl implements DhxPackageService {
   protected void checkSender(InternalXroadMember client,
       CapsuleAdressee capsuleSender) throws DhxException {
     log.info("Checking sender.");
-    DhxOrganisation sender = new DhxOrganisation();
-    if (client.getRepresentee() != null) {
-      sender.setCode(client.getRepresentee().getRepresenteeCode());
-      sender.setSystem(client.getRepresentee().getRepresenteeSystem());
-    } else {
-      sender.setCode(client.getMemberCode());
-      sender.setSystem(client.getSubsystemCode());
-    }
+    DhxOrganisation sender = DhxOrganisationFactory.createDhxOrganisation(client);
     if (client.getRepresentee() != null) {
       InternalXroadMember member = addressService.getClientForMemberCode(
           client.getMemberCode(), client.getSubsystemCode());
       if (!member.getRepresentor()) {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
-            "Xroad sender is representee, but client is not representor. sender:"
+            "Xroad sender is representee, but member found in adressregistry is not representor. sender:"
                 + sender);
       }
     }
     // check that capsule sender and Xroad sender are the same
-    if (sender.equalsToCapsuleRecipient(capsuleSender.getAdresseeCode(),
-        soapConfig.getDhxSubsystemPrefix())) {
+    if (sender.equalsToCapsuleOrganisation(capsuleSender.getAdresseeCode())) {
       return;
     }
     throw new DhxException(DhxExceptionEnum.WRONG_SENDER,

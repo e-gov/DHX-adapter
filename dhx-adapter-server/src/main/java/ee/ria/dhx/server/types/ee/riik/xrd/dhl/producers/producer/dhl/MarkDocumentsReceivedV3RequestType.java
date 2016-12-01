@@ -8,8 +8,13 @@
 
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
+
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -34,11 +39,24 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "markDocumentsReceivedV3RequestType", propOrder = {
-    "kaust"
+    "kaust", "dokumendid"
 })
 public class MarkDocumentsReceivedV3RequestType {
 
     protected String kaust;
+    
+    @XmlElementWrapper(name = "dokumendid")
+    @XmlElement(name = "item")
+    protected List<TagasisideType> dokumendid;
+
+
+    public List<TagasisideType> getDokumendid() {
+      return dokumendid;
+    }
+
+    public void setDokumendid(List<TagasisideType> dokumendid) {
+      this.dokumendid = dokumendid;
+    }
 
     /**
      * Gets the value of the kaust property.
