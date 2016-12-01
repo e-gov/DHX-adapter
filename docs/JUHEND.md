@@ -127,7 +127,7 @@ Maven-ga, juhul kui mingi muu kasutatav teek (näiteks axis2-codegen) sõltub ne
 
 Kõige lihtsam on DHX adapteri teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees, kasutades laadimiseks SpringFramework klasse [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) ja [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
-Selleks tuleb `web.xml` häälestusfaili lisada sektsioonid:
+Selleks tuleb [web.xml](https://cloud.google.com/appengine/docs/java/config/webxml) häälestusfaili lisada sektsioonid:
 ```xml
   <listener>
       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
