@@ -466,7 +466,7 @@ public class Sender {
 
      // create consignment
      OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
-         new File("saadetav-dokumendi-kapsel.xml"),
+         new File("sended-document-capsule.xml"),
          UUID.randomUUID().toString(), // unique self generated consignment id
          recipient);
 
