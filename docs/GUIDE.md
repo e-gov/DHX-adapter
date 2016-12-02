@@ -384,7 +384,7 @@ public class Sender {
      // find addressee/recipient technical data
      InternalXroadMember recipient = addressService.getClientForMemberCode(
         "70000001",  // registration code
-        "DHX"); // subsystem, DHX or DHS.sybsystem)
+        "DHX"); // subsystem, DHX or DHX.sybsystem)
 
      // create consignment
      OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
@@ -462,7 +462,7 @@ public class Sender {
      // find addressee/recipient technical data
      InternalXroadMember recipient = addressService.getClientForMemberCode(
         "70000001",  // registration code
-        "DHX"); // subsystem, DHX or DHS.sybsystem)
+        "DHX"); // subsystem, DHX or DHX.sybsystem)
 
      // create consignment
      OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(

@@ -382,7 +382,7 @@ public class Sender {
      // leiame adressaadi tehnilised andmed
      InternalXroadMember recipient = addressService.getClientForMemberCode(
         "70000001",  // adressaadi registrikood
-        "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHS.sybsystem)
+        "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHX.sybsystem)
 
      // genereerime saadetise
      OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
@@ -460,7 +460,7 @@ public class Sender {
      // leiame adressaadi tehnilised andmed
      InternalXroadMember recipient = addressService.getClientForMemberCode(
         "70000001",  // adressaadi registrikood
-        "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHS.sybsystem)
+        "DHX"); // adressaadi alamsüsteem on üldjuhul DHX (erandjuhul DHX.sybsystem)
 
      // genereerime saadetise
      OutgoingDhxPackage dhxPackage = dhxPackageProviderService.getOutgoingPackage(
