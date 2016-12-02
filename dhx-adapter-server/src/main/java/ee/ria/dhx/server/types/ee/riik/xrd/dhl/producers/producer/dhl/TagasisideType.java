@@ -6,7 +6,7 @@
 //
 
 
-package ee.ria.dhx.server.types.ee.riik.schemas.dhl;
+package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
 import java.math.BigInteger;
 

@@ -6,9 +6,9 @@
 	<parent>
 		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
-		<version>0.10.2</version>
+		<version>0.10.3</version>
 	</parent>
-	<version>0.10.2</version>
+	<version>0.10.3</version>
 	<artifactId>dhx-adapter-ws</artifactId>
 	<name>Web services</name>
 	<packaging>jar</packaging>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>ee.ria.dhx</groupId>
 			<artifactId>dhx-adapter-core</artifactId>
-			<version>0.10.2</version>
+			<version>0.10.3</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

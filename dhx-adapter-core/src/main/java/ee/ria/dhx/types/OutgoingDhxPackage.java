@@ -6,6 +6,8 @@ import ee.ria.dhx.util.CapsuleVersionEnum;
 import java.io.File;
 import java.io.InputStream;
 
+import javax.activation.DataHandler;
+
 public class OutgoingDhxPackage extends DhxPackage {
 
   /**
@@ -13,15 +15,15 @@ public class OutgoingDhxPackage extends DhxPackage {
    * 
    * @param service - XroadMember to whom document is sent(self X-road member for incoming document)
    * @param client - XroadMember who sends the document(self X-road member for outgoing document)
-   * @param file - documents file
+   * @param attachmentHandler - datahandler containing document being sent
    * @param internalConsignmentId - consingment id for sending document
    * @param dhxProtocolVersion - version of the DHX protocol which corresponds to that package. If
    *        package is being recieved, then dhxProtocolVersion is taken from request.
    * @throws DhxException - thrown if error occurs while creating dhxdocument
    */
-  public OutgoingDhxPackage(InternalXroadMember service, InternalXroadMember client, File file,
+  public OutgoingDhxPackage(InternalXroadMember service, InternalXroadMember client, DataHandler attachmentHandler,
       String internalConsignmentId, String dhxProtocolVersion) throws DhxException {
-    super(service, client, file, dhxProtocolVersion);
+    super(service, client, attachmentHandler, dhxProtocolVersion);
     this.internalConsignmentId = internalConsignmentId;
 
   }
@@ -37,13 +39,13 @@ public class OutgoingDhxPackage extends DhxPackage {
    *        package is being recieved, then dhxProtocolVersion is taken from request.
    * @throws DhxException - thrown if error occurs while creating dhxdocument
    */
-  public OutgoingDhxPackage(InternalXroadMember service, InternalXroadMember client,
+ /* public OutgoingDhxPackage(InternalXroadMember service, InternalXroadMember client,
       InputStream stream,
       String internalConsignmentId, String dhxProtocolVersion)
       throws DhxException {
     super(service, client, stream, dhxProtocolVersion);
     this.internalConsignmentId = internalConsignmentId;
-  }
+  }*/
 
 
   /**
@@ -53,7 +55,7 @@ public class OutgoingDhxPackage extends DhxPackage {
    * @param client - XroadMember who sends the document(self X-road member for outgoing document)
    * @param parsedContainer - document Object. Object type bacause different version might be sent
    * @param parsedContainerVersion - version of the container
-   * @param file - documents file
+   * @param attachmentHandler - datahandler containing document being sent
    * @param internalConsignmentId - consingment id for sending document
    * @param dhxProtocolVersion - version of the DHX protocol which corresponds to that package. If
    *        package is being recieved, then dhxProtocolVersion is taken from request.
@@ -61,10 +63,10 @@ public class OutgoingDhxPackage extends DhxPackage {
    */
   public OutgoingDhxPackage(InternalXroadMember service, InternalXroadMember client,
       Object parsedContainer,
-      CapsuleVersionEnum parsedContainerVersion, File file, String internalConsignmentId,
+      CapsuleVersionEnum parsedContainerVersion, DataHandler attachmentHandler, String internalConsignmentId,
       String dhxProtocolVersion)
       throws DhxException {
-    super(service, client, parsedContainer, parsedContainerVersion, file, dhxProtocolVersion);
+    super(service, client, parsedContainer, parsedContainerVersion, attachmentHandler, dhxProtocolVersion);
     this.internalConsignmentId = internalConsignmentId;
   }
 
@@ -81,7 +83,7 @@ public class OutgoingDhxPackage extends DhxPackage {
    *        package is being recieved, then dhxProtocolVersion is taken from request.
    * @throws DhxException - thrown if error occurs while sending document
    */
-  public OutgoingDhxPackage(InternalXroadMember service, InternalXroadMember client,
+ /* public OutgoingDhxPackage(InternalXroadMember service, InternalXroadMember client,
       InputStream stream,
       Object parsedContainer,
       CapsuleVersionEnum parsedContainerVersion, String internalConsignmentId,
@@ -90,7 +92,7 @@ public class OutgoingDhxPackage extends DhxPackage {
     super(service, client, stream, parsedContainer, parsedContainerVersion, dhxProtocolVersion);
     this.internalConsignmentId = internalConsignmentId;
   }
-
+*/
 
   /**
    * internal id of the package(for package sending).

@@ -43,7 +43,7 @@ public class Document extends BaseEntity implements Serializable {
   private Long size;
 
   @Column(name = "versioon")
-  private Integer version;
+  private Integer containerVersion;
 
 
 

@@ -1,11 +1,9 @@
 package ee.ria.dhx.types;
 
 import ee.ria.dhx.exception.DhxException;
-
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.FileUtil;
-
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 
 import java.io.File;
@@ -16,6 +14,7 @@ import java.io.InputStream;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.util.ByteArrayDataSource;
 
 /**
@@ -33,26 +32,27 @@ public abstract class DhxPackage {
    * 
    * @param service - XroadMember to whom document is sent(self X-road member for incoming document)
    * @param client - XroadMember who sends the document(self X-road member for outgoing document)
-   * @param file - documents file
+   * @param attachmentHandler - datahandler containing document being sent
    * @param dhxProtocolVersion - version of the DHX protocol which corresponds to that package. If
    *        package is being recieved, then dhxProtocolVersion is taken from request.
    * @throws DhxException - thrown if error occurs while creating dhxdocument
    */
-  protected DhxPackage(InternalXroadMember service, InternalXroadMember client, File file,
+  protected DhxPackage(InternalXroadMember service, InternalXroadMember client, DataHandler attachmentHandler,
       String dhxProtocolVersion)
       throws DhxException {
-    try {
-      InputStream stream = new FileInputStream(file);
-      DataSource source = new ByteArrayDataSource(stream, "text/xml; charset=UTF-8");
-      documentFile = new DataHandler(source);
+   // try {
+     // InputStream stream = new FileInputStream(file);
+     // DataSource source = new FileDataSource(file);
+     // documentFile = new DataHandler(source);
+      this.documentFile = attachmentHandler;
       this.service = service;
       this.client = client;
       this.dhxProtocolVersion = dhxProtocolVersion;
-    } catch (FileNotFoundException ex) {
+    /*} catch (FileNotFoundException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR, ex.getMessage(), ex);
-    } catch (IOException ex) {
+    } /*catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR, ex.getMessage(), ex);
-    }
+    }*/
 
   }
 
@@ -66,21 +66,21 @@ public abstract class DhxPackage {
    *        package is being recieved, then dhxProtocolVersion is taken from request.
    * @throws DhxException - thrown if error occurs while creating dhxdocument
    */
-  protected DhxPackage(InternalXroadMember service, InternalXroadMember client,
+ /* protected DhxPackage(InternalXroadMember service, InternalXroadMember client,
       InputStream stream, String dhxProtocolVersion)
       throws DhxException {
     try {
-      InputStream realStream;
-      realStream = stream;
-      DataSource source = new ByteArrayDataSource(realStream, "application/octet-stream");
-      documentFile = new DataHandler(source);
+    //  InputStream realStream;
+     // realStream = stream;
+    //  DataSource source = new ByteArrayDataSource(realStream, "application/octet-stream");
+    //  documentFile = new DataHandler(source);
       this.service = service;
       this.client = client;
       this.dhxProtocolVersion = dhxProtocolVersion;
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR, ex.getMessage(), ex);
     }
-  }
+  }*/
 
 
   /**
@@ -90,16 +90,16 @@ public abstract class DhxPackage {
    * @param client - XroadMember who sends the document(self X-road member for outgoing document)
    * @param parsedContainer - document Object. Object type bacause different version might be sent
    * @param parsedContainerVersion - version of the container
-   * @param file - documents file
+   * @param attachmentHandler - datahandler containing document being sent
    * @param dhxProtocolVersion - version of the DHX protocol which corresponds to that package. If
    *        package is being recieved, then dhxProtocolVersion is taken from request.
    * @throws DhxException - thrown if error occurs while sending document
    */
   protected DhxPackage(InternalXroadMember service, InternalXroadMember client,
       Object parsedContainer,
-      CapsuleVersionEnum parsedContainerVersion, File file, String dhxProtocolVersion)
+      CapsuleVersionEnum parsedContainerVersion, DataHandler attachmentHandler, String dhxProtocolVersion)
       throws DhxException {
-    this(service, client, FileUtil.getFileAsStream(file), dhxProtocolVersion);
+    this(service, client, attachmentHandler, dhxProtocolVersion);
     this.parsedContainer = parsedContainer;
     this.parsedContainerVersion = parsedContainerVersion;
   }
@@ -116,7 +116,7 @@ public abstract class DhxPackage {
    *        package is being recieved, then dhxProtocolVersion is taken from request.
    * @throws DhxException - thrown if error occurs while sending document
    */
-  protected DhxPackage(InternalXroadMember service, InternalXroadMember client,
+ /* protected DhxPackage(InternalXroadMember service, InternalXroadMember client,
       InputStream stream,
       Object parsedContainer,
       CapsuleVersionEnum parsedContainerVersion, String dhxProtocolVersion)
@@ -124,7 +124,7 @@ public abstract class DhxPackage {
     this(service, client, stream, dhxProtocolVersion);
     this.parsedContainer = parsedContainer;
     this.parsedContainerVersion = parsedContainerVersion;
-  }
+  }*/
 
 
 

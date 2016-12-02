@@ -4,6 +4,7 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
+import ee.ria.dhx.types.DhxOrganisation;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.RepresentationListResponse;
@@ -13,6 +14,7 @@ import ee.ria.dhx.types.eu.x_road.xsd.xroad.MemberType;
 import ee.ria.dhx.types.eu.x_road.xsd.xroad.SharedParametersType;
 import ee.ria.dhx.types.eu.x_road.xsd.xroad.SubsystemType;
 import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.AddressService;
@@ -141,19 +143,13 @@ public class AddressServiceImpl implements AddressService {
         for (SubsystemType subSystem : member.getSubsystem()) {
           // find DHX subsystem. if found, then member is ready to use
           // DHX protocol
-          if (subSystem
-              .getSubsystemCode()
-              .toUpperCase()
-              .startsWith(
-                  config.getDhxSubsystemPrefix()
-                      .toUpperCase())) {
+          if (subSystem.getSubsystemCode().toUpperCase()
+              .startsWith(config.getDhxSubsystemPrefix().toUpperCase())) {
             log.debug("Found DHX subsystem for member: {}",
                 member.getMemberCode());
             // do we have to add self to address list??
-            members.add(new InternalXroadMember(config
-                .getXroadInstance(), member, subSystem
+            members.add(new InternalXroadMember(config.getXroadInstance(), member, subSystem
                 .getSubsystemCode(), member.getName()));
-            // break;
           }
         }
       }
@@ -306,34 +302,19 @@ public class AddressServiceImpl implements AddressService {
         memberCode, system);
     List<InternalXroadMember> members = getAdresseeList();
     Date curDate = new Date();
+    DhxOrganisation soughtOrganisation = DhxOrganisationFactory.createDhxOrganisation(memberCode, system);
     if (members != null && members.size() > 0) {
       log.debug("local adressee list size: {}", members.size());
       for (InternalXroadMember member : members) {
-        if (member.getMemberCode().equals(memberCode)
-            && (member.getRepresentee() == null || member
-                .getRepresentee().getRepresenteeCode() == null)
-            // check if adressees system is also chosen and is right
-            && ((system == null && config.addPrefixIfNeeded(
-                member.getSubsystemCode()).equals(
-                config.getDhxSubsystemPrefix())) || (config
-                .addPrefixIfNeeded(system).equals(config
-                .addPrefixIfNeeded(member.getSubsystemCode()))))) {
-          return member;
-        } else if (member.getRepresentee() != null
-            && member.getRepresentee().getRepresenteeCode()
-                .equals(memberCode)
-            && (member.getRepresentee().getStartDate().getTime() <= curDate
-                .getTime() && (member.getRepresentee()
-                .getEndDate() == null || member
-                .getRepresentee().getEndDate().getTime() >= curDate
-                .getTime()))
-            && ((system == null && member.getRepresentee()
-                .getRepresenteeSystem() == null) || (system != null
-                && member.getRepresentee().getRepresenteeSystem() != null && config
-                .addPrefixIfNeeded(
-                    member.getRepresentee().getRepresenteeSystem())
-                .equals(config.addPrefixIfNeeded(system))))) {
-          return member;
+        DhxOrganisation addresslistOrganisation = DhxOrganisationFactory.createDhxOrganisation(member);
+        if (addresslistOrganisation.equals(soughtOrganisation)) {
+          if (member.getRepresentee() == null
+              || (member.getRepresentee().getStartDate().getTime() <= curDate.getTime() 
+                  && (member.getRepresentee().getEndDate() == null 
+                      || member.getRepresentee().getEndDate().getTime() >= curDate.getTime())
+                     )
+                 )
+            return member;
         }
       }
     }

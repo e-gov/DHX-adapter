@@ -3,6 +3,7 @@ package ee.ria.dhx.server.endpoint;
 import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.service.DhxDocumentService;
 import ee.ria.dhx.server.service.util.AttachmentUtil;
 import ee.ria.dhx.types.InternalXroadMember;
@@ -17,6 +18,8 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSending
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedResponse;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedV3RequestType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocuments;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocumentsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocumentsV4RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.SendDocuments;
@@ -72,32 +75,21 @@ public class DhxServerEndpoint {
   @Loggable
   public SendDocumentsResponse sendDocuments(@RequestPayload SendDocuments request,
       MessageContext messageContext) throws DhxException {
-    SendDocumentsResponse response = new SendDocumentsResponse();
-    try {
-      InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
-      InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-      if (log.isDebugEnabled()) {
-        log.debug("Got sendDocument request from: " + client.toString());
-        log.debug("Got sendDocument request to: " + service.toString());
-      }
-      dhxDocumentService.receiveDocuments(request, client, service);
-      // TODO: add to DB useing service
-    } catch (DhxException ex) {
-      // log.error(ex.getMessage(), ex);
-      /*if (ex.getExceptionCode().isBusinessException()) {
-        Fault fault = new Fault();
-        fault.setFaultCode(ex.getExceptionCode().getCodeForService());
-        fault.setFaultString(ex.getMessage());
-        // response.setFault(fault);
-      } else {*/
-        throw ex;
-      //}
+    InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
+    InternalXroadMember service = dhxGateway.getXroadService(messageContext);
+    if(!service.getServiceVersion().equals("v4")) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Only v4 version of sendDocuments is supported");
     }
+    if (log.isDebugEnabled()) {
+      log.debug("Got sendDocument request from: " + client.toString());
+      log.debug("Got sendDocument request to: " + service.toString());
+    }
+    SendDocumentsResponse response = dhxDocumentService.sendDocuments(request, client, service);
     return response;
   }
 
   /**
-   * X-road SOAP service sendDocuments.
+   * X-road SOAP service receiveDocuments.
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
@@ -108,37 +100,20 @@ public class DhxServerEndpoint {
   @ResponsePayload
   @Loggable
   public ReceiveDocumentsResponse receiveDocuments(
-      @RequestPayload ReceiveDocumentsV4RequestType request,
+      @RequestPayload ReceiveDocuments request,
       MessageContext messageContext) throws DhxException {
-    ReceiveDocumentsResponse response = new ReceiveDocumentsResponse();
-    try {
-      InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
-      InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-      /*
-       * if (log.isDebugEnabled()) { log.debug("Got sendDocument request from: " +
-       * client.toString()); }
-       */
-      /*
-       * response = documentService.receiveDocumentFromEndpoint(request, client, service,
-       * messageContext);
-       */
-      // TODO: add to DB useing service
-    } catch (DhxException ex) {
-      // log.error(ex.getMessage(), ex);
-      if (ex.getExceptionCode().isBusinessException()) {
-        Fault fault = new Fault();
-        fault.setFaultCode(ex.getExceptionCode().getCodeForService());
-        fault.setFaultString(ex.getMessage());
-        // response.setFault(fault);
-      } else {
-        throw ex;
-      }
+    InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
+    InternalXroadMember service = dhxGateway.getXroadService(messageContext);
+    if(!service.getServiceVersion().equals("v4")) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Only v4 version of receiveDocuments is supported");
     }
+    ReceiveDocumentsResponse response =
+        dhxDocumentService.receiveDocuments(request, client, service);
     return response;
   }
 
   /**
-   * X-road SOAP service sendDocuments.
+   * X-road SOAP service markDocumentsReceived.
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
@@ -151,35 +126,18 @@ public class DhxServerEndpoint {
   public MarkDocumentsReceivedResponse markDocumentsReceived(
       @RequestPayload MarkDocumentsReceived request,
       MessageContext messageContext) throws DhxException {
-    MarkDocumentsReceivedResponse response = new MarkDocumentsReceivedResponse();
-    try {
-      InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
-      InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-      /*
-       * if (log.isDebugEnabled()) { log.debug("Got sendDocument request from: " +
-       * client.toString()); }
-       */
-      /*
-       * response = documentService.receiveDocumentFromEndpoint(request, client, service,
-       * messageContext);
-       */
-      // TODO: add to DB useing service
-    } catch (DhxException ex) {
-      // log.error(ex.getMessage(), ex);
-      if (ex.getExceptionCode().isBusinessException()) {
-        Fault fault = new Fault();
-        fault.setFaultCode(ex.getExceptionCode().getCodeForService());
-        fault.setFaultString(ex.getMessage());
-        // response.setFault(fault);
-      } else {
-        throw ex;
-      }
+    InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
+    InternalXroadMember service = dhxGateway.getXroadService(messageContext);
+    if(!service.getServiceVersion().equals("v3")) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Only v3 version of markDocumentsReceived is supported");
     }
+    MarkDocumentsReceivedResponse response =
+        dhxDocumentService.markDocumentReceived(request.getKeha(), client, service);
     return response;
   }
 
   /**
-   * X-road SOAP service sendDocuments.
+   * X-road SOAP service getSendStatus.
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
@@ -191,31 +149,12 @@ public class DhxServerEndpoint {
   @Loggable
   public GetSendStatusResponse getSendStatus(@RequestPayload GetSendStatus request,
       MessageContext messageContext) throws DhxException {
-    GetSendStatusResponse response = new GetSendStatusResponse();
-    try {
-      InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
-      InternalXroadMember service = dhxGateway.getXroadService(messageContext);
-      /*
-       * if (log.isDebugEnabled()) { log.debug("Got sendDocument request from: " +
-       * client.toString()); }
-       */
-      /*
-       * response = documentService.receiveDocumentFromEndpoint(request, client, service,
-       * messageContext);
-       */
-      // TODO: add to DB useing service
-    } catch (DhxException ex) {
-      // log.error(ex.getMessage(), ex);
-      if (ex.getExceptionCode().isBusinessException()) {
-        Fault fault = new Fault();
-        fault.setFaultCode(ex.getExceptionCode().getCodeForService());
-        fault.setFaultString(ex.getMessage());
-        // response.setFault(fault);
-      } else {
-        throw ex;
-      }
+    InternalXroadMember client = dhxGateway.getXroadClientAndSetRersponseHeader(messageContext);
+    InternalXroadMember service = dhxGateway.getXroadService(messageContext);
+    if(!service.getServiceVersion().equals("v2")) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Only v2 version of getSendStatus is supported");
     }
-    return response;
+    return dhxDocumentService.getSendStatus(request, client, service);
   }
 
   /**
