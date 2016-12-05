@@ -412,7 +412,7 @@ Asynchronous sending interface is similar to synchronous interface.
  
 The difference is that the interface [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) method [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-) is executed asynchronously (in separate thread) and the current thread continues immediately (not waiting for response).
 
-In case there occurs an technical error, then Asynchronous execution re-attempts sending (see `dhx-application.properties` parameter `document-resend-template=30,120,1200`).
+In case there occurs an technical error, the Asynchronous execution re-attempts sending (see `dhx-application.properties` parameter `document-resend-template=30,120,1200`).
 
 After sending success (or final failure) the callback interface [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) method [saveSendResult](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveSendResult-ee.ria.dhx.types.DhxSendDocumentResult-java.util.List-) is called. 
 It is developer's responsibility to implement it, by storing response to DMS database, etc.
