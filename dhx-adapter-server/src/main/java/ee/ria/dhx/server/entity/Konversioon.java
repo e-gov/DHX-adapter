@@ -1,7 +1,11 @@
 package ee.ria.dhx.server.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 
 /**
@@ -9,53 +13,52 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@NamedQuery(name="Konversioon.findAll", query="SELECT k FROM Konversioon k")
+@NamedQuery(name = "Konversioon.findAll", query = "SELECT k FROM Konversioon k")
 public class Konversioon implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	private Integer id;
+  @Id
+  private Integer id;
 
-	@Column(name="result_version")
-	private Integer resultVersion;
+  @Column(name = "result_version")
+  private Integer resultVersion;
 
-	private Integer version;
+  private Integer version;
 
-	private String xslt;
+  private String xslt;
 
-	public Konversioon() {
-	}
+  public Konversioon() {}
 
-	public Integer getId() {
-		return this.id;
-	}
+  public Integer getId() {
+    return this.id;
+  }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-	public Integer getResultVersion() {
-		return this.resultVersion;
-	}
+  public Integer getResultVersion() {
+    return this.resultVersion;
+  }
 
-	public void setResultVersion(Integer resultVersion) {
-		this.resultVersion = resultVersion;
-	}
+  public void setResultVersion(Integer resultVersion) {
+    this.resultVersion = resultVersion;
+  }
 
-	public Integer getVersion() {
-		return this.version;
-	}
+  public Integer getVersion() {
+    return this.version;
+  }
 
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
+  public void setVersion(Integer version) {
+    this.version = version;
+  }
 
-	public String getXslt() {
-		return this.xslt;
-	}
+  public String getXslt() {
+    return this.xslt;
+  }
 
-	public void setXslt(String xslt) {
-		this.xslt = xslt;
-	}
+  public void setXslt(String xslt) {
+    this.xslt = xslt;
+  }
 
 }

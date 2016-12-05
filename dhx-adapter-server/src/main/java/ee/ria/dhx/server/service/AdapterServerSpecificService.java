@@ -4,12 +4,9 @@ package ee.ria.dhx.server.service;
 import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
-import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.entity.Classificator;
 import ee.ria.dhx.server.entity.Document;
 import ee.ria.dhx.server.entity.Organisation;
 import ee.ria.dhx.server.entity.Recipient;
-import ee.ria.dhx.server.repository.ClassificatorRepository;
 import ee.ria.dhx.server.repository.DocumentRepository;
 import ee.ria.dhx.server.repository.OrganisationRepository;
 import ee.ria.dhx.server.repository.RecipientRepository;
@@ -20,38 +17,25 @@ import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.DhxSendDocumentResult;
 import ee.ria.dhx.types.IncomingDhxPackage;
 import ee.ria.dhx.types.InternalXroadMember;
-import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
-import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.Transport.DecRecipient;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
-import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.service.impl.ExampleDhxImplementationSpecificService;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.context.MessageContext;
 
-import java.io.File;
-import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-
 @Service
 @Slf4j
-public class DhxAdapterServerSpecificService extends ExampleDhxImplementationSpecificService {
+public class AdapterServerSpecificService extends ExampleDhxImplementationSpecificService {
 
   private List<InternalXroadMember> members;
 
@@ -63,9 +47,6 @@ public class DhxAdapterServerSpecificService extends ExampleDhxImplementationSpe
 
 
   @Autowired
-  ClassificatorRepository classificatorRepository;
-
-  @Autowired
   ConvertationService convertationService;
 
   @Autowired
@@ -74,7 +55,7 @@ public class DhxAdapterServerSpecificService extends ExampleDhxImplementationSpe
 
   @Override
   public boolean isDuplicatePackage(InternalXroadMember from, String consignmentId)
-      {
+  {
     DhxOrganisation dhxOrg = DhxOrganisationFactory.createDhxOrganisation(from);
     Organisation org =
         organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrg.getCode(),
@@ -82,7 +63,7 @@ public class DhxAdapterServerSpecificService extends ExampleDhxImplementationSpe
     List<Recipient> recipients =
         recipientRepository.findByTransport_SendersOrganisationAndDhxExternalConsignmentId(org,
             consignmentId);
-    if(recipients != null && recipients.size()>0) {
+    if (recipients != null && recipients.size() > 0) {
       return true;
     }
     return false;
@@ -200,21 +181,19 @@ public class DhxAdapterServerSpecificService extends ExampleDhxImplementationSpe
       Recipient recipient = recipientRepository.findOne(new Long(recipientId));
       SendDocumentResponse docResponse = finalResult.getResponse();
       recipient.setSendingEnd(new Timestamp((new Date()).getTime()));
+      Integer successStatusId = StatusEnum.RECEIVED.getClassificatorId();
       if (docResponse.getFault() == null) {
         log.debug("Document was succesfuly sent to DHX");
         recipient.setDhxExternalReceiptId(docResponse
             .getReceiptId());
         // recipient.setRecipientStatusId(11);
-        Classificator status =
-            classificatorRepository.findByName(StatusEnum.RECEIVED.getClassificatorName());
-        recipient.setStatus(status);
+        recipient.setStatusId(successStatusId);
       } else {
         log.debug("Fault occured while sending document to DHX");
         log.debug("All attempts to send documents were done. Saving document as failed.");
-        Classificator status =
-            classificatorRepository.findByName(StatusEnum.FAILED.getClassificatorName());
+        Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
         // recipient.setRecipientStatusId(5);
-        recipient.setStatus(status);
+        recipient.setStatusId(failedStatusId);
         // recipient.setSendingEndDate(new Date());
         String faultString = "";
         if (retryResults != null && retryResults.size() > 0) {
@@ -240,6 +219,19 @@ public class DhxAdapterServerSpecificService extends ExampleDhxImplementationSpe
         recipient.setFaultDetail(faultString.substring(0, (faultString.length() > 1900
             ? 1900
             : faultString.length())));
+      }
+      boolean allSent = true;
+      for (Recipient docRecipient : recipient.getTransport().getRecipients()) {
+        if (!docRecipient.getStatusId().equals(StatusEnum.RECEIVED.getClassificatorId())) {
+          allSent = false;
+          break;
+        }
+      }
+      if (allSent
+          && !recipient.getTransport().getStatusId()
+              .equals(StatusEnum.RECEIVED.getClassificatorId())) {
+        recipient.getTransport().setStatusId(successStatusId);
+        documentRepository.save(recipient.getTransport().getDokument());
       }
       recipientRepository.save(recipient);
     } catch (Exception ex) {

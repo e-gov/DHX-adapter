@@ -5,9 +5,12 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
-
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 
 /**
@@ -15,25 +18,24 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="klassifikaator")
+@Table(name = "klassifikaator")
 @Setter
 @Getter
-public class Classificator  extends BaseEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Classificator extends BaseEntity implements Serializable {
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="klassifikaator_id")
-	private Integer klassifikaatorId;
+  @Id
+  @Column(name = "klassifikaator_id")
+  private Integer klassifikaatorId;
 
-	@Column(name="nimetus")
-	private String name;
+  @Column(name = "nimetus")
+  private String name;
 
-	//bi-directional many-to-one association to KlassifikaatoriTyyp
-	@ManyToOne
-	@JoinColumn(name="klassifikaatori_tyyp_id")
-	private KlassifikaatoriTyyp klassifikaatoriTyyp;
+  // bi-directional many-to-one association to KlassifikaatoriTyyp
+  @ManyToOne
+  @JoinColumn(name = "klassifikaatori_tyyp_id")
+  private KlassifikaatoriTyyp klassifikaatoriTyyp;
 
-	public Classificator() {
-	}
+  public Classificator() {}
 
 }

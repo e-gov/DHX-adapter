@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.ws.config.annotation.WsConfigurationSupport;
 import org.springframework.ws.server.endpoint.adapter.DefaultMethodEndpointAdapter;
 import org.springframework.ws.server.endpoint.adapter.method.MarshallingPayloadMethodProcessor;
@@ -41,7 +39,7 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
 
   @Autowired
   DhxConfig config;
-  
+
   /**
    * Injects DefaultMethodEndpointAdapter which supports SOAP message attachments. Sets proper
    * marshaller. That bean might iterfere with another same bean if it is defined(in that case most
@@ -83,7 +81,7 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
     return retVal;
   }
 
- 
+
   /**
    * Defines WSDL.
    * 
@@ -95,6 +93,6 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
     SimpleWsdl11Definition wsdlDef = new SimpleWsdl11Definition(wsdlResource);
     return wsdlDef;
   }
-  
- 
+
+
 }

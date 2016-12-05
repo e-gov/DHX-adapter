@@ -5,7 +5,14 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 
 /**
@@ -16,26 +23,25 @@ import javax.persistence.*;
 @Table(name = "saatja")
 @Getter
 @Setter
-public class Sender  extends BaseEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Sender extends BaseEntity implements Serializable {
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="saatja_id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer senderId;
+  @Id
+  @Column(name = "saatja_id")
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer senderId;
 
-	//bi-directional many-to-one association to Asutus
-	@ManyToOne
-	@JoinColumn(name="asutus_id")
-	private Organisation organisation;
+  // bi-directional many-to-one association to Asutus
+  @ManyToOne
+  @JoinColumn(name = "asutus_id")
+  private Organisation organisation;
 
-	//bi-directional many-to-one association to Transport
-	@ManyToOne
-	@JoinColumn(name="transport_id")
-	private Transport transport;
+  // bi-directional many-to-one association to Transport
+  @ManyToOne
+  @JoinColumn(name = "transport_id")
+  private Transport transport;
 
-	public Sender() {
-	}
+  public Sender() {}
 
-	
+
 }

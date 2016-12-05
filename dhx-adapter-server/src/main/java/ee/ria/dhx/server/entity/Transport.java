@@ -4,12 +4,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
@@ -20,12 +28,12 @@ import java.util.List;
 @Getter
 @Table(name = "transport")
 @Setter
-public class Transport  extends BaseEntity implements Serializable {
+public class Transport extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
   @Column(name = "transport_id")
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer transportId;
 
   @Column(name = "saatmise_algus")
@@ -44,9 +52,9 @@ public class Transport  extends BaseEntity implements Serializable {
   private Document dokument;
 
   // bi-directional many-to-one association to Klassifikaator
-  @ManyToOne
-  @JoinColumn(name = "staatus_id")
-  private Classificator status;
+  // @ManyToOne
+  @Column(name = "staatus_id")
+  private Integer statusId;
 
   // bi-directional many-to-one association to Vastuvotja
   @OneToMany(mappedBy = "transport", cascade = {CascadeType.ALL})

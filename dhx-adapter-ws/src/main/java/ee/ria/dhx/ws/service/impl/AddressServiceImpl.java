@@ -59,7 +59,7 @@ public class AddressServiceImpl implements AddressService {
 
   @Autowired
   @Setter
-  private DhxPackageService documentService;
+  private DhxPackageService dhdPackageService;
 
   @Autowired
   @Setter

@@ -1,8 +1,12 @@
 package ee.ria.dhx.server.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 
 /**
@@ -10,104 +14,103 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@NamedQuery(name="Ehak.findAll", query="SELECT e FROM Ehak e")
+@NamedQuery(name = "Ehak.findAll", query = "SELECT e FROM Ehak e")
 public class Ehak implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="ehak_id")
-	private String ehakId;
+  @Id
+  @Column(name = "ehak_id")
+  private String ehakId;
 
-	private Timestamp created;
+  private Timestamp created;
 
-	@Column(name="last_modified")
-	private Timestamp lastModified;
+  @Column(name = "last_modified")
+  private Timestamp lastModified;
 
-	private String maakond;
+  private String maakond;
 
-	private String nimi;
+  private String nimi;
 
-	private String roopnimi;
+  private String roopnimi;
 
-	private String tyyp;
+  private String tyyp;
 
-	private String username;
+  private String username;
 
-	private String vald;
+  private String vald;
 
-	public Ehak() {
-	}
+  public Ehak() {}
 
-	public String getEhakId() {
-		return this.ehakId;
-	}
+  public String getEhakId() {
+    return this.ehakId;
+  }
 
-	public void setEhakId(String ehakId) {
-		this.ehakId = ehakId;
-	}
+  public void setEhakId(String ehakId) {
+    this.ehakId = ehakId;
+  }
 
-	public Timestamp getCreated() {
-		return this.created;
-	}
+  public Timestamp getCreated() {
+    return this.created;
+  }
 
-	public void setCreated(Timestamp created) {
-		this.created = created;
-	}
+  public void setCreated(Timestamp created) {
+    this.created = created;
+  }
 
-	public Timestamp getLastModified() {
-		return this.lastModified;
-	}
+  public Timestamp getLastModified() {
+    return this.lastModified;
+  }
 
-	public void setLastModified(Timestamp lastModified) {
-		this.lastModified = lastModified;
-	}
+  public void setLastModified(Timestamp lastModified) {
+    this.lastModified = lastModified;
+  }
 
-	public String getMaakond() {
-		return this.maakond;
-	}
+  public String getMaakond() {
+    return this.maakond;
+  }
 
-	public void setMaakond(String maakond) {
-		this.maakond = maakond;
-	}
+  public void setMaakond(String maakond) {
+    this.maakond = maakond;
+  }
 
-	public String getNimi() {
-		return this.nimi;
-	}
+  public String getNimi() {
+    return this.nimi;
+  }
 
-	public void setNimi(String nimi) {
-		this.nimi = nimi;
-	}
+  public void setNimi(String nimi) {
+    this.nimi = nimi;
+  }
 
-	public String getRoopnimi() {
-		return this.roopnimi;
-	}
+  public String getRoopnimi() {
+    return this.roopnimi;
+  }
 
-	public void setRoopnimi(String roopnimi) {
-		this.roopnimi = roopnimi;
-	}
+  public void setRoopnimi(String roopnimi) {
+    this.roopnimi = roopnimi;
+  }
 
-	public String getTyyp() {
-		return this.tyyp;
-	}
+  public String getTyyp() {
+    return this.tyyp;
+  }
 
-	public void setTyyp(String tyyp) {
-		this.tyyp = tyyp;
-	}
+  public void setTyyp(String tyyp) {
+    this.tyyp = tyyp;
+  }
 
-	public String getUsername() {
-		return this.username;
-	}
+  public String getUsername() {
+    return this.username;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public String getVald() {
-		return this.vald;
-	}
+  public String getVald() {
+    return this.vald;
+  }
 
-	public void setVald(String vald) {
-		this.vald = vald;
-	}
+  public void setVald(String vald) {
+    this.vald = vald;
+  }
 
 }

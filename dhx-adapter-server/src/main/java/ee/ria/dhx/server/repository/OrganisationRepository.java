@@ -10,6 +10,6 @@ import java.util.List;
 public interface OrganisationRepository extends CrudRepository<Organisation, Long> {
 
   Organisation findByRegistrationCodeAndSubSystem(String registrationCode, String subsystem);
-  
+
   List<Organisation> findByIsActive(Boolean isActive);
 }

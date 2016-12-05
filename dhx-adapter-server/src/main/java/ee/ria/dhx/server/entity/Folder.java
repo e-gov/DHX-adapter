@@ -4,10 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
@@ -18,12 +25,12 @@ import java.util.List;
 @Table(name = "kaust")
 @Getter
 @Setter
-public class Folder  extends BaseEntity implements Serializable {
+public class Folder extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
   @Column(name = "kaust_id")
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer folderId;
 
   @Column(name = "kausta_number")

@@ -5,9 +5,10 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
-
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 /**
@@ -15,22 +16,21 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="klassifikaatori_tyyp")
+@Table(name = "klassifikaatori_tyyp")
 @Getter
 @Setter
 public class KlassifikaatoriTyyp implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="klassifikaatori_tyyp_id")
-	private Integer klassifikaatoriTyypId;
+  @Id
+  @Column(name = "klassifikaatori_tyyp_id")
+  private Integer klassifikaatoriTyypId;
 
-	@Column(name="nimetus")
-	private String name;
+  @Column(name = "nimetus")
+  private String name;
 
 
-	public KlassifikaatoriTyyp() {
-	}
+  public KlassifikaatoriTyyp() {}
 
 
 }
