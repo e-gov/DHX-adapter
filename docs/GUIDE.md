@@ -298,7 +298,7 @@ It has three methods
 
 - Method [renewAddressList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#renewAddressList--) executes address book creation algorithm. It is executed also by timer jobi (`dhx-application.properties` parameter `address-renew-timeout=0 */20 * * * ?`).
 
-- Method [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-) helps to find addressee (recipient) techincal data, by using unique combination  `registrationCode + sybsystem ` as input.
+- Method [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-) helps to find addressee (recipient) technical data, by using unique combination  `registrationCode + sybsystem ` as input.
 
 For long-term preservation of address book (in database or in filesystem), the developer may implement  `DhxImplementationSpecificService ` methods [saveAddresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#saveAddresseeList-java.util.List-) and [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--).
 If implemented, these methods must store and reload all [InternalXroadMember](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/ee/ria/dhx/types/InternalXroadMember.html) attributes (see table below).
