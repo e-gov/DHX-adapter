@@ -345,8 +345,8 @@ There are several types of recipients
 - With DHX capability through intermediary (several sub-systems `DHX.subsystem1` and `DHX.subsystem2` etc)
 
 **NB!** When sending document and generating consignment with [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) methods, all the `InternalXroadMember` instance attributes must be specified. 
-If recipeint (addressee) has `subsystemCode` value, then it must be specified on  `getOutgoingPackage()` mehtod call.
-If recipeint (addressee) has `representeeCode` value, then it must be specified on  `getOutgoingPackage()` mehtod call.
+If recipient (addressee) has `subsystemCode` value, then it must be specified on  `getOutgoingPackage()` mehtod call.
+If recipient (addressee) has `representeeCode` value, then it must be specified on  `getOutgoingPackage()` mehtod call.
 
 **The surest way** is to use [getOutgoingPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html#getOutgoingPackage-java.io.File-java.lang.String-ee.ria.dhx.types.InternalXroadMember-) variations, that have  `InternalXroadMember recipient ` input parameter.
 
