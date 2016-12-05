@@ -290,7 +290,7 @@ For unique addressing, the combination `registrationCode + subsystem` should be 
 For example, if document addressee is `Lääne Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.laane` is sufficient.
 If document addressee is `Lõuna Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.louna` is sufficient.
 
-Service [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html) is intended for creating and renewing the address book.
+Service [AddressService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html) is intended for getting, creating and renewing the address book.
 
 It has three methods 
 
