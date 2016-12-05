@@ -331,7 +331,7 @@ xroadInstance | EE | Country EE
 memberClass | GOV | GOV- Goverment, COM - commercial. In case of intermediary, it contains mediator memberClass.
 memberCode | 70000001 | organization registration code. In case of intermediary, it contains mediator's registration code, not mediated organization (representee) registration code.
 subsystemCode | DHX or DHX.adit |Sub-system code. Must start with DHX. In general just `DHX`. In case of intermediary, it contains mediator's subsystem code, not mediated organization (representee) subsystem code.
-name | Riigi infosüsteemide keskus | Organization or sub-system name.In case of intermediary, it contains mediator's name, not mediated organization (representee) name.
+name | Riigi infosüsteemide keskus | Organization or sub-system name. In case of intermediary, it contains mediator's name, not mediated organization (representee) name.
 representee.representeeCode | 70012121 | Mediated organization (representee) registration code. (used in case document is sended through intermediary)
 representee.representeeSystem |  DHX.subsystem | Mediated organization (representee) syb-system code. In general it is empty. If mediated organization has several subsystems, then subsystem code.
 representee.representeeName | Lasteaed Pallipõnn | Mediated organization (representee) name or its sub-system name
