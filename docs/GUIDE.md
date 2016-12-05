@@ -285,7 +285,7 @@ Therefore the document receiving and sending internal functionality uses `Custom
 
 ##Address book creation and renewal interface
 
-In DHX addressing, the developer needs to bear in mind that, it is not sufficint to use only the registration code of an organization. 
+In DHX addressing, the developer needs to bear in mind that, it is not sufficient to use only the registration code of an organization. 
 For unique addressing, the combination `registrationCode + subsystem` should be used. 
 For example, if document addressee is `Lääne Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.laane` is sufficient.
 If document addressee is `Lõuna Ringkonnaprokuratuur`, then combination `code=70000906 + subsystem=DHX.louna` is sufficient.
