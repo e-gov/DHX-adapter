@@ -494,7 +494,7 @@ For receiving and storing incoming documents, the developer must implement [DhxI
 On arrival, at first the method [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called.
 It must check if it is duplicate sending attempt (the same document consignment is sended to our DMS twice or more times).
 If it is duplicate, then response with error [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) is generated.
-If it's not duplicate,, then method [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-) is called. It should store the document (into DMS's `Incoming documents` folder).
+If it's not duplicate then method [receiveDocument](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#receiveDocument-ee.ria.dhx.types.IncomingDhxPackage-org.springframework.ws.context.MessageContext-) is called. It should store the document (into DMS's `Incoming documents` folder).
 
 Example
 ```java
