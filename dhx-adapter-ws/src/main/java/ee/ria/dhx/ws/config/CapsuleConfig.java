@@ -22,9 +22,7 @@ import javax.annotation.PostConstruct;
 
 @Getter
 @Setter
-// @ConfigurationProperties(prefix = "dhx.xsd")
 @Configuration
-// @PropertySource("classpath:dhx-application.properties")
 public class CapsuleConfig {
 
   @Value("${dhx.xsd.capsule-xsd-file21:jar://Dvk_kapsel_vers_2_1_eng_est.xsd}")

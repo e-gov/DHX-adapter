@@ -1,0 +1,50 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+	<SOAP-ENV:Header>
+		<ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer"
+			xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+			xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+		<ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers"
+			xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+		</ns4:id>
+		<ns4:client xmlns:ns2="http://dhx.x-road.eu/producer"
+			xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+			xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+			<ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+			<ns3:memberClass>GOV</ns3:memberClass>
+			<ns3:memberCode>401</ns3:memberCode>
+			<ns3:subsystemCode>DHX</ns3:subsystemCode>
+		</ns4:client>
+		<ns4:service xmlns:ns2="http://dhx.x-road.eu/producer"
+			xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+			xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+			ns3:objectType="SERVICE">
+			<ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+			<ns3:memberClass>COM</ns3:memberClass>
+			<ns3:memberCode>30000001</ns3:memberCode>
+			<ns3:subsystemCode>DHX</ns3:subsystemCode>
+			<ns3:serviceCode>representationList</ns3:serviceCode>
+			<ns3:serviceVersion>v1</ns3:serviceVersion>
+		</ns4:service>
+	</SOAP-ENV:Header>
+	<SOAP-ENV:Body>
+		<ns3:representationListResponse
+			xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+			xmlns:ns3="http://dhx.x-road.eu/producer" xmlns:ns4="http://x-road.eu/xsd/identifiers"
+			xmlns:ns5="http://x-road.eu/xsd/representation.xsd" xmlns:ns6="http://x-road.eu/xsd/xroad.xsd">
+			<ns3:representees>
+				<ns3:representee>
+					<ns3:memberCode>500</ns3:memberCode>
+					<ns3:representeeName>Representee 1</ns3:representeeName>
+					<ns3:representeeSystem>system</ns3:representeeSystem>
+					<ns3:startDate>2016-12-09T19:10:14.856+02:00</ns3:startDate>
+				</ns3:representee>
+				<ns3:representee>
+					<ns3:memberCode>500</ns3:memberCode>
+					<ns3:representeeName>Representee 1</ns3:representeeName>
+					<ns3:startDate>2016-12-09T19:10:14.856+02:00</ns3:startDate>
+					<ns3:endDate>2016-12-09T19:10:14.856+02:00</ns3:endDate>
+				</ns3:representee>
+			</ns3:representees>
+		</ns3:representationListResponse>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

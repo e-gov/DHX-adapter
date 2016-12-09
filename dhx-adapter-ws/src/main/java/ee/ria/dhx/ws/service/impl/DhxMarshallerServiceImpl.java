@@ -47,18 +47,6 @@ import javax.xml.validation.Validator;
 @Service("dhxMarshallerService")
 public class DhxMarshallerServiceImpl implements DhxMarshallerService {
 
-  /*
-   * @Getter
-   * 
-   * @Setter Unmarshaller unmarshaller;
-   * 
-   * @Getter
-   * 
-   * @Setter Marshaller marshaller;
-   * 
-   * @Getter Jaxb2Marshaller jaxbMarshaller;
-   */
-
   @Getter
   JAXBContext jaxbContext;
 
@@ -107,13 +95,14 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
    * @return - unmarshalled object
    * @throws DhxException - thrown if error occurs while unmrashalling object
    */
+  @SuppressWarnings("unchecked")
   @Loggable
   public <T> T unmarshall(Source source) throws DhxException {
     try {
       if (log.isDebugEnabled()) {
         log.debug("unmarshalling file");
       }
-      Object obj = (Object) getUnmarshaller().unmarshal(source);
+      Object obj = getUnmarshaller().unmarshal(source);
       return (T) obj;
     } catch (JAXBException ex) {
       log.error(ex.getMessage(), ex);
@@ -130,6 +119,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
    * @return - parsed(unmarshalled) object
    * @throws DhxException - thrown if error occurs while parsing file
    */
+  @SuppressWarnings("unchecked")
   @Loggable
   public <T> T unmarshall(File capsuleFile) throws DhxException {
     try {
@@ -214,6 +204,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     }
   }
   
+  @SuppressWarnings("unchecked")
   @Loggable
   protected <T> T unmarshallNoValidation(final InputStream capsuleStream,
       Unmarshaller unmarshaller) throws DhxException {
@@ -294,7 +285,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
   }
   
   /**
-   * Marshalls object to outputStream.
+   * Marshalls object to outputStream, removes all namespace prefixes from XML.
    * 
    * @param container - object to marshall
    * @param stream - containing marshalled object
@@ -310,6 +301,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       XMLOutputFactory outputFactory = XMLOutputFactory.newFactory();
       XMLStreamWriter writer = outputFactory.createXMLStreamWriter(stream);
       writer.setNamespaceContext(new NamespaceContext() {
+        @SuppressWarnings("rawtypes")
         public Iterator getPrefixes(String namespaceURI) {
             return null;
         }
@@ -438,47 +430,6 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
           "Error occured while validating capsule. "
               + ex.getMessage(), ex);
     }
-  }
-
-  /**
-   * Method checks filesize againts maximum filesize. NOT IMPLEMENTED!
-   * 
-   * @param streamToCheck - stream that needs to be checked
-   * @throws DhxException thrown if filesize is bigger that maximum filesize
-   */
-  @Loggable
-  public void checkFileSize(InputStream streamToCheck) throws DhxException {
-    if (config.getCheckFilesize()) {
-      log.info("Checking filesize.");
-      log.info("File size check not done because check is not implemented.");
-      throw new DhxException(DhxExceptionEnum.NOT_IMPLEMENTED,
-          "No filesize check is implemented!");
-    } else {
-      log.info("Checking filesize is disabled in configuration.");
-    }
-  }
-  
-  /**
-   * Method checks filesize againts maximum filesize. NOT IMPLEMENTED!
-   * 
-   * @param fileToCheck - stream that needs to be checked
-   * @throws DhxException thrown if filesize is bigger that maximum filesize
-   */
-  @Loggable
-  public void checkFileSize(File fileToCheck) throws DhxException {
-    if (config.getCheckFilesize()) {
-      log.info("Checking filesize.");
-      log.info("File size check not done because check is not implemented.");
-      throw new DhxException(DhxExceptionEnum.NOT_IMPLEMENTED,
-          "No filesize check is implemented!");
-    } else {
-      log.info("Checking filesize is disabled in configuration.");
-    }
-  }
-
-
-  public void readBig(InputStream fileStream) {
-
   }
 
 }

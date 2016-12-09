@@ -174,21 +174,5 @@ public interface DhxMarshallerService {
    */
   public Unmarshaller getUnmarshaller() throws DhxException;
 
-  /**
-   * Method checks filesize againts maximum filesize. NOT IMPLEMENTED!
-   * 
-   * @param streamToCheck - stream that needs to be checked
-   * @throws DhxException thrown if filesize is bigger that maximum filesize
-   */
-  public void checkFileSize(InputStream streamToCheck) throws DhxException;
-  
-  /**
-   * Method checks filesize againts maximum filesize. NOT IMPLEMENTED!
-   * 
-   * @param fileToCheck - file that needs to be checked
-   * @throws DhxException thrown if filesize is bigger that maximum filesize
-   */
-  @Loggable
-  public void checkFileSize(File fileToCheck) throws DhxException;
 
 }

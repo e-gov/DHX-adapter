@@ -41,6 +41,7 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Tagasiside
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.OutgoingDhxPackage;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
+import ee.ria.dhx.util.ConversionUtil;
 import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.AsyncDhxPackageService;
@@ -72,7 +73,8 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 
 /**
- * Class that gets SOAP request objects(from DVK services), processes requests and gives SOAP response objects. 
+ * Class that gets SOAP request objects(from DVK services), processes requests and gives SOAP
+ * response objects.
  * 
  * @author Aleksei Kokarev
  *
@@ -113,8 +115,8 @@ public class SoapService {
 
 
   /**
-   * Method processes sendDocuments request and saves the document into the database for further sending
-   * to DHX service of the recipient.
+   * Method processes sendDocuments request and saves the document into the database for further
+   * sending to DHX service of the recipient.
    * 
    * @param documents - SOAP request object
    * @param sender - sender of the request(from SOAP header)
@@ -407,13 +409,13 @@ public class SoapService {
           // adr.setAllyksuseKood(recipient.getStruCturalUnit());
           adr.setAsutuseNimi(recipient.getOrganisation().getName());
           edastus.setSaaja(adr);
-          edastus.setSaadud(WsUtil.getXmlGregorianCalendarFromDate(recipient
+          edastus.setSaadud(ConversionUtil.toGregorianCalendar(recipient
               .getSendingStart()));
 
           // edastus.setMetaxml(recipient.getMetaxml());
           // edastus.setMeetod();
           if (recipient.getSendingEnd() != null) {
-            edastus.setLoetud(WsUtil.getXmlGregorianCalendarFromDate(recipient
+            edastus.setLoetud(ConversionUtil.toGregorianCalendar(recipient
                 .getSendingEnd()));
           }
           if (recipient.getFaultCode() != null) {
@@ -425,7 +427,7 @@ public class SoapService {
             fault.setFaultstring(recipient.getFaultString());
             edastus.setFault(fault);
           }
-          edastus.setEdastatud(WsUtil.getXmlGregorianCalendarFromDate(recipient
+          edastus.setEdastatud(ConversionUtil.toGregorianCalendar(recipient
               .getSendingStart()));
           item.getEdastus().add(edastus);
           if (request.getKeha().isStaatuseAjalugu()) {
@@ -435,8 +437,8 @@ public class SoapService {
                 status.setVastuvotjaStaatusId(BigInteger.valueOf(recipientHistory
                     .getRecipientStatusId()));
               }
-              status.setStaatuseMuutmiseAeg(WsUtil
-                  .getXmlGregorianCalendarFromDate(recipientHistory.getStatusChangeDate()));
+              status.setStaatuseMuutmiseAeg(ConversionUtil.toGregorianCalendar(recipientHistory
+                  .getStatusChangeDate()));
               StatusEnum statusEnum =
                   StatusEnum.forClassificatorId(recipientHistory.getStatusId());
               StatusType statusType = null;

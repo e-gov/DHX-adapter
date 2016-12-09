@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
+@Setter
 @Configuration
 /**
  * Configuration parameters needed for SOAP services.

@@ -1,0 +1,35 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers"
+	xmlns:prod="http://dhx.x-road.eu/producer">
+	<soapenv:Header>
+		<ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer"
+			xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+			xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+		<ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers"
+			xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+		</ns4:id>
+		<ns4:client xmlns:ns2="http://dhx.x-road.eu/producer"
+			xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+			xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+			<ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+			<ns3:memberClass>GOV</ns3:memberClass>
+			<ns3:memberCode>400</ns3:memberCode>
+			<ns3:subsystemCode>DHX</ns3:subsystemCode>
+		</ns4:client>
+		<ns4:service xmlns:ns2="http://dhx.x-road.eu/producer"
+			xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+			xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+			ns3:objectType="SERVICE">
+			<ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+			<ns3:memberClass>GOV</ns3:memberClass>
+			<ns3:memberCode>401</ns3:memberCode>
+			<ns3:subsystemCode>DHX</ns3:subsystemCode>
+			<ns3:serviceCode>representationList</ns3:serviceCode>
+			<ns3:serviceVersion>v1</ns3:serviceVersion>
+		</ns4:service>
+	</soapenv:Header>
+	<soapenv:Body>
+		<prod:representationList>
+		</prod:representationList>
+	</soapenv:Body>
+</soapenv:Envelope>

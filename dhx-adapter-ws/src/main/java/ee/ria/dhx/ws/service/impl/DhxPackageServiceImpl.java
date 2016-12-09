@@ -16,6 +16,7 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.context.MessageContext;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -82,6 +84,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   private void checkProtocolVersion(String protocolVersion)
       throws DhxException {
+    log.debug("checking protocol version " + protocolVersion);
     if (protocolVersion == null) {
       throw new DhxException(DhxExceptionEnum.PROTOCOL_VERSION_ERROR,
           "DHXVersion in empty.");
@@ -188,6 +191,9 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     }
     return new DhxSendDocumentResult(document, response);
   }
+  
+
+
 
   /**
    * Method extracts and validates capsule. Uses capsuleXsdFile21 configuration parameter for find
@@ -210,7 +216,6 @@ public class DhxPackageServiceImpl implements DhxPackageService {
           document.getRecipient());
       InputStream fileStream = document.getDocumentAttachment()
           .getInputStream();
-      dhxMarshallerService.checkFileSize(fileStream);
       if (config.getCheckDhxVersion()) {
         checkProtocolVersion(document.getDHXVersion());
       }
@@ -235,9 +240,10 @@ public class DhxPackageServiceImpl implements DhxPackageService {
         }
       }
       log.info("Document received.");
+      DhxOrganisation recipient = DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
       IncomingDhxPackage dhxDocument = new IncomingDhxPackage(client,
           service, document, container,
-          CapsuleVersionEnum.forClass(container.getClass()));
+          CapsuleVersionEnum.forClass(container.getClass()), recipient);
       if (config.getCheckRecipient()) {
         checkRecipient(dhxDocument.getRecipient(), adressees);
       }
@@ -295,8 +301,9 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       } else {
         log.debug("Validating capsule is disabled");
       }
+      DhxOrganisation recipient = DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
       IncomingDhxPackage dhxDocument = new IncomingDhxPackage(client,
-          service, document);
+          service, document, recipient);
       if (config.getCheckRecipient()) {
         checkRecipient(dhxDocument.getRecipient(), null);
         log.info("Recipient checked and found in representative list or own member code. recipient:"
@@ -413,5 +420,6 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
         "Xroad sender not found in capsule. sender:" + sender);
   }
+
 
 }

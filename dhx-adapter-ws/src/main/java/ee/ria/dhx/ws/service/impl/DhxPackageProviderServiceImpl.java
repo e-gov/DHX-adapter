@@ -2,6 +2,7 @@ package ee.ria.dhx.ws.service.impl;
 
 import com.jcabi.aspects.Loggable;
 
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.types.CapsuleAdressee;
@@ -16,6 +17,7 @@ import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 import ee.ria.dhx.ws.service.DhxPackageProviderService;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +37,23 @@ import javax.activation.FileDataSource;
 public class DhxPackageProviderServiceImpl implements DhxPackageProviderService {
 
   @Autowired
+  @Setter
   SoapConfig soapConfig;
 
   @Autowired
+  @Setter
   AddressService addressService;
 
   @Autowired
+  @Setter
   CapsuleConfig capsuleConfig;
 
   @Autowired
+  @Setter
   DhxConfig dhxConfig;
 
   @Autowired
+  @Setter
   DhxMarshallerService dhxMarshallerService;
 
   @Loggable
@@ -64,7 +71,6 @@ public class DhxPackageProviderServiceImpl implements DhxPackageProviderService 
   public OutgoingDhxPackage getOutgoingPackage(File capsuleFile,
       String consignmentId, InternalXroadMember recipient,
       InternalXroadMember sender) throws DhxException {
-    dhxMarshallerService.checkFileSize(capsuleFile);
     InputStream schemaStream = null;
     OutgoingDhxPackage document = null;
     try {
@@ -86,7 +92,6 @@ public class DhxPackageProviderServiceImpl implements DhxPackageProviderService 
   public OutgoingDhxPackage getOutgoingPackage(InputStream capsuleStream,
       String consignmentId, InternalXroadMember recipient,
       InternalXroadMember sender) throws DhxException {
-    dhxMarshallerService.checkFileSize(capsuleStream);
     InputStream schemaStream = null;
     OutgoingDhxPackage document = null;
     try {
@@ -163,7 +168,7 @@ public class DhxPackageProviderServiceImpl implements DhxPackageProviderService 
     InternalXroadMember sender = addressService.getClientForMemberCode(
         senderMemberCode, senderSubsystem);
     return getOutgoingPackage(capsuleStream, consignmentId, recipient,
-        sender, schemaStream, dhxConfig.getProtocolVersion());
+        sender, schemaStream, dhxProtocolVersion);
   }
 
   @Loggable

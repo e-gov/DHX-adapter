@@ -74,7 +74,7 @@ public class DhxConfig {
 
   private JAXBContext jaxbContext;
 
-  private Jaxb2Marshaller dhxJaxb2Marshaller;
+ // private Jaxb2Marshaller dhxJaxb2Marshaller;
 
   // private Jaxb2Marshaller dhxJaxb2Marshaller;
 
@@ -133,21 +133,5 @@ public class DhxConfig {
     return jaxbContext;
   }
 
-  /**
-   * initializes using configured marshall context if needed and returns Jaxb2Marshaller.
-   * 
-   * @return Jaxb2Marshaller
-   */
-  @Bean
-  public Jaxb2Marshaller getDhxJaxb2Marshaller() {
-    if (this.dhxJaxb2Marshaller == null) {
-      dhxJaxb2Marshaller = new Jaxb2Marshaller();
-      dhxJaxb2Marshaller.setMtomEnabled(true);
-      log.debug("Creating marshaller for folowing paths: "
-          + getMarshallContext());
-      dhxJaxb2Marshaller.setContextPaths(getMarshallContextAsList());
-    }
-    return dhxJaxb2Marshaller;
-  }
 
 }

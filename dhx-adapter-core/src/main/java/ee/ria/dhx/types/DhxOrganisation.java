@@ -50,7 +50,7 @@ public class DhxOrganisation {
    * Recipient consctructor.
    * 
    */
-  public DhxOrganisation() {}
+  //public DhxOrganisation() {}
 
   public String getCodeUpper() {
     return code.toUpperCase();

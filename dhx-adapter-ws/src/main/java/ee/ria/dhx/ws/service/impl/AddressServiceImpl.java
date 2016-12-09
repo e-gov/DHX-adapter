@@ -247,6 +247,22 @@ public class AddressServiceImpl implements AddressService {
       return representees;
     }
   }
+  
+  protected InputStream getGlobalConfStream () throws MalformedURLException, IOException, DhxException{
+    URL url = new URL(config.getSecurityServer() + "/"
+        + config.getGlobalConfLocation());
+    log.debug("global conf URL: {}", url);
+    URLConnection connection = url.openConnection();
+    InputStream stream = connection.getInputStream();
+    log.debug("got file from URL");
+    InputStream confStream = FileUtil.zipUnpack(
+        stream,
+        config.getGlobalConfLocation() + "/"
+            + config.getXroadInstance() + "/"
+            + config.getGlobalConfFilename());
+
+    return confStream;
+  }
 
   /**
    * Read global configuration shared parameters from secyrity server.
@@ -256,21 +272,10 @@ public class AddressServiceImpl implements AddressService {
    */
   private SharedParametersType getGlobalConf() throws DhxException {
     try {
-      URL url = new URL(config.getSecurityServer() + "/"
-          + config.getGlobalConfLocation());
-      log.debug("global conf URL: {}", url);
-      URLConnection connection = url.openConnection();
-      InputStream stream = connection.getInputStream();
-      log.debug("got file from URL");
-      InputStream confStream = FileUtil.zipUnpack(
-          stream,
-          config.getGlobalConfLocation() + "/"
-              + config.getXroadInstance() + "/"
-              + config.getGlobalConfFilename());
-      JAXBElement<SharedParametersType> globalConfElement = dhxMarshallerService
+      InputStream confStream = getGlobalConfStream();
+            JAXBElement<SharedParametersType> globalConfElement = dhxMarshallerService
           .unmarshall(confStream);
       confStream.close();
-      stream.close();
       return globalConfElement.getValue();
     } catch (MalformedURLException ex) {
       log.error("Error occurrred in url", ex);

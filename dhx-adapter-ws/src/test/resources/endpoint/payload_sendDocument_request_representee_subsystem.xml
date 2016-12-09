@@ -1,0 +1,8 @@
+<prod:sendDocument xmlns:prod="http://dhx.x-road.eu/producer">
+	<!--Optional: -->
+	<prod:DHXVersion>1.0</prod:DHXVersion>
+	<prod:documentAttachment>cid:doc</prod:documentAttachment>
+	<prod:recipient>500</prod:recipient>
+	<prod:recipientSystem>system</prod:recipientSystem>
+	<prod:consignmentId>9999</prod:consignmentId>
+</prod:sendDocument>

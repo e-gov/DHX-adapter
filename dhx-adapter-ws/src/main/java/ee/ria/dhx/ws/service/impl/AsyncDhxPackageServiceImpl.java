@@ -14,6 +14,7 @@ import ee.ria.dhx.ws.service.AsyncDhxPackageService;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import ee.ria.dhx.ws.service.DhxPackageService;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,18 @@ import javax.annotation.PostConstruct;
 public class AsyncDhxPackageServiceImpl implements AsyncDhxPackageService {
 
   @Autowired
+  @Setter
   DhxPackageService dhxPackageService;
 
   @Autowired
+  @Setter
   DhxImplementationSpecificService dhxImplementationSpecificService;
 
+  @Setter
   private List<Integer> resendTimeouts = new ArrayList<Integer>();
 
   @Autowired
+  @Setter
   DhxConfig config;
 
   @PostConstruct

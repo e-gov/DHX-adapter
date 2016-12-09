@@ -16,10 +16,10 @@ public class IncomingDhxPackage extends DhxPackage {
    * @param document - document to send
    */
   public IncomingDhxPackage(InternalXroadMember client, InternalXroadMember service,
-      SendDocument document) {
+      SendDocument document, DhxOrganisation recipient) {
     super(client, service, document);
     this.externalConsignmentId = document.getConsignmentId();
-    this.recipient = getRecipient(document, service);
+    this.recipient = recipient;
   }
 
   /**
@@ -33,10 +33,10 @@ public class IncomingDhxPackage extends DhxPackage {
    */
   public IncomingDhxPackage(InternalXroadMember client, InternalXroadMember service,
       SendDocument document, Object parsedContainer,
-      CapsuleVersionEnum parsedContainerVersion) {
+      CapsuleVersionEnum parsedContainerVersion, DhxOrganisation recipient) {
     super(client, service, document, parsedContainer, parsedContainerVersion);
     this.externalConsignmentId = document.getConsignmentId();
-    this.recipient = getRecipient(document, service);
+    this.recipient = recipient;
   }
 
   /**
@@ -71,18 +71,6 @@ public class IncomingDhxPackage extends DhxPackage {
    *         then object contains representees data, otherwise object contains direct recipient
    */
   public DhxOrganisation getRecipient() {
-    return recipient;
-  }
-
-  private DhxOrganisation getRecipient(SendDocument document, InternalXroadMember service) {
-    DhxOrganisation recipient = new DhxOrganisation();
-    if (!StringUtil.isNullOrEmpty(document.getRecipient())) {
-      recipient.setCode(document.getRecipient());
-      recipient.setSystem(document.getRecipientSystem());
-    } else {
-      recipient.setCode(service.getMemberCode());
-      recipient.setSystem(service.getSubsystemCode());
-    }
     return recipient;
   }
 

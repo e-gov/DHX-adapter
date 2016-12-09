@@ -22,6 +22,7 @@ import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.Transport.DecRecipient;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.ObjectFactory;
 import ee.ria.dhx.util.CapsuleVersionEnum;
+import ee.ria.dhx.util.ConversionUtil;
 import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
@@ -449,7 +450,7 @@ public class ConvertationService {
         }
         container.getDecMetadata().setDecId(BigInteger.valueOf(doc.getDocumentId()));
         container.getDecMetadata().setDecFolder(doc.getFolder().getName());
-        XMLGregorianCalendar date = WsUtil.getXmlGregorianCalendarFromDate(new Date());
+        XMLGregorianCalendar date = ConversionUtil.toGregorianCalendar(new Date());
         container.getDecMetadata().setDecReceiptDate(date);
       } else {
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "UNIMPLEMENTED!");

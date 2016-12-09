@@ -1,4 +1,4 @@
-package ee.ria.dhx.ws.beanconfig;
+package ee.ria.dhx.ws.config.endpoint;
 
 import ee.ria.dhx.ws.config.DhxConfig;
 
@@ -35,6 +35,9 @@ public class DhxEndpointConfig extends WsConfigurationSupport {
 
   @Autowired
   DhxConfig config;
+  
+  @Autowired
+  Jaxb2Marshaller marshaller;
 
   /**
    * Injects DefaultMethodEndpointAdapter which supports SOAP message attachments. Sets proper
@@ -71,7 +74,7 @@ public class DhxEndpointConfig extends WsConfigurationSupport {
   public List<MarshallingPayloadMethodProcessor> methodProcessors() {
     List<MarshallingPayloadMethodProcessor> retVal =
         new ArrayList<MarshallingPayloadMethodProcessor>();
-    Jaxb2Marshaller marshallerMtom = config.getDhxJaxb2Marshaller();
+    Jaxb2Marshaller marshallerMtom = marshaller;
     retVal.add(new MarshallingPayloadMethodProcessor(marshallerMtom));
 
     return retVal;

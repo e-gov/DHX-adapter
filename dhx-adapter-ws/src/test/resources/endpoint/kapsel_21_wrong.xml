@@ -1,16 +1,4 @@
 <DecContainer xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-  <Transport>
-    <DecSender>
-      <OrganisationCode>400</OrganisationCode>
-      <PersonalIdCode>EE38806190294</PersonalIdCode>
-    </DecSender>
-    <DecRecipient>
-      <OrganisationCode>401</OrganisationCode>
-    </DecRecipient>
-	 <DecRecipient>
-      <OrganisationCode>10560025</OrganisationCode>
-    </DecRecipient>
-  </Transport>
   <RecordCreator>
     <Person>
       <Name>Lauri Tammemäe</Name>

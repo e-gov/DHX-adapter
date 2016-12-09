@@ -151,7 +151,7 @@ public class WsUtil {
    * @return - created XMLGregorianCalendar object
    * @throws DhxException
    */
-  public static XMLGregorianCalendar getXmlGregorianCalendarFromDate(Date date)
+ /* public static XMLGregorianCalendar getXmlGregorianCalendarFromDate(Date date)
       throws DhxException {
     if (date == null) {
       return null;
@@ -164,7 +164,7 @@ public class WsUtil {
     } catch (DatatypeConfigurationException ex) {
       throw new DhxException("Error occured while converting date. " + ex.getMessage(), ex);
     }
-  }
+  }*/
 
   /**
    * Method parses and creates xml dom Document from inputstream.

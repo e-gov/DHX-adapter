@@ -3,6 +3,7 @@ package ee.ria.dhx.ws.endpoint;
 import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.Fault;
