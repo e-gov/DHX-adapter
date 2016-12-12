@@ -9,6 +9,7 @@ import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.StatusHistory;
+import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
 import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
@@ -16,7 +17,6 @@ import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.persistence.service.CapsuleService;
 import ee.ria.dhx.server.persistence.service.PersistenceService;
 import ee.ria.dhx.server.service.util.WsUtil;
-import ee.ria.dhx.server.service.util.StatusEnum;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.AadressType;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.Edastus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
@@ -407,9 +407,8 @@ public class SoapService {
             .getClassificatorName());
         for (Recipient recipient : doc.getTransports().get(0).getRecipients()) {
           Edastus edastus = new Edastus();
-          if (recipient.getRecipientStatus() != null) {
-            edastus.setVastuvotjaStaatusId(BigInteger.valueOf(recipient.getRecipientStatus()
-                .getRecipientStatusId()));
+          if (recipient.getRecipientStatusId() != null) {
+            edastus.setVastuvotjaStaatusId(BigInteger.valueOf(recipient.getRecipientStatusId()));
           }
           edastus.setStaatus(StatusEnum.forClassificatorId(recipient.getStatusId())
               .getClassificatorName());
@@ -480,7 +479,7 @@ public class SoapService {
               StatusHistoryType.Status.Saaja saaja = new StatusHistoryType.Status.Saaja();
               saaja.setRegnr(recipient.getOrganisation().getRegistrationCode());
               saaja.setIsikukood(recipient.getPersonalcode());
-              saaja.setAllyksuseLyhinimetus(recipient.getStruCturalUnit());
+              saaja.setAllyksuseLyhinimetus(recipient.getStructuralUnit());
               status.setSaaja(saaja);
               // status.setMetaxml(value);
               history.getStatus().add(status);

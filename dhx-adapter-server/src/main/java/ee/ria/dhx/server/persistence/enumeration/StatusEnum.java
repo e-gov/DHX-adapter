@@ -1,4 +1,4 @@
-package ee.ria.dhx.server.service.util;
+package ee.ria.dhx.server.persistence.enumeration;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;

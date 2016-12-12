@@ -54,11 +54,6 @@ public class Document extends BaseEntity implements Serializable {
   private Integer containerVersion;
 
 
-
-  // bi-directional many-to-one association to DokumendiAjalugu
-  @OneToMany(mappedBy = "dokument")
-  private List<DokumendiAjalugu> documentHistorys;
-
   // bi-directional many-to-one association to Asutus
   @ManyToOne
   @JoinColumn(name = "asutus_id")
@@ -92,22 +87,6 @@ public class Document extends BaseEntity implements Serializable {
     transport.setDokument(null);
 
     return transport;
-  }
-
-  public DokumendiAjalugu addDocumentHistory(DokumendiAjalugu documentHistory) {
-    if (getDocumentHistorys() == null) {
-      setDocumentHistorys(new ArrayList<DokumendiAjalugu>());
-    }
-    getDocumentHistorys().add(documentHistory);
-    documentHistory.setDokument(this);
-
-    return documentHistory;
-  }
-
-  public DokumendiAjalugu removeTransport(DokumendiAjalugu documentHistory) {
-    getDocumentHistorys().remove(documentHistory);
-    documentHistory.setDokument(null);
-    return documentHistory;
   }
 
 }

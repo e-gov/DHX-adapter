@@ -35,6 +35,12 @@ public class Sender extends BaseEntity implements Serializable {
   @ManyToOne
   @JoinColumn(name = "asutus_id")
   private Organisation organisation;
+  
+  @Column(name = "isikukood")
+  private String personalCode;
+  
+  @Column(name = "allyksus")
+  private String structuralUnit;
 
   // bi-directional many-to-one association to Transport
   @ManyToOne

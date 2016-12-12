@@ -3,6 +3,7 @@ package ee.ria.dhx.ws.service.impl;
 import ee.ria.dhx.exception.DhxException;
 
 
+
 import ee.ria.dhx.types.CapsuleAdressee;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.DhxSendDocumentResult;

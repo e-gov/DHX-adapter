@@ -10,15 +10,16 @@ import com.jcabi.aspects.Loggable;
 
 
 
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
+import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.service.ConvertationService;
-import ee.ria.dhx.server.service.util.StatusEnum;
 import ee.ria.dhx.types.AsyncDhxSendDocumentResult;
 import ee.ria.dhx.types.DhxOrganisation;
 import ee.ria.dhx.types.DhxRepresentee;
@@ -63,6 +64,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   @Autowired
   CapsuleService capsuleService;
   
+  @Autowired
   PersistenceService persistenceService;
   
   @Override

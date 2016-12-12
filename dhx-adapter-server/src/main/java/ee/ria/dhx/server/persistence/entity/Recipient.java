@@ -39,7 +39,7 @@ public class Recipient extends BaseEntity implements Serializable {
   private Long recipientId;
 
   @Column(name = "allyksus")
-  private String struCturalUnit;
+  private String structuralUnit;
 
   @Column(name = "dhx_external_consignment_id")
   private String dhxExternalConsignmentId;
@@ -104,10 +104,9 @@ public class Recipient extends BaseEntity implements Serializable {
   @JoinColumn(name = "transport_id")
   private Transport transport;
 
-  // bi-directional many-to-one association to VastuvotjaStaatus
-  @ManyToOne
-  @JoinColumn(name = "vastuvotja_staatus_id")
-  private RecipientStatus recipientStatus;
+
+  @Column(name = "vastuvotja_staatus_id")
+  private Integer recipientStatusId;
 
   private String metaxml;
 
@@ -125,9 +124,7 @@ public class Recipient extends BaseEntity implements Serializable {
 
   private void insertHistory() {
     StatusHistory history = new StatusHistory();
-    if (this.getRecipientStatus() != null) {
-      history.setRecipientStatusId(this.getRecipientStatus().getRecipientStatusId());
-    }
+    history.setRecipientStatusId(this.getRecipientStatusId());
     history.setRecipient(this);
     history.setStatusChangeDate(this.getStatusChangeDate());
     history.setMetaxml(this.getMetaxml());
