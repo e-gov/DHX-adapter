@@ -1,8 +1,8 @@
-package ee.ria.dhx.server.repository;
+package ee.ria.dhx.server.persistence.repository;
 
-import ee.ria.dhx.server.entity.Document;
-import ee.ria.dhx.server.entity.Folder;
-import ee.ria.dhx.server.entity.Organisation;
+import ee.ria.dhx.server.persistence.entity.Document;
+import ee.ria.dhx.server.persistence.entity.Folder;
+import ee.ria.dhx.server.persistence.entity.Organisation;
 
 import org.springframework.data.repository.CrudRepository;
 

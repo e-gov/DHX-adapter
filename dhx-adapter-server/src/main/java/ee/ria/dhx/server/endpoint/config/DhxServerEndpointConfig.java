@@ -39,6 +39,9 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
 
   @Autowired
   DhxConfig config;
+  
+  @Autowired
+  Jaxb2Marshaller marshaller;
 
   /**
    * Injects DefaultMethodEndpointAdapter which supports SOAP message attachments. Sets proper
@@ -75,7 +78,7 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
   public List<MarshallingPayloadMethodProcessor> methodProcessors() {
     List<MarshallingPayloadMethodProcessor> retVal =
         new ArrayList<MarshallingPayloadMethodProcessor>();
-    Jaxb2Marshaller marshallerMtom = config.getDhxJaxb2Marshaller();
+    Jaxb2Marshaller marshallerMtom = marshaller;
     retVal.add(new MarshallingPayloadMethodProcessor(marshallerMtom));
 
     return retVal;

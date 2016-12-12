@@ -1,7 +1,7 @@
 package ee.ria.dhx.server;
 
-import ee.ria.dhx.server.entity.Folder;
-import ee.ria.dhx.server.repository.FolderRepository;
+import ee.ria.dhx.server.persistence.entity.Folder;
+import ee.ria.dhx.server.persistence.repository.FolderRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(basePackages = "ee.ria.dhx.ws.config,ee.ria.dhx.ws.schedule,"
     + "ee.ria.dhx.ws.service.impl,ee.ria.dhx.server.service,ee.ria.dhx.server.config"
-    + ",ee.ria.dhx.server.repository,ee.ria.dhx.server.entity,ee.ria.dhx.server.scheduler,ee.ria.dhx.ws")
+    + ",ee.ria.dhx.server.persistence.*,ee.ria.dhx.server.scheduler,ee.ria.dhx.ws")
 @EnableAsync
 @PropertySource("classpath:dhx-application.properties")
 @Slf4j

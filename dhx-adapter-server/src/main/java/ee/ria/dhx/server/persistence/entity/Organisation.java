@@ -1,4 +1,4 @@
-package ee.ria.dhx.server.entity;
+package ee.ria.dhx.server.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -64,6 +64,8 @@ public class Organisation extends BaseEntity implements Serializable {
 
   @Column(name = "dhx_asutus")
   private Boolean dhxOrganisation;
+  
+  private Boolean ownRepresentee;
 
 
   // bi-directional many-to-one association to Organisation

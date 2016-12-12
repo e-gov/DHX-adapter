@@ -1,4 +1,4 @@
-package ee.ria.dhx.server.entity;
+package ee.ria.dhx.server.persistence.entity;
 
 import java.io.Serializable;
 

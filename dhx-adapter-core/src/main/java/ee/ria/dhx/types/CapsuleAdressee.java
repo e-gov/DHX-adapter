@@ -18,7 +18,15 @@ public class CapsuleAdressee {
   public CapsuleAdressee(String adresseeCode) {
     this.adresseeCode = adresseeCode;
   }
+  
+  public CapsuleAdressee(String adresseeCode, String personalCode, String structuralUnit) {
+    this.adresseeCode = adresseeCode;
+    this.personalCode = personalCode;
+    this.structuralUnit = structuralUnit;
+  }
 
   String adresseeCode;
+  String personalCode;
+  String structuralUnit;
 
 }

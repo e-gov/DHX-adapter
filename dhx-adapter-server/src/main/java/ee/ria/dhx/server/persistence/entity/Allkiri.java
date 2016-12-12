@@ -1,6 +1,7 @@
-package ee.ria.dhx.server.entity;
+package ee.ria.dhx.server.persistence.entity;
 
 import java.io.Serializable;
+
 import java.sql.Timestamp;
 
 import javax.persistence.Column;

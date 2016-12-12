@@ -145,26 +145,6 @@ public class WsUtil {
     }
   }
 
-  /**
-   * Creates XMLGregorianCalendar object from Date
-   * @param date - date to create XMLGregorianCalendar from
-   * @return - created XMLGregorianCalendar object
-   * @throws DhxException
-   */
- /* public static XMLGregorianCalendar getXmlGregorianCalendarFromDate(Date date)
-      throws DhxException {
-    if (date == null) {
-      return null;
-    }
-    try {
-      GregorianCalendar c = new GregorianCalendar();
-      c.setTime(date);
-      XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-      return date2;
-    } catch (DatatypeConfigurationException ex) {
-      throw new DhxException("Error occured while converting date. " + ex.getMessage(), ex);
-    }
-  }*/
 
   /**
    * Method parses and creates xml dom Document from inputstream.

@@ -1,7 +1,7 @@
-package ee.ria.dhx.server.repository;
+package ee.ria.dhx.server.persistence.repository;
 
 
-import ee.ria.dhx.server.entity.Organisation;
+import ee.ria.dhx.server.persistence.entity.Organisation;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -11,5 +11,7 @@ public interface OrganisationRepository extends CrudRepository<Organisation, Lon
 
   Organisation findByRegistrationCodeAndSubSystem(String registrationCode, String subsystem);
 
-  List<Organisation> findByIsActive(Boolean isActive);
+  List<Organisation> findByIsActiveAndDhxOrganisation(Boolean isActive, Boolean dhxOrganisation);
+  
+  List<Organisation> findByIsActiveAndOwnRepresentee(Boolean isActive, Boolean OwnRepresentee);
 }

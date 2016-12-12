@@ -4,15 +4,17 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.entity.Document;
-import ee.ria.dhx.server.entity.Folder;
-import ee.ria.dhx.server.entity.Organisation;
-import ee.ria.dhx.server.entity.Recipient;
-import ee.ria.dhx.server.entity.StatusHistory;
-import ee.ria.dhx.server.repository.DocumentRepository;
-import ee.ria.dhx.server.repository.FolderRepository;
-import ee.ria.dhx.server.repository.OrganisationRepository;
-import ee.ria.dhx.server.repository.RecipientRepository;
+import ee.ria.dhx.server.persistence.entity.Document;
+import ee.ria.dhx.server.persistence.entity.Folder;
+import ee.ria.dhx.server.persistence.entity.Organisation;
+import ee.ria.dhx.server.persistence.entity.Recipient;
+import ee.ria.dhx.server.persistence.entity.StatusHistory;
+import ee.ria.dhx.server.persistence.repository.DocumentRepository;
+import ee.ria.dhx.server.persistence.repository.FolderRepository;
+import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
+import ee.ria.dhx.server.persistence.repository.RecipientRepository;
+import ee.ria.dhx.server.persistence.service.CapsuleService;
+import ee.ria.dhx.server.persistence.service.PersistenceService;
 import ee.ria.dhx.server.service.util.WsUtil;
 import ee.ria.dhx.server.service.util.StatusEnum;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.AadressType;
@@ -40,7 +42,7 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.StatusType
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.TagasisideType;
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.OutgoingDhxPackage;
-import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
+import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.ConversionUtil;
 import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.service.AddressService;
@@ -112,6 +114,12 @@ public class SoapService {
 
   @Autowired
   ConvertationService convertationService;
+  
+  @Autowired
+  CapsuleService capsuleService;
+  
+  @Autowired
+  PersistenceService persistenceService;
 
 
   /**
@@ -127,9 +135,11 @@ public class SoapService {
   @Loggable
   public SendDocumentsResponse sendDocuments(SendDocuments documents,
       InternalXroadMember sender, InternalXroadMember recipient) throws DhxException {
+    //for now support only v21
+    CapsuleVersionEnum version = CapsuleVersionEnum.V21;
     Document document =
-        convertationService.getDocumentFromOutgoingContainer(sender, recipient, documents
-            .getKeha().getDokumendid().getHref(), documents.getKeha().getKaust());
+        capsuleService.getDocumentFromOutgoingContainer(sender, recipient, documents
+            .getKeha().getDokumendid().getHref(), documents.getKeha().getKaust(), version);
     documentRepository.save(document);
     ObjectFactory fact = new ObjectFactory();
     SendDocumentsResponse response = fact.createSendDocumentsResponse();
@@ -157,7 +167,7 @@ public class SoapService {
     for (Recipient recipient : recipients) {
       try {
         Document document = recipient.getTransport().getDokument();
-        DecContainer container = convertationService.getContainerFromDocument(document);
+        Object container = capsuleService.getContainerFromDocument(document);
         File containerFile = dhxMarshallerService.marshall(container);
         if (recipient.getTransport().getSenders() == null
             || recipient.getTransport().getSenders().size() > 1) {
@@ -227,7 +237,7 @@ public class SoapService {
         organisationRepository.findByRegistrationCodeAndSubSystem(sender.getMemberCode(),
             sender.getSubsystemCode());
     Folder folder =
-        convertationService.getFolderByNameOrDefaultFolder(request.getKeha().getKaust());
+        persistenceService.getFolderByNameOrDefaultFolder(request.getKeha().getKaust());
     Integer inprocessStatusId = StatusEnum.IN_PROCESS.getClassificatorId();
     List<Document> docs =
         documentRepository
@@ -237,9 +247,9 @@ public class SoapService {
     ObjectFactory fact = new ObjectFactory();
     ReceiveDocumentsResponse resp = fact.createReceiveDocumentsResponse();
     Base64BinaryType att = fact.createBase64BinaryType();
-    List<DecContainer> containers = new ArrayList<DecContainer>();
+    List<Object> containers = new ArrayList<Object>();
     for (Document doc : docs) {
-      DecContainer container = convertationService.getContainerFromDocument(doc);
+      Object container = capsuleService.getContainerFromDocument(doc);
       containers.add(container);
     }
     DataHandler handler = convertationService.createDatahandlerFromList(containers);

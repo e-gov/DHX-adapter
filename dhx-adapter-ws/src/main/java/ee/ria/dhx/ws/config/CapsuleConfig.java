@@ -99,7 +99,7 @@ public class CapsuleConfig {
           for (DecRecipient recipient : container.getTransport()
               .getDecRecipient()) {
             adressees.add(new CapsuleAdressee(recipient
-                .getOrganisationCode()));
+                .getOrganisationCode(), recipient.getPersonalIdCode(), recipient.getStructuralUnit()));
           }
           return adressees;
         }
@@ -132,7 +132,9 @@ public class CapsuleConfig {
         if (container != null && container.getTransport() != null
             && container.getTransport().getDecSender() != null) {
           return new CapsuleAdressee(container.getTransport()
-              .getDecSender().getOrganisationCode());
+              .getDecSender().getOrganisationCode(), container.getTransport()
+              .getDecSender().getPersonalIdCode(), container.getTransport()
+              .getDecSender().getStructuralUnit());
         }
         return null;
       default:
