@@ -149,7 +149,7 @@ public class MemberType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link SubsystemType }
    * 
-   * 
+   * @return list of {@link SubsystemType}
    */
   public List<SubsystemType> getSubsystem() {
     if (subsystem == null) {

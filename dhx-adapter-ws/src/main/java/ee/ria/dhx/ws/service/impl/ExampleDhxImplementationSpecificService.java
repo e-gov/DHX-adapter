@@ -39,7 +39,7 @@ public class ExampleDhxImplementationSpecificService implements
   @Deprecated
   @Loggable
   public boolean isDuplicatePackage(InternalXroadMember from,
-      String consignmentId)throws DhxException{
+      String consignmentId) throws DhxException {
     log.debug("Checking for duplicates. from memberCode: {}",
         from.toString() + " from consignmentId:" + consignmentId);
     if (documents != null && documents.size() > 0) {
@@ -80,13 +80,13 @@ public class ExampleDhxImplementationSpecificService implements
 
   @Override
   @Deprecated
-  public List<InternalXroadMember> getAdresseeList() throws DhxException{
+  public List<InternalXroadMember> getAdresseeList() throws DhxException {
     return members;
   }
 
   @Override
   @Deprecated
-  public void saveAddresseeList(List<InternalXroadMember> members) throws DhxException{
+  public void saveAddresseeList(List<InternalXroadMember> members) throws DhxException {
     this.members = members;
   }
 

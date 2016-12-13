@@ -3,14 +3,6 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
-
-
-
-
-
-
-
-
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Organisation;
@@ -60,22 +52,22 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
 
   @Autowired
   DocumentRepository documentRepository;
-  
+
   @Autowired
   CapsuleService capsuleService;
-  
+
   @Autowired
   PersistenceService persistenceService;
-  
+
   @Override
   public List<DhxRepresentee> getRepresentationList() throws DhxException {
     List<DhxRepresentee> representees = new ArrayList<DhxRepresentee>();
-      List<Organisation> orgs = organisationRepository.findByIsActiveAndOwnRepresentee(true, true);
-      for (Organisation org : orgs) {
-        representees.add(getRepresenteeFromOrganisation(org));
-      }
-      return representees;
+    List<Organisation> orgs = organisationRepository.findByIsActiveAndOwnRepresentee(true, true);
+    for (Organisation org : orgs) {
+      representees.add(getRepresenteeFromOrganisation(org));
     }
+    return representees;
+  }
 
 
 
@@ -104,7 +96,9 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     log.debug(
         "String receiveDocument(DhxDocument document) externalConsignmentId: {}",
         document.getExternalConsignmentId());
-    Document doc = capsuleService.getDocumentFromIncomingContainer(document, document.getParsedContainerVersion());
+    Document doc =
+        capsuleService.getDocumentFromIncomingContainer(document,
+            document.getParsedContainerVersion());
     documentRepository.save(doc);
     // by container definition and DHX protocol we know that those arrays are all not null and only
     // have 1 object in it
@@ -119,7 +113,8 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   public List<InternalXroadMember> getAdresseeList() throws DhxException {
     if (members == null) {
       members = new ArrayList<InternalXroadMember>();
-      List<Organisation> orgs = organisationRepository.findByIsActiveAndDhxOrganisation(true, true);
+      List<Organisation> orgs =
+          organisationRepository.findByIsActiveAndDhxOrganisation(true, true);
       for (Organisation org : orgs) {
         members.add(getInternalXroadMemberFromOrganisation(org));
       }
@@ -133,7 +128,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     if (org.getRepresentor() != null) {
       mainOrg = org.getRepresentor();
       representee = getRepresenteeFromOrganisation(org);
-          
+
     }
     InternalXroadMember member =
         new InternalXroadMember(mainOrg.getXroadInstance(), mainOrg.getMemberClass(),
@@ -141,10 +136,10 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
             mainOrg.getSubSystem(), mainOrg.getName(), representee);
     return member;
   }
-  
-  private DhxRepresentee getRepresenteeFromOrganisation (Organisation org) {
+
+  private DhxRepresentee getRepresenteeFromOrganisation(Organisation org) {
     return new DhxRepresentee(org.getRegistrationCode(), org.getRepresenteeStart(),
-      org.getRepresenteeEnd(), org.getName(), org.getSubSystem());
+        org.getRepresenteeEnd(), org.getName(), org.getSubSystem());
   }
 
 

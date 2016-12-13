@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * <p>
  * 
  * <pre>
  * &lt;simpleType name="XRoadObjectType"&gt;

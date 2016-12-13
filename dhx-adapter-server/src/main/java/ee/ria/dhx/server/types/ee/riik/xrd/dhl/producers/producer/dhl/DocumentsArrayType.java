@@ -9,8 +9,8 @@
 
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
-import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.DhlDokumentType;
+import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 
 import java.util.ArrayList;
 import java.util.List;

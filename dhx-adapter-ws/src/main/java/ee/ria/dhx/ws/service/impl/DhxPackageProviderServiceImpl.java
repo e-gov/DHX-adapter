@@ -2,7 +2,6 @@ package ee.ria.dhx.ws.service.impl;
 
 import com.jcabi.aspects.Loggable;
 
-
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.types.CapsuleAdressee;
@@ -28,9 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 
 @Slf4j
 @Service

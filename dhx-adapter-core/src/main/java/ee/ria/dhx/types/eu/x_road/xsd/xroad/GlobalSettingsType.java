@@ -71,7 +71,7 @@ public class GlobalSettingsType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link MemberClassType }
    * 
-   * 
+   * @return list of {@link MemberClassType}
    */
   public List<MemberClassType> getMemberClass() {
     if (memberClass == null) {

@@ -195,7 +195,7 @@ public class SendDocument {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link Element }
    * 
-   * 
+   * @return list of {@link Element}
    */
   public List<Element> getAny() {
     if (any == null) {

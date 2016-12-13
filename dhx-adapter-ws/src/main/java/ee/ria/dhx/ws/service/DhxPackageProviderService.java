@@ -55,8 +55,7 @@ public interface DhxPackageProviderService {
   public OutgoingDhxPackage getOutgoingPackage(File capsuleFile,
       String consignmentId, InternalXroadMember recipient,
       InternalXroadMember sender) throws DhxException;
-  
-  
+
 
 
   /**
@@ -263,8 +262,8 @@ public interface DhxPackageProviderService {
       String consignmentId, InternalXroadMember recipient,
       InternalXroadMember sender, InputStream schemaStream,
       String dhxProtocolVersion) throws DhxException;
-  
-  
+
+
   /**
    * Get outgoing package. No capsule parsing is done and package recipient is defined in input.
    * Sender parameter will be put as X-road sender. Use this method if sender differs from the
@@ -284,10 +283,10 @@ public interface DhxPackageProviderService {
    * @throws DhxException - thrown if error occurs while sending document
    */
   public OutgoingDhxPackage getOutgoingPackage(File capsuleFile,
-                                               String consignmentId, InternalXroadMember recipient,
-                                               InternalXroadMember sender, InputStream schemaStream,
-                                               String dhxProtocolVersion) throws DhxException;
-  
+      String consignmentId, InternalXroadMember recipient,
+      InternalXroadMember sender, InputStream schemaStream,
+      String dhxProtocolVersion) throws DhxException;
+
 
   /**
    * Get outgoing package. Parses capsule from file and creates package for each adressee defined in

@@ -92,7 +92,7 @@ public class FileUtil {
    * Gets file from classpath or from filesystem by files path and returns files stream
    * 
    * @param path - path of the file. if start with jar://, then searches from classpath
-   * @return - files stream
+   * @return - files {@link InputStream}
    * @throws DhxException - throws if error occurs while getting file
    */
   public static InputStream getFileAsStream(String path) throws DhxException {
@@ -118,8 +118,8 @@ public class FileUtil {
   /**
    * Returns files stream.
    * 
-   * @param file - file to get its stream
-   * @return - files stream
+   * @param file - {@link File} to get its stream
+   * @return - files {@link InputStream}
    * @throws DhxException - throws if error occcurs while getting files stream
    */
   public static InputStream getFileAsStream(File file) throws DhxException {
@@ -262,9 +262,9 @@ public class FileUtil {
   /**
    * Unpacks ZIP file and find file provided in input.
    * 
-   * @param zipStream - stream of ZIP file
+   * @param zipStream - {@link InputStream} of ZIP file
    * @param fileToFindInZip - file to find inside ZIP file
-   * @return - stream of file found
+   * @return - {@link InputStream} of file found
    * @throws DhxException - throws if error occurs while unzipping of during file search
    */
   public static InputStream zipUnpack(InputStream zipStream, String fileToFindInZip)
@@ -290,10 +290,10 @@ public class FileUtil {
   }
 
   /**
-   * Method creates datahandler from file.
+   * Method creates {@link DataHandler} from {@link File}.
    * 
-   * @param file - file to create datahandler from
-   * @return
+   * @param file - {@link File} to create {@link DataHandler} from
+   * @return {@link DataHandler} created from {@link File}
    */
   public static DataHandler getDatahandlerFromFile(File file) {
     FileDataSource datasource = new FileDataSource(file);
@@ -302,10 +302,11 @@ public class FileUtil {
   }
 
   /**
-   * Method creates datahandler from file.
+   * Method creates {@link DataHandler} from {@link InputStream}.
    * 
-   * @param stream - stream to create datahandler from
-   * @return
+   * @param stream - {@link InputStream} to create {@link DataHandler} from
+   * @return {@link DataHandler} created from {@link InputStream}
+   * @throws DhxException - throws if error occurs while creating {@link DataHandler}
    */
   public static DataHandler getDatahandlerFromStream(InputStream stream) throws DhxException {
     File file = createFileAndWrite(stream);

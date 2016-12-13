@@ -377,7 +377,7 @@ public class DecContainer {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link DecContainer.Recipient }
    * 
-   * 
+   * @return list of {@link Recipient}
    */
   public List<DecContainer.Recipient> getRecipient() {
     if (recipient == null) {
@@ -445,7 +445,7 @@ public class DecContainer {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link DecContainer.SignatureMetadata }
    * 
-   * 
+   * @return list of {@link SignatureMetadata}
    */
   public List<DecContainer.SignatureMetadata> getSignatureMetadata() {
     if (signatureMetadata == null) {
@@ -473,7 +473,7 @@ public class DecContainer {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link DecContainer.File }
    * 
-   * 
+   * @return list of {@link File}
    */
   public List<DecContainer.File> getFile() {
     if (file == null) {
@@ -614,7 +614,7 @@ public class DecContainer {
      * Objects of the following type(s) are allowed in the list
      * {@link DecContainer.Access.AccessRestriction }
      * 
-     * 
+     * @return list of {@link AccessRestriction}
      */
     public List<DecContainer.Access.AccessRestriction> getAccessRestriction() {
       if (accessRestriction == null) {
@@ -1898,7 +1898,7 @@ public class DecContainer {
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Element }
      * 
-     * 
+     * @return list of {@link Element}
      */
     public List<Element> getAny() {
       if (any == null) {
@@ -2134,7 +2134,7 @@ public class DecContainer {
      * Objects of the following type(s) are allowed in the list
      * {@link DecContainer.Transport.DecRecipient }
      * 
-     * 
+     * @return list of {@link DecRecipient}
      */
     public List<DecContainer.Transport.DecRecipient> getDecRecipient() {
       if (decRecipient == null) {

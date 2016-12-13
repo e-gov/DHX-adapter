@@ -7,9 +7,6 @@ import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.Transport.DecRecipient;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +17,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-@Getter
-@Setter
 @Configuration
 public class CapsuleConfig {
 
@@ -99,7 +94,8 @@ public class CapsuleConfig {
           for (DecRecipient recipient : container.getTransport()
               .getDecRecipient()) {
             adressees.add(new CapsuleAdressee(recipient
-                .getOrganisationCode(), recipient.getPersonalIdCode(), recipient.getStructuralUnit()));
+                .getOrganisationCode(), recipient.getPersonalIdCode(), recipient
+                .getStructuralUnit()));
           }
           return adressees;
         }
@@ -142,6 +138,60 @@ public class CapsuleConfig {
             "Unable to find adressees for given verion. version:"
                 + version.toString());
     }
+  }
+
+  /**
+   * by default jar://Dvk_kapsel_vers_2_1_eng_est.xsd
+   * 
+   * @return the location of the capsule version 2.1 XSD
+   */
+  public String getCapsuleXsdFile21() {
+    return capsuleXsdFile21;
+  }
+
+  /**
+   * be default jar://Dvk_kapsel_vers_2_1_eng_est.xsd
+   * 
+   * @param capsuleXsdFile21 the location of the capsule version 2.1 XSD
+   */
+  public void setCapsuleXsdFile21(String capsuleXsdFile21) {
+    this.capsuleXsdFile21 = capsuleXsdFile21;
+  }
+
+  /**
+   * by default V21.
+   * 
+   * @return the current version of the capsule to send and receive
+   */
+  public String getCurrentCapsuleVersionStr() {
+    return currentCapsuleVersionStr;
+  }
+
+  /**
+   * by default V21.
+   * 
+   * @param currentCapsuleVersionStr current version of the capsule to send and receive
+   */
+  public void setCurrentCapsuleVersionStr(String currentCapsuleVersionStr) {
+    this.currentCapsuleVersionStr = currentCapsuleVersionStr;
+  }
+
+  /**
+   * Return the currentCapsuleVersion.
+   * @return the currentCapsuleVersion enumeration of the current version of the capsule to send and
+   *         receive
+   */
+  public CapsuleVersionEnum getCurrentCapsuleVersion() {
+    return currentCapsuleVersion;
+  }
+
+  /**
+   * Sets the currentCapsuleVersion.
+   * @param currentCapsuleVersion enumeration of the current version of the capsule to send and
+   *        receive
+   */
+  public void setCurrentCapsuleVersion(CapsuleVersionEnum currentCapsuleVersion) {
+    this.currentCapsuleVersion = currentCapsuleVersion;
   }
 
 }

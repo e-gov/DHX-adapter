@@ -15,7 +15,6 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import ee.ria.dhx.ws.service.DhxPackageService;
-import ee.ria.dhx.ws.service.impl.AsyncDhxPackageServiceImpl;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -89,7 +88,7 @@ public class AsyncDhxPackageServiceImplTest {
       assertEquals(asyncResult.getResult(), result);
     }
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void sendMultiplePackages() throws DhxException {
@@ -105,7 +104,7 @@ public class AsyncDhxPackageServiceImplTest {
     verify(dhxPackageService, times(2)).sendPackage(pckg);
     verify(specificService, times(2)).saveSendResult(Mockito.eq(result), any(List.class));
   }
-  
+
   @SuppressWarnings({"unchecked"})
   @Test
   public void sendMultiplePackagesFailed() throws DhxException {

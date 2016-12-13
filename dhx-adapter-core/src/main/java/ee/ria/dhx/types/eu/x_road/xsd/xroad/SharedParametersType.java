@@ -12,6 +12,7 @@ package ee.ria.dhx.types.eu.x_road.xsd.xroad;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -109,7 +110,7 @@ public class SharedParametersType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link ApprovedCAType }
    * 
-   * 
+   * @return list of {@link ApprovedCAType}
    */
   public List<ApprovedCAType> getApprovedCA() {
     if (approvedCA == null) {
@@ -137,7 +138,7 @@ public class SharedParametersType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link ApprovedTSAType }
    * 
-   * 
+   * @return list of {@link ApprovedTSAType}
    */
   public List<ApprovedTSAType> getApprovedTSA() {
     if (approvedTSA == null) {
@@ -165,7 +166,7 @@ public class SharedParametersType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link MemberType }
    * 
-   * 
+   * @return list of {@link MemberType}
    */
   public List<MemberType> getMember() {
     if (member == null) {
@@ -193,7 +194,7 @@ public class SharedParametersType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link SecurityServerType }
    * 
-   * 
+   * @return list of {@link SecurityServerType}
    */
   public List<SecurityServerType> getSecurityServer() {
     if (securityServer == null) {
@@ -221,7 +222,7 @@ public class SharedParametersType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link GlobalGroupType }
    * 
-   * 
+   * @return list of {@link GlobalGroupType}
    */
   public List<GlobalGroupType> getGlobalGroup() {
     if (globalGroup == null) {
@@ -249,7 +250,7 @@ public class SharedParametersType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link CentralServiceType }
    * 
-   * 
+   * @return list of {@link CentralServiceType}
    */
   public List<CentralServiceType> getCentralService() {
     if (centralService == null) {

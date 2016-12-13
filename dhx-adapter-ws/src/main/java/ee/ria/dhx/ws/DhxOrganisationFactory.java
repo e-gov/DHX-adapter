@@ -57,9 +57,10 @@ public class DhxOrganisationFactory {
    * 
    * @param document - sendDocument services request
    * @param service - recipient of the request
-   * @return
+   * @return DhxOrganisation object
    */
-  public static DhxOrganisation createIncomingRecipientOrgnisation(SendDocument document, InternalXroadMember service) {
+  public static DhxOrganisation createIncomingRecipientOrgnisation(SendDocument document,
+      InternalXroadMember service) {
     String code;
     String system;
     if (!StringUtil.isNullOrEmpty(document.getRecipient())) {

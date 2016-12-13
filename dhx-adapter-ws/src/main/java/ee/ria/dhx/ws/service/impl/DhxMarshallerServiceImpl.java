@@ -8,7 +8,6 @@ import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
-import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +46,6 @@ import javax.xml.validation.Validator;
 @Service("dhxMarshallerService")
 public class DhxMarshallerServiceImpl implements DhxMarshallerService {
 
-  @Getter
   JAXBContext jaxbContext;
 
   @Autowired
@@ -172,7 +170,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       // unmarshaller.setSchema(null);
     }
   }
-  
+
   /**
    * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
    * present.
@@ -203,7 +201,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       // unmarshaller.setSchema(null);
     }
   }
-  
+
   @SuppressWarnings("unchecked")
   @Loggable
   protected <T> T unmarshallNoValidation(final InputStream capsuleStream,
@@ -260,7 +258,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
               + ex.getMessage(), ex);
     }
   }
-  
+
   /**
    * Marshalls object to outputStream.
    * 
@@ -276,14 +274,14 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
         log.debug("marshalling container");
       }
       getMarshaller().marshal(container, stream);
-    } catch ( JAXBException ex) {
+    } catch (JAXBException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
               + ex.getMessage(), ex);
     }
   }
-  
+
   /**
    * Marshalls object to outputStream, removes all namespace prefixes from XML.
    * 
@@ -293,7 +291,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
    */
   @Loggable
   @Override
-  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream) throws DhxException {
+  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream)
+      throws DhxException {
     try {
       if (log.isDebugEnabled()) {
         log.debug("marshalling container");
@@ -303,19 +302,19 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       writer.setNamespaceContext(new NamespaceContext() {
         @SuppressWarnings("rawtypes")
         public Iterator getPrefixes(String namespaceURI) {
-            return null;
+          return null;
         }
 
         public String getPrefix(String namespaceURI) {
-            return "";
+          return "";
         }
 
         public String getNamespaceURI(String prefix) {
-            return null;
+          return null;
         }
-    });
+      });
       getMarshaller().marshal(container, writer);
-    } catch ( JAXBException | XMLStreamException ex) {
+    } catch (JAXBException | XMLStreamException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
@@ -430,6 +429,14 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
           "Error occured while validating capsule. "
               + ex.getMessage(), ex);
     }
+  }
+
+  /**
+   * Returns the jaxbContext.
+   * @return the jaxbContext
+   */
+  public JAXBContext getJaxbContext() {
+    return jaxbContext;
   }
 
 }

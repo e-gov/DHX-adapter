@@ -36,6 +36,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SendDocument }
    * 
+   * @return created object
    */
   public SendDocument createSendDocument() {
     return new SendDocument();
@@ -44,6 +45,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SendDocumentResponse }
    * 
+   * @return created object
    */
   public SendDocumentResponse createSendDocumentResponse() {
     return new SendDocumentResponse();
@@ -52,6 +54,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Fault }
    * 
+   * @return created object
    */
   public Fault createFault() {
     return new Fault();
@@ -60,6 +63,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link RepresentationList }
    * 
+   * @return created object
    */
   public RepresentationList createRepresentationList() {
     return new RepresentationList();
@@ -68,6 +72,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link RepresentationListResponse }
    * 
+   * @return created object
    */
   public RepresentationListResponse createRepresentationListResponse() {
     return new RepresentationListResponse();
@@ -76,6 +81,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Representees }
    * 
+   * @return created object
    */
   public Representees createRepresentees() {
     return new Representees();
@@ -84,6 +90,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Representee }
    * 
+   * @return created object
    */
   public Representee createRepresentee() {
     return new Representee();

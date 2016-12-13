@@ -147,6 +147,7 @@ public class SecurityServerType {
    * <p>
    * Objects of the following type(s) are allowed in the list byte[]
    * 
+   * @return list of byte
    */
   public List<byte[]> getAuthCertHash() {
     if (authCertHash == null) {
@@ -175,7 +176,7 @@ public class SecurityServerType {
    * Objects of the following type(s) are allowed in the list {@link JAXBElement }{@code <}
    * {@link Object }{@code >}
    * 
-   * 
+   * @return list of {@link JAXBElement}
    */
   public List<JAXBElement<Object>> getClient() {
     if (client == null) {

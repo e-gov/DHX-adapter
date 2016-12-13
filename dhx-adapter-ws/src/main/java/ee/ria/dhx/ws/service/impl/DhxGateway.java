@@ -200,7 +200,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
                 "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
                 null);
         Transformer transformer = fact.newTransformer();
-        ee.ria.dhx.types.eu.x_road.xsd.xroad.ObjectFactory factory = 
+        ee.ria.dhx.types.eu.x_road.xsd.xroad.ObjectFactory factory =
             new ee.ria.dhx.types.eu.x_road.xsd.xroad.ObjectFactory();
         transformer.transform(
             marshallObject(factory.createProtocolVersion(soapConfig

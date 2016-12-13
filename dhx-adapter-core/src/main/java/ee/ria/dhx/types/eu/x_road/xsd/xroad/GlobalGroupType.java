@@ -11,7 +11,6 @@ package ee.ria.dhx.types.eu.x_road.xsd.xroad;
 
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +116,7 @@ public class GlobalGroupType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link XRoadClientIdentifierType }
    * 
-   * 
+   * @return list of {@link XRoadClientIdentifierType}
    */
   public List<XRoadClientIdentifierType> getGroupMember() {
     if (groupMember == null) {

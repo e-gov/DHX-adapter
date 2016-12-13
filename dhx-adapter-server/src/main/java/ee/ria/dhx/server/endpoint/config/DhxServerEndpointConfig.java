@@ -31,15 +31,13 @@ import java.util.List;
  * @author Aleksei Kokarev
  *
  */
-@Getter
 @Configuration
 @ComponentScan(basePackages = "ee.ria.dhx.server.endpoint")
-@Slf4j
 public class DhxServerEndpointConfig extends WsConfigurationSupport {
 
   @Autowired
   DhxConfig config;
-  
+
   @Autowired
   Jaxb2Marshaller marshaller;
 

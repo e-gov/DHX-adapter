@@ -2,7 +2,6 @@ package ee.ria.dhx.server.service.util;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.util.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,26 +11,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Base64;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -64,6 +53,7 @@ public class WsUtil {
 
   /**
    * Creates OutputStream that will GZIP compress the stream from input.
+   * 
    * @param stream - stream to compress
    * @return - compressed stream
    * @throws DhxException
@@ -80,6 +70,7 @@ public class WsUtil {
 
   /**
    * Creates InputStream that will BASE64 decode the stream from input.
+   * 
    * @param stream - stream to decode
    * @return - decoded stream
    * @throws DhxException
@@ -89,9 +80,10 @@ public class WsUtil {
     return base64DecoderStream;
   }
 
-  
+
   /**
    * Creates OutputStream that will BASE64 encode the stream from input.
+   * 
    * @param stream - stream to encode
    * @return - encoded stream
    * @throws DhxException
@@ -103,6 +95,7 @@ public class WsUtil {
 
   /**
    * Creates InputStream that will BASE64 decode the stream from input.
+   * 
    * @param stream - stream to decode
    * @return - decoded stream
    * @throws DhxException
@@ -122,6 +115,7 @@ public class WsUtil {
 
   /**
    * Method reads inputstream into string.
+   * 
    * @param fileStream - stream to read
    * @return
    */
@@ -148,6 +142,7 @@ public class WsUtil {
 
   /**
    * Method parses and creates xml dom Document from inputstream.
+   * 
    * @param objectStream - stream of the xml to parse
    * @return - dom document created from stream
    * @throws DhxException

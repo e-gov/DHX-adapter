@@ -35,7 +35,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer }
-   * 
+   * @return created object
    */
   public DecContainer createDecContainer() {
     return new DecContainer();
@@ -43,7 +43,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.Access }
-   * 
+   * @return created object
    */
   public DecContainer.Access createDecContainerAccess() {
     return new DecContainer.Access();
@@ -51,7 +51,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.Transport }
-   * 
+   * @return created object
    */
   public DecContainer.Transport createDecContainerTransport() {
     return new DecContainer.Transport();
@@ -59,7 +59,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.Initiator }
-   * 
+   * @return created object
    */
   public DecContainer.Initiator createDecContainerInitiator() {
     return new DecContainer.Initiator();
@@ -67,7 +67,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.RecordCreator }
-   * 
+   * @return created object
    */
   public DecContainer.RecordCreator createDecContainerRecordCreator() {
     return new DecContainer.RecordCreator();
@@ -75,7 +75,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.RecordSenderToDec }
-   * 
+   * @return created object
    */
   public DecContainer.RecordSenderToDec createDecContainerRecordSenderToDec() {
     return new DecContainer.RecordSenderToDec();
@@ -83,7 +83,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.Recipient }
-   * 
+   * @return created object
    */
   public DecContainer.Recipient createDecContainerRecipient() {
     return new DecContainer.Recipient();
@@ -91,7 +91,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.RecordMetadata }
-   * 
+   * @return created object
    */
   public DecContainer.RecordMetadata createDecContainerRecordMetadata() {
     return new DecContainer.RecordMetadata();
@@ -99,7 +99,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.SignatureMetadata }
-   * 
+   * @return created object
    */
   public DecContainer.SignatureMetadata createDecContainerSignatureMetadata() {
     return new DecContainer.SignatureMetadata();
@@ -107,7 +107,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.File }
-   * 
+   * @return created object
    */
   public DecContainer.File createDecContainerFile() {
     return new DecContainer.File();
@@ -115,7 +115,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.RecordTypeSpecificMetadata }
-   * 
+   * @return created object
    */
   public DecContainer.RecordTypeSpecificMetadata createDecContainerRecordTypeSpecificMetadata() {
     return new DecContainer.RecordTypeSpecificMetadata();
@@ -123,7 +123,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.DecMetadata }
-   * 
+   * @return created object
    */
   public DecContainer.DecMetadata createDecContainerDecMetadata() {
     return new DecContainer.DecMetadata();
@@ -131,7 +131,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link OrganisationType }
-   * 
+   * @return created object
    */
   public OrganisationType createOrganisationType() {
     return new OrganisationType();
@@ -139,7 +139,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link PersonType }
-   * 
+   * @return created object
    */
   public PersonType createPersonType() {
     return new PersonType();
@@ -147,7 +147,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link ContactDataType }
-   * 
+   * @return created object
    */
   public ContactDataType createContactDataType() {
     return new ContactDataType();
@@ -155,7 +155,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link PostalAddressType }
-   * 
+   * @return created object
    */
   public PostalAddressType createPostalAddressType() {
     return new PostalAddressType();
@@ -163,7 +163,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.Access.AccessRestriction }
-   * 
+   * @return created object
    */
   public DecContainer.Access.AccessRestriction createDecContainerAccessAccessRestriction() {
     return new DecContainer.Access.AccessRestriction();
@@ -171,7 +171,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.Transport.DecSender }
-   * 
+   * @return created object
    */
   public DecContainer.Transport.DecSender createDecContainerTransportDecSender() {
     return new DecContainer.Transport.DecSender();
@@ -179,7 +179,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DecContainer.Transport.DecRecipient }
-   * 
+   * @return created object
    */
   public DecContainer.Transport.DecRecipient createDecContainerTransportDecRecipient() {
     return new DecContainer.Transport.DecRecipient();

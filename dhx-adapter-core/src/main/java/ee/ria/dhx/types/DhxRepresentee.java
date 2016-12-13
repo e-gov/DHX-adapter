@@ -1,13 +1,8 @@
 package ee.ria.dhx.types;
 
 import ee.ria.dhx.exception.DhxException;
-
-import ee.ria.dhx.util.ConversionUtil;
-
 import ee.ria.dhx.types.eu.x_road.dhx.producer.Representee;
-
-import lombok.Getter;
-import lombok.Setter;
+import ee.ria.dhx.util.ConversionUtil;
 
 import java.util.Date;
 
@@ -17,8 +12,7 @@ import java.util.Date;
  * @author Aleksei Kokarev
  *
  */
-@Getter
-@Setter
+
 public class DhxRepresentee {
 
   private String representeeCode;
@@ -87,6 +81,86 @@ public class DhxRepresentee {
     representee.setRepresenteeSystem(representeeSystem);
     representee.setRepresenteeName(representeeName);
     return representee;
+  }
+
+  /**
+   * Returns the representeeCode.
+   * @return the representeeCode
+   */
+  public String getRepresenteeCode() {
+    return representeeCode;
+  }
+
+  /**
+   * Sets the representeeCode.
+   * @param representeeCode the representeeCode to set
+   */
+  public void setRepresenteeCode(String representeeCode) {
+    this.representeeCode = representeeCode;
+  }
+
+  /**
+   * Returns the startDate.
+   * @return the startDate
+   */
+  public Date getStartDate() {
+    return startDate;
+  }
+
+  /**
+   * Sets the startDate.
+   * @param startDate the startDate to set
+   */
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
+
+  /**
+   * Returns the endDate.
+   * @return the endDate
+   */
+  public Date getEndDate() {
+    return endDate;
+  }
+
+  /**
+   * Sets the endDate.
+   * @param endDate the endDate to set
+   */
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
+
+  /**
+   * Returns the representeeName.
+   * @return the representeeName
+   */
+  public String getRepresenteeName() {
+    return representeeName;
+  }
+
+  /**
+   * Sets the representeeName.
+   * @param representeeName the representeeName to set
+   */
+  public void setRepresenteeName(String representeeName) {
+    this.representeeName = representeeName;
+  }
+
+  /**
+   * Returns the representeeSystem.
+   * @return the representeeSystem
+   */
+  public String getRepresenteeSystem() {
+    return representeeSystem;
+  }
+
+  /**
+   * Sets the representeeSystem.
+   * @param representeeSystem the representeeSystem to set
+   */
+  public void setRepresenteeSystem(String representeeSystem) {
+    this.representeeSystem = representeeSystem;
   }
 
 

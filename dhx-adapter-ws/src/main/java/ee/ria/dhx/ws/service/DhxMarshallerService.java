@@ -73,6 +73,7 @@ public interface DhxMarshallerService {
    * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
    * present.
    * 
+   * @param <T> - type of the capsule being unmarshalled
    * @param capsuleFile - file to parse
    * @param schemaStream - stream on XSD schema against which to validate. No validation is done if
    *        stream is NULL
@@ -82,7 +83,7 @@ public interface DhxMarshallerService {
   @Loggable
   public <T> T unmarshallAndValidate(File capsuleFile,
       InputStream schemaStream) throws DhxException;
-  
+
   /**
    * Marshalls object to file.
    * 
@@ -91,7 +92,7 @@ public interface DhxMarshallerService {
    * @throws DhxException - thrown if error occurs while marshalling object
    */
   public File marshall(Object container) throws DhxException;
-  
+
   /**
    * Marshalls object to outputStream.
    * 
@@ -100,8 +101,8 @@ public interface DhxMarshallerService {
    * @throws DhxException - thrown if error occurs while marshalling object
    */
   public void marshallToOutputStream(Object container, OutputStream stream) throws DhxException;
-  
-  
+
+
   /**
    * Marshalls object to outputStream. Written XML is without namespace prefixes.
    * 
@@ -109,7 +110,8 @@ public interface DhxMarshallerService {
    * @param stream - containing marshalled object
    * @throws DhxException - thrown if error occurs while marshalling object
    */
-  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream) throws DhxException;
+  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream)
+      throws DhxException;
 
   /**
    * Marshalls object to result.

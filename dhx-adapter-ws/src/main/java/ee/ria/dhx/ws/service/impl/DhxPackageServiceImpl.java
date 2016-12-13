@@ -16,7 +16,6 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.FileUtil;
-import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
@@ -26,15 +25,12 @@ import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 import ee.ria.dhx.ws.service.DhxPackageService;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.context.MessageContext;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -54,32 +50,24 @@ import java.util.List;
 public class DhxPackageServiceImpl implements DhxPackageService {
 
   @Autowired
-  @Getter
-  @Setter
   DhxConfig config;
 
   @Autowired
-  @Setter
   SoapConfig soapConfig;
 
   @Autowired
-  @Setter
   CapsuleConfig capsuleConfig;
 
   @Autowired
-  @Setter
   AddressService addressService;
 
   @Autowired
-  @Setter
   DhxGateway documentGateway;
 
   @Autowired
-  @Setter
   DhxMarshallerService dhxMarshallerService;
 
   @Autowired
-  @Setter
   DhxImplementationSpecificService dhxImplementationSpecificService;
 
   private void checkProtocolVersion(String protocolVersion)
@@ -139,7 +127,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     }
   }
 
-  
+
   @Loggable
   @Override
   public DhxSendDocumentResult sendPackage(OutgoingDhxPackage outgoingPackage)
@@ -191,7 +179,6 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     }
     return new DhxSendDocumentResult(document, response);
   }
-  
 
 
 
@@ -240,7 +227,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
         }
       }
       log.info("Document received.");
-      DhxOrganisation recipient = DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
+      DhxOrganisation recipient =
+          DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
       IncomingDhxPackage dhxDocument = new IncomingDhxPackage(client,
           service, document, container,
           CapsuleVersionEnum.forClass(container.getClass()), recipient);
@@ -301,7 +289,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       } else {
         log.debug("Validating capsule is disabled");
       }
-      DhxOrganisation recipient = DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
+      DhxOrganisation recipient =
+          DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
       IncomingDhxPackage dhxDocument = new IncomingDhxPackage(client,
           service, document, recipient);
       if (config.getCheckRecipient()) {
@@ -366,9 +355,9 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       }
     }
     if (!found) {
-      if (log.isDebugEnabled() && recipientList != null){
+      if (log.isDebugEnabled() && recipientList != null) {
         log.debug("Recipient not found in representativesList and own member code. recipientList:");
-        for(DhxOrganisation recipientFromList : recipientList) {
+        for (DhxOrganisation recipientFromList : recipientList) {
           log.debug("Recipient: " + recipientFromList.toString());
         }
       }
@@ -391,8 +380,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
   }
 
   /**
-   * Checks if sender is defined as capsule sender. Needed to be sure if document is sent from
-   * right sender.
+   * Checks if sender is defined as capsule sender. Needed to be sure if document is sent from right
+   * sender.
    * 
    * @param client - Xroad client from service input.(e.g. representee who sent document is sent or
    *        the direct sender)
@@ -409,7 +398,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
           client.getMemberCode(), client.getSubsystemCode());
       if (!member.getRepresentor()) {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
-            "Xroad sender is representee, but member found in adressregistry is not representor. sender:"
+            "Xroad sender is representee, but member found in "
+            + "adressregistry is not representor. sender:"
                 + sender);
       }
     }
@@ -419,6 +409,63 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     }
     throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
         "Xroad sender not found in capsule. sender:" + sender);
+  }
+
+  /**
+   * Sets the config.
+   * @param config the config to set
+   */
+  public void setConfig(DhxConfig config) {
+    this.config = config;
+  }
+
+  /**
+   * Sets the soapConfig.
+   * @param soapConfig the soapConfig to set
+   */
+  public void setSoapConfig(SoapConfig soapConfig) {
+    this.soapConfig = soapConfig;
+  }
+
+  /**
+   * Sets the capsuleConfig.
+   * @param capsuleConfig the capsuleConfig to set
+   */
+  public void setCapsuleConfig(CapsuleConfig capsuleConfig) {
+    this.capsuleConfig = capsuleConfig;
+  }
+
+  /**
+   * Sets the addressService.
+   * @param addressService the addressService to set
+   */
+  public void setAddressService(AddressService addressService) {
+    this.addressService = addressService;
+  }
+
+  /**
+   * Sets the documentGateway.
+   * @param documentGateway the documentGateway to set
+   */
+  public void setDocumentGateway(DhxGateway documentGateway) {
+    this.documentGateway = documentGateway;
+  }
+
+  /**
+   * Sets the dhxMarshallerService.
+   * @param dhxMarshallerService the dhxMarshallerService to set
+   */
+  public void setDhxMarshallerService(DhxMarshallerService dhxMarshallerService) {
+    this.dhxMarshallerService = dhxMarshallerService;
+  }
+
+  /**
+   * Sets the dhxImplementationSpecificService.
+   * @param dhxImplementationSpecificService the dhxImplementationSpecificService to set
+   */
+  public void setDhxImplementationSpecificService(
+      DhxImplementationSpecificService dhxImplementationSpecificService) {
+    this.dhxImplementationSpecificService = dhxImplementationSpecificService;
   }
 
 

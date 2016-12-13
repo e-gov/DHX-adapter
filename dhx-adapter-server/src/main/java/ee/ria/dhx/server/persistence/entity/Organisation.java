@@ -64,7 +64,7 @@ public class Organisation extends BaseEntity implements Serializable {
 
   @Column(name = "dhx_asutus")
   private Boolean dhxOrganisation;
-  
+
   private Boolean ownRepresentee;
 
 

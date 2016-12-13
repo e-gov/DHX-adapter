@@ -44,7 +44,6 @@ import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.OutgoingDhxPackage;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.ConversionUtil;
-import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.AsyncDhxPackageService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
@@ -59,20 +58,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 
 /**
  * Class that gets SOAP request objects(from DVK services), processes requests and gives SOAP
@@ -114,10 +108,10 @@ public class SoapService {
 
   @Autowired
   ConvertationService convertationService;
-  
+
   @Autowired
   CapsuleService capsuleService;
-  
+
   @Autowired
   PersistenceService persistenceService;
 
@@ -135,7 +129,7 @@ public class SoapService {
   @Loggable
   public SendDocumentsResponse sendDocuments(SendDocuments documents,
       InternalXroadMember sender, InternalXroadMember recipient) throws DhxException {
-    //for now support only v21
+    // for now support only v21
     CapsuleVersionEnum version = CapsuleVersionEnum.V21;
     Document document =
         capsuleService.getDocumentFromOutgoingContainer(sender, recipient, documents

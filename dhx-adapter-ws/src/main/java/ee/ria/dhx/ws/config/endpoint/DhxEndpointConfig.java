@@ -2,8 +2,6 @@ package ee.ria.dhx.ws.config.endpoint;
 
 import ee.ria.dhx.ws.config.DhxConfig;
 
-import lombok.Getter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,14 +26,13 @@ import java.util.List;
  * @author Aleksei Kokarev
  *
  */
-@Getter
 @Configuration
 @ComponentScan(basePackages = "ee.ria.dhx.ws.endpoint")
 public class DhxEndpointConfig extends WsConfigurationSupport {
 
   @Autowired
   DhxConfig config;
-  
+
   @Autowired
   Jaxb2Marshaller marshaller;
 

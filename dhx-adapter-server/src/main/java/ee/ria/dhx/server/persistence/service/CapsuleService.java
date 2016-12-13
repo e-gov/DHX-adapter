@@ -1,10 +1,5 @@
 package ee.ria.dhx.server.persistence.service;
 
-import com.jcabi.aspects.Loggable;
-
-import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
-import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.ObjectFactory;
-import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.Transport.DecRecipient;
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.persistence.entity.Document;
@@ -16,12 +11,13 @@ import ee.ria.dhx.server.persistence.entity.Transport;
 import ee.ria.dhx.server.persistence.enumeration.RecipientStatusEnum;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
-import ee.ria.dhx.server.service.ConvertationService;
 import ee.ria.dhx.server.service.util.WsUtil;
 import ee.ria.dhx.types.CapsuleAdressee;
 import ee.ria.dhx.types.DhxOrganisation;
 import ee.ria.dhx.types.IncomingDhxPackage;
 import ee.ria.dhx.types.InternalXroadMember;
+import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
+import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.ObjectFactory;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.ConversionUtil;
 import ee.ria.dhx.util.FileUtil;
@@ -41,9 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -87,7 +81,7 @@ public class CapsuleService {
    * Methods creates Document object from IncomingDhxPackage. Created object is not saved in
    * database. If document senders's organisation is not found, it is created and saved.
    * 
-   * @param document - IncomingDhxPackage to create Document for
+   * @param pckg - IncomingDhxPackage to create Document for
    * @param version - version of the capsule veing received
    * @return - Document created from IncomingDhxPackage
    * @throws DhxException
@@ -196,7 +190,7 @@ public class CapsuleService {
       recipient.setOrganisation(recipientOrg);
       for (CapsuleAdressee containerRecipient : capsuleConfig
           .getAdresseesFromContainer(container)) {
-        if(dhxRecipientOrg.equalsToCapsuleOrganisation(containerRecipient.getAdresseeCode())) {
+        if (dhxRecipientOrg.equalsToCapsuleOrganisation(containerRecipient.getAdresseeCode())) {
           recipient.setPersonalcode(containerRecipient.getPersonalCode());
           recipient.setStructuralUnit(containerRecipient.getStructuralUnit());
           break;

@@ -91,7 +91,7 @@ public class CaInfoType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link OcspInfoType }
    * 
-   * 
+   * @return list of {@link OcspInfoType}
    */
   public List<OcspInfoType> getOcsp() {
     if (ocsp == null) {

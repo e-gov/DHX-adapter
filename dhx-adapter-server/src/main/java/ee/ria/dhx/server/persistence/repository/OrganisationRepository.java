@@ -12,6 +12,6 @@ public interface OrganisationRepository extends CrudRepository<Organisation, Lon
   Organisation findByRegistrationCodeAndSubSystem(String registrationCode, String subsystem);
 
   List<Organisation> findByIsActiveAndDhxOrganisation(Boolean isActive, Boolean dhxOrganisation);
-  
+
   List<Organisation> findByIsActiveAndOwnRepresentee(Boolean isActive, Boolean OwnRepresentee);
 }

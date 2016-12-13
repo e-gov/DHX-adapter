@@ -2,32 +2,19 @@ package ee.ria.dhx.server.service;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.persistence.entity.Folder;
-import ee.ria.dhx.server.persistence.entity.Organisation;
-import ee.ria.dhx.server.persistence.repository.DocumentRepository;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
-import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
-import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.service.util.WsUtil;
-import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.util.FileUtil;
-import ee.ria.dhx.ws.config.CapsuleConfig;
-import ee.ria.dhx.ws.service.AddressService;
-import ee.ria.dhx.ws.service.AsyncDhxPackageService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
-import ee.ria.dhx.ws.service.DhxPackageProviderService;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 

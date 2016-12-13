@@ -1,7 +1,6 @@
 package ee.ria.dhx.util;
 
 import ee.ria.dhx.exception.DhxException;
-
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 

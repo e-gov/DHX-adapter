@@ -45,6 +45,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadRepresentedPartyType }
    * 
+   * @return created object
    */
   public XRoadRepresentedPartyType createXRoadRepresentedPartyType() {
     return new XRoadRepresentedPartyType();
@@ -52,7 +53,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/representation.xsd", name = "partyClass")
   public JAXBElement<String> createPartyClass(String value) {
@@ -61,7 +63,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/representation.xsd", name = "partyCode")
   public JAXBElement<String> createPartyCode(String value) {
@@ -70,7 +73,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link XRoadRepresentedPartyType }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/representation.xsd", name = "representedParty")
   public JAXBElement<XRoadRepresentedPartyType> createRepresentedParty(

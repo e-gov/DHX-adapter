@@ -1,10 +1,7 @@
 package ee.ria.dhx.types;
 
-import ee.ria.dhx.util.CapsuleVersionEnum;
-
-import ee.ria.dhx.util.StringUtil;
-
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
+import ee.ria.dhx.util.CapsuleVersionEnum;
 
 public class IncomingDhxPackage extends DhxPackage {
 
@@ -14,6 +11,7 @@ public class IncomingDhxPackage extends DhxPackage {
    * @param client - XroadMember from who the document is being sent
    * @param service - XroadMember who receives the document(self)
    * @param document - document to send
+   * @param recipient - real recipient of the package.
    */
   public IncomingDhxPackage(InternalXroadMember client, InternalXroadMember service,
       SendDocument document, DhxOrganisation recipient) {
@@ -30,6 +28,7 @@ public class IncomingDhxPackage extends DhxPackage {
    * @param service - XroadMember who receives the document(self)
    * @param parsedContainer - document Object. Object type bacause different version might be sent
    * @param parsedContainerVersion - version of the container
+   * @param recipient - real recipient of the package.
    */
   public IncomingDhxPackage(InternalXroadMember client, InternalXroadMember service,
       SendDocument document, Object parsedContainer,

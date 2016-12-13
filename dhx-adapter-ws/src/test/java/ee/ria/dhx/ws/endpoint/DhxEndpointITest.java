@@ -1,5 +1,9 @@
 package ee.ria.dhx.ws.endpoint;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.ws.test.server.RequestCreators.withSoapEnvelope;
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.IncomingDhxPackage;
@@ -9,17 +13,15 @@ import ee.ria.dhx.ws.TestApp;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+/*
+ * import org.springframework.ws.test.server.MockWebServiceClient; import
+ * org.springframework.ws.test.server.RequestCreator; import
+ * org.springframework.ws.test.server.RequestCreators;
+ */
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -29,43 +31,21 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ws.context.MessageContext;
-import org.springframework.ws.server.endpoint.adapter.DefaultMethodEndpointAdapter;
 import org.springframework.ws.test.server.MockWebServiceClient;
 import org.springframework.ws.test.server.ResponseMatchers;
-// import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.xml.transform.StringSource;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-/*
- * import org.springframework.ws.test.server.MockWebServiceClient; import
- * org.springframework.ws.test.server.RequestCreator; import
- * org.springframework.ws.test.server.RequestCreators;
- */
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
-
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.io.FileInputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.ws.test.server.RequestCreators.*;
-import static org.springframework.ws.test.server.ResponseMatchers.*;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+
+// import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Tests on DhxEndpoint. Real XML-s are sent to endpoint and received response is being validated.
@@ -438,8 +418,8 @@ public class DhxEndpointITest {
                     getDhxNamespaceMap())
                 .exists());
   }
-  
-  
+
+
   @Test
   public void getRepresentationListEmpty() throws Exception {
     Source requestEnvelope =

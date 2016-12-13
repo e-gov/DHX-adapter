@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
-		<version>0.10.3</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>dhx-adapter-server</artifactId>
-	<version>0.4</version>
+	<version>0.5</version>
 	<name>dhx-adapter-server</name>
 	<packaging>war</packaging>
 	<properties>
@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>ee.ria.dhx</groupId>
 			<artifactId>dhx-adapter-ws</artifactId>
-			<version>0.10.3</version>
+			<version>1.0.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

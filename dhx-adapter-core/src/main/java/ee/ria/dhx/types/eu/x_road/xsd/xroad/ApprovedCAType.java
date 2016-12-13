@@ -141,7 +141,7 @@ public class ApprovedCAType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link CaInfoType }
    * 
-   * 
+   * @return list of {@link CaInfoType}
    */
   public List<CaInfoType> getIntermediateCA() {
     if (intermediateCA == null) {

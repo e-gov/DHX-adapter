@@ -1,7 +1,5 @@
 package ee.ria.dhx.exception;
 
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * DHX specific exception. contains error code.
@@ -9,8 +7,7 @@ import lombok.Setter;
  * @author Aleksei Kokarev
  *
  */
-@Getter
-@Setter
+
 public class DhxException extends Exception {
 
   private DhxExceptionEnum exceptionCode;
@@ -19,7 +16,7 @@ public class DhxException extends Exception {
     super(message);
     this.setExceptionCode(exceptionCode);
   }
-  
+
   public DhxException(String message, Exception cause) {
     super(message, cause);
     this.setExceptionCode(DhxExceptionEnum.TECHNICAL_ERROR);
@@ -35,6 +32,22 @@ public class DhxException extends Exception {
   public String getMessage() {
     String message = super.getMessage();
     return "DHXException code: " + exceptionCode.getCodeForService() + " " + message;
+  }
+
+  /**
+   * Returns the exceptionCode.
+   * @return the exceptionCode
+   */
+  public DhxExceptionEnum getExceptionCode() {
+    return exceptionCode;
+  }
+
+  /**
+   * Sets the exceptionCode.
+   * @param exceptionCode the exceptionCode to set
+   */
+  public void setExceptionCode(DhxExceptionEnum exceptionCode) {
+    this.exceptionCode = exceptionCode;
   }
 
 }

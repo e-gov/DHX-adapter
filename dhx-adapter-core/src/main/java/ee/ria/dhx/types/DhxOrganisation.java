@@ -1,27 +1,30 @@
 package ee.ria.dhx.types;
 
-import lombok.Setter;
-
-import org.omg.CORBA.portable.ApplicationException;
 
 /**
- * Represents document sender or recipient organisation. Helps to easily define to whom or from who the document is really sent.
- * Recipient might be not obvious if document is sent to representee. This class contains
- * representees data if document is sent to/from representee and direct reciever data if it is sent
- * directly, not to/from representee. Also is usefull to check if two organisations are the same, using equals method.
+ * Represents document sender or recipient organisation. Helps to easily define to whom or from who
+ * the document is really sent. Recipient might be not obvious if document is sent to representee.
+ * This class contains representees data if document is sent to/from representee and direct reciever
+ * data if it is sent directly, not to/from representee. Also is usefull to check if two
+ * organisations are the same, using equals method.
  * 
  * @author Aleksei Kokarev
  *
  */
-@Setter
+
 public class DhxOrganisation {
 
   private String code;
   private String system;
   private String dhxSubsystemPrefix;
-  
-  public DhxOrganisation(InternalXroadMember member, String dhxSubsystemPrefix){
-    if(member.getRepresentee() != null ) {
+
+  /**
+   * DhxOrganisation consctructor.
+   * @param member the member to create DhxOrganisation from
+   * @param dhxSubsystemPrefix DHX subsystem prefix to use when creating DhxOrganisation
+   */
+  public DhxOrganisation(InternalXroadMember member, String dhxSubsystemPrefix) {
+    if (member.getRepresentee() != null) {
       this.code = member.getRepresentee().getRepresenteeCode();
       this.system = member.getRepresentee().getRepresenteeSystem();
     } else {
@@ -32,13 +35,13 @@ public class DhxOrganisation {
   }
 
   /**
-   * Recipient consctructor.
+   * DhxOrganisation consctructor.
    * 
-   * @param code - code of the reciepint. might be either X-road memberCode or representees code
-   * @param system - system of the recipient. migth be either X-road subSystemCode or representees
+   * @param code code of the reciepint. might be either X-road memberCode or representees code
+   * @param system system of the recipient. migth be either X-road subSystemCode or representees
    *        system
-   * @param dhxSubsystemPrefix - DHX system default prefix. used to define if two systems are euqal
-   *  even if one of them presented without prefix.
+   * @param dhxSubsystemPrefix DHX system default prefix. used to define if two systems are euqal
+   *        even if one of them presented without prefix.
    */
   public DhxOrganisation(String code, String system, String dhxSubsystemPrefix) {
     this.code = code;
@@ -47,23 +50,33 @@ public class DhxOrganisation {
   }
 
   /**
-   * Recipient consctructor.
-   * 
+   * Returns code in upper case.
+   * @return code in upper case
    */
-  //public DhxOrganisation() {}
-
   public String getCodeUpper() {
     return code.toUpperCase();
   }
 
+  /**
+   * Returns the code.
+   * @return the code
+   */
   public String getCode() {
     return code;
   }
 
+  /**
+   * Returns the system.
+   * @return the system
+   */
   public String getSystem() {
     return system;
   }
 
+  /**
+   * Returns the system, if system is null then empty string is returned.
+   * @return the system, if system is null then empty string is returned
+   */
   private String getNotNullSystem() {
     if (system == null) {
       return "";
@@ -72,11 +85,7 @@ public class DhxOrganisation {
   }
 
 
-  /**
-   * 
-   * @param obj - object to compare to
-   * @return - returns true if both recipients are equal
-   */
+  @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof DhxOrganisation)) {
       return false;
@@ -131,11 +140,49 @@ public class DhxOrganisation {
     return false;
   }
 
+  /**
+   * Returns the dhxSubsystemPrefix.
+   * @return the dhxSubsystemPrefix
+   */
+  public String getDhxSubsystemPrefix() {
+    return dhxSubsystemPrefix;
+  }
+
+  /**
+   * Sets the dhxSubsystemPrefix.
+   * @param dhxSubsystemPrefix the dhxSubsystemPrefix to set
+   */
+  public void setDhxSubsystemPrefix(String dhxSubsystemPrefix) {
+    this.dhxSubsystemPrefix = dhxSubsystemPrefix;
+  }
+
+  /**
+   * Returns the code.
+   * @param code the code to set
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Sets the system.
+   * @param system the system to set
+   */
+  public void setSystem(String system) {
+    this.system = system;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#toString()
+   */
   @Override
   public String toString() {
-    return "code: " + code
-        + ", system: " + system;
+    return "DhxOrganisation [code=" + code + ", system=" + system + ", dhxSubsystemPrefix="
+        + dhxSubsystemPrefix + "]";
   }
+
 
 
 }

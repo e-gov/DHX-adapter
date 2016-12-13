@@ -57,6 +57,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadClientIdentifierType }
    * 
+   * @return created object
    */
   public XRoadClientIdentifierType createXRoadClientIdentifierType() {
     return new XRoadClientIdentifierType();
@@ -65,6 +66,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadServiceIdentifierType }
    * 
+   * @return created object
    */
   public XRoadServiceIdentifierType createXRoadServiceIdentifierType() {
     return new XRoadServiceIdentifierType();
@@ -73,6 +75,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadCentralServiceIdentifierType }
    * 
+   * @return created object
    */
   public XRoadCentralServiceIdentifierType createXRoadCentralServiceIdentifierType() {
     return new XRoadCentralServiceIdentifierType();
@@ -81,6 +84,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadIdentifierType }
    * 
+   * @return created object
    */
   public XRoadIdentifierType createXRoadIdentifierType() {
     return new XRoadIdentifierType();
@@ -89,6 +93,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadSecurityCategoryIdentifierType }
    * 
+   * @return created object
    */
   public XRoadSecurityCategoryIdentifierType createXRoadSecurityCategoryIdentifierType() {
     return new XRoadSecurityCategoryIdentifierType();
@@ -97,6 +102,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadSecurityServerIdentifierType }
    * 
+   * @return created object
    */
   public XRoadSecurityServerIdentifierType createXRoadSecurityServerIdentifierType() {
     return new XRoadSecurityServerIdentifierType();
@@ -105,6 +111,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadGlobalGroupIdentifierType }
    * 
+   * @return created object
    */
   public XRoadGlobalGroupIdentifierType createXRoadGlobalGroupIdentifierType() {
     return new XRoadGlobalGroupIdentifierType();
@@ -113,6 +120,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link XRoadLocalGroupIdentifierType }
    * 
+   * @return created object
    */
   public XRoadLocalGroupIdentifierType createXRoadLocalGroupIdentifierType() {
     return new XRoadLocalGroupIdentifierType();
@@ -120,7 +128,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "xRoadInstance")
   public JAXBElement<String> createXRoadInstance(String value) {
@@ -129,7 +138,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "memberClass")
   public JAXBElement<String> createMemberClass(String value) {
@@ -138,7 +148,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "memberCode")
   public JAXBElement<String> createMemberCode(String value) {
@@ -147,7 +158,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "subsystemCode")
   public JAXBElement<String> createSubsystemCode(String value) {
@@ -156,7 +168,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "groupCode")
   public JAXBElement<String> createGroupCode(String value) {
@@ -165,7 +178,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "serviceCode")
   public JAXBElement<String> createServiceCode(String value) {
@@ -174,7 +188,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "serviceVersion")
   public JAXBElement<String> createServiceVersion(String value) {
@@ -183,7 +198,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "securityCategoryCode")
   public JAXBElement<String> createSecurityCategoryCode(String value) {
@@ -192,7 +208,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/identifiers", name = "serverCode")
   public JAXBElement<String> createServerCode(String value) {

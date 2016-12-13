@@ -1,10 +1,8 @@
 package ee.ria.dhx.ws.service.impl;
 
 import static org.junit.Assert.assertEquals;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,30 +20,23 @@ import ee.ria.dhx.types.eu.x_road.xsd.xroad.MemberType;
 import ee.ria.dhx.types.eu.x_road.xsd.xroad.SharedParametersType;
 import ee.ria.dhx.types.eu.x_road.xsd.xroad.SubsystemType;
 import ee.ria.dhx.util.ConversionUtil;
-import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
-import ee.ria.dhx.ws.service.impl.AddressServiceImpl;
-import ee.ria.dhx.ws.service.impl.DhxGateway;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,7 +62,7 @@ public class AddressServiceImplTest {
 
   @Mock
   SoapConfig config;
-  
+
   @Rule
   public ExpectedException expectedEx = ExpectedException.none();
 
@@ -107,7 +98,7 @@ public class AddressServiceImplTest {
   private SharedParametersType setReturningGlobalConfAndMock(SharedParametersType params)
       throws Exception {
     addressService = Mockito.spy(addressService);
-    Mockito.doReturn(new InputStream() { 
+    Mockito.doReturn(new InputStream() {
       @Override
       public int read() throws IOException {
         return 0;
@@ -302,7 +293,7 @@ public class AddressServiceImplTest {
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("06.12.2016 12:32");
-    
+
     RepresentationListResponse resp = new RepresentationListResponse();
     resp.setRepresentees(new Representees());
     // regular representee
@@ -424,7 +415,7 @@ public class AddressServiceImplTest {
 
     @Override
     public boolean matches(Object argument) {
-      if(argument == null || ((InternalXroadMember) argument).getMemberCode()==null) {
+      if (argument == null || ((InternalXroadMember) argument).getMemberCode() == null) {
         return false;
       }
       return ((InternalXroadMember) argument).getMemberCode().equals(memberCode);
@@ -432,58 +423,63 @@ public class AddressServiceImplTest {
   }
 
   @Test
-  public void getClientForMemberCode () throws Exception{
+  public void getClientForMemberCode() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code1", null);
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeNotRepresentee () throws Exception{
+  public void getClientForMemberCodeNotRepresentee() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code1", null);
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeNotFound () throws Exception{
+  public void getClientForMemberCodeNotFound() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
     DhxRepresentee representee = new DhxRepresentee("code2", date, null, "Name", null);
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
     members.add(member);
     member = new InternalXroadMember("ee", "GOV", "code3", "DHX", "Name", null);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
     expectedEx.expect(DhxException.class);
     expectedEx.expectMessage("Recipient is not found in address list. memberCode: code1");
-    addressService.getClientForMemberCode("code1", null); 
+    addressService.getClientForMemberCode("code1", null);
   }
-  
+
   @Test
-  public void getClientForMemberCodeSubsystems () throws Exception{
+  public void getClientForMemberCodeSubsystems() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX.subsystem", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX.subsystem", "Name", null);
     members.add(member);
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code1", null);
     assertEquals(member, memberFound);
-    
+
   }
-  
+
   @Test
-  public void getClientForMemberCodeSubsystems2 () throws Exception{
+  public void getClientForMemberCodeSubsystems2() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX.subsystem", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX.subsystem", "Name", null);
     members.add(member);
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
@@ -491,11 +487,12 @@ public class AddressServiceImplTest {
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code1", "DHX");
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeSubsystems3 () throws Exception{
+  public void getClientForMemberCodeSubsystems3() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX.subsystem", "Name", null);
     members.add(member);
@@ -503,25 +500,28 @@ public class AddressServiceImplTest {
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code1", "subsystem");
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeSubsystems4 () throws Exception{
+  public void getClientForMemberCodeSubsystems4() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX.subsystem", "Name", null);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
-    InternalXroadMember memberFound = addressService.getClientForMemberCode("code1", "DHX.subsystem");
+    InternalXroadMember memberFound =
+        addressService.getClientForMemberCode("code1", "DHX.subsystem");
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeRepresentee () throws Exception{
+  public void getClientForMemberCodeRepresentee() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     DhxRepresentee representee = new DhxRepresentee("code2", date, null, "Name", null);
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
@@ -530,14 +530,15 @@ public class AddressServiceImplTest {
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code2", null);
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeRepresenteeSubsystem () throws Exception{
+  public void getClientForMemberCodeRepresenteeSubsystem() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
     DhxRepresentee representee = new DhxRepresentee("code2", date, null, "Name", "DHX.system2");
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     representee = new DhxRepresentee("code2", date, null, "Name", "system");
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
@@ -546,46 +547,51 @@ public class AddressServiceImplTest {
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code2", "system");
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeRepresenteeSubsystem2 () throws Exception{
+  public void getClientForMemberCodeRepresenteeSubsystem2() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
     DhxRepresentee representee = new DhxRepresentee("code2", date, null, "Name", "DHX.system2");
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     representee = new DhxRepresentee("code2", date, null, "Name", "system");
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
-    InternalXroadMember memberFound = addressService.getClientForMemberCode("code2", "DHX.system");
+    InternalXroadMember memberFound =
+        addressService.getClientForMemberCode("code2", "DHX.system");
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeRepresenteeSubsystem3 () throws Exception{
+  public void getClientForMemberCodeRepresenteeSubsystem3() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
     DhxRepresentee representee = new DhxRepresentee("code2", date, null, "Name", "system");
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     representee = new DhxRepresentee("code2", date, null, "Name", "DHX.system2");
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
-    InternalXroadMember memberFound = addressService.getClientForMemberCode("code2", "DHX.system2");
+    InternalXroadMember memberFound =
+        addressService.getClientForMemberCode("code2", "DHX.system2");
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeRepresenteeSubsystem4 () throws Exception{
+  public void getClientForMemberCodeRepresenteeSubsystem4() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
     DhxRepresentee representee = new DhxRepresentee("code 2", date, null, "Name", "system");
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", null);
     members.add(member);
     representee = new DhxRepresentee("code2", date, null, "Name", "DHX.system2");
     member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
@@ -594,28 +600,30 @@ public class AddressServiceImplTest {
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code2", "system2");
     assertEquals(member, memberFound);
   }
-  
+
   @Test
-  public void getClientForMemberCodeRepresenteeOutdated () throws Exception{
+  public void getClientForMemberCodeRepresenteeOutdated() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
     DhxRepresentee representee = new DhxRepresentee("code2", date, date, "Name", null);
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
     members.add(member);
     when(specificService.getAdresseeList()).thenReturn(members);
     expectedEx.expect(DhxException.class);
     expectedEx.expectMessage("Recipient is not found in address list. memberCode: code2");
     addressService.getClientForMemberCode("code2", null);
   }
-  
+
   @Test
-  public void getClientForMemberCodeRepresenteeValidAndOutdated () throws Exception{
+  public void getClientForMemberCodeRepresenteeValidAndOutdated() throws Exception {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     Date date = sdf.parse("05.12.2016 12:32");
     DhxRepresentee representee = new DhxRepresentee("code2", date, date, "Name", null);
-    InternalXroadMember member = new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
+    InternalXroadMember member =
+        new InternalXroadMember("ee", "GOV", "code1", "DHX", "Name", representee);
     members.add(member);
     representee = new DhxRepresentee("code2", date, null, "Name", null);
     member = new InternalXroadMember("ee", "GOV", "code3", "DHX", "Name", representee);

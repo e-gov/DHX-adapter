@@ -60,6 +60,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link RequestHash }
    * 
+   * @return created object
    */
   public RequestHash createRequestHash() {
     return new RequestHash();
@@ -68,6 +69,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Title }
    * 
+   * @return created object
    */
   public Title createTitle() {
     return new Title();
@@ -76,6 +78,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Notes }
    * 
+   * @return created object
    */
   public Notes createNotes() {
     return new Notes();
@@ -84,6 +87,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link TechNotes }
    * 
+   * @return created object
    */
   public TechNotes createTechNotes() {
     return new TechNotes();
@@ -92,6 +96,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SharedParametersType }
    * 
+   * @return created object
    */
   public SharedParametersType createSharedParametersType() {
     return new SharedParametersType();
@@ -100,6 +105,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link MemberType }
    * 
+   * @return created object
    */
   public MemberType createMemberType() {
     return new MemberType();
@@ -108,6 +114,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SecurityServerType }
    * 
+   * @return created object
    */
   public SecurityServerType createSecurityServerType() {
     return new SecurityServerType();
@@ -116,6 +123,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link ApprovedCAType }
    * 
+   * @return created object
    */
   public ApprovedCAType createApprovedCAType() {
     return new ApprovedCAType();
@@ -124,6 +132,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link GlobalGroupType }
    * 
+   * @return created object
    */
   public GlobalGroupType createGlobalGroupType() {
     return new GlobalGroupType();
@@ -132,6 +141,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link OcspInfoType }
    * 
+   * @return created object
    */
   public OcspInfoType createOcspInfoType() {
     return new OcspInfoType();
@@ -140,6 +150,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link ApprovedTSAType }
    * 
+   * @return created object
    */
   public ApprovedTSAType createApprovedTSAType() {
     return new ApprovedTSAType();
@@ -148,6 +159,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link CaInfoType }
    * 
+   * @return created object
    */
   public CaInfoType createCaInfoType() {
     return new CaInfoType();
@@ -156,6 +168,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SubsystemType }
    * 
+   * @return created object
    */
   public SubsystemType createSubsystemType() {
     return new SubsystemType();
@@ -164,6 +177,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link MemberClassType }
    * 
+   * @return created object
    */
   public MemberClassType createMemberClassType() {
     return new MemberClassType();
@@ -172,6 +186,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link CentralServiceType }
    * 
+   * @return created object
    */
   public CentralServiceType createCentralServiceType() {
     return new CentralServiceType();
@@ -180,6 +195,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link GlobalSettingsType }
    * 
+   * @return created object
    */
   public GlobalSettingsType createGlobalSettingsType() {
     return new GlobalSettingsType();
@@ -188,6 +204,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link XRoadClientIdentifierType }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "client")
   public JAXBElement<XRoadClientIdentifierType> createClient(XRoadClientIdentifierType value) {
@@ -198,6 +216,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link XRoadServiceIdentifierType }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "service")
   public JAXBElement<XRoadServiceIdentifierType> createService(XRoadServiceIdentifierType value) {
@@ -209,6 +229,8 @@ public class ObjectFactory {
    * Create an instance of {@link JAXBElement }{@code <}{@link XRoadCentralServiceIdentifierType }
    * {@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "centralService")
   public JAXBElement<XRoadCentralServiceIdentifierType> createCentralService(
@@ -220,6 +242,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "id")
   public JAXBElement<String> createId(String value) {
@@ -229,6 +253,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "userId")
   public JAXBElement<String> createUserId(String value) {
@@ -238,6 +264,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "issue")
   public JAXBElement<String> createIssue(String value) {
@@ -247,6 +275,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "protocolVersion")
   public JAXBElement<String> createProtocolVersion(String value) {
@@ -256,6 +286,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "version")
   public JAXBElement<String> createVersion(String value) {
@@ -265,6 +297,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SharedParametersType }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "http://x-road.eu/xsd/xroad.xsd", name = "conf")
   public JAXBElement<SharedParametersType> createConf(SharedParametersType value) {
@@ -275,6 +309,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
    * 
+   * @param value value
+   * @return created object
    */
   @XmlElementDecl(namespace = "", name = "client", scope = SecurityServerType.class)
   @XmlIDREF

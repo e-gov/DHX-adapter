@@ -45,6 +45,7 @@ public class PersistenceService {
 
   /**
    * Finds persisted organisation using organisation code from capsule.
+   * 
    * @param containerOrganisationId
    * @return
    * @throws DhxException
@@ -114,11 +115,11 @@ public class PersistenceService {
       throws DhxException {
     return getOrganisationFromInternalXroadMember(member, false);
   }
-  
-  
+
+
   public Organisation getOrganisationFromInternalXroadMemberAndSave(InternalXroadMember member,
-                                                             Boolean representorOnly, Boolean dhxOrganisation)
-                                                             throws DhxException {
+      Boolean representorOnly, Boolean dhxOrganisation)
+      throws DhxException {
     Organisation org = getOrganisationFromInternalXroadMember(member, representorOnly);
     org.setDhxOrganisation(dhxOrganisation);
     organisationRepository.save(org);
@@ -174,8 +175,7 @@ public class PersistenceService {
     }
     return organisation;
   }
-  
-  
+
 
 
 }

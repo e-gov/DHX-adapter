@@ -4,17 +4,12 @@ import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.xroad.MemberType;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Internal representation of X-road member. Among X-road data contains also representees data.
  * 
  * @author Aleksei Kokarev
  *
  */
-@Getter
-@Setter
 public class InternalXroadMember {
 
   /**
@@ -126,6 +121,167 @@ public class InternalXroadMember {
         + subsystemCode
         + (representee == null ? "" : ", representee: "
             + representee.getRepresenteeCode() + ", system:" + representee.getRepresenteeSystem());
+  }
+
+
+  /**
+   * Returns the xroadInstance.
+   * @return the xroadInstance
+   */
+  public String getXroadInstance() {
+    return xroadInstance;
+  }
+
+  /**
+   * Sets the xroadInstance.
+   * @param xroadInstance the xroadInstance to set
+   */
+  public void setXroadInstance(String xroadInstance) {
+    this.xroadInstance = xroadInstance;
+  }
+
+  /**
+   * Returns the memberClass.
+   * @return the memberClass
+   */
+  public String getMemberClass() {
+    return memberClass;
+  }
+
+  /**
+   * Sets the memberClass.
+   * @param memberClass the memberClass to set
+   */
+  public void setMemberClass(String memberClass) {
+    this.memberClass = memberClass;
+  }
+
+  /**
+   * Returns the memberCode.
+   * @return the memberCode
+   */
+  public String getMemberCode() {
+    return memberCode;
+  }
+
+  /**
+   * Sets the memberCode.
+   * @param memberCode the memberCode to set
+   */
+  public void setMemberCode(String memberCode) {
+    this.memberCode = memberCode;
+  }
+
+  /**
+   * Returns the subsystemCode.
+   * @return the subsystemCode
+   */
+  public String getSubsystemCode() {
+    return subsystemCode;
+  }
+
+  /**
+   * Sets the subsystemCode.
+   * @param subsystemCode the subsystemCode to set
+   */
+  public void setSubsystemCode(String subsystemCode) {
+    this.subsystemCode = subsystemCode;
+  }
+
+  /**
+   * Returns the name.
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets the name.
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Returns the serviceCode.
+   * @return the serviceCode
+   */
+  public String getServiceCode() {
+    return serviceCode;
+  }
+
+  /**
+   * Sets the serviceCode.
+   * @param serviceCode the serviceCode to set
+   */
+  public void setServiceCode(String serviceCode) {
+    this.serviceCode = serviceCode;
+  }
+
+  /**
+   * Returns the serviceVersion.
+   * @return the serviceVersion
+   */
+  public String getServiceVersion() {
+    return serviceVersion;
+  }
+
+  /**
+   * Sets the serviceVersion.
+   * @param serviceVersion the serviceVersion to set
+   */
+  public void setServiceVersion(String serviceVersion) {
+    this.serviceVersion = serviceVersion;
+  }
+
+  /**
+   * Returns the representee.
+   * @return the representee
+   */
+  public DhxRepresentee getRepresentee() {
+    return representee;
+  }
+
+  /**
+   * Sets the representee.
+   * @param representee the representee to set
+   */
+  public void setRepresentee(DhxRepresentee representee) {
+    this.representee = representee;
+  }
+
+  /**
+   * Returns the representor.
+   * @return the representor
+   */
+  public Boolean getRepresentor() {
+    return representor;
+  }
+
+  /**
+   * Sets the representor.
+   * @param representor the representor to set
+   */
+  public void setRepresentor(Boolean representor) {
+    this.representor = representor;
+  }
+
+  /**
+   * Returns the userId.
+   * @return the userId
+   */
+  public String getUserId() {
+    return userId;
+  }
+
+  /**
+   * Sets the userId.
+   * @param userId the userId to set
+   */
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
 
 }

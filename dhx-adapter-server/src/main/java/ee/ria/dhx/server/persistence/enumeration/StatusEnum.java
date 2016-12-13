@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Enumeration of the document statuses with IDs and names.
+ * 
  * @author Aleksei Kokarev
  *
  */
@@ -30,6 +31,7 @@ public enum StatusEnum {
 
   /**
    * Finds StatusEnum by classificatorId
+   * 
    * @param classificatorId
    * @return
    * @throws DhxException
