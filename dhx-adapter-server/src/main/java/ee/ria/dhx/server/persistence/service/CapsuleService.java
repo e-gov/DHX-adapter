@@ -268,16 +268,12 @@ public class CapsuleService {
       if (senderOrg == null) {
         if (senderMember.getRepresentee() != null) {
           Organisation representor =
-              persistenceService.getOrganisationFromInternalXroadMember(senderMember, true);
-          if (representor.getOrganisationId() == null) {
-            representor.setDhxOrganisation(false);
-          }
-          organisationRepository.save(representor);
+              persistenceService.getOrganisationFromInternalXroadMemberAndSave(senderMember,
+                  true, false);
         }
-        Organisation org =
-            persistenceService.getOrganisationFromInternalXroadMember(senderMember);
-        org.setDhxOrganisation(false);
-        organisationRepository.save(org);
+        senderOrg =
+            persistenceService.getOrganisationFromInternalXroadMemberAndSave(senderMember, false,
+                false);
         // throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
         // "Unable to find senders organisation");
       }
@@ -309,13 +305,6 @@ public class CapsuleService {
         recipient.setRecipientStatusId(RecipientStatusEnum.ACCEPTED.getClassificatorId());
         recipient.setPersonalcode(containerRecipient.getPersonalCode());
         recipient.setSendingStart(new Timestamp(new Date().getTime()));
-        /*
-         * DhxOrganisation dhxRecipientOrg =
-         * getOrganisationByContainerRecipient(containerRecipient); Organisation recipientOrg =
-         * organisationRepository.findByRegistrationCodeAndSubSystem(dhxRecipientOrg.getCode(),
-         * dhxRecipientOrg.getSystem()); if (recipientOrg == null) { throw new
-         * DhxException(DhxExceptionEnum.WRONG_SENDER, "Unable to find recipients organisation"); }
-         */
         Organisation org = persistenceService.findOrg(containerRecipient.getAdresseeCode());
         if (org == null) {
           throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
@@ -337,7 +326,8 @@ public class CapsuleService {
 
 
   /**
-   * Method creates container object from Document object.
+   * Method creates container object from Document object. Also it sets DecMetadata for capsule
+   * version 2.1.
    * 
    * @param doc - Document to create DecContaner from
    * @return - created container object
@@ -400,96 +390,18 @@ public class CapsuleService {
           container.setDecMetadata(factory.createDecContainerDecMetadata());
         }
         container.getDecMetadata().setDecId(BigInteger.valueOf(doc.getDocumentId()));
-        container.getDecMetadata().setDecFolder(doc.getFolder().getName());
+        if (doc.getFolder() != null) {
+          container.getDecMetadata().setDecFolder(doc.getFolder().getName());
+        }
         XMLGregorianCalendar date = ConversionUtil.toGregorianCalendar(new Date());
         container.getDecMetadata().setDecReceiptDate(date);
+        break;
       default:
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
             "Unable to find adressees for given verion. version:"
                 + version.toString());
     }
   }
-
-
-  /*
-   * 
-   * @Loggable private Document getDocumentFromContainer(DataHandler containerHandler,
-   * InternalXroadMember senderMember, InternalXroadMember recipientMember, String folderName,
-   * Boolean outgoing, String externalConsignmentId, Object parsedContainer, CapsuleVersionEnum
-   * capsuleVersion) throws DhxException { // TODO: try to refactor this method InputStream
-   * schemaStream = null; InputStream capsuleStream = null; InputStream stringStream = null; if
-   * (containerHandler == null) { throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-   * "Empty attachment!"); } try { Object container = null; String containerString = null; if
-   * (outgoing) { log.debug("creating container for outgoing document"); schemaStream =
-   * FileUtil.getFileAsStream(capsuleConfig .getXsdForVersion(capsuleConfig
-   * .getCurrentCapsuleVersion())); capsuleStream =
-   * WsUtil.base64decodeAndUnzip(containerHandler.getInputStream()); if (parsedContainer != null) {
-   * container = parsedContainer; } // TODO: think of the alternative to reading into string if
-   * (treatContainerAsString) { containerString = WsUtil.readInput(capsuleStream); if (container ==
-   * null) { stringStream = new ByteArrayInputStream(containerString.getBytes("UTF-8")); container =
-   * dhxMarshallerService.unmarshallAndValidate(stringStream, schemaStream); } } else if (container
-   * == null) { container = dhxMarshallerService .unmarshallAndValidate(capsuleStream,
-   * schemaStream); } } else { log.debug("creating container for incoming document"); schemaStream =
-   * FileUtil.getFileAsStream(capsuleConfig .getXsdForVersion(capsuleConfig
-   * .getCurrentCapsuleVersion())); capsuleStream = containerHandler.getInputStream(); if
-   * (parsedContainer != null) { container = parsedContainer; } // TODO: think of the alternative to
-   * reading into string if (treatContainerAsString) { containerString =
-   * WsUtil.readInput(capsuleStream); if (container == null) { stringStream = new
-   * ByteArrayInputStream(containerString.getBytes("UTF-8")); container =
-   * dhxMarshallerService.unmarshallAndValidate(stringStream, schemaStream); } } else if (container
-   * == null) { container = dhxMarshallerService .unmarshallAndValidate(capsuleStream,
-   * schemaStream); } } if (folderName == null) { folderName = getFolderNameFromCapsule(container);
-   * } Document document = new Document(); document.setCapsuleVersion(capsuleVersion.toString());
-   * DhxOrganisation dhxSenderOrg = DhxOrganisationFactory.createDhxOrganisation(senderMember);
-   * Organisation senderOrg =
-   * organisationRepository.findByRegistrationCodeAndSubSystem(dhxSenderOrg.getCode(),
-   * dhxSenderOrg.getSystem()); if (senderOrg == null) { if (senderMember.getRepresentee() != null)
-   * { Organisation representor =
-   * persistenceService.getOrganisationFromInternalXroadMember(senderMember, true); if
-   * (representor.getOrganisationId() == null) { representor.setDhxOrganisation(false); }
-   * organisationRepository.save(representor); } Organisation org =
-   * persistenceService.getOrganisationFromInternalXroadMember(senderMember);
-   * org.setDhxOrganisation(false); organisationRepository.save(org); // throw new
-   * DhxException(DhxExceptionEnum.WRONG_SENDER, // "Unable to find senders organisation"); }
-   * document.setContent(containerString); document.setOrganisation(senderOrg); //
-   * document.setContent(containerString); Integer inprocessStatusId =
-   * StatusEnum.IN_PROCESS.getClassificatorId(); Transport transport = new Transport();
-   * transport.setStatusId(inprocessStatusId); transport.setSendingStart(new Timestamp(new
-   * Date().getTime())); document.addTransport(transport); Sender sender = new Sender();
-   * transport.addSender(sender); sender.setOrganisation(senderOrg); sender.setTransport(transport);
-   * 
-   * if (outgoing) { Folder folder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
-   * document.setFolder(folder); document.setOutgoingDocument(true); for (CapsuleAdressee
-   * containerRecipient : capsuleConfig .getAdresseesFromContainer(container)) { Recipient recipient
-   * = new Recipient(); recipient.setTransport(transport);
-   * recipient.setStruCturalUnit(containerRecipient.getStructuralUnit());
-   * recipient.setStatusId(inprocessStatusId); recipient.setStatusChangeDate(new Timestamp(new
-   * Date().getTime()));
-   * recipient.setRecipientStatusId(RecipientStatusEnum.ACCEPTED.getClassificatorId());
-   * recipient.setPersonalcode(containerRecipient.getPersonalCode()); recipient.setSendingStart(new
-   * Timestamp(new Date().getTime())); Organisation org =
-   * persistenceService.findOrg(containerRecipient.getAdresseeCode()); if (org == null) { throw new
-   * DhxException(DhxExceptionEnum.WRONG_SENDER, "Unable to find recipients organisation"); }
-   * recipient.setOrganisation(org); transport.addRecipient(recipient); } } else { Folder folder =
-   * persistenceService.getFolderByNameOrDefaultFolder(folderName); document.setFolder(folder);
-   * document.setOutgoingDocument(false); Recipient recipient = new Recipient();
-   * recipient.setTransport(transport); recipient.setStatusId(inprocessStatusId);
-   * recipient.setDhxExternalConsignmentId(externalConsignmentId); recipient.setSendingStart(new
-   * Timestamp(new Date().getTime())); recipient.setStatusChangeDate(new Timestamp(new
-   * Date().getTime()));
-   * recipient.setRecipientStatusId(RecipientStatusEnum.ACCEPTED.getClassificatorId());
-   * DhxOrganisation dhxRecipientOrg =
-   * DhxOrganisationFactory.createDhxOrganisation(recipientMember); Organisation recipientOrg =
-   * organisationRepository.findByRegistrationCodeAndSubSystem(dhxRecipientOrg.getCode(),
-   * dhxRecipientOrg.getSystem()); if (recipientOrg == null) { throw new
-   * DhxException(DhxExceptionEnum.WRONG_SENDER, "Unable to find recipients organisation"); }
-   * recipient.setOrganisation(recipientOrg); transport.addRecipient(recipient); } return document;
-   * } catch (IOException ex) { throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-   * "Error occured while getting or unpacking attachment"); } finally {
-   * FileUtil.safeCloseStream(capsuleStream); FileUtil.safeCloseStream(schemaStream);
-   * FileUtil.safeCloseStream(stringStream); } }
-   */
-
 
 
 }

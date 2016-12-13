@@ -1,4 +1,4 @@
-package ee.ria.dhx.ws;
+package ee.ria.dhx.ws.context;
 
 import org.springframework.context.ApplicationContext;
 

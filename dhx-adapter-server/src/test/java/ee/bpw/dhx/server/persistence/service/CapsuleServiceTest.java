@@ -1,4 +1,4 @@
-package ee.bpw.dhx.server.service;
+package ee.bpw.dhx.server.persistence.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,6 +17,7 @@ import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.server.persistence.service.CapsuleService;
 import ee.ria.dhx.server.persistence.service.PersistenceService;
+import ee.ria.dhx.server.service.util.WsUtil;
 import ee.ria.dhx.types.CapsuleAdressee;
 import ee.ria.dhx.types.DhxOrganisation;
 import ee.ria.dhx.types.DhxRepresentee;
@@ -41,8 +42,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -286,7 +289,7 @@ public class CapsuleServiceTest {
   }
 
   @Test
-  public void getDocumentFromIncomingContainerSnederNotFound() throws DhxException, IOException {
+  public void getDocumentFromIncomingContainerSenderNotFound() throws DhxException, IOException {
     // init package
     File file = new ClassPathResource("kapsel_21.xml").getFile();
     DataHandler handler = new DataHandler(new FileDataSource(file));
@@ -332,7 +335,7 @@ public class CapsuleServiceTest {
 
 
   @Test
-  public void getDocumentFromIncomingContainerSnederRepresenteeNotFound() throws DhxException,
+  public void getDocumentFromIncomingContainerSenderRepresenteeNotFound() throws DhxException,
       IOException {
     // init package
     File file = new ClassPathResource("kapsel_21.xml").getFile();
@@ -657,6 +660,303 @@ public class CapsuleServiceTest {
     assertEquals(1, document.getTransports().get(0).getSenders().size());
     assertEquals(clientOrg, document.getTransports().get(0).getSenders().get(0).getOrganisation());
   }
+  
+  @Test
+  public void getDocumentFromOutgoingContainerSenderNotFound() throws DhxException, IOException {
+    // init input parameters
+    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+    DataHandler handler = new DataHandler(new FileDataSource(file));
+    InternalXroadMember client = getMember("400", null);
+    DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
+    InternalXroadMember service = getMember("401", serviceRepresentee);
+
+    // mock organisations
+    Organisation clientOrg = new Organisation();
+    clientOrg.setRegistrationCode(client.getMemberCode());
+    when(
+        organisationRepository.findByRegistrationCodeAndSubSystem(client.getMemberCode(),
+            client.getSubsystemCode())).thenReturn(null);
+    Organisation serviceOrg = new Organisation();
+    serviceOrg.setRegistrationCode(service.getMemberCode());
+    when(persistenceService.findOrg(service.getRepresentee().getRepresenteeCode())).thenReturn(
+      serviceOrg);
+
+    when(persistenceService.getOrganisationFromInternalXroadMemberAndSave(client, false, false))
+        .thenReturn(clientOrg);
+
+    // mock container
+    DecContainer container = getDecContainer(client, service);
+    when(
+        dhxMarshallerService
+            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+        container);
+
+    // mock capsule recipient and sender
+    List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
+    CapsuleAdressee adressee = new CapsuleAdressee("500", null, null);
+    addressees.add(adressee);
+    when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
+    adressee = new CapsuleAdressee("400", null, null);
+    when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+
+    // method call
+    Document document =
+        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+            CapsuleVersionEnum.V21);
+    verify(persistenceService, times(1)).findOrg("500");
+    verify(persistenceService, times(1)).getOrganisationFromInternalXroadMemberAndSave(client,
+      false, false);
+    assertEquals(1, document.getTransports().size());
+    assertEquals(1, document.getTransports().get(0).getRecipients().size());
+    assertEquals(serviceOrg, document.getTransports().get(0).getRecipients().get(0)
+        .getOrganisation());
+    assertEquals(1, document.getTransports().get(0).getSenders().size());
+    assertEquals(clientOrg, document.getTransports().get(0).getSenders().get(0).getOrganisation());
+  }
+
+  
+  @Test
+  public void getDocumentFromOutgoingContainerSenderRepresenteeNotFound() throws DhxException, IOException {
+    // init input parameters
+    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+    DataHandler handler = new DataHandler(new FileDataSource(file));
+    DhxRepresentee clientRepresentee = new DhxRepresentee("410", null, null, null, null);
+    InternalXroadMember client = getMember("400", clientRepresentee);
+    DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
+    InternalXroadMember service = getMember("401", serviceRepresentee);
+
+    // mock organisations
+    Organisation clientOrg = new Organisation();
+    clientOrg.setRegistrationCode(client.getMemberCode());
+
+    Organisation clientRepresenteeOrg = new Organisation();
+    clientOrg.setRegistrationCode(client.getRepresentee().getRepresenteeCode());
+    when(
+        organisationRepository.findByRegistrationCodeAndSubSystem(client.getMemberCode(),
+            client.getSubsystemCode())).thenReturn(null);
+    Organisation serviceOrg = new Organisation();
+    serviceOrg.setRegistrationCode(service.getMemberCode());
+    when(persistenceService.findOrg(service.getRepresentee().getRepresenteeCode())).thenReturn(
+      serviceOrg);
+    when(persistenceService.getOrganisationFromInternalXroadMemberAndSave(client, true, false))
+        .thenReturn(clientOrg);
+
+    when(persistenceService.getOrganisationFromInternalXroadMemberAndSave(client, false, false))
+        .thenReturn(clientRepresenteeOrg);
+
+    // mock container
+    DecContainer container = getDecContainer(client, service);
+    when(
+        dhxMarshallerService
+            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+        container);
+
+    // mock capsule recipient and sender
+    List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
+    CapsuleAdressee adressee = new CapsuleAdressee("500", null, null);
+    addressees.add(adressee);
+    when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
+    adressee = new CapsuleAdressee("400", null, null);
+    when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+
+    // method call
+    Document document =
+        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+            CapsuleVersionEnum.V21);
+    verify(persistenceService, times(1)).findOrg("500");
+    verify(persistenceService, times(1)).getOrganisationFromInternalXroadMemberAndSave(client,
+      true, false);
+    verify(persistenceService, times(1)).getOrganisationFromInternalXroadMemberAndSave(client,
+      false, false);
+    assertEquals(1, document.getTransports().size());
+    assertEquals(1, document.getTransports().get(0).getRecipients().size());
+    assertEquals(serviceOrg, document.getTransports().get(0).getRecipients().get(0)
+        .getOrganisation());
+    assertEquals(1, document.getTransports().get(0).getSenders().size());
+    assertEquals(clientRepresenteeOrg, document.getTransports().get(0).getSenders().get(0).getOrganisation());
+  }
+
+  
+  @Test
+  public void getDocumentFromOutgoingContainerManyRecipients() throws DhxException, IOException {
+    // init input parameters
+    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+    DataHandler handler = new DataHandler(new FileDataSource(file));
+    DhxRepresentee clientRepresentee = new DhxRepresentee("410", null, null, null, null);
+    InternalXroadMember client = getMember("400", clientRepresentee);
+    DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
+    InternalXroadMember service = getMember("401", serviceRepresentee);
+
+    // mock organisations
+    Organisation clientOrg = new Organisation();
+    clientOrg.setRegistrationCode(client.getRepresentee().getRepresenteeCode());
+    when(
+        organisationRepository.findByRegistrationCodeAndSubSystem(client.getRepresentee()
+            .getRepresenteeCode(),
+            client.getRepresentee().getRepresenteeSystem())).thenReturn(clientOrg);
+    
+
+    Organisation serviceOrg = new Organisation();
+    serviceOrg.setRegistrationCode(service.getMemberCode());
+    when(persistenceService.findOrg(service.getRepresentee().getRepresenteeCode())).thenReturn(
+        serviceOrg);
+
+    
+    Organisation secondOrg = new Organisation();
+    secondOrg.setRegistrationCode("random");
+    when(persistenceService.findOrg("random")).thenReturn(
+      secondOrg);
+    
+    // mock container
+    DecContainer container = getDecContainer(client, service);
+    when(
+        dhxMarshallerService
+            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+        container);
+
+    // mock capsule recipient and sender
+    List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
+    CapsuleAdressee adressee = new CapsuleAdressee("500", null, null);
+    addressees.add(adressee);
+    adressee = new CapsuleAdressee("random", null, null);
+    addressees.add(adressee);
+    when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
+    adressee = new CapsuleAdressee("400", null, null);
+    when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+
+    // method call
+    Document document =
+        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+            CapsuleVersionEnum.V21);
+    verify(persistenceService, times(1)).findOrg("500");
+    verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("410", null);
+    assertEquals(1, document.getTransports().size());
+    assertEquals(2, document.getTransports().get(0).getRecipients().size());
+    assertEquals(serviceOrg, document.getTransports().get(0).getRecipients().get(0)
+        .getOrganisation());
+    assertEquals(secondOrg, document.getTransports().get(0).getRecipients().get(1)
+      .getOrganisation());
+    assertEquals(1, document.getTransports().get(0).getSenders().size());
+    assertEquals(clientOrg, document.getTransports().get(0).getSenders().get(0).getOrganisation());
+  }
+  
+  
+  @Test
+  public void getDocumentFromOutgoingContainerPersonalCode() throws DhxException, IOException {
+    // init input parameters
+    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+    DataHandler handler = new DataHandler(new FileDataSource(file));
+    DhxRepresentee clientRepresentee = new DhxRepresentee("410", null, null, null, null);
+    InternalXroadMember client = getMember("400", clientRepresentee);
+    DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
+    InternalXroadMember service = getMember("401", serviceRepresentee);
+
+    // mock organisations
+    Organisation clientOrg = new Organisation();
+    clientOrg.setRegistrationCode(client.getRepresentee().getRepresenteeCode());
+    when(
+        organisationRepository.findByRegistrationCodeAndSubSystem(client.getRepresentee()
+            .getRepresenteeCode(),
+            client.getRepresentee().getRepresenteeSystem())).thenReturn(clientOrg);
+    Organisation serviceOrg = new Organisation();
+    serviceOrg.setRegistrationCode(service.getMemberCode());
+    when(persistenceService.findOrg(service.getRepresentee().getRepresenteeCode())).thenReturn(
+        serviceOrg);
+
+    // mock container
+    DecContainer container = getDecContainer(client, service);
+    when(
+        dhxMarshallerService
+            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+        container);
+
+    // mock capsule recipient and sender
+    List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
+    CapsuleAdressee adressee = new CapsuleAdressee("500", "pcode", null);
+    addressees.add(adressee);
+    when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
+    CapsuleAdressee sender = new CapsuleAdressee("400", "pcode2", null);
+    when(capsuleConfig.getSenderFromContainer(container)).thenReturn(sender);
+
+    // method call
+    Document document =
+        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+            CapsuleVersionEnum.V21);
+    verify(persistenceService, times(1)).findOrg("500");
+    verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("410", null);
+    assertEquals(1, document.getTransports().size());
+    assertEquals(1, document.getTransports().get(0).getRecipients().size());
+    assertEquals("pcode", document.getTransports().get(0).getRecipients().get(0)
+        .getPersonalcode());
+    assertEquals(1, document.getTransports().get(0).getSenders().size());
+    assertEquals("pcode2", document.getTransports().get(0).getSenders().get(0).getPersonalCode());
+  }
+
+  
+  @Test
+  public void getDocumentFromOutgoingContainerStructuralUnit() throws DhxException, IOException {
+    // init input parameters
+    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+    DataHandler handler = new DataHandler(new FileDataSource(file));
+    DhxRepresentee clientRepresentee = new DhxRepresentee("410", null, null, null, null);
+    InternalXroadMember client = getMember("400", clientRepresentee);
+    DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
+    InternalXroadMember service = getMember("401", serviceRepresentee);
+
+    // mock organisations
+    Organisation clientOrg = new Organisation();
+    clientOrg.setRegistrationCode(client.getRepresentee().getRepresenteeCode());
+    when(
+        organisationRepository.findByRegistrationCodeAndSubSystem(client.getRepresentee()
+            .getRepresenteeCode(),
+            client.getRepresentee().getRepresenteeSystem())).thenReturn(clientOrg);
+    Organisation serviceOrg = new Organisation();
+    serviceOrg.setRegistrationCode(service.getMemberCode());
+    when(persistenceService.findOrg(service.getRepresentee().getRepresenteeCode())).thenReturn(
+        serviceOrg);
+
+    // mock container
+    DecContainer container = getDecContainer(client, service);
+    when(
+        dhxMarshallerService
+            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+        container);
+
+    // mock capsule recipient and sender
+    List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
+    CapsuleAdressee adressee = new CapsuleAdressee("500", null, "sunit");
+    addressees.add(adressee);
+    when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
+    CapsuleAdressee sender = new CapsuleAdressee("400", null, "sunit2");
+    when(capsuleConfig.getSenderFromContainer(container)).thenReturn(sender);
+
+    // method call
+    Document document =
+        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+            CapsuleVersionEnum.V21);
+    verify(persistenceService, times(1)).findOrg("500");
+    verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("410", null);
+    assertEquals(1, document.getTransports().size());
+    assertEquals(1, document.getTransports().get(0).getRecipients().size());
+    assertEquals("sunit", document.getTransports().get(0).getRecipients().get(0)
+        .getStructuralUnit());
+    assertEquals(1, document.getTransports().get(0).getSenders().size());
+    assertEquals("sunit2", document.getTransports().get(0).getSenders().get(0).getStructuralUnit());
+  }
 
 
+  @Test
+  public void getContainerFromDocument () throws DhxException, IOException{
+    File file = new ClassPathResource("kapsel_21.xml").getFile();
+    String containerStr = WsUtil.readInput(new FileInputStream(file));
+    Document doc = new Document();
+    doc.setDocumentId(12);
+    doc.setContent(containerStr);
+    DecContainer containerReturn = new DecContainer();
+    when(dhxMarshallerService.unmarshallAndValidate(any(InputStream.class),
+      any(InputStream.class))).thenReturn(containerReturn);
+    DecContainer container = (DecContainer)capsuleService.getContainerFromDocument(doc);
+    assertEquals(containerReturn, container);
+    assertEquals(BigInteger.valueOf(12), container.getDecMetadata().getDecId());
+  }
 }

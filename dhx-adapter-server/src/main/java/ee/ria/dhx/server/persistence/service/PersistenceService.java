@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.service;
 
+import com.jcabi.aspects.Loggable;
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.persistence.entity.Folder;
@@ -9,9 +11,11 @@ import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.ws.service.AddressService;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -31,13 +35,22 @@ public class PersistenceService {
 
 
   @Autowired
+  @Setter
   AddressService addressService;
 
   @Autowired
+  @Setter
   OrganisationRepository organisationRepository;
 
 
+  @Value("${dhx.server.special-orgnisations}")
+  @Setter
+  String specialOrganisations;
+
+
+
   @Autowired
+  @Setter
   FolderRepository folderRepository;
 
   private final String DEFAULT_FOLDERNAME = "/";
@@ -50,37 +63,43 @@ public class PersistenceService {
    * @return
    * @throws DhxException
    */
+  @Loggable
   public Organisation findOrg(String containerOrganisationId) throws DhxException {
     Organisation org = null;
     log.debug("Searching member by organisationId:" + containerOrganisationId);
     InternalXroadMember member = null;
-    try {
-      member = addressService.getClientForMemberCode(containerOrganisationId, null);
-    } catch (DhxException ex) {
-      log.debug(
-          "Erro occured while searching org. ignoring error and continue!" + ex.getMessage(), ex);
-    }
-    // if member not found, then try to find by registration code and subsystem, by splitting
-    // adressee from container
-    if (member == null) {
-      Integer index = containerOrganisationId.lastIndexOf(".");
-      if (index > 0) {
-        String code = containerOrganisationId.substring(index);
-        String system = containerOrganisationId.substring(0, index);
-        log.debug("Searching member by code:" + code + " and subsystem: " + system);
-        member = addressService.getClientForMemberCode(code, system);
+    if (isSpecialOrganisation(containerOrganisationId)) {
+      log.debug("Special organisation. Searching organisaiton by subsystem: " + containerOrganisationId);
+      org = organisationRepository.findBySubSystem(containerOrganisationId);
+    } else {
+      org = organisationRepository.findByRegistrationCodeAndSubSystem(containerOrganisationId, null);
+      /*try {
+        member = addressService.getClientForMemberCode(containerOrganisationId, null);
+      } catch (DhxException ex) {
+        log.debug(
+            "Error occured while searching org. ignoring error and continue!" + ex.getMessage(),
+            ex);
+      }*/
+      // if member not found, then try to find by registration code and subsystem, by splitting
+      // adressee from container
+      if (org == null) {
+        Integer index = containerOrganisationId.lastIndexOf(".");
+        if (index > 0) {
+          String code = containerOrganisationId.substring(index+1);
+          String system = containerOrganisationId.substring(0, index);
+          log.debug("Searching member by code:" + code + " and subsystem: " + system);
+          member = addressService.getClientForMemberCode(code, system);
+        }
+        if (member == null) {
+          throw new DhxException(DhxExceptionEnum.DATA_ERROR,
+              "Unable to find member in addressregistry by regsitration code: "
+                  + containerOrganisationId);
+        }
+        org = organisationRepository.findByRegistrationCodeAndSubSystem(member.getMemberCode(),
+          member.getSubsystemCode());
       }
-
-
-      if (member == null) {
-        throw new DhxException(DhxExceptionEnum.DATA_ERROR,
-            "Unable to find member in addressregistry by regsitration code: "
-                + containerOrganisationId);
-      }
-
+      
     }
-    org = organisationRepository.findByRegistrationCodeAndSubSystem(member.getMemberCode(),
-        member.getSubsystemCode());
     if (org == null) {
       throw new DhxException(DhxExceptionEnum.DATA_ERROR,
           "Unable to find organisation using member: "
@@ -95,6 +114,7 @@ public class PersistenceService {
    * @param folderName - name of the folder to find
    * @return - Folder object found
    */
+  @Loggable
   public Folder getFolderByNameOrDefaultFolder(String folderName) {
     if (folderName == null) {
       folderName = DEFAULT_FOLDERNAME;
@@ -111,21 +131,26 @@ public class PersistenceService {
    * @return - created or found Organisation
    * @throws DhxException
    */
+  @Loggable
   public Organisation getOrganisationFromInternalXroadMember(InternalXroadMember member)
       throws DhxException {
     return getOrganisationFromInternalXroadMember(member, false);
   }
 
 
+  @Loggable
   public Organisation getOrganisationFromInternalXroadMemberAndSave(InternalXroadMember member,
       Boolean representorOnly, Boolean dhxOrganisation)
       throws DhxException {
     Organisation org = getOrganisationFromInternalXroadMember(member, representorOnly);
-    org.setDhxOrganisation(dhxOrganisation);
-    organisationRepository.save(org);
+    if (org.getOrganisationId() == null) {
+      org.setDhxOrganisation(dhxOrganisation);
+      organisationRepository.save(org);
+    }
     return org;
   }
 
+  @Loggable
   public Organisation getOrganisationFromInternalXroadMember(InternalXroadMember member,
       Boolean representorOnly)
       throws DhxException {
@@ -174,6 +199,30 @@ public class PersistenceService {
       organisation = representeeOrganisation;
     }
     return organisation;
+  }
+
+  /**
+   * Method defines if organisation is one of the special organisations that are in the capsule
+   * without registration code, but with system name.
+   * 
+   * @param organisationCode
+   * @return
+   */
+  @Loggable
+  public Boolean isSpecialOrganisation(String organisationCode) {
+    String specialOrgs = "," + getSpecialOrganisations() + ",";
+    log.debug("specialOrgs: " + specialOrgs + "  organisationCode:" + organisationCode);
+    if (specialOrgs.indexOf("," + organisationCode + ",") >= 0) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @return the specialOrganisations
+   */
+  public String getSpecialOrganisations() {
+    return specialOrganisations;
   }
 
 

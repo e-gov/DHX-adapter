@@ -5,6 +5,7 @@ import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.config.SoapConfig;
+import ee.ria.dhx.ws.context.AppContext;
 
 import lombok.Setter;
 
