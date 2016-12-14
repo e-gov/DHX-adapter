@@ -277,11 +277,12 @@ public class DhxPackageServceImplTest {
     request.setRecipient("410");
     request.setRecipientSystem("subsystem");
     Date date = new Date();
+    Date date2 = new Date(date.getTime()-10000);
     InternalXroadMember client = new InternalXroadMember("ee", "GOV", "400", "DHX", "Name", null);
     InternalXroadMember service =
         new InternalXroadMember("ee", "GOV", "401", "DHX", "Name", null);
     List<DhxRepresentee> representees = new ArrayList<DhxRepresentee>();
-    DhxRepresentee representee = new DhxRepresentee("410", date, date, null, "subsystem");
+    DhxRepresentee representee = new DhxRepresentee("410", date, date2, null, "subsystem");
     representees.add(representee);
     when(dhxImplementationSpecificService.getRepresentationList()).thenReturn(representees);
     when(dhxConfig.getParseCapsule()).thenReturn(true);
