@@ -1,4 +1,4 @@
-package ee.bpw.dhx.server.persistence.service;
+package ee.ria.dhx.server.persistence.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -37,6 +37,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -45,6 +46,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -537,8 +539,8 @@ public class CapsuleServiceTest {
   @Test
   public void getDocumentFromOutgoingContainer() throws DhxException, IOException {
     // init input parameters
-    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
-    DataHandler handler = new DataHandler(new FileDataSource(file));
+    //File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+    //DataHandler handler = new DataHandler(new FileDataSource(file));
     InternalXroadMember client = getMember("400", null);
     InternalXroadMember service = getMember("401", null);
 
@@ -551,7 +553,14 @@ public class CapsuleServiceTest {
     Organisation serviceOrg = new Organisation();
     serviceOrg.setRegistrationCode(service.getMemberCode());
     when(persistenceService.findOrg(service.getMemberCode())).thenReturn(serviceOrg);
+    
+    
+    DecContainer container = getDecContainer(client, service);
 
+    StringWriter writer = new StringWriter();
+    writer.write("container string");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
+    
     // mock folder
     Folder folder = new Folder();
     folder.setName("folder");
@@ -559,13 +568,13 @@ public class CapsuleServiceTest {
 
     // method call
     Document document =
-        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+        capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
             CapsuleVersionEnum.V21);
     verify(persistenceService, times(1)).findOrg("401");
     verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("400", "DHX");
     assertEquals("V21", document.getCapsuleVersion());
     assertEquals(folder, document.getFolder());
-    assertNotNull(document.getContent());
+    assertEquals("container string",document.getContent());
     assertEquals(clientOrg, document.getOrganisation());
     assertEquals(true, document.getOutgoingDocument());
     assertEquals(1, document.getTransports().size());
@@ -613,8 +622,8 @@ public class CapsuleServiceTest {
   @Test
   public void getDocumentFromOutgoingContainerRepresentee() throws DhxException, IOException {
     // init input parameters
-    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
-    DataHandler handler = new DataHandler(new FileDataSource(file));
+   // File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+   // DataHandler handler = new DataHandler(new FileDataSource(file));
     DhxRepresentee clientRepresentee = new DhxRepresentee("410", null, null, null, null);
     InternalXroadMember client = getMember("400", clientRepresentee);
     DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
@@ -634,6 +643,11 @@ public class CapsuleServiceTest {
 
     // mock container
     DecContainer container = getDecContainer(client, service);
+
+    StringWriter writer = new StringWriter();
+    writer.write("container string");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
+    
     when(
         dhxMarshallerService
             .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
@@ -649,7 +663,7 @@ public class CapsuleServiceTest {
 
     // method call
     Document document =
-        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+        capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
             CapsuleVersionEnum.V21);
     verify(persistenceService, times(1)).findOrg("500");
     verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("410", null);
@@ -664,8 +678,8 @@ public class CapsuleServiceTest {
   @Test
   public void getDocumentFromOutgoingContainerSenderNotFound() throws DhxException, IOException {
     // init input parameters
-    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
-    DataHandler handler = new DataHandler(new FileDataSource(file));
+    //File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+   // DataHandler handler = new DataHandler(new FileDataSource(file));
     InternalXroadMember client = getMember("400", null);
     DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
     InternalXroadMember service = getMember("401", serviceRepresentee);
@@ -691,6 +705,10 @@ public class CapsuleServiceTest {
             .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
         container);
 
+    StringWriter writer = new StringWriter();
+    writer.write("container string");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
+    
     // mock capsule recipient and sender
     List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
     CapsuleAdressee adressee = new CapsuleAdressee("500", null, null);
@@ -701,7 +719,7 @@ public class CapsuleServiceTest {
 
     // method call
     Document document =
-        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+        capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
             CapsuleVersionEnum.V21);
     verify(persistenceService, times(1)).findOrg("500");
     verify(persistenceService, times(1)).getOrganisationFromInternalXroadMemberAndSave(client,
@@ -718,8 +736,8 @@ public class CapsuleServiceTest {
   @Test
   public void getDocumentFromOutgoingContainerSenderRepresenteeNotFound() throws DhxException, IOException {
     // init input parameters
-    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
-    DataHandler handler = new DataHandler(new FileDataSource(file));
+   // File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+   // DataHandler handler = new DataHandler(new FileDataSource(file));
     DhxRepresentee clientRepresentee = new DhxRepresentee("410", null, null, null, null);
     InternalXroadMember client = getMember("400", clientRepresentee);
     DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
@@ -746,10 +764,10 @@ public class CapsuleServiceTest {
 
     // mock container
     DecContainer container = getDecContainer(client, service);
-    when(
+   /* when(
         dhxMarshallerService
             .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
-        container);
+        container);*/
 
     // mock capsule recipient and sender
     List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
@@ -758,10 +776,12 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
     adressee = new CapsuleAdressee("400", null, null);
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
-
+    StringWriter writer = new StringWriter();
+    writer.write("container string");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
     // method call
     Document document =
-        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+        capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
             CapsuleVersionEnum.V21);
     verify(persistenceService, times(1)).findOrg("500");
     verify(persistenceService, times(1)).getOrganisationFromInternalXroadMemberAndSave(client,
@@ -813,6 +833,10 @@ public class CapsuleServiceTest {
         dhxMarshallerService
             .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
         container);
+    
+    StringWriter writer = new StringWriter();
+    writer.write("container string");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock capsule recipient and sender
     List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
@@ -826,7 +850,7 @@ public class CapsuleServiceTest {
 
     // method call
     Document document =
-        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+        capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
             CapsuleVersionEnum.V21);
     verify(persistenceService, times(1)).findOrg("500");
     verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("410", null);
@@ -844,8 +868,8 @@ public class CapsuleServiceTest {
   @Test
   public void getDocumentFromOutgoingContainerPersonalCode() throws DhxException, IOException {
     // init input parameters
-    File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
-    DataHandler handler = new DataHandler(new FileDataSource(file));
+    //File file = new ClassPathResource("kapsel_21_gzip_base64.txt").getFile();
+    //DataHandler handler = new DataHandler(new FileDataSource(file));
     DhxRepresentee clientRepresentee = new DhxRepresentee("410", null, null, null, null);
     InternalXroadMember client = getMember("400", clientRepresentee);
     DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
@@ -870,6 +894,10 @@ public class CapsuleServiceTest {
             .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
         container);
 
+    StringWriter writer = new StringWriter();
+    writer.write("container string");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
+
     // mock capsule recipient and sender
     List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
     CapsuleAdressee adressee = new CapsuleAdressee("500", "pcode", null);
@@ -880,7 +908,7 @@ public class CapsuleServiceTest {
 
     // method call
     Document document =
-        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+        capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
             CapsuleVersionEnum.V21);
     verify(persistenceService, times(1)).findOrg("500");
     verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("410", null);
@@ -922,6 +950,10 @@ public class CapsuleServiceTest {
             .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
         container);
 
+    StringWriter writer = new StringWriter();
+    writer.write("container string");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
+
     // mock capsule recipient and sender
     List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
     CapsuleAdressee adressee = new CapsuleAdressee("500", null, "sunit");
@@ -932,7 +964,7 @@ public class CapsuleServiceTest {
 
     // method call
     Document document =
-        capsuleService.getDocumentFromOutgoingContainer(client, service, handler, "/",
+        capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
             CapsuleVersionEnum.V21);
     verify(persistenceService, times(1)).findOrg("500");
     verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("410", null);

@@ -127,56 +127,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
       this.client = client;
     }
 
-    private Document convertStringToDocument(String xmlStr)
-        throws IOException, SAXException, ParserConfigurationException {
-      DocumentBuilderFactory factory = DocumentBuilderFactory
-          .newInstance();
-      factory.setNamespaceAware(true);
-      DocumentBuilder builder;
-      builder = factory.newDocumentBuilder();
-      Document doc = builder.parse(new InputSource(new StringReader(
-          xmlStr)));
-      return doc;
-    }
-
-    private void scanChildren(Node elementtoScan,
-        SOAPElement elementToAddChildren) throws SOAPException {
-      log.debug("scanningCHilder for " + elementtoScan.getNodeName()
-          + ": " + elementtoScan.getLocalName() + ": "
-          + elementtoScan.getPrefix() + ": "
-          + elementtoScan.getNamespaceURI() + " cur soap element "
-          + elementToAddChildren.getLocalName());
-      if (elementtoScan.getNodeType() == Node.TEXT_NODE) {
-        elementToAddChildren
-            .addTextNode(elementtoScan.getTextContent());
-      } else {
-        SOAPElement newSoapElement = elementToAddChildren
-            .addChildElement(elementtoScan.getLocalName(),
-                elementtoScan.getPrefix(),
-                elementtoScan.getNamespaceURI());
-        for (int j = 0; j < elementtoScan.getAttributes().getLength(); j++) {
-          log.debug("Adding attribute. "
-              + elementtoScan.getAttributes().item(j)
-                  .getNodeName()
-              + " : "
-              + elementtoScan.getAttributes().item(j)
-                  .getNodeValue());
-
-          newSoapElement.addAttribute(new QName(elementtoScan
-              .getAttributes().item(j).getNamespaceURI(),
-              elementtoScan.getAttributes().item(j)
-                  .getLocalName(), elementtoScan
-                  .getAttributes().item(j).getPrefix()),
-              elementtoScan.getAttributes().item(j)
-                  .getNodeValue());
-        }
-        for (int i = 0; i < elementtoScan.getChildNodes().getLength(); i++) {
-          Node child = elementtoScan.getChildNodes().item(i);
-          scanChildren(child, newSoapElement);
-        }
-      }
-    }
-
+   
     @SuppressWarnings({"rawtypes"})
     @Override
     public void doWithMessage(WebServiceMessage message)
@@ -196,9 +147,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
         // Transformer transformer =
         // SAXTransformerFactory.newInstance().newTransformer();
         TransformerFactory fact = TransformerFactory
-            .newInstance(
-                "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
-                null);
+            .newInstance();
         Transformer transformer = fact.newTransformer();
         ee.ria.dhx.types.eu.x_road.xsd.xroad.ObjectFactory factory =
             new ee.ria.dhx.types.eu.x_road.xsd.xroad.ObjectFactory();

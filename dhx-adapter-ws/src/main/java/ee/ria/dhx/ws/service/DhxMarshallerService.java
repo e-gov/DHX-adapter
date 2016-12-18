@@ -139,6 +139,17 @@ public interface DhxMarshallerService {
    * @throws DhxException - thrown if error occurs while marshalling object
    */
   public StringWriter marshallToWriter(Object container) throws DhxException;
+  
+
+  /**
+   * Marshalls object to writer and validates.
+   * 
+   * @param container - object to marshall
+   * @param schemaStream - stream of the XSD schema to validate against 
+   * @return - file containing marshalled object
+   * @throws DhxException - thrown if error occurs while marshalling object
+   */
+  public StringWriter marshallToWriterAndValidate(Object container, InputStream schemaStream) throws DhxException;
 
   /**
    * Method validates file against XSD schema.

@@ -17,6 +17,8 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
@@ -44,14 +46,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "documentsArrayType", propOrder = {
-    "dokument"
+    "DecContainer"
 })
 @XmlSeeAlso({
     ReceiveDocumentsV4ResponseTypeUnencoded.class
 })
+@XmlRootElement(name = "DocWrapper")
 public class DocumentsArrayType {
 
-  protected List<DecContainer> dokument;
+	//@XmlElementWrapper(name="docs")
+  protected List<DecContainer> DecContainer;
 
   /**
    * Gets the value of the dokument property.
@@ -74,11 +78,17 @@ public class DocumentsArrayType {
    * 
    * 
    */
-  public List<DecContainer> getDokument() {
+  public List<DecContainer> getDecContainer() {
+	    if (DecContainer == null) {
+	    	DecContainer = new ArrayList<DecContainer>();
+	    }
+	    return this.DecContainer;
+	  }
+  /*public List<DecContainer> getDokument() {
     if (dokument == null) {
       dokument = new ArrayList<DecContainer>();
     }
     return this.dokument;
-  }
+  }*/
 
 }

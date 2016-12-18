@@ -233,6 +233,24 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
               + ex.getMessage(), ex);
     }
   }
+  
+  @Loggable
+  private void setSchemaForMarshaller(InputStream schemaStream,
+      Marshaller marshaller) throws DhxException {
+    try {
+      if (schemaStream != null) {
+        Source schemaSource = new StreamSource(schemaStream);
+        SchemaFactory schemaFactory = SchemaFactory
+            .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = schemaFactory.newSchema(schemaSource);
+        marshaller.setSchema(schema);
+      }
+    } catch (SAXException ex) {
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while setting schema for unmarshaller. "
+              + ex.getMessage(), ex);
+    }
+  }
 
   /**
    * Marshalls object to file.
@@ -388,6 +406,24 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
           "Error occured while creating object from capsule. "
               + ex.getMessage(), ex);
     }
+  }
+  
+  public StringWriter marshallToWriterAndValidate(Object container, InputStream schemaStream) throws DhxException {
+	  try {
+	      if (log.isDebugEnabled()) {
+	        log.debug("marshalling container");
+	      }
+	      Marshaller marshaller = getMarshaller();
+	      setSchemaForMarshaller(schemaStream, marshaller);
+	      StringWriter writer = new StringWriter();
+	      marshaller.marshal(container, writer);
+	      return writer;
+	    } catch (JAXBException ex) {
+	      log.error(ex.getMessage(), ex);
+	      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+	          "Error occured while creating object from capsule. "
+	              + ex.getMessage(), ex);
+	    }
   }
 
   /**

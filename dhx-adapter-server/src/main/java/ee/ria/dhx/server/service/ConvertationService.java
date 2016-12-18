@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jcabi.aspects.Loggable;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,6 +46,7 @@ public class ConvertationService {
    * @return
    * @throws DhxException
    */
+  @Loggable
   public DataHandler createDatahandlerFromObject(Object obj) throws DhxException {
     FileOutputStream fos = null;
     GZIPOutputStream zippedStream = null;

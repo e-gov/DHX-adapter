@@ -72,11 +72,11 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
 
 
   @Override
-  public boolean isDuplicatePackage(InternalXroadMember from, String consignmentId)
+  public boolean isDuplicatePackage(InternalXroadMember from, String consignmentId) throws DhxException
   {
     DhxOrganisation dhxOrg = DhxOrganisationFactory.createDhxOrganisation(from);
     Organisation org =
-        organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrg.getCode(),
+    		organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrg.getCode(),
             dhxOrg.getSystem());
     List<Recipient> recipients =
         recipientRepository.findByTransport_SendersOrganisationAndDhxExternalConsignmentId(org,
@@ -155,13 +155,13 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       }
     }
     organisationRepository.save(organisations);
-    Iterable<Organisation> orgs = organisationRepository.findAll();
+   /* Iterable<Organisation> orgs = organisationRepository.findAll();
     for (Organisation org : orgs) {
       log.debug("org code" + org.getRegistrationCode() + " system: " + org.getSubSystem());
-    }
+    }*/
     organisations = new ArrayList<Organisation>();
     for (InternalXroadMember member : members) {
-      if (member.getRepresentee() != null) {
+      if (member.getRepresentee() != null && persistenceService.isRepresenteeValid(member)) {
         organisations.add(persistenceService.getOrganisationFromInternalXroadMember(member));
       }
     }
