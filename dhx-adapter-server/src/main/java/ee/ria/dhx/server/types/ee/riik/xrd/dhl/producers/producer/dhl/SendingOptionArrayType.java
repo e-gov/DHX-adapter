@@ -67,7 +67,7 @@ public class SendingOptionArrayType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link String }
    * 
-   * 
+   * @return list of {@link String}
    */
   public List<String> getSaatmisviis() {
     if (saatmisviis == null) {

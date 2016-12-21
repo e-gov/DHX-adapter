@@ -17,7 +17,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
@@ -54,7 +53,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "DocWrapper")
 public class DocumentsArrayType {
 
-	//@XmlElementWrapper(name="docs")
+  // @XmlElementWrapper(name="docs")
   protected List<DecContainer> DecContainer;
 
   /**
@@ -76,19 +75,17 @@ public class DocumentsArrayType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link DhlDokumentType }
    * 
-   * 
+   * @return List of {@link DecContainer}
    */
   public List<DecContainer> getDecContainer() {
-	    if (DecContainer == null) {
-	    	DecContainer = new ArrayList<DecContainer>();
-	    }
-	    return this.DecContainer;
-	  }
-  /*public List<DecContainer> getDokument() {
-    if (dokument == null) {
-      dokument = new ArrayList<DecContainer>();
+    if (DecContainer == null) {
+      DecContainer = new ArrayList<DecContainer>();
     }
-    return this.dokument;
-  }*/
+    return this.DecContainer;
+  }
+  /*
+   * public List<DecContainer> getDokument() { if (dokument == null) { dokument = new
+   * ArrayList<DecContainer>(); } return this.dokument; }
+   */
 
 }

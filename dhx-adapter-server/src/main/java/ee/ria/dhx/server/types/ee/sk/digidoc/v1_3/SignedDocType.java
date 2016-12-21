@@ -80,7 +80,7 @@ public class SignedDocType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link DataFileType }
    * 
-   * 
+   * @return list of {@link DataFileType}
    */
   public List<DataFileType> getDataFile() {
     if (dataFile == null) {
@@ -108,7 +108,7 @@ public class SignedDocType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link SignatureType }
    * 
-   * 
+   * @return list of {@link SignatureType}
    */
   public List<SignatureType> getSignature() {
     if (signature == null) {

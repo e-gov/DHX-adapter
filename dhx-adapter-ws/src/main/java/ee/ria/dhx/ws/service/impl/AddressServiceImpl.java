@@ -163,8 +163,8 @@ public class AddressServiceImpl implements AddressService {
             // exclude own representatives
             if (!(client.getMemberCode().equals(
                 config.getMemberCode()) && client
-                .getSubsystemCode().equals(
-                    config.getDefaultSubsystem()))) {
+                    .getSubsystemCode().equals(
+                        config.getDefaultSubsystem()))) {
               InternalXroadMember member = new InternalXroadMember(
                   client);
               InternalXroadMember parentMember = findMember(
@@ -184,7 +184,8 @@ public class AddressServiceImpl implements AddressService {
                 log.error(
                     "Error occured while getting representationList for: "
                         + member.toString()
-                        + ex.getMessage(), ex);
+                        + ex.getMessage(),
+                    ex);
               }
               // include own representatives not from x-road
               // servicce, but from local method
@@ -282,13 +283,15 @@ public class AddressServiceImpl implements AddressService {
       log.error("Error occurrred in url", ex);
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured while getting global conf. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
 
     } catch (IOException ex) {
       log.error("Error occurrred ", ex);
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured while getting global conf. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -318,9 +321,8 @@ public class AddressServiceImpl implements AddressService {
         if (addresslistOrganisation.equals(soughtOrganisation)) {
           if (member.getRepresentee() == null
               || (member.getRepresentee().getStartDate().getTime() <= curDate.getTime()
-              && (member.getRepresentee().getEndDate() == null
-              || member.getRepresentee().getEndDate().getTime() >= curDate.getTime())
-              )) {
+                  && (member.getRepresentee().getEndDate() == null
+                      || member.getRepresentee().getEndDate().getTime() >= curDate.getTime()))) {
             return member;
           }
         }

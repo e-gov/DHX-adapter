@@ -83,7 +83,7 @@ public class GetSendStatusV2RequestTypeUnencoded {
    * Objects of the following type(s) are allowed in the list
    * {@link GetSendStatusV2RequestTypeUnencoded.Item }
    * 
-   * 
+   * @return list of {@link GetSendStatusV2RequestTypeUnencoded.Item}
    */
   public List<GetSendStatusV2RequestTypeUnencoded.Item> getItem() {
     if (item == null) {
@@ -95,6 +95,7 @@ public class GetSendStatusV2RequestTypeUnencoded {
   /**
    * Gets the value of the staatuseAjalugu property.
    * 
+   * @return list of {@link Boolean}
    */
   public boolean isStaatuseAjalugu() {
     return staatuseAjalugu;
@@ -103,6 +104,7 @@ public class GetSendStatusV2RequestTypeUnencoded {
   /**
    * Sets the value of the staatuseAjalugu property.
    * 
+   * @param value value
    */
   public void setStaatuseAjalugu(boolean value) {
     this.staatuseAjalugu = value;

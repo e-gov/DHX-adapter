@@ -82,7 +82,7 @@ public class KeyValueType {
    * {@link DSAKeyValueType }{@code >} {@link String } {@link JAXBElement }{@code <}
    * {@link RSAKeyValueType }{@code >} {@link Object } {@link Element }
    * 
-   * 
+   * @return list of {@link Object}
    */
   public List<Object> getContent() {
     if (content == null) {

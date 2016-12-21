@@ -82,7 +82,7 @@ public class TransformType {
    * Objects of the following type(s) are allowed in the list {@link String } {@link JAXBElement }
    * {@code <}{@link String }{@code >} {@link Object } {@link Element }
    * 
-   * 
+   * @return list of {@link Object}
    */
   public List<Object> getContent() {
     if (content == null) {

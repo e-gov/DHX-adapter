@@ -150,7 +150,7 @@ public class SignatureType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link ObjectType }
    * 
-   * 
+   * @return list of {@link ObjectType}
    */
   public List<ObjectType> getObject() {
     if (object == null) {

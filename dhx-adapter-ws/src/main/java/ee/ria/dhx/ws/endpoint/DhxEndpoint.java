@@ -30,6 +30,7 @@ import java.util.List;
 @Endpoint
 /**
  * Endpoint class which offers SOAP services.
+ * 
  * @author Aleksei Kokarev
  *
  */

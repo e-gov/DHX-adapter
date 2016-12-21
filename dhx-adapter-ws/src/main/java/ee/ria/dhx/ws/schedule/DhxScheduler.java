@@ -30,7 +30,8 @@ public class DhxScheduler {
     } catch (DhxException ex) {
       log.error(
           "Error occured while renewing addresslist. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 

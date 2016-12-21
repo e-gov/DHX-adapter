@@ -67,7 +67,7 @@ public class Signature {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link SignatureType }
    * 
-   * 
+   * @return List of {@link SignatureType}
    */
   public List<SignatureType> getSignatures() {
     if (signatures == null) {

@@ -67,7 +67,7 @@ public class Compilator {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link PersonType }
    * 
-   * 
+   * @return List of {@link PersonType}
    */
   public List<PersonType> getCompilator() {
     if (compilator == null) {

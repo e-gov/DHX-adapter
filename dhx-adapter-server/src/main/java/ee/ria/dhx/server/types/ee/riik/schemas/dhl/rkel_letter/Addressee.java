@@ -67,7 +67,7 @@ public class Addressee {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link PartyType }
    * 
-   * 
+   * @return List of {@link PartyType}
    */
   public List<PartyType> getAddressee() {
     if (addressee == null) {

@@ -41,6 +41,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Letter }
    * 
+   * @return {@link Letter}
    */
   public Letter createLetter() {
     return new Letter();
@@ -48,6 +49,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link Addressee }
+   * 
+   * @return {@link Addressee}
    * 
    */
   public Addressee createAddressee() {
@@ -57,6 +60,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Signature }
    * 
+   * @return {@link Signature}
    */
   public Signature createSignature() {
     return new Signature();
@@ -65,6 +69,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Compilator }
    * 
+   * @return {@link Compilator}
    */
   public Compilator createCompilator() {
     return new Compilator();
@@ -73,6 +78,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link LetterType }
    * 
+   * @return {@link LetterType}
    */
   public LetterType createLetterType() {
     return new LetterType();
@@ -81,6 +87,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Enclosure }
    * 
+   * @return {@link Enclosure}
    */
   public Enclosure createEnclosure() {
     return new Enclosure();
@@ -89,6 +96,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link AccessRightsType }
    * 
+   * @return {@link AccessRightsType}
    */
   public AccessRightsType createAccessRightsType() {
     return new AccessRightsType();
@@ -97,6 +105,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SignatureType }
    * 
+   * @return {@link SignatureType}
    */
   public SignatureType createSignatureType() {
     return new SignatureType();
@@ -105,6 +114,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SignatureDataType }
    * 
+   * @return {@link SignatureDataType}
    */
   public SignatureDataType createSignatureDataType() {
     return new SignatureDataType();
@@ -113,6 +123,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link PartyType }
    * 
+   * @return {@link PartyType}
    */
   public PartyType createPartyType() {
     return new PartyType();
@@ -121,6 +132,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link OrganisationType }
    * 
+   * @return {@link OrganisationType}
    */
   public OrganisationType createOrganisationType() {
     return new OrganisationType();
@@ -129,6 +141,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link PersonType }
    * 
+   * @return {@link PersonType}
    */
   public PersonType createPersonType() {
     return new PersonType();
@@ -137,6 +150,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link IntellectualPropertyRightsType }
    * 
+   * @return {@link IntellectualPropertyRightsType}
    */
   public IntellectualPropertyRightsType createIntellectualPropertyRightsType() {
     return new IntellectualPropertyRightsType();
@@ -145,6 +159,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Letter }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl/rkel_letter", name = "LetterExport")
   public JAXBElement<Letter> createLetterExport(Letter value) {

@@ -69,7 +69,7 @@ public class InstitutionArrayType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link InstitutionType }
    * 
-   * 
+   * @return list of {@link InstitutionType}
    */
   public List<InstitutionType> getAsutus() {
     if (asutus == null) {

@@ -84,7 +84,7 @@ public class GetSendStatusV2ResponseTypeUnencoded {
    * Objects of the following type(s) are allowed in the list
    * {@link GetSendStatusV2ResponseTypeUnencoded.Item }
    * 
-   * 
+   * @return List of {@link GetSendStatusV2ResponseTypeUnencoded.Item}
    */
   public List<GetSendStatusV2ResponseTypeUnencoded.Item> getItem() {
     if (item == null) {
@@ -176,7 +176,7 @@ public class GetSendStatusV2ResponseTypeUnencoded {
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Edastus }
      * 
-     * 
+     * @return List of {@link Edastus}
      */
     public List<Edastus> getEdastus() {
       if (edastus == null) {

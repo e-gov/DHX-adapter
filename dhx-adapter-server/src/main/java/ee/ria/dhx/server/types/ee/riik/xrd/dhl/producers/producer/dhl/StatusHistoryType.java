@@ -102,7 +102,7 @@ public class StatusHistoryType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link StatusHistoryType.Status }
    * 
-   * 
+   * @return list of {@link StatusHistoryType.Status}
    */
   public List<StatusHistoryType.Status> getStatus() {
     if (status == null) {
@@ -349,7 +349,7 @@ public class StatusHistoryType {
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
 
-        })
+    })
     public static class Saaja {
 
       @XmlElement(namespace = "http://www.riik.ee/schemas/dhl")

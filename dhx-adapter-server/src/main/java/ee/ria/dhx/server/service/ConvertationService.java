@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.service;
 
+import com.jcabi.aspects.Loggable;
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.service.util.WsUtil;
@@ -10,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.jcabi.aspects.Loggable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +25,7 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 
 /**
- * Class for converting between SOAP objects and Database obejcts.
+ * Class that converts Objects.
  * 
  * @author Aleksei Kokarev
  *
@@ -43,8 +43,8 @@ public class ConvertationService {
    * to file. Datahandler will be created from that file.
    * 
    * @param obj - object to create dataHandler for
-   * @return
-   * @throws DhxException
+   * @return created {@link DataHandler}
+   * @throws DhxException thrown if error occurs
    */
   @Loggable
   public DataHandler createDatahandlerFromObject(Object obj) throws DhxException {
@@ -78,8 +78,8 @@ public class ConvertationService {
    * same file one after another.
    * 
    * @param objList - list of objects to create dataHandler for
-   * @return
-   * @throws DhxException
+   * @return created {@link DataHandler}
+   * @throws DhxException thrown if error occurs
    */
   public DataHandler createDatahandlerFromList(List<? extends Object> objList)
       throws DhxException {

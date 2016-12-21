@@ -8,6 +8,12 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ * Repository class for CRUD actions with Recipient table.
+ * 
+ * @author Aleksei Kokarev
+ *
+ */
 public interface RecipientRepository extends CrudRepository<Recipient, Long> {
 
   public List<Recipient> findByStatusId(Integer statusId);

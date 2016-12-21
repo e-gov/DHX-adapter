@@ -15,6 +15,7 @@ import javax.xml.bind.JAXBException;
 @Configuration
 /**
  * Main configuration of DHX webservice application
+ * 
  * @author Aleksei Kokarev
  *
  */

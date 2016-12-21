@@ -20,7 +20,6 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * <p>
  * 
  * <pre>
  * &lt;simpleType name="statusType"&gt;
@@ -38,10 +37,8 @@ import javax.xml.bind.annotation.XmlType;
 public enum StatusType {
 
   @XmlEnumValue("saatmisel")
-  SAATMISEL("saatmisel"),
-  @XmlEnumValue("saadetud")
-  SAADETUD("saadetud"),
-  @XmlEnumValue("katkestatud")
+  SAATMISEL("saatmisel"), @XmlEnumValue("saadetud")
+  SAADETUD("saadetud"), @XmlEnumValue("katkestatud")
   KATKESTATUD("katkestatud");
   private final String value;
 

@@ -71,7 +71,7 @@ public class Metaxml {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link Element }
    * 
-   * 
+   * @return List of Elements
    */
   public List<Element> getAny() {
     if (any == null) {

@@ -6,7 +6,6 @@
 // Generated on: 2016.11.17 at 11:49:24 AM EET
 //
 
-
 package ee.ria.dhx.server.types.ee.riik.schemas.dhl;
 
 import java.math.BigInteger;
@@ -15,7 +14,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
-
 
 /**
  * This object contains factory methods for each Java content interface and Java element interface
@@ -31,31 +29,31 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
   private final static QName _Regnr_QNAME = new QName("http://www.riik.ee/schemas/dhl", "regnr");
-  private final static QName _Isikukood_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "isikukood");
-  private final static QName _AmetikohaKood_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "ametikoha_kood");
-  private final static QName _AmetikohaNimetus_QNAME = new QName(
-      "http://www.riik.ee/schemas/dhl", "ametikoha_nimetus");
-  private final static QName _AllyksuseKood_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "allyksuse_kood");
-  private final static QName _AllyksuseNimetus_QNAME = new QName(
-      "http://www.riik.ee/schemas/dhl", "allyksuse_nimetus");
+  private final static QName _Isikukood_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "isikukood");
+  private final static QName _AmetikohaKood_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "ametikoha_kood");
+  private final static QName _AmetikohaNimetus_QNAME = new QName("http://www.riik.ee/schemas/dhl",
+      "ametikoha_nimetus");
+  private final static QName _AllyksuseKood_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "allyksuse_kood");
+  private final static QName _AllyksuseNimetus_QNAME = new QName("http://www.riik.ee/schemas/dhl",
+      "allyksuse_nimetus");
   private final static QName _Epost_QNAME = new QName("http://www.riik.ee/schemas/dhl", "epost");
   private final static QName _Nimi_QNAME = new QName("http://www.riik.ee/schemas/dhl", "nimi");
-  private final static QName _AsutuseNimi_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "asutuse_nimi");
-  private final static QName _OsakonnaKood_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "osakonna_kood");
-  private final static QName _OsakonnaNimi_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "osakonna_nimi");
+  private final static QName _AsutuseNimi_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "asutuse_nimi");
+  private final static QName _OsakonnaKood_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "osakonna_kood");
+  private final static QName _OsakonnaNimi_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "osakonna_nimi");
   private final static QName _Saatja_QNAME =
       new QName("http://www.riik.ee/schemas/dhl", "saatja");
   private final static QName _Saaja_QNAME = new QName("http://www.riik.ee/schemas/dhl", "saaja");
-  private final static QName _Vahendaja_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "vahendaja");
-  private final static QName _Dokument_QNAME = new QName("http://www.riik.ee/schemas/dhl",
-      "dokument");
+  private final static QName _Vahendaja_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "vahendaja");
+  private final static QName _Dokument_QNAME =
+      new QName("http://www.riik.ee/schemas/dhl", "dokument");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema derived classes
@@ -67,6 +65,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Edastus }
    * 
+   * @return Edastus
    */
   public Edastus createEdastus() {
     return new Edastus();
@@ -75,6 +74,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link DhlDokumentType }
    * 
+   * @return DhlDokumentType
    */
   public DhlDokumentType createDhlDokumentType() {
     return new DhlDokumentType();
@@ -83,6 +83,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link AadressType }
    * 
+   * @return object
    */
   public AadressType createAadressType() {
     return new AadressType();
@@ -91,6 +92,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Fault }
    * 
+   * @return object
    */
   public Fault createFault() {
     return new Fault();
@@ -99,6 +101,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Edastus.Metaxml }
    * 
+   * @return object
    */
   public Edastus.Metaxml createEdastusMetaxml() {
     return new Edastus.Metaxml();
@@ -107,6 +110,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Transport }
    * 
+   * @return object
    */
   public Transport createTransport() {
     return new Transport();
@@ -115,6 +119,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link ee.ria.dhx.server.types.ee.riik.schemas.dhl.Metaxml }
    * 
+   * @return object
    */
   public ee.ria.dhx.server.types.ee.riik.schemas.dhl.Metaxml createMetaxml() {
     return new ee.ria.dhx.server.types.ee.riik.schemas.dhl.Metaxml();
@@ -123,6 +128,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link Ajalugu }
    * 
+   * @return object
    */
   public Ajalugu createAjalugu() {
     return new Ajalugu();
@@ -131,6 +137,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link TagasisideType }
    * 
+   * @return object
    */
   public TagasisideType createTagasisideType() {
     return new TagasisideType();
@@ -139,6 +146,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link DhlDokumentType.Ref }
    * 
+   * @return object
    */
   public DhlDokumentType.Ref createDhlDokumentTypeRef() {
     return new DhlDokumentType.Ref();
@@ -147,6 +155,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "regnr")
   public JAXBElement<String> createRegnr(String value) {
@@ -156,6 +166,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "isikukood")
   public JAXBElement<String> createIsikukood(String value) {
@@ -165,6 +177,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "ametikoha_kood")
   public JAXBElement<BigInteger> createAmetikohaKood(BigInteger value) {
@@ -174,6 +188,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "ametikoha_nimetus")
   public JAXBElement<BigInteger> createAmetikohaNimetus(BigInteger value) {
@@ -183,6 +199,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "allyksuse_kood")
   public JAXBElement<BigInteger> createAllyksuseKood(BigInteger value) {
@@ -192,6 +210,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "allyksuse_nimetus")
   public JAXBElement<BigInteger> createAllyksuseNimetus(BigInteger value) {
@@ -201,6 +221,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "epost")
   public JAXBElement<String> createEpost(String value) {
@@ -210,6 +232,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "nimi")
   public JAXBElement<String> createNimi(String value) {
@@ -219,6 +243,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "asutuse_nimi")
   public JAXBElement<String> createAsutuseNimi(String value) {
@@ -228,6 +254,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "osakonna_kood")
   public JAXBElement<String> createOsakonnaKood(String value) {
@@ -237,6 +265,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "osakonna_nimi")
   public JAXBElement<String> createOsakonnaNimi(String value) {
@@ -246,6 +276,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link AadressType }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "saatja")
   public JAXBElement<AadressType> createSaatja(AadressType value) {
@@ -255,6 +287,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link AadressType }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "saaja")
   public JAXBElement<AadressType> createSaaja(AadressType value) {
@@ -264,6 +298,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link AadressType }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "vahendaja")
   public JAXBElement<AadressType> createVahendaja(AadressType value) {
@@ -273,6 +309,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link DhlDokumentType }{@code >}
    * 
+   * @param value value
+   * @return object
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl", name = "dokument")
   public JAXBElement<DhlDokumentType> createDokument(DhlDokumentType value) {

@@ -81,7 +81,7 @@ public class SignatureMethodType {
    * Objects of the following type(s) are allowed in the list {@link JAXBElement }{@code <}
    * {@link BigInteger }{@code >} {@link String } {@link Object }
    * 
-   * 
+   * @return list of {@link Object}
    */
   public List<Object> getContent() {
     if (content == null) {

@@ -72,6 +72,7 @@ public class GetSendStatusV2RequestType {
   /**
    * Gets the value of the staatuseAjalugu property.
    * 
+   * @return {@link Boolean}
    */
   public boolean isStaatuseAjalugu() {
     return staatuseAjalugu;
@@ -80,6 +81,7 @@ public class GetSendStatusV2RequestType {
   /**
    * Sets the value of the staatuseAjalugu property.
    * 
+   * @param value value
    */
   public void setStaatuseAjalugu(boolean value) {
     this.staatuseAjalugu = value;

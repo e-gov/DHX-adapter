@@ -94,8 +94,7 @@ public class InstitutionRefsTypeUnencoded {
   @XmlAccessorType(XmlAccessType.FIELD)
   @XmlType(name = "")
   public static class Asutused
-      extends InstitutionRefsArrayType
-  {
+      extends InstitutionRefsArrayType {
 
 
   }

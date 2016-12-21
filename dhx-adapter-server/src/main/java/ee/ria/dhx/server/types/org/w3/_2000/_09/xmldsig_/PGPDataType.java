@@ -91,11 +91,11 @@ public class PGPDataType {
    * 
    * 
    * <p>
-   * Objects of the following type(s) are allowed in the list {@link JAXBElement }{@code <}{@link
-   * byte[]}{@code >} {@link JAXBElement }{@code <}{@link byte[]}{@code >} {@link Object }
-   * {@link Element }
+   * Objects of the following type(s) are allowed in the list {@link JAXBElement
+   * }{@code <}{@link byte[]}{@code >} {@link JAXBElement }{@code <}{@link byte[]}{@code >}
+   * {@link Object } {@link Element }
    * 
-   * 
+   * @return list of {@link Object}
    */
   public List<Object> getContent() {
     if (content == null) {

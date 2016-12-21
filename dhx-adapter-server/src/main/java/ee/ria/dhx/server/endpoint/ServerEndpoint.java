@@ -31,6 +31,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Endpoint
 /**
  * Endpoint class which offers SOAP services.
+ * 
  * @author Aleksei Kokarev
  *
  */

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Enumeration of the document statuses with IDs and names.
+ * Enumeration of the document statuses with IDs and names(for DVk backward compatibility).
  * 
  * @author Aleksei Kokarev
  *
@@ -30,11 +30,11 @@ public enum StatusEnum {
 
 
   /**
-   * Finds StatusEnum by classificatorId
+   * Finds StatusEnum by classificatorId.
    * 
-   * @param classificatorId
-   * @return
-   * @throws DhxException
+   * @param classificatorId classificatorId to find StatusEnum for
+   * @return found StatusEnum
+   * @throws DhxException thrown if error occurs
    */
   public static StatusEnum forClassificatorId(Integer classificatorId)
       throws DhxException {

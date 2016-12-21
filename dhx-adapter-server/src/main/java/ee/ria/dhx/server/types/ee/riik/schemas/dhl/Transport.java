@@ -93,7 +93,7 @@ public class Transport {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link AadressType }
    * 
-   * 
+   * @return List of {@link AadressType}
    */
   public List<AadressType> getSaaja() {
     if (saaja == null) {

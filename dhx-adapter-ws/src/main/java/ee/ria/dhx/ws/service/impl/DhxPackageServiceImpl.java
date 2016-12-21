@@ -16,6 +16,7 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
@@ -110,6 +111,11 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       if (document.getDocumentAttachment() == null) {
         throw new DhxException(DhxExceptionEnum.EXTRACTION_ERROR,
             "Attached capsule is not found in request");
+      }
+      if (!StringUtil.isNullOrEmpty(document.getRecipient())) {
+        DhxRepresentee representee = new DhxRepresentee(document.getRecipient(), new Date(), null,
+            null, document.getRecipientSystem());
+        service.setRepresentee(representee);
       }
       IncomingDhxPackage dhxDocument;
       if (config.getParseCapsule()) {
@@ -295,8 +301,9 @@ public class DhxPackageServiceImpl implements DhxPackageService {
           service, document, recipient);
       if (config.getCheckRecipient()) {
         checkRecipient(dhxDocument.getRecipient(), null);
-        log.info("Recipient checked and found in representative list or own member code. recipient:"
-            + document.getRecipient());
+        log.info(
+            "Recipient checked and found in representative list or own member code. recipient:"
+                + document.getRecipient());
       }
       log.info("Document received.");
       return dhxDocument;
@@ -356,7 +363,8 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     }
     if (!found) {
       if (log.isDebugEnabled() && recipientList != null) {
-        log.debug("Recipient not found in representativesList and own member code. recipientList:");
+        log.debug(
+            "Recipient not found in representativesList and own member code. recipientList:");
         for (DhxOrganisation recipientFromList : recipientList) {
           log.debug("Recipient: " + recipientFromList.toString());
         }
@@ -399,7 +407,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       if (!member.getRepresentor()) {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
             "Xroad sender is representee, but member found in "
-            + "adressregistry is not representor. sender:"
+                + "adressregistry is not representor. sender:"
                 + sender);
       }
     }
@@ -413,6 +421,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   /**
    * Sets the config.
+   * 
    * @param config the config to set
    */
   public void setConfig(DhxConfig config) {
@@ -421,6 +430,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   /**
    * Sets the soapConfig.
+   * 
    * @param soapConfig the soapConfig to set
    */
   public void setSoapConfig(SoapConfig soapConfig) {
@@ -429,6 +439,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   /**
    * Sets the capsuleConfig.
+   * 
    * @param capsuleConfig the capsuleConfig to set
    */
   public void setCapsuleConfig(CapsuleConfig capsuleConfig) {
@@ -437,6 +448,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   /**
    * Sets the addressService.
+   * 
    * @param addressService the addressService to set
    */
   public void setAddressService(AddressService addressService) {
@@ -445,6 +457,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   /**
    * Sets the documentGateway.
+   * 
    * @param documentGateway the documentGateway to set
    */
   public void setDocumentGateway(DhxGateway documentGateway) {
@@ -453,6 +466,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   /**
    * Sets the dhxMarshallerService.
+   * 
    * @param dhxMarshallerService the dhxMarshallerService to set
    */
   public void setDhxMarshallerService(DhxMarshallerService dhxMarshallerService) {
@@ -461,6 +475,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
 
   /**
    * Sets the dhxImplementationSpecificService.
+   * 
    * @param dhxImplementationSpecificService the dhxImplementationSpecificService to set
    */
   public void setDhxImplementationSpecificService(

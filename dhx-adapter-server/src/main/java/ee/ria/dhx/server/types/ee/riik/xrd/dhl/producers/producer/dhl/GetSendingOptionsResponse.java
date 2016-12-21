@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetSendingOptionsResponse {
 
   @XmlElement(required = true)
-  protected /*InstitutionArrayType*/ Base64BinaryType keha;
+  protected /* InstitutionArrayType */ Base64BinaryType keha;
 
   /**
    * Gets the value of the keha property.

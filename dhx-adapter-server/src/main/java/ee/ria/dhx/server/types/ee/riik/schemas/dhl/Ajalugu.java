@@ -74,7 +74,7 @@ public class Ajalugu {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link Transport } {@link Metaxml }
    * 
-   * 
+   * @return List of objects
    */
   public List<Object> getTransportAndMetaxml() {
     if (transportAndMetaxml == null) {

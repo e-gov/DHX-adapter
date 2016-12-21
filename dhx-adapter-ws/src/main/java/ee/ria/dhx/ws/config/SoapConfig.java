@@ -11,6 +11,7 @@ import java.util.List;
 @Configuration
 /**
  * Configuration parameters needed for SOAP services.
+ * 
  * @author Aleksei Kokarev
  *
  */

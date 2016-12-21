@@ -37,11 +37,11 @@ public class WsUtil {
   /**
    * Creates InputStream that will GZIP decompress the stream from input.
    * 
-   * @param stream - stream to decompress
-   * @return - decompressed stream
-   * @throws DhxException
+   * @param stream stream to decompress
+   * @return decompressed stream
+   * @throws DhxException thrown if error occurs
    */
-  public static InputStream gZipDecompress(InputStream stream) throws DhxException {
+  public static InputStream gzipDecompress(InputStream stream) throws DhxException {
     try {
       GZIPInputStream gzis = new GZIPInputStream(stream);
       return gzis;
@@ -55,8 +55,8 @@ public class WsUtil {
    * Creates OutputStream that will GZIP compress the stream from input.
    * 
    * @param stream - stream to compress
-   * @return - compressed stream
-   * @throws DhxException
+   * @return compressed stream
+   * @throws DhxException thrown if error occurs
    */
   public static GZIPOutputStream getGZipCompressStream(OutputStream stream) throws DhxException {
     try {
@@ -72,8 +72,8 @@ public class WsUtil {
    * Creates InputStream that will BASE64 decode the stream from input.
    * 
    * @param stream - stream to decode
-   * @return - decoded stream
-   * @throws DhxException
+   * @return decoded stream
+   * @throws DhxException thrown if error occurs
    */
   public static InputStream base64Decode(InputStream stream) throws DhxException {
     InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);
@@ -84,9 +84,9 @@ public class WsUtil {
   /**
    * Creates OutputStream that will BASE64 encode the stream from input.
    * 
-   * @param stream - stream to encode
-   * @return - encoded stream
-   * @throws DhxException
+   * @param stream stream to encode
+   * @return encoded stream
+   * @throws DhxException thrown if error occurs
    */
   public static OutputStream getBase64EncodeStream(OutputStream stream) throws DhxException {
     OutputStream base64EncoderStream = Base64.getEncoder().wrap(stream);
@@ -96,19 +96,20 @@ public class WsUtil {
   /**
    * Creates InputStream that will BASE64 decode the stream from input.
    * 
-   * @param stream - stream to decode
-   * @return - decoded stream
-   * @throws DhxException
+   * @param stream stream to decode
+   * @return decoded stream
+   * @throws DhxException thrown if error occurs
    */
   public static InputStream base64decodeAndUnzip(InputStream stream) throws DhxException {
     InputStream decoded = stream;
     try {
       decoded = base64Decode(decoded);
     } catch (DhxException ex) {
-      log.info("Error occured while creating base64 decoded stream, maybe input is not base64 encoded, continue. "
-          + ex.getMessage());
+      log.info(
+          "Error occured while creating base64 decoded stream, maybe input is not base64 encoded, "
+          + "continue. " + ex.getMessage());
     }
-    return gZipDecompress(decoded);
+    return gzipDecompress(decoded);
   }
 
 
@@ -116,8 +117,8 @@ public class WsUtil {
   /**
    * Method reads inputstream into string.
    * 
-   * @param fileStream - stream to read
-   * @return
+   * @param fileStream stream to read
+   * @return read String from {@link InputStream}
    */
   public static String readInput(InputStream fileStream) {
     StringBuffer buffer = new StringBuffer();
@@ -133,8 +134,8 @@ public class WsUtil {
 
       FileUtil.safeCloseReader(isr);
       return buffer.toString();
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException ex) {
+      ex.printStackTrace();
       return null;
     }
   }
@@ -145,7 +146,7 @@ public class WsUtil {
    * 
    * @param objectStream - stream of the xml to parse
    * @return - dom document created from stream
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   public static Document xmlDocumentFromStream(InputStream objectStream)
       throws DhxException {

@@ -91,6 +91,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SaatjaDefineeritud }
    * 
+   * @return {@link SaatjaDefineeritud}
    */
   public SaatjaDefineeritud createSaatjaDefineeritud() {
     return new SaatjaDefineeritud();
@@ -99,6 +100,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_asutuse_nr")
   public JAXBElement<String> createKoostajaAsutuseNr(String value) {
@@ -108,6 +111,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "saaja_asutuse_nr")
   public JAXBElement<String> createSaajaAsutuseNr(String value) {
@@ -117,6 +122,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_dokumendinimi")
   public JAXBElement<String> createKoostajaDokumendinimi(String value) {
@@ -126,6 +133,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_dokumendityyp")
   public JAXBElement<String> createKoostajaDokumendityyp(String value) {
@@ -135,6 +144,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_votmesona")
   public JAXBElement<String> createKoostajaVotmesona(String value) {
@@ -144,6 +155,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_dokumendinr")
   public JAXBElement<String> createKoostajaDokumendinr(String value) {
@@ -153,6 +166,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_kuupaev")
   public JAXBElement<String> createKoostajaKuupaev(String value) {
@@ -162,6 +177,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_asutuse_nimi")
   public JAXBElement<String> createKoostajaAsutuseNimi(String value) {
@@ -171,6 +188,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_asutuse_kontakt")
   public JAXBElement<String> createKoostajaAsutuseKontakt(String value) {
@@ -180,6 +199,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "autori_osakond")
   public JAXBElement<String> createAutoriOsakond(String value) {
@@ -189,6 +210,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "autori_isikukood")
   public JAXBElement<String> createAutoriIsikukood(String value) {
@@ -198,6 +221,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "autori_nimi")
   public JAXBElement<String> createAutoriNimi(String value) {
@@ -207,6 +232,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "autori_kontakt")
   public JAXBElement<String> createAutoriKontakt(String value) {
@@ -216,6 +243,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "seotud_dhl_id")
   public JAXBElement<String> createSeotudDhlId(String value) {
@@ -225,6 +254,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "seotud_dokumendinr_koostajal")
   public JAXBElement<String> createSeotudDokumendinrKoostajal(String value) {
@@ -234,6 +265,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "seotud_dokumendinr_saajal")
   public JAXBElement<String> createSeotudDokumendinrSaajal(String value) {
@@ -243,6 +276,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "saatja_dokumendinr")
   public JAXBElement<String> createSaatjaDokumendinr(String value) {
@@ -252,6 +287,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "saatja_kuupaev")
   public JAXBElement<String> createSaatjaKuupaev(String value) {
@@ -261,6 +298,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "saatja_asutuse_kontakt")
   public JAXBElement<String> createSaatjaAsutuseKontakt(String value) {
@@ -270,6 +309,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "saaja_isikukood")
   public JAXBElement<String> createSaajaIsikukood(String value) {
@@ -279,6 +320,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "saaja_nimi")
   public JAXBElement<String> createSaajaNimi(String value) {
@@ -288,6 +331,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "saaja_osakond")
   public JAXBElement<String> createSaajaOsakond(String value) {
@@ -297,6 +342,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_failinimi")
   public JAXBElement<Object> createKoostajaFailinimi(Object value) {
@@ -306,6 +353,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_kataloog")
   public JAXBElement<Object> createKoostajaKataloog(Object value) {
@@ -315,6 +364,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "koostaja_kokkuvote")
   public JAXBElement<Object> createKoostajaKokkuvote(Object value) {
@@ -324,6 +375,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
    * 
+   * @param value value
+   * @return {@link SaatjaDefineeritud}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-manual", name = "sisu_id")
   public JAXBElement<Object> createSisuId(Object value) {

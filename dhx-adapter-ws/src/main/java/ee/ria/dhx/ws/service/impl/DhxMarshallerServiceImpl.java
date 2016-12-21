@@ -59,7 +59,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     } catch (JAXBException ex) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured while creating unmarshaller. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -70,7 +71,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     } catch (JAXBException ex) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured while creating marshaller. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -106,7 +108,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -127,7 +130,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -195,7 +199,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     } finally {
       // wont set single schema for unmarshaller
       // unmarshaller.setSchema(null);
@@ -212,7 +217,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     } catch (JAXBException ex) {
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -230,10 +236,11 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     } catch (SAXException ex) {
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while setting schema for unmarshaller. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
-  
+
   @Loggable
   private void setSchemaForMarshaller(InputStream schemaStream,
       Marshaller marshaller) throws DhxException {
@@ -248,7 +255,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     } catch (SAXException ex) {
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while setting schema for unmarshaller. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -273,7 +281,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -296,7 +305,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -336,7 +346,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -358,7 +369,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -380,7 +392,8 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
@@ -404,26 +417,37 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
-  
-  public StringWriter marshallToWriterAndValidate(Object container, InputStream schemaStream) throws DhxException {
-	  try {
-	      if (log.isDebugEnabled()) {
-	        log.debug("marshalling container");
-	      }
-	      Marshaller marshaller = getMarshaller();
-	      setSchemaForMarshaller(schemaStream, marshaller);
-	      StringWriter writer = new StringWriter();
-	      marshaller.marshal(container, writer);
-	      return writer;
-	    } catch (JAXBException ex) {
-	      log.error(ex.getMessage(), ex);
-	      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
-	          "Error occured while creating object from capsule. "
-	              + ex.getMessage(), ex);
-	    }
+
+  /**
+   * Marshalls object to writer and validates object if schemaStream is present.
+   * 
+   * @param container object to marshall
+   * @param schemaStream {@link InputStream} of the XSD schema to validate against
+   * @return - file containing marshalled object
+   * @throws DhxException thrown if error occurs while marshalling object
+   */
+  public StringWriter marshallToWriterAndValidate(Object container, InputStream schemaStream)
+      throws DhxException {
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("marshalling container");
+      }
+      Marshaller marshaller = getMarshaller();
+      setSchemaForMarshaller(schemaStream, marshaller);
+      StringWriter writer = new StringWriter();
+      marshaller.marshal(container, writer);
+      return writer;
+    } catch (JAXBException ex) {
+      log.error(ex.getMessage(), ex);
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while creating object from capsule. "
+              + ex.getMessage(),
+          ex);
+    }
   }
 
   /**
@@ -463,12 +487,14 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     } catch (Exception ex) {
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while validating capsule. "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 
   /**
    * Returns the jaxbContext.
+   * 
    * @return the jaxbContext
    */
   public JAXBContext getJaxbContext() {

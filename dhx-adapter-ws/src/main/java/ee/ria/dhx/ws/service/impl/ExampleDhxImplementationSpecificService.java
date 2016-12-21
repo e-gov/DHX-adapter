@@ -28,8 +28,9 @@ import java.util.UUID;
  */
 @Slf4j
 @Deprecated
-public class ExampleDhxImplementationSpecificService implements
-    DhxImplementationSpecificService {
+public class ExampleDhxImplementationSpecificService
+    implements
+      DhxImplementationSpecificService {
 
   private List<IncomingDhxPackage> documents = new ArrayList<IncomingDhxPackage>();
 
@@ -49,8 +50,8 @@ public class ExampleDhxImplementationSpecificService implements
                 consignmentId)
             && (document.getClient().toString()
                 .equals(from.toString()) || document
-                .getClient().getRepresentee().getRepresenteeCode()
-                .equals(from.toString()))) {
+                    .getClient().getRepresentee().getRepresenteeCode()
+                    .equals(from.toString()))) {
           return true;
         }
       }

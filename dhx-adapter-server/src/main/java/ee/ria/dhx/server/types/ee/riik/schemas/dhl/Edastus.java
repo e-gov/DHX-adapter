@@ -78,7 +78,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
 
-    })
+})
 @XmlRootElement(name = "edastus")
 public class Edastus {
 

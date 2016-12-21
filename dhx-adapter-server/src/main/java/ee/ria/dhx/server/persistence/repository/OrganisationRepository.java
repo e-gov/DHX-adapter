@@ -6,15 +6,22 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ * Repository class for CRUD actions with Organisation table.
+ * 
+ * @author Aleksei Kokarev
+ *
+ */
 public interface OrganisationRepository extends CrudRepository<Organisation, Long> {
 
-	Organisation findByRegistrationCodeAndSubSystem(String registrationCode, String subsystem);
-	
-	Organisation findByRegistrationCodeAndSubSystemAndRepresentor(String registrationCode, String subsystem, Organisation representor);
+  Organisation findByRegistrationCodeAndSubSystem(String registrationCode, String subsystem);
 
-	Organisation findBySubSystem(String subsystem);
+  Organisation findByRegistrationCodeAndSubSystemAndRepresentor(String registrationCode,
+      String subsystem, Organisation representor);
 
-	List<Organisation> findByIsActiveAndDhxOrganisation(Boolean isActive, Boolean dhxOrganisation);
+  Organisation findBySubSystem(String subsystem);
 
-	List<Organisation> findByIsActiveAndOwnRepresentee(Boolean isActive, Boolean OwnRepresentee);
+  List<Organisation> findByIsActiveAndDhxOrganisation(Boolean isActive, Boolean dhxOrganisation);
+
+  List<Organisation> findByIsActiveAndOwnRepresentee(Boolean isActive, Boolean ownRepresentee);
 }

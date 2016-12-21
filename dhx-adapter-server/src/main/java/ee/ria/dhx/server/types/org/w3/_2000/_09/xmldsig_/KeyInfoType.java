@@ -100,13 +100,14 @@ public class KeyInfoType {
    * 
    * <p>
    * Objects of the following type(s) are allowed in the list {@link JAXBElement }{@code <}
-   * {@link String }{@code >} {@link String } {@link JAXBElement }{@code <}{@link RetrievalMethodType }
-   * {@code >} {@link JAXBElement }{@code <}{@link SPKIDataType }{@code >} {@link Element }
-   * {@link JAXBElement }{@code <}{@link String }{@code >} {@link JAXBElement }{@code <}
-   * {@link PGPDataType }{@code >} {@link Object } {@link JAXBElement }{@code <}{@link KeyValueType }
-   * {@code >} {@link JAXBElement }{@code <}{@link X509DataType }{@code >}
+   * {@link String }{@code >} {@link String } {@link JAXBElement
+   * }{@code <}{@link RetrievalMethodType } {@code >} {@link JAXBElement
+   * }{@code <}{@link SPKIDataType }{@code >} {@link Element } {@link JAXBElement
+   * }{@code <}{@link String }{@code >} {@link JAXBElement }{@code <} {@link PGPDataType }{@code >}
+   * {@link Object } {@link JAXBElement }{@code <}{@link KeyValueType } {@code >} {@link JAXBElement
+   * }{@code <}{@link X509DataType }{@code >}
    * 
-   * 
+   * @return list of {@link Object}
    */
   public List<Object> getContent() {
     if (content == null) {

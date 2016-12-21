@@ -1,8 +1,6 @@
 package ee.ria.dhx.server.persistence.service;
 
-
 import com.jcabi.aspects.Loggable;
-
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.persistence.entity.Document;
@@ -34,7 +32,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -48,7 +45,6 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   @Autowired
   RecipientRepository recipientRepository;
 
-
   @Autowired
   ConvertationService convertationService;
 
@@ -61,6 +57,9 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   @Autowired
   PersistenceService persistenceService;
 
+  /**
+   * Returns all organisations from database that are active and marked as own representees.
+   */
   @Override
   public List<DhxRepresentee> getRepresentationList() throws DhxException {
     List<DhxRepresentee> representees = new ArrayList<DhxRepresentee>();
@@ -72,46 +71,39 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   }
 
 
-
   @Override
-  public boolean isDuplicatePackage(InternalXroadMember from, String consignmentId) throws DhxException
-  {
+  public boolean isDuplicatePackage(InternalXroadMember from, String consignmentId)
+      throws DhxException {
     DhxOrganisation dhxOrg = DhxOrganisationFactory.createDhxOrganisation(from);
-    Organisation org =
-    		organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrg.getCode(),
-            dhxOrg.getSystem());
-    List<Recipient> recipients =
-        recipientRepository.findByTransport_SendersOrganisationAndDhxExternalConsignmentId(org,
-            consignmentId);
+    Organisation org = organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrg.getCode(),
+        dhxOrg.getSystem());
+    List<Recipient> recipients = recipientRepository
+        .findByTransport_SendersOrganisationAndDhxExternalConsignmentId(org, consignmentId);
     if (recipients != null && recipients.size() > 0) {
       return true;
     }
     return false;
   }
 
-
-
   @Override
   @Loggable
-  public String receiveDocument(IncomingDhxPackage document,
-      MessageContext context) throws DhxException {
-    log.debug(
-        "String receiveDocument(DhxDocument document) externalConsignmentId: {}",
-        document.getExternalConsignmentId());
-    Document doc =
-        capsuleService.getDocumentFromIncomingContainer(document,
-            document.getParsedContainerVersion());
+  public String receiveDocument(IncomingDhxPackage document, MessageContext context)
+      throws DhxException {
+    log.debug("String receiveDocument(DhxDocument document) externalConsignmentId: {}",
+        document.getExternalConsignmentId() + " recipient:" + document.getRecipient().toString()
+            + " service: "
+            + document.getService().toString());
+    Document doc = capsuleService.getDocumentFromIncomingContainer(document,
+        document.getParsedContainerVersion());
     documentRepository.save(doc);
-    // by container definition and DHX protocol we know that those arrays are all not null and only
+    // by container definition and DHX protocol we know that those arrays
+    // are all not null and only
     // have 1 object in it
     return doc.getTransports().get(0).getRecipients().get(0).getRecipientId().toString();
   }
 
 
-  /*
-   * public abstract List<DhxRepresentee> getRepresentationList() throws DhxException;
-   */
-
+  @Override
   public List<InternalXroadMember> getAdresseeList() throws DhxException {
     if (members == null) {
       members = new ArrayList<InternalXroadMember>();
@@ -134,21 +126,19 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     }
     InternalXroadMember member =
         new InternalXroadMember(mainOrg.getXroadInstance(), mainOrg.getMemberClass(),
-            mainOrg.getRegistrationCode(),
-            mainOrg.getSubSystem(), mainOrg.getName(), representee);
+            mainOrg.getRegistrationCode(), mainOrg.getSubSystem(), mainOrg.getName(),
+            representee);
     return member;
   }
 
   private DhxRepresentee getRepresenteeFromOrganisation(Organisation org) {
     return new DhxRepresentee(org.getRegistrationCode(), org.getRepresenteeStart(),
-        org.getRepresenteeEnd(), org.getName(), org.getSubSystem());
+        org.getRepresenteeEnd(),
+        org.getName(), org.getSubSystem());
   }
 
-
-
   @Override
-  public void saveAddresseeList(List<InternalXroadMember> members)
-      throws DhxException {
+  public void saveAddresseeList(List<InternalXroadMember> members) throws DhxException {
     updateNotActiveAdressees(members);
     List<Organisation> organisations = new ArrayList<Organisation>();
     for (InternalXroadMember member : members) {
@@ -157,10 +147,10 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       }
     }
     organisationRepository.save(organisations);
-   /* Iterable<Organisation> orgs = organisationRepository.findAll();
-    for (Organisation org : orgs) {
-      log.debug("org code" + org.getRegistrationCode() + " system: " + org.getSubSystem());
-    }*/
+    /*
+     * Iterable<Organisation> orgs = organisationRepository.findAll(); for (Organisation org : orgs)
+     * { log.debug("org code" + org.getRegistrationCode() + " system: " + org.getSubSystem()); }
+     */
     organisations = new ArrayList<Organisation>();
     for (InternalXroadMember member : members) {
       if (member.getRepresentee() != null && persistenceService.isRepresenteeValid(member)) {
@@ -168,7 +158,6 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       }
     }
     organisationRepository.save(organisations);
-
 
     this.members = members;
   }
@@ -181,8 +170,8 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     for (Organisation org : allOrgs) {
       found = false;
       for (InternalXroadMember member : members) {
-        if (member.getMemberCode().equals(org.getRegistrationCode()) &&
-            (member.getSubsystemCode() == null && org.getSubSystem() == null)
+        if (member.getMemberCode().equals(org.getRegistrationCode())
+            && (member.getSubsystemCode() == null && org.getSubSystem() == null)
             || member.getSubsystemCode().equals(org.getSubSystem())) {
           found = true;
           break;
@@ -195,8 +184,6 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     }
     organisationRepository.save(changedOrgs);
   }
-
-
 
   @Override
   @Loggable
@@ -212,8 +199,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       Integer successStatusId = StatusEnum.RECEIVED.getClassificatorId();
       if (docResponse.getFault() == null) {
         log.debug("Document was succesfuly sent to DHX");
-        recipient.setDhxExternalReceiptId(docResponse
-            .getReceiptId());
+        recipient.setDhxExternalReceiptId(docResponse.getReceiptId());
         // recipient.setRecipientStatusId(11);
         recipient.setStatusId(successStatusId);
       } else {
@@ -228,25 +214,21 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
           faultString = faultString + " Total retries count: " + retryResults.size()
               + " Results for individual retries: ";
           for (AsyncDhxSendDocumentResult result : retryResults) {
-            faultString = faultString + "\n Retry date: " + result.getTryDate()
-                + " Technical error:";
+            faultString =
+                faultString + "\n Retry date: " + result.getTryDate() + " Technical error:";
             if (result.getResult().getOccuredException() != null) {
-              faultString =
-                  faultString + " Error message:"
-                      + result.getResult().getOccuredException().getMessage()
-                      + " Stacktrace: "
-                      + ExceptionUtils.getStackTrace(result.getResult().getOccuredException());
+              faultString = faultString + " Error message:"
+                  + result.getResult().getOccuredException().getMessage() + " Stacktrace: "
+                  + ExceptionUtils.getStackTrace(result.getResult().getOccuredException());
             }
           }
         }
-        faultString = docResponse.getFault()
-            .getFaultString() + faultString;
-        recipient.setFaultCode(docResponse.getFault()
-            .getFaultCode());
+        faultString = docResponse.getFault().getFaultString() + faultString;
+        recipient.setFaultCode(docResponse.getFault().getFaultCode());
         recipient.setFaultString(docResponse.getFault().getFaultString());
-        recipient.setFaultDetail(faultString.substring(0, (faultString.length() > 1900
-            ? 1900
-            : faultString.length())));
+        recipient.setFaultDetail(
+            faultString.substring(0,
+                (faultString.length() > 1900 ? 1900 : faultString.length())));
       }
       boolean allSent = true;
       for (Recipient docRecipient : recipient.getTransport().getRecipients()) {
@@ -255,16 +237,15 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
           break;
         }
       }
-      if (allSent
-          && !recipient.getTransport().getStatusId()
-              .equals(StatusEnum.RECEIVED.getClassificatorId())) {
+      if (allSent && !recipient.getTransport().getStatusId()
+          .equals(StatusEnum.RECEIVED.getClassificatorId())) {
         recipient.getTransport().setStatusId(successStatusId);
         documentRepository.save(recipient.getTransport().getDokument());
       }
       recipientRepository.save(recipient);
     } catch (Exception ex) {
       log.error("Error occured while saving send results. " + ex.getMessage(), ex);
-    } finally {}
+    }
   }
 
 }

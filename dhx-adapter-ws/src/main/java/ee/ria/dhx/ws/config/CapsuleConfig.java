@@ -95,7 +95,7 @@ public class CapsuleConfig {
               .getDecRecipient()) {
             adressees.add(new CapsuleAdressee(recipient
                 .getOrganisationCode(), recipient.getPersonalIdCode(), recipient
-                .getStructuralUnit()));
+                    .getStructuralUnit()));
           }
           return adressees;
         }
@@ -129,8 +129,9 @@ public class CapsuleConfig {
             && container.getTransport().getDecSender() != null) {
           return new CapsuleAdressee(container.getTransport()
               .getDecSender().getOrganisationCode(), container.getTransport()
-              .getDecSender().getPersonalIdCode(), container.getTransport()
-              .getDecSender().getStructuralUnit());
+                  .getDecSender().getPersonalIdCode(),
+              container.getTransport()
+                  .getDecSender().getStructuralUnit());
         }
         return null;
       default:
@@ -178,6 +179,7 @@ public class CapsuleConfig {
 
   /**
    * Return the currentCapsuleVersion.
+   * 
    * @return the currentCapsuleVersion enumeration of the current version of the capsule to send and
    *         receive
    */
@@ -187,6 +189,7 @@ public class CapsuleConfig {
 
   /**
    * Sets the currentCapsuleVersion.
+   * 
    * @param currentCapsuleVersion enumeration of the current version of the capsule to send and
    *        receive
    */

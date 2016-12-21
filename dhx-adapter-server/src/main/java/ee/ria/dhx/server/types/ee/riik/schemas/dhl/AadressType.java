@@ -53,7 +53,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "aadressType", propOrder = {
 
-    })
+})
 public class AadressType {
 
   protected String regnr;

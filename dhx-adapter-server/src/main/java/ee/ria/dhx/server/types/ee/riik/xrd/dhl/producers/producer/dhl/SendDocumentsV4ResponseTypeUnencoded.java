@@ -96,8 +96,7 @@ public class SendDocumentsV4ResponseTypeUnencoded {
   @XmlRootElement(name = "keha")
   @XmlType(name = "")
   public static class Keha
-      extends DocumentRefsArrayType
-  {
+      extends DocumentRefsArrayType {
 
 
   }

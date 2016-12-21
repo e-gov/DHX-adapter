@@ -1,7 +1,6 @@
 package ee.ria.dhx.ws.service.impl;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,7 +11,6 @@ import org.springframework.core.io.ClassPathResource;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.ws.service.AddressService;
-import ee.ria.dhx.ws.service.impl.AddressServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

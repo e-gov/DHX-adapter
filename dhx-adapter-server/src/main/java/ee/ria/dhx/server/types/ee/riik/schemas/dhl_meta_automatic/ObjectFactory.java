@@ -68,6 +68,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link DhlEmailHeader }
    * 
+   * @return {@link DhlEmailHeader}
    */
   public DhlEmailHeader createDhlEmailHeader() {
     return new DhlEmailHeader();
@@ -76,6 +77,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_id")
   public JAXBElement<String> createDhlId(String value) {
@@ -85,6 +88,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saabumisviis")
   public JAXBElement<String> createDhlSaabumisviis(String value) {
@@ -94,6 +99,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saabumisaeg")
   public JAXBElement<XMLGregorianCalendar> createDhlSaabumisaeg(XMLGregorianCalendar value) {
@@ -104,6 +111,9 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
+   * 
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saatmisviis")
   public JAXBElement<String> createDhlSaatmisviis(String value) {
@@ -113,6 +123,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saatmisaeg")
   public JAXBElement<XMLGregorianCalendar> createDhlSaatmisaeg(XMLGregorianCalendar value) {
@@ -123,6 +135,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saatja_asutuse_nr")
   public JAXBElement<String> createDhlSaatjaAsutuseNr(String value) {
@@ -131,6 +145,9 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   * 
+   * @param value value
+   * @return {@link JAXBElement}
    * 
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saatja_asutuse_nimi")
@@ -141,6 +158,9 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
+   * 
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saatja_isikukood")
   public JAXBElement<String> createDhlSaatjaIsikukood(String value) {
@@ -150,6 +170,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saaja_asutuse_nr")
   public JAXBElement<String> createDhlSaajaAsutuseNr(String value) {
@@ -159,6 +181,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saaja_asutuse_nimi")
   public JAXBElement<String> createDhlSaajaAsutuseNimi(String value) {
@@ -168,6 +192,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saaja_isikukood")
   public JAXBElement<String> createDhlSaajaIsikukood(String value) {
@@ -177,6 +203,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saatja_epost")
   public JAXBElement<String> createDhlSaatjaEpost(String value) {
@@ -186,6 +214,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_saaja_epost")
   public JAXBElement<String> createDhlSaajaEpost(String value) {
@@ -195,6 +225,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", name = "dhl_kaust")
   public JAXBElement<String> createDhlKaust(String value) {

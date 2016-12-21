@@ -9,21 +9,23 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ * Repository class for CRUD actions with Document table.
+ * 
+ * @author Aleksei Kokarev
+ *
+ */
 public interface DocumentRepository extends CrudRepository<Document, Long> {
 
-	List<Document> findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(Organisation org,
-			Integer statusId, Folder folder, Pageable pageable);
+  List<Document> findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
+      Boolean outgoingDocument, Organisation org,
+      Integer statusId, Folder folder, Pageable pageable);
 
-	List<Document> findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(Organisation org,
-			Integer statusId, Pageable pageable);
+  List<Document> findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
+      Boolean outgoingDocument, Organisation org,
+      Integer statusId, Pageable pageable);
 
-	List<Document> findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndTransportsRecipientsStructuralUnit(
-			Organisation org, Integer statusId, String structuralUnit, Pageable pageable);
+  List<Document> findByDocumentIdIn(List<Long> ids);
 
-	List<Document> findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolderAndTransportsRecipientsStructuralUnit(
-			Organisation org, Integer statusId, Folder folder, String structuralUnit, Pageable pageable);
-
-	List<Document> findByDocumentIdIn(List<Long> ids);
-
-	Document findByDocumentId(Long id);
+  Document findByDocumentId(Long id);
 }

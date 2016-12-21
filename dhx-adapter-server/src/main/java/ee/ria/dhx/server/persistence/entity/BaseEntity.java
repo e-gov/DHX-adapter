@@ -1,8 +1,5 @@
 package ee.ria.dhx.server.persistence.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,8 +8,13 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
-@Getter
-@Setter
+/**
+ * Genereic entity class that is super class for other entities.
+ * 
+ * @author Aleksei Kokarev
+ *
+ */
+
 @MappedSuperclass
 public class BaseEntity {
 
@@ -31,6 +33,60 @@ public class BaseEntity {
   @PreUpdate
   public void beforeUpdate() {
     dateModified = new Date();
+  }
+
+  /**
+   * Returns the dateCreated.
+   * 
+   * @return the dateCreated
+   */
+  public Date getDateCreated() {
+    return dateCreated;
+  }
+
+  /**
+   * Sets the dateCreated.
+   * 
+   * @param dateCreated the dateCreated to set
+   */
+  public void setDateCreated(Date dateCreated) {
+    this.dateCreated = dateCreated;
+  }
+
+  /**
+   * Returns the dateModified.
+   * 
+   * @return the dateModified
+   */
+  public Date getDateModified() {
+    return dateModified;
+  }
+
+  /**
+   * Sets the dateModified.
+   * 
+   * @param dateModified the dateModified to set
+   */
+  public void setDateModified(Date dateModified) {
+    this.dateModified = dateModified;
+  }
+
+  /**
+   * Returns the version.
+   * 
+   * @return the version
+   */
+  public Integer getVersion() {
+    return version;
+  }
+
+  /**
+   * Sets the version.
+   * 
+   * @param version the version to set
+   */
+  public void setVersion(Integer version) {
+    this.version = version;
   }
 
 }

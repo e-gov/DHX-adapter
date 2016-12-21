@@ -1,11 +1,6 @@
 package ee.ria.dhx.server.service;
 
-import javax.activation.DataHandler;
-import javax.mail.util.ByteArrayDataSource;
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
@@ -22,6 +17,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.activation.DataHandler;
+import javax.mail.util.ByteArrayDataSource;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -31,9 +30,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.xml.transform.StringSource;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.persistence.entity.Document;
@@ -50,9 +47,6 @@ import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.persistence.service.CapsuleService;
 import ee.ria.dhx.server.persistence.service.PersistenceService;
-import ee.ria.dhx.server.service.ConvertationService;
-import ee.ria.dhx.server.service.SoapService;
-import ee.ria.dhx.server.service.util.WsUtil;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Fault;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
@@ -79,7 +73,6 @@ import ee.ria.dhx.types.OutgoingDhxPackage;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.ConversionUtil;
-import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.AsyncDhxPackageService;
@@ -120,7 +113,7 @@ public class SoapServiceTest {
 
 	@Mock
 	PersistenceService persistenceService;
-	
+
 	@Mock
 	SoapConfig config;
 
@@ -278,8 +271,8 @@ public class SoapServiceTest {
 		doc2.getTransports().get(0).addSender(new Sender());
 		doc2.getTransports().get(0).getSenders().get(0).setOrganisation(new Organisation());
 		docs.add(doc2);
-		when(documentRepository.findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
-				Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), any(Pageable.class)))
+		when(documentRepository.findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
+				Mockito.eq(false), Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), any(Pageable.class)))
 						.thenReturn(docs);
 		DecContainer container = new DecContainer();
 		when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
@@ -287,8 +280,8 @@ public class SoapServiceTest {
 		when(convertationService.createDatahandlerFromList(any(List.class))).thenReturn(handler);
 		ReceiveDocumentsResponse resp = soapService.receiveDocuments(request, senderMember, recipientMember);
 		verify(capsuleService, times(2)).getContainerFromDocument(any(Document.class));
-		verify(documentRepository, times(1)).findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
-				Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), any(Pageable.class));
+		verify(documentRepository, times(1)).findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
+				Mockito.eq(false), Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), any(Pageable.class));
 		assertEquals(handler, resp.getKeha().getHref());
 
 	}
@@ -317,8 +310,8 @@ public class SoapServiceTest {
 		docs.add(doc2);
 		Folder folder = new Folder();
 		when(folderRepository.findByName("folder")).thenReturn(folder);
-		when(documentRepository.findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
-				Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), Mockito.eq(folder),
+		when(documentRepository.findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
+				Mockito.eq(false), Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), Mockito.eq(folder),
 				any(Pageable.class))).thenReturn(docs);
 		DecContainer container = new DecContainer();
 		when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
@@ -327,97 +320,10 @@ public class SoapServiceTest {
 		ReceiveDocumentsResponse resp = soapService.receiveDocuments(request, senderMember, recipientMember);
 		verify(capsuleService, times(2)).getContainerFromDocument(any(Document.class));
 		verify(documentRepository, times(1))
-				.findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(Mockito.eq(senderOrg),
+				.findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(Mockito.eq(false), Mockito.eq(senderOrg),
 						Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), Mockito.eq(folder),
 						any(Pageable.class));
 		verify(folderRepository, times(1)).findByName("folder");
-		assertEquals(handler, resp.getKeha().getHref());
-
-	}
-
-	@Test
-	public void receiveDocumentsStructuralUnitAndFolder() throws DhxException {
-		DataHandler handler = Mockito.mock(DataHandler.class);
-		ReceiveDocuments request = new ReceiveDocuments();
-		request.setKeha(new ReceiveDocumentsV4RequestType());
-		request.getKeha().setAllyksuseLyhinimetus("structure");
-		request.getKeha().setKaust("folder");
-		InternalXroadMember senderMember = getMember("sender", null);
-		InternalXroadMember recipientMember = getMember("recipient", null);
-		Organisation senderOrg = new Organisation();
-		when(organisationRepository.findByRegistrationCodeAndSubSystem(senderMember.getMemberCode(),
-				senderMember.getSubsystemCode())).thenReturn(senderOrg);
-		List<Document> docs = new ArrayList<Document>();
-		Document doc = new Document();
-		doc.addTransport(new Transport());
-		doc.getTransports().get(0).addSender(new Sender());
-		doc.getTransports().get(0).getSenders().get(0).setOrganisation(new Organisation());
-		docs.add(doc);
-		Document doc2 = new Document();
-		doc2.addTransport(new Transport());
-		doc2.getTransports().get(0).addSender(new Sender());
-		doc2.getTransports().get(0).getSenders().get(0).setOrganisation(new Organisation());
-		docs.add(doc2);
-		Folder folder = new Folder();
-		when(folderRepository.findByName("folder")).thenReturn(folder);
-		when(documentRepository
-				.findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolderAndTransportsRecipientsStructuralUnit(
-						Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()),
-						Mockito.eq(folder), Mockito.eq("structure"), any(Pageable.class))).thenReturn(docs);
-		DecContainer container = new DecContainer();
-		when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
-		when(capsuleService.getContainerFromDocument(doc2)).thenReturn(container);
-		when(convertationService.createDatahandlerFromList(any(List.class))).thenReturn(handler);
-
-		ReceiveDocumentsResponse resp = soapService.receiveDocuments(request, senderMember, recipientMember);
-		verify(capsuleService, times(2)).getContainerFromDocument(any(Document.class));
-		verify(documentRepository, times(1))
-				.findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolderAndTransportsRecipientsStructuralUnit(
-						Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()),
-						Mockito.eq(folder), Mockito.eq("structure"), any(Pageable.class));
-		verify(folderRepository, times(1)).findByName("folder");
-		assertEquals(handler, resp.getKeha().getHref());
-
-	}
-	
-	@Test
-	public void receiveDocumentsStructuralUnit() throws DhxException {
-		DataHandler handler = Mockito.mock(DataHandler.class);
-		ReceiveDocuments request = new ReceiveDocuments();
-		request.setKeha(new ReceiveDocumentsV4RequestType());
-		request.getKeha().setAllyksuseLyhinimetus("structure");
-		InternalXroadMember senderMember = getMember("sender", null);
-		InternalXroadMember recipientMember = getMember("recipient", null);
-		Organisation senderOrg = new Organisation();
-		when(organisationRepository.findByRegistrationCodeAndSubSystem(senderMember.getMemberCode(),
-				senderMember.getSubsystemCode())).thenReturn(senderOrg);
-		List<Document> docs = new ArrayList<Document>();
-		Document doc = new Document();
-		doc.addTransport(new Transport());
-		doc.getTransports().get(0).addSender(new Sender());
-		doc.getTransports().get(0).getSenders().get(0).setOrganisation(new Organisation());
-		docs.add(doc);
-		Document doc2 = new Document();
-		doc2.addTransport(new Transport());
-		doc2.getTransports().get(0).addSender(new Sender());
-		doc2.getTransports().get(0).getSenders().get(0).setOrganisation(new Organisation());
-		docs.add(doc2);
-		when(documentRepository
-				.findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndTransportsRecipientsStructuralUnit(
-						Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()),
-						Mockito.eq("structure"), any(Pageable.class))).thenReturn(docs);
-		DecContainer container = new DecContainer();
-		when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
-		when(capsuleService.getContainerFromDocument(doc2)).thenReturn(container);
-		when(convertationService.createDatahandlerFromList(any(List.class))).thenReturn(handler);
-
-		ReceiveDocumentsResponse resp = soapService.receiveDocuments(request, senderMember, recipientMember);
-		verify(capsuleService, times(2)).getContainerFromDocument(any(Document.class));
-		verify(documentRepository, times(1))
-				.findDistinctByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndTransportsRecipientsStructuralUnit(
-						Mockito.eq(senderOrg), Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()),
-						Mockito.eq("structure"), any(Pageable.class));
-		verify(folderRepository, times(0)).findByName("folder");
 		assertEquals(handler, resp.getKeha().getHref());
 
 	}
@@ -650,6 +556,7 @@ public class SoapServiceTest {
 		DataHandler handlerMock = Mockito.mock(DataHandler.class);
 		when(documentRepository.findByDocumentIdIn(any(List.class))).thenReturn(docs);
 		when(convertationService.createDatahandlerFromList(any(List.class))).thenReturn(handlerMock);
+		when(persistenceService.toDvkCapsuleAddressee(Mockito.anyString(), Mockito.anyString())).thenReturn("regCode");
 		GetSendStatusResponse resp = soapService.getSendStatus(request, senderMember, recipientMember);
 		ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
 		Mockito.verify(convertationService).createDatahandlerFromList(argument.capture());
@@ -735,42 +642,41 @@ public class SoapServiceTest {
 		assertNull(items.get(0).getStaatuseAjalugu());
 	}
 
-	
 	@Test
 	@Ignore
-	public void getSendingOptions () throws DhxException{
+	public void getSendingOptions() throws DhxException {
 		InternalXroadMember senderMember = getMember("sender", null);
 		InternalXroadMember recipientMember = getMember("recipient", null);
 		List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
 		InternalXroadMember member = getMember("code", null);
 		members.add(member);
-		
+
 		member = getMember("code", null);
 		member.setSubsystemCode("DHX.system");
 		member.setName("memberName");
 		members.add(member);
-		
+
 		member = getMember("code", null);
 		member.setSubsystemCode("DHX.special");
 		members.add(member);
 		member.setName("memberName2");
-		
+
 		DhxRepresentee representee = new DhxRepresentee("reprCode", new Date(), null, "Name", null);
 		member = getMember("code", representee);
 		members.add(member);
-		
-		representee = new DhxRepresentee("reprCode2", new Date(), new Date(new Date().getTime()-1000), "Name2", null);
+
+		representee = new DhxRepresentee("reprCode2", new Date(), new Date(new Date().getTime() - 1000), "Name2", null);
 		member = getMember("code", representee);
 		members.add(member);
-		
+
 		representee = new DhxRepresentee("reprCode3", new Date(), null, "Name3", "system");
 		member = getMember("code", representee);
 		members.add(member);
-		
+
 		representee = new DhxRepresentee("reprCode4", new Date(), null, "Name4", "specialrepr");
 		member = getMember("code", representee);
 		members.add(member);
-		
+
 		when(persistenceService.isSpecialOrganisation("special")).thenReturn(true);
 		when(persistenceService.isSpecialOrganisation("specialrepr")).thenReturn(true);
 		when(addressService.getAdresseeList()).thenReturn(members);
@@ -785,21 +691,21 @@ public class SoapServiceTest {
 		verify(addressService, times(1)).getAdresseeList();
 		assertEquals(handler, resp.getKeha().getHref());
 		assertEquals(6, items.getAsutus().size());
-		
+
 		assertEquals("dhl", items.getAsutus().get(0).getSaatmine().getSaatmisviis().get(0));
-		
+
 		assertEquals("system.code", items.getAsutus().get(1).getRegnr());
 		assertEquals("memberName", items.getAsutus().get(1).getNimi());
-		
+
 		assertEquals("special", items.getAsutus().get(2).getRegnr());
 		assertEquals("memberName2", items.getAsutus().get(2).getNimi());
-		
+
 		assertEquals("reprCode", items.getAsutus().get(3).getRegnr());
 		assertEquals("Name", items.getAsutus().get(3).getNimi());
-		
+
 		assertEquals("system.reprCode3", items.getAsutus().get(4).getRegnr());
 		assertEquals("Name3", items.getAsutus().get(4).getNimi());
-		
+
 		assertEquals("specialrepr", items.getAsutus().get(5).getRegnr());
 		assertEquals("Name4", items.getAsutus().get(5).getNimi());
 	}

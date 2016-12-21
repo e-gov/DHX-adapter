@@ -41,6 +41,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link SignedDocType }
    * 
+   * @return {@link SignedDocType}
    */
   public SignedDocType createSignedDocType() {
     return new SignedDocType();
@@ -49,6 +50,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link DataFileType }
    * 
+   * @return {@link DataFileType}
    */
   public DataFileType createDataFileType() {
     return new DataFileType();
@@ -57,6 +59,8 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SignedDocType }{@code >}
    * 
+   * @param value value
+   * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.sk.ee/DigiDoc/v1.3.0#", name = "SignedDoc")
   public JAXBElement<SignedDocType> createSignedDoc(SignedDocType value) {

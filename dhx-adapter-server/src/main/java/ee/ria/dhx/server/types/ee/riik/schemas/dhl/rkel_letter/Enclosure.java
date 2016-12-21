@@ -67,7 +67,7 @@ public class Enclosure {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link String }
    * 
-   * 
+   * @return List of {@link String}
    */
   public List<String> getEnclosureTitle() {
     if (enclosureTitle == null) {

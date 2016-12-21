@@ -9,21 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import ee.ria.dhx.exception.DhxException;
-import ee.ria.dhx.server.persistence.entity.Folder;
-import ee.ria.dhx.server.persistence.entity.Organisation;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
-import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
-import ee.ria.dhx.server.persistence.service.CapsuleService;
-import ee.ria.dhx.server.persistence.service.PersistenceService;
-import ee.ria.dhx.types.CapsuleAdressee;
-import ee.ria.dhx.types.DhxRepresentee;
-import ee.ria.dhx.types.InternalXroadMember;
-import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
-import ee.ria.dhx.util.CapsuleVersionEnum;
-import ee.ria.dhx.ws.DhxOrganisationFactory;
-import ee.ria.dhx.ws.config.SoapConfig;
-import ee.ria.dhx.ws.service.AddressService;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,13 +18,16 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.activation.DataHandler;
+import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.server.persistence.entity.Folder;
+import ee.ria.dhx.server.persistence.entity.Organisation;
+import ee.ria.dhx.server.persistence.repository.FolderRepository;
+import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
+import ee.ria.dhx.types.DhxRepresentee;
+import ee.ria.dhx.types.InternalXroadMember;
+import ee.ria.dhx.ws.config.SoapConfig;
+import ee.ria.dhx.ws.service.AddressService;
 
 public class PersistenceServiceTest {
 
@@ -52,7 +41,7 @@ public class PersistenceServiceTest {
 	FolderRepository folderRepository;
 
 	PersistenceService persistenceService;
-	
+
 	@Mock
 	SoapConfig config;
 
@@ -145,7 +134,7 @@ public class PersistenceServiceTest {
 				Mockito.notNull(String.class));
 		verify(organisationRepository, times(0)).findBySubSystem(Mockito.anyString());
 	}
-	
+
 	@Test
 	public void findOrgNotActive() throws DhxException {
 		String containerOrganisationId = "system.member1";
@@ -164,7 +153,7 @@ public class PersistenceServiceTest {
 		expectedEx.expectMessage("Found organisation is either inactive or not registered as DHX orghanisation.");
 		persistenceService.findOrg(containerOrganisationId);
 	}
-	
+
 	@Test
 	public void findOrgNotDhxOrg() throws DhxException {
 		String containerOrganisationId = "system.member1";
@@ -225,6 +214,7 @@ public class PersistenceServiceTest {
 		Folder folder = new Folder();
 		when(folderRepository.findByName(folderName)).thenReturn(folder);
 		Folder foundFolder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
+		verify(folderRepository, times(0)).save(any(Folder.class));
 		assertEquals(folder, foundFolder);
 	}
 
@@ -233,7 +223,8 @@ public class PersistenceServiceTest {
 		String folderName = "folder";
 		when(folderRepository.findByName(folderName)).thenReturn(null);
 		Folder foundFolder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
-		assertNull(foundFolder);
+		verify(folderRepository, times(1)).save(any(Folder.class));
+		assertNotNull(foundFolder);
 	}
 
 	@Test
@@ -242,6 +233,7 @@ public class PersistenceServiceTest {
 		Folder folder = new Folder();
 		when(folderRepository.findByName("/")).thenReturn(folder);
 		Folder foundFolder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
+		verify(folderRepository, times(0)).save(any(Folder.class));
 		assertEquals(folder, foundFolder);
 	}
 
@@ -368,9 +360,9 @@ public class PersistenceServiceTest {
 		verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("code", "DHX");
 
 	}
-	
+
 	@Test
-	public void getOrganisationFromInternalXroadMemberAndSave () throws DhxException{
+	public void getOrganisationFromInternalXroadMemberAndSave() throws DhxException {
 		InternalXroadMember member = getMember("code", null);
 		Organisation foundOrg = new Organisation();
 		foundOrg.setOrganisationId(10);
@@ -379,9 +371,9 @@ public class PersistenceServiceTest {
 		verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("code", "DHX");
 		verify(organisationRepository, times(0)).save(any(Organisation.class));
 	}
-	
+
 	@Test
-	public void getOrganisationFromInternalXroadMemberAndSaveFound () throws DhxException{
+	public void getOrganisationFromInternalXroadMemberAndSaveFound() throws DhxException {
 		InternalXroadMember member = getMember("code", null);
 		when(organisationRepository.findByRegistrationCodeAndSubSystem("code", "DHX")).thenReturn(null);
 		persistenceService.getOrganisationFromInternalXroadMemberAndSave(member, true, false);

@@ -34,14 +34,12 @@ public class DhxServerWebServiceConfig {
   public ServletRegistrationBean dhxMessageDispatcherServlet(
       ApplicationContext applicationContext) {
     MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-    // servlet.setApplicationContext(applicationContext);
     AnnotationConfigWebApplicationContext applicationAnnotationContext =
         new AnnotationConfigWebApplicationContext();
     applicationAnnotationContext.setParent(applicationContext);
     applicationAnnotationContext.register(DhxEndpointConfig.class);
     servlet.setApplicationContext(applicationAnnotationContext);
     servlet.setTransformWsdlLocations(true);
-    // servlet.setContextConfigLocation("ee.ria.dhx.ws.beanconfig.DhxEndpointConfig");
     ServletRegistrationBean servletBean = new ServletRegistrationBean(servlet, "/" + "ws" + "/*");
     servletBean.setName("dhx");
     return servletBean;
@@ -57,14 +55,12 @@ public class DhxServerWebServiceConfig {
   public ServletRegistrationBean dhxServerMessageDispatcherServlet(
       ApplicationContext applicationContext) {
     MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-    // servlet.setApplicationContext(applicationContext);
     AnnotationConfigWebApplicationContext applicationAnnotationContext =
         new AnnotationConfigWebApplicationContext();
     applicationAnnotationContext.setParent(applicationContext);
     applicationAnnotationContext.register(DhxServerEndpointConfig.class);
     servlet.setApplicationContext(applicationAnnotationContext);
     servlet.setTransformWsdlLocations(true);
-    // servlet.setContextConfigLocation("ee.ria.dhx.server.endpoint.config.DhxServerEndpointConfig");
     ServletRegistrationBean servletBean =
         new ServletRegistrationBean(servlet, "/" + "wsServer" + "/*");
     servletBean.setName("dhxServer");

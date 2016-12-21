@@ -38,26 +38,15 @@ import org.springframework.ws.soap.SoapMessage;
 import org.springframework.ws.soap.saaj.SaajSoapMessage;
 import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.springframework.xml.transform.StringSource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.AttachmentPart;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -66,6 +55,7 @@ import javax.xml.transform.TransformerFactory;
 @Component
 /**
  * Class for consuming X-road SOAP services sendDocument and representationList
+ * 
  * @author Aleksei Kokarev
  *
  */
@@ -109,8 +99,9 @@ public class DhxGateway extends WebServiceGatewaySupport {
    * @author Aleksei Kokarev
    *
    */
-  private class SoapRequestHeaderModifier implements
-      WebServiceMessageCallback {
+  private class SoapRequestHeaderModifier
+      implements
+        WebServiceMessageCallback {
 
     private InternalXroadMember service;
     private InternalXroadMember client;
@@ -127,7 +118,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
       this.client = client;
     }
 
-   
+
     @SuppressWarnings({"rawtypes"})
     @Override
     public void doWithMessage(WebServiceMessage message)
@@ -153,12 +144,13 @@ public class DhxGateway extends WebServiceGatewaySupport {
             new ee.ria.dhx.types.eu.x_road.xsd.xroad.ObjectFactory();
         transformer.transform(
             marshallObject(factory.createProtocolVersion(soapConfig
-                .getProtocolVersion())), header.getResult());
+                .getProtocolVersion())),
+            header.getResult());
         transformer.transform(marshallObject(factory.createId(UUID
             .randomUUID().toString())), header.getResult());
         transformer.transform(marshallObject(factory
             .createClient(getXRoadClientIdentifierType())), header
-            .getResult());
+                .getResult());
         if (client.getRepresentee() != null) {
           transformer.transform(marshallObject(getRepresented(client
               .getRepresentee())), header.getResult());
@@ -170,7 +162,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
       } catch (DhxException /*
                              * | SOAPException | IOException | SAXException |
                              * ParserConfigurationException
-                             */ex) {
+                             */ ex) {
         throw new RuntimeException(ex);
       }
     }
@@ -369,11 +361,13 @@ public class DhxGateway extends WebServiceGatewaySupport {
               + ex.getWebServiceMessage().getFaultCode()
                   .getLocalPart()
               + "SOAP fault returned from web service: "
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     } catch (Exception ex) {
       throw new DhxException(DhxExceptionEnum.WS_ERROR,
           "Error occured while getting representation list."
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
     return response;
   }
@@ -434,7 +428,8 @@ public class DhxGateway extends WebServiceGatewaySupport {
     } catch (TransformerException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,
           "Error occured while reading info form soap header."
-              + ex.getMessage(), ex);
+              + ex.getMessage(),
+          ex);
     }
   }
 

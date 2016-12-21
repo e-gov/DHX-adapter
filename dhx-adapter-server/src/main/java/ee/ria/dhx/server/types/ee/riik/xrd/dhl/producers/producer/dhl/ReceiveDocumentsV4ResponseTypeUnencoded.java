@@ -35,8 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "receiveDocumentsV4ResponseTypeUnencoded")
 public class ReceiveDocumentsV4ResponseTypeUnencoded
-    extends DocumentsArrayType
-{
+    extends DocumentsArrayType {
 
 
 }

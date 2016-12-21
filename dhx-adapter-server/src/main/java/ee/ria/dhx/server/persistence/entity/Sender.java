@@ -1,8 +1,5 @@
 package ee.ria.dhx.server.persistence.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -14,15 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 /**
  * The persistent class for the saatja database table.
  * 
  */
 @Entity
 @Table(name = "saatja")
-@Getter
-@Setter
 public class Sender extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -49,5 +43,94 @@ public class Sender extends BaseEntity implements Serializable {
 
   public Sender() {}
 
+  /**
+   * Returns the senderId.
+   *
+   * @return the senderId
+   */
+  public Integer getSenderId() {
+    return senderId;
+  }
+
+  /**
+   * Sets the senderId.
+   *
+   * @param senderId the senderId to set
+   */
+  public void setSenderId(Integer senderId) {
+    this.senderId = senderId;
+  }
+
+  /**
+   * Returns the organisation.
+   *
+   * @return the organisation
+   */
+  public Organisation getOrganisation() {
+    return organisation;
+  }
+
+  /**
+   * Sets the organisation.
+   *
+   * @param organisation the organisation to set
+   */
+  public void setOrganisation(Organisation organisation) {
+    this.organisation = organisation;
+  }
+
+  /**
+   * Returns the personalCode.
+   *
+   * @return the personalCode
+   */
+  public String getPersonalCode() {
+    return personalCode;
+  }
+
+  /**
+   * Sets the personalCode.
+   *
+   * @param personalCode the personalCode to set
+   */
+  public void setPersonalCode(String personalCode) {
+    this.personalCode = personalCode;
+  }
+
+  /**
+   * Returns the structuralUnit.
+   *
+   * @return the structuralUnit
+   */
+  public String getStructuralUnit() {
+    return structuralUnit;
+  }
+
+  /**
+   * Sets the structuralUnit.
+   *
+   * @param structuralUnit the structuralUnit to set
+   */
+  public void setStructuralUnit(String structuralUnit) {
+    this.structuralUnit = structuralUnit;
+  }
+
+  /**
+   * Returns the transport.
+   *
+   * @return the transport
+   */
+  public Transport getTransport() {
+    return transport;
+  }
+
+  /**
+   * Sets the transport.
+   *
+   * @param transport the transport to set
+   */
+  public void setTransport(Transport transport) {
+    this.transport = transport;
+  }
 
 }

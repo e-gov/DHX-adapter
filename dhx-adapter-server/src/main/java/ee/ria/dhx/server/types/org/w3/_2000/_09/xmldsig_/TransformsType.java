@@ -67,7 +67,7 @@ public class TransformsType {
    * <p>
    * Objects of the following type(s) are allowed in the list {@link TransformType }
    * 
-   * 
+   * @return list of {@link TransformType}
    */
   public List<TransformType> getTransform() {
     if (transform == null) {

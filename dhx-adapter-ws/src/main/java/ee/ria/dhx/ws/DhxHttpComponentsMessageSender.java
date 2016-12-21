@@ -13,8 +13,7 @@ public class DhxHttpComponentsMessageSender extends HttpComponentsMessageSender 
 
   @Override
   public WebServiceConnection createConnection(URI uri) throws IOException {
-    HttpComponentsConnection connection = (HttpComponentsConnection) super
-        .createConnection(uri);
+    HttpComponentsConnection connection = (HttpComponentsConnection) super.createConnection(uri);
     HttpPost postMethod = connection.getHttpPost();
     postMethod.addHeader(
         HttpTransportConstants.HEADER_CONTENT_TRANSFER_ENCODING,

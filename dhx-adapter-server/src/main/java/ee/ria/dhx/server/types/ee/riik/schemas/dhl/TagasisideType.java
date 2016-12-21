@@ -47,7 +47,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tagasisideType", propOrder = {
 
-    })
+})
 public class TagasisideType {
 
   @XmlElement(name = "dhl_id", namespace = "")
