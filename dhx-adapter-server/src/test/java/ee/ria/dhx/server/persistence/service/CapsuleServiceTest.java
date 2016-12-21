@@ -30,6 +30,7 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
+import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
 import org.junit.Before;
@@ -75,6 +76,9 @@ public class CapsuleServiceTest {
 
   @Rule
   public ExpectedException expectedEx = ExpectedException.none();
+  
+  @Mock
+  DhxConfig config;
 
 
   CapsuleService capsuleService;
@@ -101,6 +105,8 @@ public class CapsuleServiceTest {
     Folder folder = new Folder();
     folder.setName("folder");
     when(persistenceService.getFolderByNameOrDefaultFolder("/")).thenReturn(folder);
+    capsuleService.setConfig(config);
+    when(config.getCapsuleValidate()).thenReturn(true);
 
   }
 
@@ -169,8 +175,11 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
+    StringWriter writer = new StringWriter();
+    writer.write("content");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock organisations
     Organisation clientOrg = new Organisation();
@@ -261,8 +270,11 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
+    StringWriter writer = new StringWriter();
+    writer.write("content");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock organisations
     Organisation clientOrg = new Organisation();
@@ -305,8 +317,11 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
+    StringWriter writer = new StringWriter();
+    writer.write("content");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock organisations
     Organisation clientOrg = new Organisation();
@@ -353,8 +368,11 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
+    StringWriter writer = new StringWriter();
+    writer.write("content");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock organisations
     Organisation clientOrg = new Organisation();
@@ -410,8 +428,11 @@ public class CapsuleServiceTest {
     container.getTransport().getDecRecipient().add(decRecipient);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
+    StringWriter writer = new StringWriter();
+    writer.write("content");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock organisations
     Organisation clientOrg = new Organisation();
@@ -452,8 +473,11 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
+    StringWriter writer = new StringWriter();
+    writer.write("content");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock organisations
     Organisation clientOrg = new Organisation();
@@ -496,13 +520,15 @@ public class CapsuleServiceTest {
     SendDocument sendDocument = getSendDocument(null, null, handler);
     DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
-
     // mock container
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
+    StringWriter writer = new StringWriter();
+    writer.write("content");
+    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
 
     // mock organisations
     Organisation clientOrg = new Organisation();
@@ -523,7 +549,9 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
     adressee = new CapsuleAdressee("400", null, "sunit1");
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
-
+    when(persistenceService.findOrg("400")).thenReturn(clientOrg);
+    
+    
     // method call
     Document document =
         capsuleService.getDocumentFromIncomingContainer(pckg, CapsuleVersionEnum.V21);
@@ -554,12 +582,15 @@ public class CapsuleServiceTest {
     serviceOrg.setRegistrationCode(service.getMemberCode());
     when(persistenceService.findOrg(service.getMemberCode())).thenReturn(serviceOrg);
     
-    
     DecContainer container = getDecContainer(client, service);
 
     StringWriter writer = new StringWriter();
     writer.write("container string");
     when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
+    List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
+    CapsuleAdressee adressee = new CapsuleAdressee("400", null, null);
+    when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+    when(persistenceService.findOrg("400")).thenReturn(clientOrg);
     
     // mock folder
     Folder folder = new Folder();
@@ -650,7 +681,7 @@ public class CapsuleServiceTest {
     
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
 
     // mock capsule recipient and sender
@@ -660,6 +691,7 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
     adressee = new CapsuleAdressee("400", null, null);
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+    when(persistenceService.findOrg("400")).thenReturn(clientOrg);
 
     // method call
     Document document =
@@ -702,7 +734,7 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
 
     StringWriter writer = new StringWriter();
@@ -716,6 +748,7 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
     adressee = new CapsuleAdressee("400", null, null);
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+    when(persistenceService.findOrg("400")).thenReturn(clientOrg);
 
     // method call
     Document document =
@@ -774,8 +807,10 @@ public class CapsuleServiceTest {
     CapsuleAdressee adressee = new CapsuleAdressee("500", null, null);
     addressees.add(adressee);
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
-    adressee = new CapsuleAdressee("400", null, null);
+    adressee = new CapsuleAdressee("410", null, null);
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+    when(persistenceService.findOrg("410")).thenReturn(clientRepresenteeOrg);
+    
     StringWriter writer = new StringWriter();
     writer.write("container string");
     when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container), any(InputStream.class))).thenReturn(writer);
@@ -831,7 +866,7 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
     
     StringWriter writer = new StringWriter();
@@ -847,6 +882,7 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
     adressee = new CapsuleAdressee("400", null, null);
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
+    when(persistenceService.findOrg("400")).thenReturn(clientOrg);
 
     // method call
     Document document =
@@ -891,7 +927,7 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall(any(InputStream.class))).thenReturn(
         container);
 
     StringWriter writer = new StringWriter();
@@ -905,6 +941,7 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
     CapsuleAdressee sender = new CapsuleAdressee("400", "pcode2", null);
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(sender);
+    when(persistenceService.findOrg("400")).thenReturn(clientOrg);
 
     // method call
     Document document =
@@ -947,7 +984,7 @@ public class CapsuleServiceTest {
     DecContainer container = getDecContainer(client, service);
     when(
         dhxMarshallerService
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class))).thenReturn(
+            .unmarshall( any(InputStream.class))).thenReturn(
         container);
 
     StringWriter writer = new StringWriter();
@@ -961,6 +998,7 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(container)).thenReturn(addressees);
     CapsuleAdressee sender = new CapsuleAdressee("400", null, "sunit2");
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(sender);
+    when(persistenceService.findOrg("400")).thenReturn(clientOrg);
 
     // method call
     Document document =
@@ -982,7 +1020,7 @@ public class CapsuleServiceTest {
     File file = new ClassPathResource("kapsel_21.xml").getFile();
     String containerStr = WsUtil.readInput(new FileInputStream(file));
     Document doc = new Document();
-    doc.setDocumentId(12);
+    doc.setDocumentId(12L);
     doc.setContent(containerStr);
     DecContainer containerReturn = new DecContainer();
     when(dhxMarshallerService.unmarshallAndValidate(any(InputStream.class),

@@ -34,7 +34,7 @@ public class Document extends BaseEntity implements Serializable {
   @Id
   @Column(name = "dokument_id")
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Integer documentId;
+  private Long documentId;
 
   private String guid;
 

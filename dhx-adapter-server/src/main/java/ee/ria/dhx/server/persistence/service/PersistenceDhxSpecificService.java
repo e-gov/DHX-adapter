@@ -3,6 +3,7 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Organisation;
@@ -33,6 +34,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -197,6 +199,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
 
 
   @Override
+  @Loggable
   public void saveSendResult(DhxSendDocumentResult finalResult,
       List<AsyncDhxSendDocumentResult> retryResults) {
     log.info("saveSendResult invoked.");

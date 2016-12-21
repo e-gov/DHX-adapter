@@ -82,6 +82,8 @@ public class PersistenceServiceTest {
 		String containerOrganisationId = "member1";
 		Organisation org = new Organisation();
 		org.setRegistrationCode("member1");
+		org.setIsActive(true);
+		org.setDhxOrganisation(true);
 		when(organisationRepository.findByRegistrationCodeAndSubSystem(containerOrganisationId, null)).thenReturn(org);
 		persistenceService.findOrg(containerOrganisationId);
 		verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem(containerOrganisationId, null);
@@ -103,6 +105,8 @@ public class PersistenceServiceTest {
 
 		Organisation org = new Organisation();
 		org.setRegistrationCode("member1");
+		org.setIsActive(true);
+		org.setDhxOrganisation(true);
 		when(organisationRepository.findByRegistrationCodeAndSubSystem("member1", "system")).thenReturn(org);
 		persistenceService.findOrg(containerOrganisationId);
 		verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem(containerOrganisationId, null);
@@ -116,6 +120,8 @@ public class PersistenceServiceTest {
 		String containerOrganisationId = "adit";
 		Organisation org = new Organisation();
 		org.setRegistrationCode("adit");
+		org.setIsActive(true);
+		org.setDhxOrganisation(true);
 		when(organisationRepository.findBySubSystem("adit")).thenReturn(org);
 		persistenceService.findOrg(containerOrganisationId);
 		verify(organisationRepository, times(1)).findBySubSystem("adit");
@@ -138,6 +144,44 @@ public class PersistenceServiceTest {
 		verify(organisationRepository, times(0)).findByRegistrationCodeAndSubSystem(Mockito.anyString(),
 				Mockito.notNull(String.class));
 		verify(organisationRepository, times(0)).findBySubSystem(Mockito.anyString());
+	}
+	
+	@Test
+	public void findOrgNotActive() throws DhxException {
+		String containerOrganisationId = "system.member1";
+		when(organisationRepository.findByRegistrationCodeAndSubSystem(containerOrganisationId, null)).thenReturn(null);
+
+		InternalXroadMember member = getMember("member1", null);
+		member.setSubsystemCode("system");
+		when(addressService.getClientForMemberCode("member1", "system")).thenReturn(member);
+
+		Organisation org = new Organisation();
+		org.setRegistrationCode("member1");
+		org.setIsActive(false);
+		org.setDhxOrganisation(true);
+		when(organisationRepository.findByRegistrationCodeAndSubSystem("member1", "system")).thenReturn(org);
+		expectedEx.expect(DhxException.class);
+		expectedEx.expectMessage("Found organisation is either inactive or not registered as DHX orghanisation.");
+		persistenceService.findOrg(containerOrganisationId);
+	}
+	
+	@Test
+	public void findOrgNotDhxOrg() throws DhxException {
+		String containerOrganisationId = "system.member1";
+		when(organisationRepository.findByRegistrationCodeAndSubSystem(containerOrganisationId, null)).thenReturn(null);
+
+		InternalXroadMember member = getMember("member1", null);
+		member.setSubsystemCode("system");
+		when(addressService.getClientForMemberCode("member1", "system")).thenReturn(member);
+
+		Organisation org = new Organisation();
+		org.setRegistrationCode("member1");
+		org.setIsActive(true);
+		org.setDhxOrganisation(false);
+		when(organisationRepository.findByRegistrationCodeAndSubSystem("member1", "system")).thenReturn(org);
+		expectedEx.expect(DhxException.class);
+		expectedEx.expectMessage("Found organisation is either inactive or not registered as DHX orghanisation.");
+		persistenceService.findOrg(containerOrganisationId);
 	}
 
 	@Test

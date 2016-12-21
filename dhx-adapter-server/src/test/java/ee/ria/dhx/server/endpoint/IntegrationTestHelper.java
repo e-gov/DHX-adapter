@@ -53,7 +53,7 @@ public class IntegrationTestHelper {
 	public static XRoadClientIdentifierType getClient(String memberCode) {
 		XRoadClientIdentifierType client = new XRoadClientIdentifierType();
 		client.setMemberClass("GOV");
-		client.setMemberCode("memberCode");
+		client.setMemberCode(memberCode);
 		client.setSubsystemCode("DHX");
 		client.setXRoadInstance("ee-dev");
 
@@ -63,7 +63,7 @@ public class IntegrationTestHelper {
 	public static XRoadServiceIdentifierType getService(String memberCode, String serviceVersion) {
 		XRoadServiceIdentifierType service = new XRoadServiceIdentifierType();
 		service.setMemberClass("GOV");
-		service.setMemberCode("memberCode");
+		service.setMemberCode(memberCode);
 		service.setSubsystemCode("DHX");
 		service.setXRoadInstance("ee-dev");
 		service.setServiceVersion(serviceVersion);

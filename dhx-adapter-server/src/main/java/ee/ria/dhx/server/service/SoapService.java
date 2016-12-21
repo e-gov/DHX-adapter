@@ -2,6 +2,7 @@ package ee.ria.dhx.server.service;
 
 import com.jcabi.aspects.Loggable;
 
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.persistence.entity.Document;
@@ -9,6 +10,7 @@ import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.StatusHistory;
+import ee.ria.dhx.server.persistence.enumeration.RecipientStatusEnum;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
 import ee.ria.dhx.server.persistence.repository.FolderRepository;
@@ -128,7 +130,7 @@ public class SoapService {
 	@Autowired
 	@Setter
 	PersistenceService persistenceService;
-	
+
 	@Autowired
 	@Setter
 	SoapConfig soapConfig;
@@ -158,8 +160,8 @@ public class SoapService {
 		response.setKeha(fact.createBase64BinaryType());
 		SendDocumentsV4ResponseTypeUnencoded.Keha attachmentObj = fact.createSendDocumentsV4ResponseTypeUnencodedKeha();
 		for (Object container : containers) {
-			Document document = capsuleService.getDocumentFromOutgoingContainer(sender, recipient,
-					container, documents.getKeha().getKaust(), version);
+			Document document = capsuleService.getDocumentFromOutgoingContainer(sender, recipient, container,
+					documents.getKeha().getKaust(), version);
 			documentRepository.save(document);
 			attachmentObj.getDhlId().add(document.getDocumentId().toString());
 
@@ -182,6 +184,9 @@ public class SoapService {
 			try {
 				Document document = recipient.getTransport().getDokument();
 				Object container = capsuleService.getContainerFromDocument(document);
+				capsuleService.formatCapsuleRecipientAndSender(container,
+						recipient.getTransport().getSenders().get(0).getOrganisation(), recipient.getOrganisation(),
+						true);
 				File containerFile = dhxMarshallerService.marshall(container);
 				if (recipient.getTransport().getSenders() == null || recipient.getTransport().getSenders().size() > 1) {
 					throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
@@ -198,6 +203,7 @@ public class SoapService {
 				Organisation recipientOrg = recipient.getOrganisation();
 				InternalXroadMember recipientMember = addressService
 						.getClientForMemberCode(recipientOrg.getRegistrationCode(), recipientOrg.getSubSystem());
+				log.debug("Found recipient member: " + recipientMember.toString());
 				OutgoingDhxPackage dhxPackage = null;
 				// if sender org is null, then try sending with sender from
 				// config
@@ -215,6 +221,9 @@ public class SoapService {
 				log.error("Error occured while sending document! " + ex.getMessage(), ex);
 				Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
 				recipient.setStatusId(failedStatusId);
+				recipient.setFaultString(ex.getMessage());
+				recipient.setFaultCode(ex.getExceptionCode().toString());
+				recipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
 			} finally {
 				recipientRepository.save(recipient);
 			}
@@ -239,9 +248,9 @@ public class SoapService {
 			InternalXroadMember recipient) throws DhxException {
 		Pageable pageable = null;
 		if (request.getKeha().getArv() != null) {
-			pageable = new PageRequest(1, request.getKeha().getArv().intValue());
+			pageable = new PageRequest(0, request.getKeha().getArv().intValue());
 		} else {
-			pageable = new PageRequest(1, 10);
+			pageable = new PageRequest(0, 10);
 		}
 		Organisation senderOrg = organisationRepository.findByRegistrationCodeAndSubSystem(sender.getMemberCode(),
 				sender.getSubsystemCode());
@@ -253,6 +262,7 @@ public class SoapService {
 		List<Document> docs = null;
 		if (folder == null && request.getKeha().getKaust() == null) {
 			if (request.getKeha().getAllyksuseLyhinimetus() == null) {
+				log.debug("searching by recipients organisation and status " + senderOrg.getOrganisationId());
 				docs = documentRepository.findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
 						senderOrg, inprocessStatusId, pageable);
 			} else {
@@ -262,9 +272,10 @@ public class SoapService {
 			}
 		} else {
 			if (request.getKeha().getAllyksuseLyhinimetus() == null) {
+				log.debug("searching by recipients organisation, folder and status");
 				docs = documentRepository
-						.findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(senderOrg,
-								inprocessStatusId, folder, pageable);
+						.findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
+								senderOrg, inprocessStatusId, folder, pageable);
 			} else {
 				docs = documentRepository
 						.findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolderAndTransportsRecipientsStructuralUnit(
@@ -273,12 +284,17 @@ public class SoapService {
 
 			}
 		}
+		if(docs != null) {
+			log.debug("found docs: " + docs.size());
+		}
 		ObjectFactory fact = new ObjectFactory();
 		ReceiveDocumentsResponse resp = fact.createReceiveDocumentsResponse();
 		Base64BinaryType att = fact.createBase64BinaryType();
 		List<Object> containers = new ArrayList<Object>();
 		for (Document doc : docs) {
 			Object container = capsuleService.getContainerFromDocument(doc);
+			capsuleService.formatCapsuleRecipientAndSender(container,
+					doc.getTransports().get(0).getSenders().get(0).getOrganisation(), senderOrg, false);
 			containers.add(container);
 		}
 		DataHandler handler = convertationService.createDatahandlerFromList(containers);
@@ -322,7 +338,7 @@ public class SoapService {
 		Boolean allSent = true;
 		Boolean found = false;
 		for (TagasisideType status : request.getDokumendid()) {
-			Document doc = documentRepository.findByDocumentId(status.getDhlId().intValue());
+			Document doc = documentRepository.findOne(status.getDhlId().longValue());
 			if (doc == null) {
 				throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Document is not found.");
 			}
@@ -398,12 +414,12 @@ public class SoapService {
 		try {
 			org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
 					WsUtil.base64decodeAndUnzip(request.getKeha().getDokumendid().getHref().getInputStream()));
-			List<Integer> dhlIds = new ArrayList<Integer>();
+			List<Long> dhlIds = new ArrayList<Long>();
 			NodeList list = xmlDoc.getElementsByTagName("dhl_id");
 			for (int i = 0; i < list.getLength(); i++) {
 				Node node = list.item(i);
 				log.debug("dhl id " + node.getTextContent());
-				dhlIds.add(Integer.valueOf(node.getTextContent()));
+				dhlIds.add(Long.valueOf(node.getTextContent()));
 			}
 			// TODO: check is sender org is the same as the documetns org
 			if (dhlIds.size() == 0) {
@@ -436,7 +452,7 @@ public class SoapService {
 					}
 					edastus.setStaatus(StatusEnum.forClassificatorId(recipient.getStatusId()).getClassificatorName());
 					AadressType adr = new AadressType();
-					adr.setRegnr(recipient.getOrganisation().getRegistrationCode());
+					adr.setRegnr(persistenceService.toDvkCapsuleAddressee(recipient.getOrganisation().getRegistrationCode(), recipient.getOrganisation().getSubSystem()));
 					adr.setIsikukood(recipient.getPersonalcode());
 					// adr.setAllyksuseKood(recipient.getStructuralUnit());
 					adr.setAsutuseNimi(recipient.getOrganisation().getName());
@@ -536,24 +552,8 @@ public class SoapService {
 		for (InternalXroadMember org : addressService.getAdresseeList()) {
 			InstitutionType institution = new InstitutionType();
 			if (org.getRepresentee() == null) {
-				if (org.getSubsystemCode() != null && org.getSubsystemCode().lastIndexOf(".") > 0) {
-					Integer index = org.getSubsystemCode().lastIndexOf(".");
-					String system = org.getSubsystemCode().substring(index + 1);
-					String perfix = org.getSubsystemCode().substring(0, index);
-					log.debug("found system with prefix:" + perfix + " and subsystem: " + system);
-					if (persistenceService.isSpecialOrganisation(system)) {
-						institution.setRegnr(system);
-					} else {
-						institution.setRegnr(system + "." + org.getMemberCode());
-					}
-
-				}else if(org.getSubsystemCode() != null && !org.getSubsystemCode().equals(soapConfig.getDhxSubsystemPrefix())) {
-					institution.setRegnr(org.getSubsystemCode() + "." + org.getMemberCode());
-				}
-				else {
-
-					institution.setRegnr(org.getMemberCode());
-				}
+				institution.setRegnr(
+						persistenceService.toDvkCapsuleAddressee(org.getMemberCode(), org.getSubsystemCode()));
 				institution.setNimi(org.getName());
 
 			} else {
@@ -564,16 +564,8 @@ public class SoapService {
 								&& org.getRepresentee().getEndDate().getTime() < curDate.getTime())) {
 					continue;
 				}
-				if (!StringUtil.isNullOrEmpty(org.getRepresentee().getRepresenteeSystem())) {
-					if (persistenceService.isSpecialOrganisation(org.getRepresentee().getRepresenteeSystem())) {
-						institution.setRegnr(org.getRepresentee().getRepresenteeSystem());
-					} else {
-						institution.setRegnr(org.getRepresentee().getRepresenteeSystem() + "."
-								+ org.getRepresentee().getRepresenteeCode());
-					}
-				} else {
-					institution.setRegnr(org.getRepresentee().getRepresenteeCode());
-				}
+				institution.setRegnr(persistenceService.toDvkCapsuleAddressee(org.getRepresentee().getRepresenteeCode(),
+						org.getRepresentee().getRepresenteeSystem()));
 				institution.setNimi(org.getRepresentee().getRepresenteeName());
 			}
 			SendingOptionArrayType sendingOptions = new SendingOptionArrayType();

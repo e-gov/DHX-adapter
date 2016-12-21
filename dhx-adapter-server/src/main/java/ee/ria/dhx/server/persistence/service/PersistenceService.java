@@ -8,7 +8,11 @@ import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
+import ee.ria.dhx.types.CapsuleAdressee;
+import ee.ria.dhx.types.DhxOrganisation;
 import ee.ria.dhx.types.InternalXroadMember;
+import ee.ria.dhx.util.StringUtil;
+import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.AddressService;
 
@@ -18,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -33,6 +38,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+// @Transactional
 public class PersistenceService {
 
 	@Autowired
@@ -58,11 +64,15 @@ public class PersistenceService {
 	private final String DEFAULT_FOLDERNAME = "/";
 
 	/**
-	 * Finds persisted organisation using organisation code from capsule.
+	 * Finds persisted organisation using organisation code from capsule. Only
+	 * active DHX organisations will be returned, otherwise {@link DhxException}
+	 * will be thrown
 	 * 
 	 * @param containerOrganisationId
 	 * @return
 	 * @throws DhxException
+	 *             - if orgnisation is not found or organisation is inactive or
+	 *             not DHX organisation
 	 */
 	@Loggable
 	public Organisation findOrg(String containerOrganisationId) throws DhxException {
@@ -72,12 +82,17 @@ public class PersistenceService {
 		if (isSpecialOrganisation(containerOrganisationId)) {
 			log.debug("Special organisation. Searching organisaiton by subsystem: " + containerOrganisationId);
 			org = organisationRepository.findBySubSystem(containerOrganisationId);
+			// if not found, then try using prefix
+			if (org == null) {
+				org = organisationRepository
+						.findBySubSystem(config.getDhxSubsystemPrefix() + "." + containerOrganisationId);
+			}
 		} else {
-			//find organisation
+			// find organisation
 			org = organisationRepository.findByRegistrationCodeAndSubSystem(containerOrganisationId,
 					config.getDhxSubsystemPrefix());
-			if(org == null) {
-				//find representee
+			if (org == null) {
+				// find representee
 				org = organisationRepository.findByRegistrationCodeAndSubSystem(containerOrganisationId, null);
 			}
 			// if member not found, then try to find by registration code and
@@ -96,8 +111,9 @@ public class PersistenceService {
 							"Unable to find member in addressregistry by regsitration code: "
 									+ containerOrganisationId);
 				}
-				org = organisationRepository.findByRegistrationCodeAndSubSystem(member.getMemberCode(),
-						member.getSubsystemCode());
+				DhxOrganisation dhxOrganisation = DhxOrganisationFactory.createDhxOrganisation(member);
+				org = organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrganisation.getCode(),
+						dhxOrganisation.getSystem());
 			}
 
 		}
@@ -105,12 +121,19 @@ public class PersistenceService {
 			throw new DhxException(DhxExceptionEnum.DATA_ERROR,
 					"Unable to find organisation using organisation code: " + containerOrganisationId);
 		}
+		if (org.getIsActive() == null || !org.getIsActive() || org.getDhxOrganisation() == null
+				|| !org.getDhxOrganisation()) {
+			throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+					"Found organisation is either inactive or not registered as DHX orghanisation. Organisation registration code:"
+							+ org.getRegistrationCode());
+		}
 		return org;
 	}
 
 	/**
 	 * Finds folder according to folderName, or by default folder name if
-	 * folderName in input is NULL.
+	 * folderName in input is NULL. If Folder is not found in database, new
+	 * folder will be created.
 	 * 
 	 * @param folderName
 	 *            - name of the folder to find
@@ -122,6 +145,11 @@ public class PersistenceService {
 			folderName = DEFAULT_FOLDERNAME;
 		}
 		Folder folder = folderRepository.findByName(folderName);
+		if (folder == null) {
+			folder = new Folder();
+			folder.setName(folderName);
+			folderRepository.save(folder);
+		}
 		return folder;
 	}
 
@@ -230,7 +258,7 @@ public class PersistenceService {
 	public String getSpecialOrganisations() {
 		return specialOrganisations;
 	}
- 
+
 	private Boolean isRepresenteeValid(Organisation org) throws DhxException {
 		Long curDate = new Date().getTime();
 		if (org.getRepresenteeStart() == null) {
@@ -244,19 +272,69 @@ public class PersistenceService {
 			return false;
 		}
 	}
-	
+
 	public Boolean isRepresenteeValid(InternalXroadMember member) throws DhxException {
 		Long curDate = new Date().getTime();
 		if (member.getRepresentee() == null || member.getRepresentee().getStartDate() == null) {
 			throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
 					"Something went wrong! Start date of representee is empty or organisation is not representee!");
 		}
-		if (member.getRepresentee().getStartDate().getTime() <= curDate
-				&& (member.getRepresentee().getEndDate() == null || member.getRepresentee().getEndDate().getTime() >= curDate)) {
+		if (member.getRepresentee().getStartDate().getTime() <= curDate && (member.getRepresentee().getEndDate() == null
+				|| member.getRepresentee().getEndDate().getTime() >= curDate)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
+
+	/**
+	 * Sometimes DHX addressee and DVK addresse might be different. In DHX there
+	 * must be always registration code, in DVK there might be system also.
+	 * 
+	 * @param dhxCapsuleAddressee
+	 *            capsule addressee that came from DHX system
+	 * @return capsule addressee accordinbg to DVK
+	 */
+	@Loggable
+	public String toDvkCapsuleAddressee(String memberCode, String subsystem) {
+		String dvkCode = null;
+		if (!StringUtil.isNullOrEmpty(subsystem) && subsystem.startsWith(config.getDhxSubsystemPrefix() + ".")) {
+			String system = subsystem.substring(config.getDhxSubsystemPrefix().length() + 1);
+			// String perfix = subsystem.substring(0, index);
+			log.debug("found system with subsystem: " + system);
+			if (isSpecialOrganisation(system)) {
+				dvkCode = system;
+			} else {
+				dvkCode = system + "." + memberCode;
+			}
+
+		} else if (!StringUtil.isNullOrEmpty(subsystem) && !subsystem.equals(config.getDhxSubsystemPrefix())) {
+			if (isSpecialOrganisation(subsystem)) {
+				dvkCode = subsystem;
+			} else {
+				dvkCode = subsystem + "." + memberCode;
+			}
+		} else {
+
+			dvkCode = memberCode;
+		}
+		return dvkCode;
+	}
+
+	/*
+	 * public Boolean checkCapsuleAddressee(CapsuleAdressee capsuleOrganisation,
+	 * Organisation xroadOrganisation){
+	 * if(isSpecialOrganisation(capsuleOrganisation.getAdresseeCode()) &&
+	 * capsuleOrganisation.getAdresseeCode().equals(xroadOrganisation.
+	 * getSubSystem())) { return true; }
+	 * if(capsuleOrganisation.getAdresseeCode().equals(xroadOrganisation.
+	 * getRegistrationCode())){ return true;
+	 * 
+	 * } if((xroadOrganisation.getSubSystem() + "." +
+	 * xroadOrganisation.getRegistrationCode()).equals(capsuleOrganisation.
+	 * getAdresseeCode())) { return true; }
+	 * if(xroadOrganisation.getSubSystem().startsWith(config.
+	 * getDhxSubsystemPrefix() + ".")) { String subsystem = } }
+	 */
 
 }

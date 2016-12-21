@@ -23,7 +23,7 @@ public interface DocumentRepository extends CrudRepository<Document, Long> {
 	List<Document> findByTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolderAndTransportsRecipientsStructuralUnit(
 			Organisation org, Integer statusId, Folder folder, String structuralUnit, Pageable pageable);
 
-	List<Document> findByDocumentIdIn(List<Integer> ids);
+	List<Document> findByDocumentIdIn(List<Long> ids);
 
-	Document findByDocumentId(Integer id);
+	Document findByDocumentId(Long id);
 }
