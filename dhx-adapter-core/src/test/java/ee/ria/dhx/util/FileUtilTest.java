@@ -70,6 +70,7 @@ public class FileUtilTest {
     File testFile = testFolder.newFile("trying");
     File resultFile = FileUtil.getFile(testFile.getAbsolutePath());
     assertTrue(resultFile.exists());
+    testFile.delete();
   }
 
   @Test
@@ -85,6 +86,7 @@ public class FileUtilTest {
     File testFile = testFolder.newFile("trying");
     InputStream resultStream = FileUtil.getFileAsStream(testFile.getAbsolutePath());
     assertNotNull(resultStream);
+    testFile.delete();
   }
 
   @Test(expected = DhxException.class)
@@ -98,6 +100,7 @@ public class FileUtilTest {
     File testFile = testFolder.newFile("trying");
     InputStream resultStream = FileUtil.getFileAsStream(testFile.getAbsolutePath());
     assertNotNull(resultStream);
+    testFile.delete();
   }
 
   @Test(expected = DhxException.class)
@@ -134,6 +137,7 @@ public class FileUtilTest {
     int length = stream.read(bytes, 0, 10000);
     assertEquals(unzippedString.length(), length);
     String theString = new String(bytes, "UTF-8");
+    zipFile.delete();
     // that somehow does not work, though string are the same
     // assertEquals(unzippedString, theString);
   }

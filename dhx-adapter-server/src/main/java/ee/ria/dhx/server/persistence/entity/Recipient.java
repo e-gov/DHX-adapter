@@ -110,10 +110,6 @@ public class Recipient extends BaseEntity implements Serializable {
     insertHistory();
   }
 
-  @PreUpdate
-  public void beforeUpdate() {
-    insertHistory();
-  }
 
   private void insertHistory() {
     StatusHistory history = new StatusHistory();

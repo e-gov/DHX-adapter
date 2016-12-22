@@ -176,7 +176,8 @@ public class CapsuleService {
               dhxRecipientOrg.getSystem());
       if (recipientOrg == null) {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
-            "Unable to find recipients organisation. code:" + dhxRecipientOrg.getCode() + " system:" + dhxRecipientOrg.getSystem());
+            "Unable to find recipients organisation. code:" + dhxRecipientOrg.getCode()
+                + " system:" + dhxRecipientOrg.getSystem());
       }
       recipient.setOrganisation(recipientOrg);
       for (CapsuleAdressee containerRecipient : capsuleConfig
@@ -226,7 +227,7 @@ public class CapsuleService {
         } catch (Exception ex) {
           log.info(
               "Got error while unmarshalling capsule. Maybe there are many capsules in reqeust. "
-              + "continue." + ex.getMessage(),
+                  + "continue." + ex.getMessage(),
               ex);
         }
         // if single contianer faile,d try multiple containers.
@@ -240,8 +241,9 @@ public class CapsuleService {
           FileUtil.writeToFile("</docs></DocWrapper>", fos);
           DocumentsArrayType docs = dhxMarshallerService.unmarshall(tempFile);
           List<DecContainer> containers = docs.getDecContainer();
-          if(containers == null || containers.size() == 0) {
-            throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "No container found in request.");
+          if (containers == null || containers.size() == 0) {
+            throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+                "No container found in request.");
           }
           List<Object> objects = new ArrayList<Object>();
           objects.addAll(containers);
@@ -311,10 +313,12 @@ public class CapsuleService {
     sender.setOrganisation(senderOrg);
     sender.setTransport(transport);
     CapsuleAdressee capsuleSender = capsuleConfig.getSenderFromContainer(container);
-    Organisation capsuleSenderOrg = persistenceService.findOrg(capsuleSender.getAdresseeCode());
-    if (!capsuleSenderOrg.equals(senderOrg)) {
-      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-          "Request sender and capsule sender do not match! ");
+    if (config.getCheckSender()) {
+      Organisation capsuleSenderOrg = persistenceService.findOrg(capsuleSender.getAdresseeCode());
+      if (!capsuleSenderOrg.equals(senderOrg)) {
+        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+            "Request sender and capsule sender do not match! ");
+      }
     }
     sender.setPersonalCode(capsuleSender.getPersonalCode());
     sender.setStructuralUnit(capsuleSender.getStructuralUnit());

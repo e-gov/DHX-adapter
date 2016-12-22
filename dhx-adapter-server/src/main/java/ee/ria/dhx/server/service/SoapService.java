@@ -365,6 +365,7 @@ public class SoapService {
           if (status.getVastuvotjaStaatusId() != null) {
             recipient.setRecipientStatusId(status.getVastuvotjaStaatusId().intValue());
           }
+          persistenceService.addStatusHistory(recipient);
           recipientRepository.save(recipient);
         }
         if (recipient.getStatusId() != null
@@ -513,7 +514,9 @@ public class SoapService {
               status.setStaatuseAjaluguId(
                   BigInteger.valueOf(recipientHistory.getStatusHistoryId()));
               StatusHistoryType.Status.Saaja saaja = new StatusHistoryType.Status.Saaja();
-              saaja.setRegnr(recipient.getOrganisation().getRegistrationCode());
+              saaja.setRegnr(persistenceService.toDvkCapsuleAddressee(
+                  recipient.getOrganisation().getRegistrationCode(),
+                  recipient.getOrganisation().getSubSystem()));
               saaja.setIsikukood(recipient.getPersonalcode());
               saaja.setAllyksuseLyhinimetus(recipient.getStructuralUnit());
               status.setSaaja(saaja);

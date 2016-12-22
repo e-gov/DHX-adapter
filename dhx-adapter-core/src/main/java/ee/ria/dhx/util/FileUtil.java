@@ -1,5 +1,7 @@
 package ee.ria.dhx.util;
 
+import com.jcabi.aspects.Loggable;
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 
@@ -47,6 +49,7 @@ public class FileUtil {
 	 *             - thrown if error occurs while creating file
 	 * 
 	 */
+	@Loggable
 	public static File createPipelineFile() throws IOException {
 		String tmpDir = System.getProperty("java.io.tmpdir", "");
 
@@ -383,9 +386,7 @@ public class FileUtil {
 	 */
 	public static DataHandler getDatahandlerFromStream(InputStream stream) throws DhxException {
 		File file = createFileAndWrite(stream);
-		FileDataSource datasource = new FileDataSource(file);
-		DataHandler handler = new DataHandler(datasource);
-		return handler;
+		return getDatahandlerFromFile(file);
 	}
 
 }

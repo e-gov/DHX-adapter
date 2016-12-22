@@ -99,7 +99,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     // by container definition and DHX protocol we know that those arrays
     // are all not null and only
     // have 1 object in it
-    return doc.getTransports().get(0).getRecipients().get(0).getRecipientId().toString();
+    return doc.getDocumentId().toString();
   }
 
 
@@ -242,6 +242,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
         recipient.getTransport().setStatusId(successStatusId);
         documentRepository.save(recipient.getTransport().getDokument());
       }
+      persistenceService.addStatusHistory(recipient);
       recipientRepository.save(recipient);
     } catch (Exception ex) {
       log.error("Error occured while saving send results. " + ex.getMessage(), ex);

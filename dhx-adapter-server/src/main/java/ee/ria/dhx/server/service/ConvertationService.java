@@ -60,8 +60,8 @@ public class ConvertationService {
       zippedStream.finish();
       base64Stream.flush();
       fos.flush();
-      DataSource datasource = new FileDataSource(file);
-      return new DataHandler(datasource);
+      fos.close();
+      return FileUtil.getDatahandlerFromFile(file);
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,
           "Error occured while creating attachment for response. " + ex.getMessage(), ex);
@@ -97,8 +97,8 @@ public class ConvertationService {
       zippedStream.finish();
       base64Stream.flush();
       fos.flush();
-      DataSource datasource = new FileDataSource(file);
-      return new DataHandler(datasource);
+      fos.close();
+      return FileUtil.getDatahandlerFromFile(file);
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,
           "Error occured while creating attachment for response. " + ex.getMessage(), ex);

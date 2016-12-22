@@ -2,10 +2,13 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
+import ee.ria.dhx.server.persistence.entity.Recipient;
+import ee.ria.dhx.server.persistence.entity.StatusHistory;
 import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.types.DhxOrganisation;
@@ -336,6 +339,20 @@ public class PersistenceService {
       dvkCode = memberCode;
     }
     return dvkCode;
+  }
+  
+  public void addStatusHistory (Recipient recipient) {
+    StatusHistory history = new StatusHistory();
+    history.setRecipientStatusId(recipient.getRecipientStatusId());
+    history.setRecipient(recipient);
+    history.setStatusChangeDate(recipient.getStatusChangeDate());
+    history.setMetaxml(recipient.getMetaxml());
+    history.setStatusId(recipient.getStatusId());
+    history.setFaultString(recipient.getFaultString());
+    history.setFaultDetail(recipient.getFaultDetail());
+    history.setFaultCode(recipient.getFaultCode());
+    history.setFaultActor(recipient.getFaultActor());
+    recipient.addStatusHistory(history);
   }
 
 
