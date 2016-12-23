@@ -68,9 +68,8 @@ public class CapsuleService {
   @Setter
   CapsuleConfig capsuleConfig;
 
-  @Value("${dhx.server.treat-cantainer-as-string}")
   @Setter
-  Boolean treatContainerAsString;
+  Boolean treatContainerAsString = true;
 
   @Autowired
   @Setter

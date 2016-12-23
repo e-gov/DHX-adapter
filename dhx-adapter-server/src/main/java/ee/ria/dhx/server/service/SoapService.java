@@ -55,6 +55,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,7 @@ import java.io.StringWriter;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -133,6 +135,15 @@ public class SoapService {
   @Autowired
   @Setter
   SoapConfig soapConfig;
+  
+
+  @Value("${dhx.server.received-document-lifetime}")
+  @Setter
+  Integer receivedDocumentLifetime;
+
+  @Value("${dhx.server.failed-document-lifetime}")
+  @Setter
+  Integer failedDocumentLifetime;
 
   /**
    * Method processes sendDocuments request and saves the document into the database for further
@@ -328,6 +339,7 @@ public class SoapService {
           "Senders organisation not found. organisation:" + senderMember.toString());
     }
     Boolean allSent = true;
+    Boolean allFailed = true;
     Boolean found = false;
     for (TagasisideType status : request.getDokumendid()) {
       Document doc = documentRepository.findOne(status.getDhlId().longValue());
@@ -372,6 +384,12 @@ public class SoapService {
             && !recipient.getStatusId().equals(StatusEnum.RECEIVED.getClassificatorId())) {
           allSent = false;
         }
+        
+        if (recipient.getStatusId() != null
+            && !recipient.getStatusId().equals(StatusEnum.FAILED.getClassificatorId())) {
+          allFailed = false;
+        }
+        
       }
       if (!found) {
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
@@ -382,6 +400,11 @@ public class SoapService {
       if (allSent && !doc.getTransports().get(0).getStatusId()
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
         doc.getTransports().get(0).setStatusId(successStatusId);
+        documentRepository.save(doc);
+      }
+      if (allFailed && !doc.getTransports().get(0).getStatusId()
+          .equals(StatusEnum.FAILED.getClassificatorId())) {
+        doc.getTransports().get(0).setStatusId(failedStatusId);
         documentRepository.save(doc);
       }
     }
@@ -582,6 +605,51 @@ public class SoapService {
     DataHandler handler = convertationService.createDatahandlerFromObject(institutions);
     response.getKeha().setHref(handler);
     return response;
+  }
+  
+  /**
+   * Method deletes documents or content of the documents older than configured lifetime of the
+   * received and failed documents. In sending process documents are not deleted.
+   * 
+   * @param deleteWholeDocument delete whole document from database or only content.
+   */
+  @Loggable
+  public void deleteOldDocuments(Boolean deleteWholeDocument) {
+    Calendar receivedDocumentDate = Calendar.getInstance();
+    receivedDocumentDate.add(Calendar.DAY_OF_YEAR, -receivedDocumentLifetime);
+    
+    Calendar failedDocumentDate = Calendar.getInstance();
+    failedDocumentDate.add(Calendar.DAY_OF_YEAR, -failedDocumentLifetime);
+    log.debug("receivedDocumentDate: " + receivedDocumentDate.getTime());
+    List<Document> documents =
+        documentRepository.findByDateCreatedLessThanAndTransportsStatusId(
+          receivedDocumentDate.getTime(), StatusEnum.RECEIVED.getClassificatorId());
+    if(documents.size()>0) {
+      log.debug("Found received documents to delete: " + documents.size());
+    }
+    if (deleteWholeDocument) {
+      documentRepository.delete(documents);
+    } else {
+      for (Document doc : documents) {
+        doc.setContent(null);
+      }
+      documentRepository.save(documents);
+    }
+
+    documents = documentRepository.findByDateCreatedLessThanAndTransportsStatusId(
+      failedDocumentDate.getTime(), StatusEnum.FAILED.getClassificatorId());
+    if(documents.size()>0) {
+      log.debug("Found failed documents to delete: " + documents.size());
+    }
+    if (deleteWholeDocument) {
+      documentRepository.delete(documents);
+    } else {
+      for (Document doc : documents) {
+        doc.setContent(null);
+      }
+      documentRepository.save(documents);
+    }
+
   }
 
 }

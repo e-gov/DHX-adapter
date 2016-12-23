@@ -2,13 +2,15 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
-
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
+import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.StatusHistory;
+import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
+import ee.ria.dhx.server.persistence.repository.DocumentRepository;
 import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.types.DhxOrganisation;
@@ -26,7 +28,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Class to perform actions on persistence objects, e.g. create persistence object from DHX specific
@@ -60,6 +64,10 @@ public class PersistenceService {
   @Autowired
   @Setter
   FolderRepository folderRepository;
+
+  @Autowired
+  @Setter
+  DocumentRepository documentRepository;
 
   private static final String DEFAULT_FOLDERNAME = "/";
 
@@ -125,7 +133,7 @@ public class PersistenceService {
         || !org.getDhxOrganisation()) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Found organisation is either inactive or not registered as DHX orghanisation. "
-          + "Organisation registration code:"
+              + "Organisation registration code:"
               + org.getRegistrationCode());
     }
     return org;
@@ -156,6 +164,7 @@ public class PersistenceService {
   /**
    * Method finds or creates new Organisation object according to data from InternalXroadMember. If
    * object was not found in database, if new object is created then it will be saved to database.
+   * 
    * @param member {@link InternalXroadMember} to find Organisation for
    * @param representorOnly whether to search only representor
    * @param dhxOrganisation whether to search only dhxOrganisations
@@ -172,7 +181,7 @@ public class PersistenceService {
     }
     return org;
   }
-  
+
   /**
    * Method finds or creates new Organisation object according to data from InternalXroadMember. If
    * object was not found in database, new object is created but not saved to database.
@@ -275,6 +284,7 @@ public class PersistenceService {
 
   /**
    * Returns the specialOrganisations.
+   * 
    * @return the specialOrganisations
    */
   public String getSpecialOrganisations() {
@@ -294,7 +304,7 @@ public class PersistenceService {
     if (member.getRepresentee() == null || member.getRepresentee().getStartDate() == null) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Something went wrong! Start date of representee is empty "
-          + "or organisation is not representee!");
+              + "or organisation is not representee!");
     }
     if (member.getRepresentee().getStartDate().getTime() <= curDate
         && (member.getRepresentee().getEndDate() == null
@@ -340,8 +350,8 @@ public class PersistenceService {
     }
     return dvkCode;
   }
-  
-  public void addStatusHistory (Recipient recipient) {
+
+  public void addStatusHistory(Recipient recipient) {
     StatusHistory history = new StatusHistory();
     history.setRecipientStatusId(recipient.getRecipientStatusId());
     history.setRecipient(recipient);

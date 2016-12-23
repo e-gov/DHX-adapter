@@ -60,7 +60,12 @@ public class ConvertationService {
       zippedStream.finish();
       base64Stream.flush();
       fos.flush();
+      base64Stream.close();
+      base64Stream = null;
+      zippedStream.close();
+      zippedStream= null;
       fos.close();
+      fos = null;
       return FileUtil.getDatahandlerFromFile(file);
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,

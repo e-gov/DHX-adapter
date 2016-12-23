@@ -398,7 +398,7 @@ public class SoapServiceTest {
 		when(documentRepository.findOne(10L)).thenReturn(doc);
 		soapService.markDocumentReceived(request, senderMember, recipientMember);
 		verify(recipientRepository, times(1)).save(recipient);
-		assertEquals(StatusEnum.IN_PROCESS.getClassificatorId(), doc.getTransports().get(0).getStatusId());
+		assertEquals(StatusEnum.FAILED.getClassificatorId(), doc.getTransports().get(0).getStatusId());
 		assertEquals(StatusEnum.FAILED.getClassificatorId(), recipient.getStatusId());
 		assertNotNull(recipient.getStatusChangeDate());
 		assertEquals(new Integer(2), recipient.getRecipientStatusId());

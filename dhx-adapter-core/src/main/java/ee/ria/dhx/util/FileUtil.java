@@ -51,7 +51,10 @@ public class FileUtil {
 	 */
 	@Loggable
 	public static File createPipelineFile() throws IOException {
-		String tmpDir = System.getProperty("java.io.tmpdir", "");
+	  
+	    File file = File.createTempFile("dhx_", "");
+	    file.deleteOnExit();
+		/*String tmpDir = System.getProperty("java.io.tmpdir", "");
 
 		String result = tmpDir + File.separator + "dhx_" + String.valueOf((new Date()).getTime());
 		int uniqueCounter = 0;
@@ -61,7 +64,7 @@ public class FileUtil {
 					+ String.valueOf(uniqueCounter);
 		}
 		File file = new File(result);
-		file.createNewFile();
+		file.createNewFile();*/
 		return file;
 	}
 

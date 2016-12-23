@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,11 +54,16 @@ import ee.ria.dhx.server.RepoFactory4Test;
 import ee.ria.dhx.server.TestApp;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Organisation;
+import ee.ria.dhx.server.persistence.entity.Recipient;
+import ee.ria.dhx.server.persistence.entity.Sender;
+import ee.ria.dhx.server.persistence.entity.StatusHistory;
+import ee.ria.dhx.server.persistence.entity.Transport;
 import ee.ria.dhx.server.persistence.enumeration.RecipientStatusEnum;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
 import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
+import ee.ria.dhx.server.persistence.service.PersistenceService;
 import ee.ria.dhx.server.service.ConvertationService;
 import ee.ria.dhx.server.service.SoapService;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.Edastus;
@@ -137,6 +143,9 @@ public class ServerIT {
 
   @Autowired
   DhxMarshallerService dhxMarshallerService;
+  
+  @Autowired
+  PersistenceService persistenceService;
 
   @Before
   public void init() throws DhxException, IOException {
@@ -1441,6 +1450,42 @@ public class ServerIT {
     assertEquals(0, items.size());
 
     file.delete();
+  }
+  
+  @Test
+  public void deleteOldDocuments () {
+    
+    //Date controlDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DAY_OF_YEAR, -31);
+    
+    Document document = new Document();
+    document.setContent("Content");
+    document.addTransport(new Transport());
+    document.getTransports().get(0).addSender(new Sender());
+    document.getTransports().get(0).addRecipient(new Recipient());
+    document.getTransports().get(0).setStatusId(StatusEnum.IN_PROCESS.getClassificatorId());
+    document.getTransports().get(0).getRecipients().get(0).addStatusHistory(new StatusHistory());
+    documentRepository.save(document);
+    Long docId = document.getDocumentId();
+    
+    soapService.deleteOldDocuments(true);
+    
+    Document foundDoc = documentRepository.findOne(docId);
+    assertNotNull(foundDoc);
+    
+    document.setDateCreated(calendar.getTime());
+    document.getTransports().get(0).setStatusId(StatusEnum.RECEIVED.getClassificatorId());
+    documentRepository.save(document);
+    
+    soapService.deleteOldDocuments(false);
+    foundDoc = documentRepository.findOne(docId);
+    assertNull(foundDoc.getContent());
+    
+    soapService.deleteOldDocuments(true);
+    foundDoc = documentRepository.findOne(docId);
+    assertNull(foundDoc);
+    
   }
 
 }

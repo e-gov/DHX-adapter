@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 	<artifactId>dhx-adapter-core</artifactId>
 	<name>dhx-adapter-core</name>
