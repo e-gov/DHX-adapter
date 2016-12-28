@@ -135,7 +135,7 @@ public class SoapService {
   @Autowired
   @Setter
   SoapConfig soapConfig;
-  
+
 
   @Value("${dhx.server.received-document-lifetime}")
   @Setter
@@ -144,6 +144,11 @@ public class SoapService {
   @Value("${dhx.server.failed-document-lifetime}")
   @Setter
   Integer failedDocumentLifetime;
+
+  
+  @Value("${dhx.resend.timeout}")
+  @Setter
+  Integer resendTimeout;
 
   /**
    * Method processes sendDocuments request and saves the document into the database for further
@@ -188,9 +193,18 @@ public class SoapService {
   @Loggable
   public void sendDocumentsToDhx() {
     Integer statusId = StatusEnum.IN_PROCESS.getClassificatorId();
+    // not sent documents
     List<Recipient> recipients = recipientRepository
         .findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNull(
             statusId, true);
+    Date date = new Date();
+    date.setTime(date.getTime() - resendTimeout*1000*60);
+    log.debug("date: " + date);
+    // documents that tried to send, but maybe server were stopped and status stays the same
+    List<Recipient> recipientsSent = recipientRepository
+        .findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
+            statusId, true, date);
+    recipients.addAll(recipientsSent);
     for (Recipient recipient : recipients) {
       try {
         Document document = recipient.getTransport().getDokument();
@@ -384,12 +398,12 @@ public class SoapService {
             && !recipient.getStatusId().equals(StatusEnum.RECEIVED.getClassificatorId())) {
           allSent = false;
         }
-        
+
         if (recipient.getStatusId() != null
             && !recipient.getStatusId().equals(StatusEnum.FAILED.getClassificatorId())) {
           allFailed = false;
         }
-        
+
       }
       if (!found) {
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
@@ -606,7 +620,7 @@ public class SoapService {
     response.getKeha().setHref(handler);
     return response;
   }
-  
+
   /**
    * Method deletes documents or content of the documents older than configured lifetime of the
    * received and failed documents. In sending process documents are not deleted.
@@ -617,14 +631,14 @@ public class SoapService {
   public void deleteOldDocuments(Boolean deleteWholeDocument) {
     Calendar receivedDocumentDate = Calendar.getInstance();
     receivedDocumentDate.add(Calendar.DAY_OF_YEAR, -receivedDocumentLifetime);
-    
+
     Calendar failedDocumentDate = Calendar.getInstance();
     failedDocumentDate.add(Calendar.DAY_OF_YEAR, -failedDocumentLifetime);
     log.debug("receivedDocumentDate: " + receivedDocumentDate.getTime());
     List<Document> documents =
         documentRepository.findByDateCreatedLessThanAndTransportsStatusId(
-          receivedDocumentDate.getTime(), StatusEnum.RECEIVED.getClassificatorId());
-    if(documents.size()>0) {
+            receivedDocumentDate.getTime(), StatusEnum.RECEIVED.getClassificatorId());
+    if (documents.size() > 0) {
       log.debug("Found received documents to delete: " + documents.size());
     }
     if (deleteWholeDocument) {
@@ -637,8 +651,8 @@ public class SoapService {
     }
 
     documents = documentRepository.findByDateCreatedLessThanAndTransportsStatusId(
-      failedDocumentDate.getTime(), StatusEnum.FAILED.getClassificatorId());
-    if(documents.size()>0) {
+        failedDocumentDate.getTime(), StatusEnum.FAILED.getClassificatorId());
+    if (documents.size() > 0) {
       log.debug("Found failed documents to delete: " + documents.size());
     }
     if (deleteWholeDocument) {

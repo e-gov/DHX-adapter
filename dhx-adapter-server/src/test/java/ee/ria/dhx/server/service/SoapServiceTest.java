@@ -142,6 +142,7 @@ public class SoapServiceTest {
 		soapService.setPersistenceService(persistenceService);
 		soapService.setRecipientRepository(recipientRepository);
 		soapService.setSoapConfig(config);
+		soapService.setResendTimeout(30);
 		when(config.getDhxSubsystemPrefix()).thenReturn("DXH");
 	}
 

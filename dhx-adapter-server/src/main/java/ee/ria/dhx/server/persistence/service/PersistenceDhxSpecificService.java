@@ -18,6 +18,7 @@ import ee.ria.dhx.types.DhxSendDocumentResult;
 import ee.ria.dhx.types.IncomingDhxPackage;
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
+import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 
@@ -33,8 +34,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 @Service
 @Slf4j
+@Transactional
 public class PersistenceDhxSpecificService implements DhxImplementationSpecificService {
 
   private List<InternalXroadMember> members;
@@ -168,16 +172,34 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     Boolean found = false;
     List<Organisation> changedOrgs = new ArrayList<Organisation>();
     for (Organisation org : allOrgs) {
-      found = false;
-      for (InternalXroadMember member : members) {
-        if (member.getMemberCode().equals(org.getRegistrationCode())
-            && (member.getSubsystemCode() == null && org.getSubSystem() == null)
-            || member.getSubsystemCode().equals(org.getSubSystem())) {
-          found = true;
-          break;
+      // we need to check only active organisations
+      if (org.getIsActive()) {
+        found = false;
+        for (InternalXroadMember member : members) {
+          if (member.getRepresentee() == null) {
+            if (member.getMemberCode().equals(org.getRegistrationCode())
+                && (member.getSubsystemCode() == null && org.getSubSystem() == null)
+                || member.getSubsystemCode().equals(org.getSubSystem())) {
+              found = true;
+              break;
+            }
+          } else {
+            if (member.getRepresentee().getRepresenteeCode().equals(org.getRegistrationCode())
+                && (member.getRepresentee().getRepresenteeSystem() == null
+                    && org.getSubSystem() == null)
+                || (member.getRepresentee().getRepresenteeSystem() != null
+                    && org.getSubSystem() != null && member.getRepresentee()
+                        .getRepresenteeSystem().equals(org.getSubSystem()))) {
+              found = true;
+              break;
+            }
+          }
         }
+      } else {
+        found = true;
       }
       if (!found) {
+        log.debug("organisation is not found in renewed address list, deactivating it: " + org.getOrganisationId());
         org.setIsActive(false);
         changedOrgs.add(org);
       }
@@ -224,7 +246,12 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
           }
         }
         faultString = docResponse.getFault().getFaultString() + faultString;
-        recipient.setFaultCode(docResponse.getFault().getFaultCode());
+        if (!StringUtil.isNullOrEmpty(docResponse.getFault().getFaultCode())) {
+          recipient.setFaultCode(docResponse.getFault().getFaultCode().substring(0,
+              docResponse.getFault().getFaultCode().length() > 250
+                  ? 250
+                  : docResponse.getFault().getFaultCode().length()));
+        }
         recipient.setFaultString(docResponse.getFault().getFaultString());
         recipient.setFaultDetail(
             faultString.substring(0,

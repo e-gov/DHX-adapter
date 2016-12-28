@@ -58,12 +58,13 @@ public class ConvertationService {
       zippedStream = WsUtil.getGZipCompressStream(base64Stream);
       dhxMarshallerService.marshallToOutputStreamNoNamespacePrefixes(obj, zippedStream);
       zippedStream.finish();
-      base64Stream.flush();
-      fos.flush();
-      base64Stream.close();
-      base64Stream = null;
+      zippedStream.flush();
       zippedStream.close();
       zippedStream= null;
+      base64Stream.flush();
+      base64Stream.close();
+      base64Stream = null;
+      fos.flush();
       fos.close();
       fos = null;
       return FileUtil.getDatahandlerFromFile(file);
@@ -100,9 +101,15 @@ public class ConvertationService {
         dhxMarshallerService.marshallToOutputStreamNoNamespacePrefixes(obj, zippedStream);
       }
       zippedStream.finish();
+      zippedStream.flush();
+      zippedStream.close();
+      zippedStream= null;
       base64Stream.flush();
+      base64Stream.close();
+      base64Stream = null;
       fos.flush();
       fos.close();
+      fos = null;
       return FileUtil.getDatahandlerFromFile(file);
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,

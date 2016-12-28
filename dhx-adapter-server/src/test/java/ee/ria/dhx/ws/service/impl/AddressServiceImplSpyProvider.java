@@ -17,21 +17,25 @@ import lombok.extern.slf4j.Slf4j;
 public class AddressServiceImplSpyProvider {
 
 	public static AddressService getAddressServiceSpy(AddressService addressService) throws IOException, DhxException {
-		AddressService adressServiceSpy = Mockito.spy(addressService);
-		AddressServiceImpl addressServiceImpl = (AddressServiceImpl) adressServiceSpy;
-		Mockito.doAnswer(new Answer() {
-			public Object answer(InvocationOnMock invocation) {
-				try {
-					InputStream stream = new FileInputStream(new ClassPathResource("shared-params.xml").getFile());
-					return stream;
-				} catch (IOException ex) {
-					log.error(ex.getMessage(), ex);
-				}
-				return null;
-			}
-		}).when(addressServiceImpl).getGlobalConfStream();
-		// Mockito.doReturn(stream)
-		return adressServiceSpy;
+      AddressService adressServiceSpy = Mockito.spy(addressService);
+		return getAddressServiceSpy(adressServiceSpy, "shared-params.xml");
 	}
+	
+	public static AddressService getAddressServiceSpy(AddressService addressService, final String shredParamFilename) throws IOException, DhxException {
+      AddressServiceImpl addressServiceImpl = (AddressServiceImpl) addressService;
+      Mockito.doAnswer(new Answer() {
+          public Object answer(InvocationOnMock invocation) {
+              try {
+                  InputStream stream = new FileInputStream(new ClassPathResource(shredParamFilename).getFile());
+                  return stream;
+              } catch (IOException ex) {
+                  log.error(ex.getMessage(), ex);
+              }
+              return null;
+          }
+      }).when(addressServiceImpl).getGlobalConfStream();
+      // Mockito.doReturn(stream)
+      return addressService;
+  }
 
 }

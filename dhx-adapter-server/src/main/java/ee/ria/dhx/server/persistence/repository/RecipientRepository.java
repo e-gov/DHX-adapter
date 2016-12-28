@@ -6,6 +6,7 @@ import ee.ria.dhx.server.persistence.entity.Recipient;
 
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +21,9 @@ public interface RecipientRepository extends CrudRepository<Recipient, Long> {
 
   public List<Recipient> findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNull(
       Integer statusId, Boolean outgoing);
+
+  public List<Recipient> findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
+      Integer statusId, Boolean outgoing, Date dateCreated);
 
   public List<Recipient> findByTransport_SendersOrganisationAndDhxExternalConsignmentId(
       Organisation org, String dhxExternalConsignmentId);

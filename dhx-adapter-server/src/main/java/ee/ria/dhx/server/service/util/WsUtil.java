@@ -46,6 +46,11 @@ public class WsUtil {
       GZIPInputStream gzis = new GZIPInputStream(stream);
       return gzis;
     } catch (IOException ex) {
+      //if we got not base64, then throw specific error about it
+      if(ex.getMessage().indexOf("Illegal base64")>=0) {
+        throw new DhxException(DhxExceptionEnum.EXTRACTION_ERROR,
+          "Not a base64 stream! " + ex.getMessage(), ex);
+      }
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured whle unzipping file. " + ex.getMessage(), ex);
     }
@@ -102,13 +107,7 @@ public class WsUtil {
    */
   public static InputStream base64decodeAndUnzip(InputStream stream) throws DhxException {
     InputStream decoded = stream;
-    try {
-      decoded = base64Decode(decoded);
-    } catch (DhxException ex) {
-      log.info(
-          "Error occured while creating base64 decoded stream, maybe input is not base64 encoded, "
-          + "continue. " + ex.getMessage());
-    }
+    decoded = base64Decode(decoded);
     return gzipDecompress(decoded);
   }
 

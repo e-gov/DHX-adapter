@@ -1,5 +1,8 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,14 +21,17 @@ import javax.persistence.Version;
 @MappedSuperclass
 public class BaseEntity {
 
+  @CreatedDate
   Date dateCreated;
+  
+  @LastModifiedDate
   Date dateModified;
 
   @Version
   @Column(name = "VERSION")
   private Integer version;
 
-  @PrePersist
+ /* @PrePersist
   public void beforeInsert() {
     dateCreated = new Date();
   }
@@ -33,7 +39,7 @@ public class BaseEntity {
   @PreUpdate
   public void beforeUpdate() {
     dateModified = new Date();
-  }
+  }*/
 
   /**
    * Returns the dateCreated.

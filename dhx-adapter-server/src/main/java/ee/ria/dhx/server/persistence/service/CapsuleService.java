@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -216,10 +217,22 @@ public class CapsuleService {
       case V21:
         File tempFile = null;
         FileOutputStream fos = null;
-        // first try single contianer.
+        InputStream attachmentStream = null;
+        // first try single contianer, because parsing multiple containers is more hack and does not
+        // support for example container with XML declaration etc.
         try {
-          DecContainer container = dhxMarshallerService
-              .unmarshall(WsUtil.base64decodeAndUnzip(handler.getInputStream()));
+          try {
+            attachmentStream = WsUtil.base64decodeAndUnzip(handler.getInputStream());
+          } catch (DhxException ex) {
+            // if input is not base64, then try to just unzip it. it might be if
+            // Content-transfer-encoding is set to base64, then base64 is decoded automatically
+            if (ex.getExceptionCode().equals(DhxExceptionEnum.EXTRACTION_ERROR)) {
+              attachmentStream = WsUtil.gzipDecompress(handler.getInputStream());
+            } else {
+              throw ex;
+            }
+          }
+          DecContainer container = dhxMarshallerService.unmarshall(attachmentStream);
           ArrayList<Object> containers = new ArrayList<Object>();
           containers.add(container);
           return containers;
@@ -228,16 +241,35 @@ public class CapsuleService {
               "Got error while unmarshalling capsule. Maybe there are many capsules in reqeust. "
                   + "continue." + ex.getMessage(),
               ex);
+        } finally {
+          FileUtil.safeCloseStream(attachmentStream);
         }
-        // if single contianer faile,d try multiple containers.
+
+        // if single contianer failed try to parse multiple containers.
         try {
           // first create wrapper so then we can unmarshall
           tempFile = FileUtil.createPipelineFile();
           fos = new FileOutputStream(tempFile);
+          try {
+            attachmentStream = WsUtil.base64decodeAndUnzip(handler.getInputStream());
+          } catch (DhxException ex) {
+            // if input is not base64, then try to just unzip it. it might be if
+            // Content-transfer-encoding is set to base64, then base64 is decoded automatically
+            if (ex.getExceptionCode().equals(DhxExceptionEnum.EXTRACTION_ERROR)) {
+              attachmentStream = WsUtil.gzipDecompress(handler.getInputStream());
+            } else {
+              throw ex;
+            }
+          }
           FileUtil.writeToFile(
-              "<DocWrapper xmlns=\"http://producers.dhl.xrd.riik.ee/producer/dhl\"><docs>", fos);
-          FileUtil.writeToFile(handler.getInputStream(), fos);
-          FileUtil.writeToFile("</docs></DocWrapper>", fos);
+              "<DocWrapper xmlns=\"http://producers.dhl.xrd.riik.ee/producer/dhl\">", fos);
+          FileUtil.writeToFile(attachmentStream, fos);
+          FileUtil.writeToFile("</DocWrapper>", fos);
+          fos.flush();
+          FileUtil.safeCloseStream(fos);
+          FileUtil.safeCloseStream(attachmentStream);
+          fos = null;
+          attachmentStream = null;
           DocumentsArrayType docs = dhxMarshallerService.unmarshall(tempFile);
           List<DecContainer> containers = docs.getDecContainer();
           if (containers == null || containers.size() == 0) {
@@ -249,8 +281,9 @@ public class CapsuleService {
           return objects;
         } catch (IOException ex) {
           throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-              "Error occured while parsing attachment.");
+              "Error occured while parsing attachment." + ex.getMessage(), ex);
         } finally {
+          FileUtil.safeCloseStream(attachmentStream);
           if (tempFile != null) {
             FileUtil.safeCloseStream(fos);
             tempFile.delete();

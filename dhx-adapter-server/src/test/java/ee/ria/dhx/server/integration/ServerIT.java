@@ -94,6 +94,7 @@ import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.util.ConversionUtil;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
+import ee.ria.dhx.ws.service.impl.AddressServiceImplSpyProvider;
 
 // import org.springframework.test.context.junit4.SpringRunner;
 
@@ -143,12 +144,13 @@ public class ServerIT {
 
   @Autowired
   DhxMarshallerService dhxMarshallerService;
-  
+
   @Autowired
   PersistenceService persistenceService;
 
   @Before
   public void init() throws DhxException, IOException {
+    AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params.xml");
     mockClient = MockWebServiceClient.createClient(applicationContext);
     mockServer = MockWebServiceServer.createServer(applicationContext);
     List<InternalXroadMember> members = createMemberList();
@@ -189,12 +191,15 @@ public class ServerIT {
         new InternalXroadMember("ee-dev", "GOV", "400", "DHX", "Name1", null);
     members.add(member);
   }
-
   private SendDocuments getSendDocumentsRequest(DecContainer... containers) throws DhxException {
+    return getSendDocumentsRequest(true, containers);
+  }
+
+  private SendDocuments getSendDocumentsRequest(Boolean encodeBase64, DecContainer... containers) throws DhxException {
     SendDocuments request = new SendDocuments();
     request.setKeha(new SendDocumentsV4RequestType());
     request.getKeha().setDokumendid(new Base64BinaryType());
-    request.getKeha().getDokumendid().setHref(getSendDocumentsAttachment(containers));
+    request.getKeha().getDokumendid().setHref(getSendDocumentsAttachment(encodeBase64, containers));
     return request;
   }
 
@@ -238,12 +243,12 @@ public class ServerIT {
     return container;
   }
 
-  private DataHandler getSendDocumentsAttachment(DecContainer... containers) throws DhxException {
+  private DataHandler getSendDocumentsAttachment(Boolean encodeBase64, DecContainer... containers) throws DhxException {
     DocumentsArrayType docs = new DocumentsArrayType();
     for (DecContainer cont : containers) {
       docs.getDecContainer().add(cont);
     }
-    return IntegrationTestHelper.createDatahandlerFromList(docs.getDecContainer());
+    return IntegrationTestHelper.createDatahandlerFromList(docs.getDecContainer(), encodeBase64);
 
   }
 
@@ -398,6 +403,84 @@ public class ServerIT {
   }
   
   
+  
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Test
+  public void sendDocumentsNormalNoBase64() throws DhxException {
+    DecContainer cont = getContainer("30000001", "70000004");
+    SendDocuments request = getSendDocumentsRequest(false, cont);
+    // reset because we just did a request into that service.
+    Mockito.reset(convertationService);
+    Mockito.doReturn(request).when(marshaller).unmarshal(any(Source.class),
+        any(MimeContainer.class));
+
+    XRoadClientIdentifierType client = IntegrationTestHelper.getClient("30000001");
+    XRoadServiceIdentifierType service = IntegrationTestHelper.getService("40000001", "v4");
+
+    // send Document
+    Source envelope =
+        IntegrationTestHelper.getEnvelope(client, service, null, new SendDocuments());
+    mockClient.sendRequest(RequestCreators.withSoapEnvelope(envelope))
+        .andExpect(ResponseMatchers.xpath("//ns4:sendDocumentsResponse[1]", getDhlNamespaceMap())
+            .exists());
+    ArgumentCaptor<SendDocumentsV4ResponseTypeUnencoded.Keha> argument = ArgumentCaptor
+        .forClass(SendDocumentsV4ResponseTypeUnencoded.Keha.class);
+    Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
+    SendDocumentsV4ResponseTypeUnencoded.Keha keha = argument.getValue();
+    assertEquals(1, keha.getDhlId().size());
+    Long docId = Long.parseLong(keha.getDhlId().get(0));
+    Document doc = documentRepository.findOne(docId);
+    assertEquals(true, doc.getOutgoingDocument());
+    assertEquals("/", doc.getFolder().getName());
+    assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
+
+    assertEquals(1, doc.getTransports().size());
+    assertEquals(1, doc.getTransports().get(0).getSenders().size());
+    assertEquals(1, doc.getTransports().get(0).getRecipients().size());
+    assertEquals(client.getMemberCode(),
+        doc.getTransports().get(0).getSenders().get(0).getOrganisation().getRegistrationCode());
+    assertEquals("70000004",
+        doc.getTransports().get(0).getRecipients().get(0).getOrganisation()
+            .getRegistrationCode());
+
+    
+    // send document to DHX
+    Mockito.reset(convertationService);
+    Mockito.doCallRealMethod().when(marshaller).unmarshal(any(Source.class),
+        any(MimeContainer.class));
+    SendDocumentResponse sendDocumentResponse = new SendDocumentResponse();
+    sendDocumentResponse.setReceiptId("receiptId1");
+    Source sendDocumentResponseEnvelope = IntegrationTestHelper.getEnvelope(client, service, null,
+        sendDocumentResponse);
+    MockWebServiceServer mockServerSendDOcument =
+        MockWebServiceServer.createServer(applicationContext);
+    mockServerSendDOcument
+        .expect(RequestMatchers
+            .xpath("//ns9:sendDocument[1]/ns9:consignmentId[1]", getDhxNamespaceMap())
+            .evaluatesTo(
+                doc.getTransports().get(0).getRecipients().get(0).getRecipientId().toString()))
+        .andExpect(
+            RequestMatchers.xpath("//ns9:sendDocument[1]/ns9:DHXVersion[1]", getDhxNamespaceMap())
+                .evaluatesTo("1.0"))
+        .andExpect(RequestMatchers
+            .xpath("//ns9:sendDocument[1]/ns9:documentAttachment[1]", getDhxNamespaceMap())
+            .exists())
+        .andExpect(
+            RequestMatchers.xpath("//ns9:sendDocument[1]/ns9:recipient[1]", getDhxNamespaceMap())
+                .doesNotExist())
+        .andExpect(RequestMatchers
+            .xpath("//ns9:sendDocument[1]/ns9:recipientSystem[1]", getDhxNamespaceMap())
+            .doesNotExist())
+        .andRespond(ResponseCreators.withSoapEnvelope(sendDocumentResponseEnvelope));
+    soapService.sendDocumentsToDhx();
+    mockServerSendDOcument.verify();
+    doc = documentRepository.findOne(docId);
+    assertEquals("receiptId1",
+        doc.getTransports().get(0).getRecipients().get(0).getDhxExternalReceiptId());
+
+  }
+
+
   /**
    * Tests whole flow. Starts with sendDocuments service, then document is sent to DHX and send
    * status is checked.
@@ -428,9 +511,14 @@ public class ServerIT {
         .forClass(SendDocumentsV4ResponseTypeUnencoded.Keha.class);
     Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
     SendDocumentsV4ResponseTypeUnencoded.Keha keha = argument.getValue();
-    assertEquals(1, keha.getDhlId().size());
+    assertEquals(2, keha.getDhlId().size());
     Long docId = Long.parseLong(keha.getDhlId().get(0));
     Document doc = documentRepository.findOne(docId);
+
+    Long docId2 = Long.parseLong(keha.getDhlId().get(1));
+    Document doc2 = documentRepository.findOne(docId2);
+
+
     assertEquals(true, doc.getOutgoingDocument());
     assertEquals("/", doc.getFolder().getName());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
@@ -505,6 +593,30 @@ public class ServerIT {
             .xpath("//ns9:sendDocument[1]/ns9:recipientSystem[1]", getDhxNamespaceMap())
             .doesNotExist())
         .andRespond(ResponseCreators.withSoapEnvelope(sendDocumentResponseEnvelope));
+
+
+    sendDocumentResponse = new SendDocumentResponse();
+    sendDocumentResponse.setReceiptId("receiptId2");
+    sendDocumentResponseEnvelope = IntegrationTestHelper.getEnvelope(client, service, null,
+        sendDocumentResponse);
+    mockServerSendDOcument
+        .expect(RequestMatchers
+            .xpath("//ns9:sendDocument[1]/ns9:consignmentId[1]", getDhxNamespaceMap())
+            .evaluatesTo(
+                doc2.getTransports().get(0).getRecipients().get(0).getRecipientId().toString()))
+        .andExpect(
+            RequestMatchers.xpath("//ns9:sendDocument[1]/ns9:DHXVersion[1]", getDhxNamespaceMap())
+                .evaluatesTo("1.0"))
+        .andExpect(RequestMatchers
+            .xpath("//ns9:sendDocument[1]/ns9:documentAttachment[1]", getDhxNamespaceMap())
+            .exists())
+        .andExpect(
+            RequestMatchers.xpath("//ns9:sendDocument[1]/ns9:recipient[1]", getDhxNamespaceMap())
+                .doesNotExist())
+        .andExpect(RequestMatchers
+            .xpath("//ns9:sendDocument[1]/ns9:recipientSystem[1]", getDhxNamespaceMap())
+            .doesNotExist())
+        .andRespond(ResponseCreators.withSoapEnvelope(sendDocumentResponseEnvelope));
     soapService.sendDocumentsToDhx();
     mockServerSendDOcument.verify();
     doc = documentRepository.findOne(docId);
@@ -516,6 +628,7 @@ public class ServerIT {
     status.setKeha(new GetSendStatusV2RequestType());
     docIds = new DocumentRefsArrayType();
     docIds.getDhlId().add(docId.toString());
+    docIds.getDhlId().add(docId2.toString());
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
@@ -533,7 +646,7 @@ public class ServerIT {
         .createDatahandlerFromList(getSendStatusArgument.capture());
     items = getSendStatusArgument.getValue();
 
-    assertEquals(1, items.size());
+    assertEquals(2, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
     assertEquals(StatusEnum.RECEIVED.getClassificatorName(), items.get(0).getOlek());
     assertEquals(1, items.get(0).getEdastus().size());
@@ -542,6 +655,15 @@ public class ServerIT {
         items.get(0).getEdastus().get(0).getStaatus());
     assertNull(items.get(0).getEdastus().get(0).getFault());
     assertNotNull(items.get(0).getEdastus().get(0).getLoetud());
+
+    assertEquals(docId2.toString(), items.get(1).getDhlId());
+    assertEquals(StatusEnum.RECEIVED.getClassificatorName(), items.get(1).getOlek());
+    assertEquals(1, items.get(1).getEdastus().size());
+    assertEquals("70000004", items.get(1).getEdastus().get(0).getSaaja().getRegnr());
+    assertEquals(StatusEnum.RECEIVED.getClassificatorName(),
+        items.get(1).getEdastus().get(0).getStaatus());
+    assertNull(items.get(1).getEdastus().get(0).getFault());
+    assertNotNull(items.get(1).getEdastus().get(0).getLoetud());
 
     // send document to DHX. just to check that no new requests will be
     // sent.
@@ -1121,6 +1243,133 @@ public class ServerIT {
     assertEquals("30000001", org.getRepresentor().getRegistrationCode());
   }
 
+
+  /**
+   * Test of getSendingOptions service. And check of organisations in database. Testing that some of
+   * the organisations are no longer DHX members, some of the representees changed the representor
+   * and some are no longer members, one representee is not representee anymore.
+   * 
+   * @throws IOException
+   * @throws DhxException
+   */
+  @Test
+  public void getSendingOptionsChanged() throws IOException, DhxException {
+    AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params2.xml");
+    Source requestEnvelope = new StreamSource(
+        new ClassPathResource(resourceFolder + "getSendingOptions.xml").getFile());
+    Source responseEnvelope = new StreamSource(
+        new ClassPathResource(resourceFolder + "representationList_response2.xml").getFile());
+    MockWebServiceServer mockServerSendingOptions =
+        MockWebServiceServer.createServer(applicationContext);
+    mockServerSendingOptions.expect(
+        RequestMatchers.xpath("//ns9:representationList[1]", getDhxNamespaceMap()).exists())
+        .andRespond(ResponseCreators.withSoapEnvelope(responseEnvelope));
+    addressService.renewAddressList(); 
+    
+    mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
+        .andExpect(ResponseMatchers
+            .xpath("//ns4:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
+
+    ArgumentCaptor<InstitutionArrayType> argument =
+        ArgumentCaptor.forClass(InstitutionArrayType.class);
+    Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
+    InstitutionArrayType items = argument.getValue();
+    
+    assertEquals(6, items.getAsutus().size());
+
+    assertEquals("dhl", items.getAsutus().get(0).getSaatmine().getSaatmisviis().get(0));
+
+    // organisation with subsustem
+    assertEquals("dvk.70006317", items.getAsutus().get(0).getRegnr());
+    assertEquals("Riigi Infosüsteemi Amet", items.getAsutus().get(0).getNimi());
+
+    // regular organisation
+    assertEquals("30000001", items.getAsutus().get(1).getRegnr());
+    assertEquals("Hõbekuuli OÜ", items.getAsutus().get(1).getNimi());
+
+    // organisation with subsystem
+    assertEquals("raamatupidamine.30000001", items.getAsutus().get(2).getRegnr());
+    assertEquals("Hõbekuuli OÜ", items.getAsutus().get(2).getNimi());
+
+    // regular organisation
+    assertEquals("40000001", items.getAsutus().get(3).getRegnr());
+    assertEquals("Ministeerium X", items.getAsutus().get(3).getNimi());
+
+    // organisation with non standard subsystem(without dot(.) iafter
+    // prefix)
+    assertEquals("DHXsubsystem.40000001", items.getAsutus().get(4).getRegnr());
+    assertEquals("Ministeerium X", items.getAsutus().get(4).getNimi());
+
+    // regular representee
+    assertEquals("system.500", items.getAsutus().get(5).getRegnr());
+    assertEquals("Representee 1", items.getAsutus().get(5).getNimi());
+
+    Iterable<Organisation> orgs = organisationRepository.findAll();
+    Iterator<Organisation> iterator = orgs.iterator();
+    
+    
+    
+    Organisation org = iterator.next();
+    assertEquals("70006317", org.getRegistrationCode());
+    assertEquals("DHX.dvk", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX.raamatupidamine", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHXsubsystem", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(false, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX.adit", org.getSubSystem());
+    assertEquals(false, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertEquals("system", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("70006317", org.getRepresentor().getRegistrationCode());
+    assertEquals("DHX.dvk", org.getRepresentor().getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("510", org.getRegistrationCode());
+    assertEquals("rt", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(false, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertNull(org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(false, org.getIsActive());
+    
+    mockServerSendingOptions.verify();
+  }
+
   private SendDocument getSendDocumentRequest(DataHandler handler, String consignmentId,
       String recipient,
       String recipientSystem) throws DhxException {
@@ -1451,14 +1700,14 @@ public class ServerIT {
 
     file.delete();
   }
-  
+
   @Test
-  public void deleteOldDocuments () {
-    
-    //Date controlDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
+  public void deleteOldDocuments() {
+
+    // Date controlDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.DAY_OF_YEAR, -31);
-    
+
     Document document = new Document();
     document.setContent("Content");
     document.addTransport(new Transport());
@@ -1468,24 +1717,24 @@ public class ServerIT {
     document.getTransports().get(0).getRecipients().get(0).addStatusHistory(new StatusHistory());
     documentRepository.save(document);
     Long docId = document.getDocumentId();
-    
+
     soapService.deleteOldDocuments(true);
-    
+
     Document foundDoc = documentRepository.findOne(docId);
     assertNotNull(foundDoc);
-    
+
     document.setDateCreated(calendar.getTime());
     document.getTransports().get(0).setStatusId(StatusEnum.RECEIVED.getClassificatorId());
     documentRepository.save(document);
-    
+
     soapService.deleteOldDocuments(false);
     foundDoc = documentRepository.findOne(docId);
     assertNull(foundDoc.getContent());
-    
+
     soapService.deleteOldDocuments(true);
     foundDoc = documentRepository.findOne(docId);
     assertNull(foundDoc);
-    
+
   }
 
 }

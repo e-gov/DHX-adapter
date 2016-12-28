@@ -32,10 +32,10 @@ public class StatusHistory implements Serializable {
   @Column(name = "fault_code")
   private String faultCode;
 
-  @Column(name = "fault_detail")
+  @Column(name = "fault_detail", columnDefinition = "TEXT")
   private String faultDetail;
 
-  @Column(name = "fault_string")
+  @Column(name = "fault_string", columnDefinition = "TEXT")
   private String faultString;
 
   private String metaxml;

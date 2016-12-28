@@ -232,7 +232,10 @@ public class PersistenceService {
         // we cannot create new representor with representee. first
         // insert representor without representee, then representee
         throw new DhxException(DhxExceptionEnum.DATA_ERROR,
-            "Trying to insert representee, but representor is not in database! ");
+            "Trying to insert representee, but representor is not in database! representor:"
+                + member.getMemberCode() + "/" + member.getSubsystemCode() + " representee: "
+                + member.getRepresentee().getRepresenteeCode() + "/"
+                + member.getRepresentee().getRepresenteeSystem());
       }
       Organisation representeeOrganisation =
           organisationRepository.findByRegistrationCodeAndSubSystem(
@@ -248,7 +251,7 @@ public class PersistenceService {
       if (member.getRepresentee().getStartDate() != null) {
         representeeOrganisation
             .setRepresenteeStart(new Timestamp(member.getRepresentee().getStartDate().getTime()));
-      } else {
+      } else if (representeeOrganisation.getRepresenteeStart() != null) {
         representeeOrganisation.setRepresenteeStart(new Timestamp(new Date().getTime()));
       }
       if (member.getRepresentee().getEndDate() != null) {
