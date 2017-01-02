@@ -186,6 +186,7 @@ public class SoapServiceTest {
 		recipientOrg.setRegistrationCode("recipientCode");
 		recipientOrg.setSubSystem("recipientSystem");
 		Recipient recipient = new Recipient();
+		recipient.setRecipientId(2L);
 		recipient.setTransport(new Transport());
 		recipient.getTransport().addSender(sender);
 		recipient.setOrganisation(recipientOrg);
@@ -193,8 +194,9 @@ public class SoapServiceTest {
 		recipient.getTransport().setDokument(doc);
 		recipient.setRecipientId(12L);
 		recipients.add(recipient);
-		when(recipientRepository.findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNull(
+		when(recipientRepository.findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
 				StatusEnum.IN_PROCESS.getClassificatorId(), true)).thenReturn(recipients);
+		//when(recipientRepository.findByRecipientId(any(Long.class))).thenReturn(recipient);
 		DecContainer container = new DecContainer();
 		when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
 		File containerFile = new File("");
@@ -223,6 +225,7 @@ public class SoapServiceTest {
 		recipientOrg.setRegistrationCode("recipientCode");
 		recipientOrg.setSubSystem("recipientSystem");
 		Recipient recipient = new Recipient();
+		recipient.setRecipientId(2L);
 		recipient.setTransport(new Transport());
 		recipient.getTransport().addSender(sender);
 		recipient.setOrganisation(recipientOrg);
@@ -230,8 +233,9 @@ public class SoapServiceTest {
 		recipient.getTransport().setDokument(doc);
 		recipient.setRecipientId(12L);
 		recipients.add(recipient);
-		when(recipientRepository.findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNull(
+		when(recipientRepository.findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
 				StatusEnum.IN_PROCESS.getClassificatorId(), true)).thenReturn(recipients);
+		//when(recipientRepository.findByRecipientId(any(Long.class))).thenReturn(recipient);
 		DecContainer container = new DecContainer();
 		when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
 		File containerFile = new File("");

@@ -67,8 +67,8 @@ public class ServerEndpoint {
           "Only v4 version of sendDocuments is supported");
     }
     if (log.isDebugEnabled()) {
-      log.debug("Got sendDocument request from: " + client.toString());
-      log.debug("Got sendDocument request to: " + service.toString());
+      log.debug("Got sendDocument request from: {}", client);
+      log.debug("Got sendDocument request to: {}", service);
     }
     SendDocumentsResponse response = dhxDocumentService.sendDocuments(request, client, service);
     return response;

@@ -358,5 +358,18 @@ public class Organisation extends BaseEntity implements Serializable {
     this.representees = representees;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return "Organisation [organisationId=" + organisationId + ", isActive=" + isActive
+        + ", capsuleVersion=" + capsuleVersion + ", name=" + name + ", registrationCode="
+        + registrationCode + ", subSystem=" + subSystem + ", memberClass=" + memberClass
+        + ", xroadInstance=" + xroadInstance + ", representeeStart=" + representeeStart
+        + ", representeeEnd=" + representeeEnd + ", dhxOrganisation=" + dhxOrganisation
+        + ", ownRepresentee=" + ownRepresentee + ", representor=" + representor + "]";
+  }
+
   
 }

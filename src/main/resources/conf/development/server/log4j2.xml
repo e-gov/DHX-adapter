@@ -22,7 +22,7 @@
     </RollingFile>
   </Appenders>
   <Loggers>
-    <Logger name="ee.ria" level="debug" additivity="false">
+    <Logger name="ee.ria" level="trace" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger>
@@ -31,6 +31,11 @@
       <AppenderRef ref="RollingFile"/>
     </Logger> 
     <Logger name="org.springframework.ws.server.MessageTracing" level="trace" additivity="false">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Logger>
+    
+     <Logger name="org.hibernate.SQL" level="debug" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger>

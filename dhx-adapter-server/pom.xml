@@ -9,7 +9,7 @@
 		<version>1.0.1</version>
 	</parent>
 	<artifactId>dhx-adapter-server</artifactId>
-	<version>0.8.5</version>
+	<version>0.9.0</version>
 	<name>dhx-adapter-server</name>
 	<packaging>war</packaging>
 	<properties>

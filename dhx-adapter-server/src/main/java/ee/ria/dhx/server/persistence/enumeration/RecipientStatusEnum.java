@@ -46,9 +46,8 @@ public enum RecipientStatusEnum {
     if (classificatorId != null) {
       for (RecipientStatusEnum status : RecipientStatusEnum.values()) {
         if (classificatorId.equals(status.getClassificatorId())) {
-          log.debug("Found XSD version for class. classificatorId: {}",
-              classificatorId.toString()
-                  + " status:" + status.toString());
+          log.debug("Found XSD version for class. classificatorId: {} status: {}",
+              classificatorId, status);
           return status;
         }
       }

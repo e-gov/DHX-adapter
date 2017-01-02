@@ -2,10 +2,13 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
+
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
+import ee.ria.dhx.server.persistence.enumeration.RecipientStatusEnum;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
@@ -27,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.ws.context.MessageContext;
 
 import java.sql.Timestamp;
@@ -34,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -65,9 +69,11 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
    * Returns all organisations from database that are active and marked as own representees.
    */
   @Override
+  @Loggable
   public List<DhxRepresentee> getRepresentationList() throws DhxException {
     List<DhxRepresentee> representees = new ArrayList<DhxRepresentee>();
     List<Organisation> orgs = organisationRepository.findByIsActiveAndOwnRepresentee(true, true);
+    log.debug("found own representees:" + orgs.size());
     for (Organisation org : orgs) {
       representees.add(getRepresenteeFromOrganisation(org));
     }
@@ -76,11 +82,13 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
 
 
   @Override
+  @Loggable
   public boolean isDuplicatePackage(InternalXroadMember from, String consignmentId)
       throws DhxException {
     DhxOrganisation dhxOrg = DhxOrganisationFactory.createDhxOrganisation(from);
     Organisation org = organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrg.getCode(),
         dhxOrg.getSystem());
+    log.debug("checking duplicates for organisation: {}", org);
     List<Recipient> recipients = recipientRepository
         .findByTransport_SendersOrganisationAndDhxExternalConsignmentId(org, consignmentId);
     if (recipients != null && recipients.size() > 0) {
@@ -93,12 +101,11 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   @Loggable
   public String receiveDocument(IncomingDhxPackage document, MessageContext context)
       throws DhxException {
-    log.debug("String receiveDocument(DhxDocument document) externalConsignmentId: {}",
-        document.getExternalConsignmentId() + " recipient:" + document.getRecipient().toString()
-            + " service: "
-            + document.getService().toString());
+    log.debug("String receiveDocument(DhxDocument document) externalConsignmentId: {} recipient: {} service: {}",
+        document.getExternalConsignmentId(), document.getRecipient(), document.getService());
     Document doc = capsuleService.getDocumentFromIncomingContainer(document,
         document.getParsedContainerVersion());
+    log.trace("document created from incoming package: {}", doc);
     documentRepository.save(doc);
     // by container definition and DHX protocol we know that those arrays
     // are all not null and only
@@ -108,11 +115,13 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
 
 
   @Override
+  @Loggable
   public List<InternalXroadMember> getAdresseeList() throws DhxException {
     if (members == null) {
       members = new ArrayList<InternalXroadMember>();
       List<Organisation> orgs =
           organisationRepository.findByIsActiveAndDhxOrganisation(true, true);
+      log.debug("found addressee organisations:" + orgs.size());
       for (Organisation org : orgs) {
         members.add(getInternalXroadMemberFromOrganisation(org));
       }
@@ -120,6 +129,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     return members;
   }
 
+  @Loggable
   private InternalXroadMember getInternalXroadMemberFromOrganisation(Organisation org) {
     Organisation mainOrg = org;
     DhxRepresentee representee = null;
@@ -132,9 +142,11 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
         new InternalXroadMember(mainOrg.getXroadInstance(), mainOrg.getMemberClass(),
             mainOrg.getRegistrationCode(), mainOrg.getSubSystem(), mainOrg.getName(),
             representee);
+    log.trace("created member: {}", member);
     return member;
   }
 
+  @Loggable
   private DhxRepresentee getRepresenteeFromOrganisation(Organisation org) {
     return new DhxRepresentee(org.getRegistrationCode(), org.getRepresenteeStart(),
         org.getRepresenteeEnd(),
@@ -142,6 +154,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   }
 
   @Override
+  @Loggable
   public void saveAddresseeList(List<InternalXroadMember> members) throws DhxException {
     updateNotActiveAdressees(members);
     List<Organisation> organisations = new ArrayList<Organisation>();
@@ -150,17 +163,15 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
         organisations.add(persistenceService.getOrganisationFromInternalXroadMember(member));
       }
     }
+    log.debug("saving not representees. " + organisations.size());
     organisationRepository.save(organisations);
-    /*
-     * Iterable<Organisation> orgs = organisationRepository.findAll(); for (Organisation org : orgs)
-     * { log.debug("org code" + org.getRegistrationCode() + " system: " + org.getSubSystem()); }
-     */
     organisations = new ArrayList<Organisation>();
     for (InternalXroadMember member : members) {
       if (member.getRepresentee() != null && persistenceService.isRepresenteeValid(member)) {
         organisations.add(persistenceService.getOrganisationFromInternalXroadMember(member));
       }
     }
+    log.debug("saving representees. " + organisations.size());
     organisationRepository.save(organisations);
 
     this.members = members;
@@ -172,14 +183,21 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     Boolean found = false;
     List<Organisation> changedOrgs = new ArrayList<Organisation>();
     for (Organisation org : allOrgs) {
+      if (log.isDebugEnabled()) {
+        log.debug(
+            "checking if organisation needs to be deactivated organisation: {}", org);
+      }
       // we need to check only active organisations
-      if (org.getIsActive()) {
+      if (org.getIsActive() && (org.getOwnRepresentee()== null || !org.getOwnRepresentee())) {
         found = false;
         for (InternalXroadMember member : members) {
+          if (log.isTraceEnabled()) {
+            log.trace("checking against member: {}", member);
+          }
           if (member.getRepresentee() == null) {
             if (member.getMemberCode().equals(org.getRegistrationCode())
-                && (member.getSubsystemCode() == null && org.getSubSystem() == null)
-                || member.getSubsystemCode().equals(org.getSubSystem())) {
+                && (member.getSubsystemCode() == null && org.getSubSystem() == null
+                    || member.getSubsystemCode().equals(org.getSubSystem()))) {
               found = true;
               break;
             }
@@ -199,7 +217,10 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
         found = true;
       }
       if (!found) {
-        log.debug("organisation is not found in renewed address list, deactivating it: " + org.getOrganisationId());
+        if (log.isDebugEnabled()) {
+          log.debug(
+              "organisation is not found in renewed address list, deactivating it. organisation: {}", org);
+        }
         org.setIsActive(false);
         changedOrgs.add(org);
       }
@@ -209,26 +230,32 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
 
   @Override
   @Loggable
+ // @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void saveSendResult(DhxSendDocumentResult finalResult,
       List<AsyncDhxSendDocumentResult> retryResults) {
     log.info("saveSendResult invoked.");
     try {
       String recipientIdStr = finalResult.getSentPackage().getInternalConsignmentId();
       Integer recipientId = Integer.parseInt(recipientIdStr);
+      log.debug("searching recipient to save send result. " + recipientId);
       Recipient recipient = recipientRepository.findOne(new Long(recipientId));
+      if(recipient == null) {
+        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Recipient is not found in database. recipientId: " + recipientId);
+      }
       SendDocumentResponse docResponse = finalResult.getResponse();
       recipient.setSendingEnd(new Timestamp((new Date()).getTime()));
       Integer successStatusId = StatusEnum.RECEIVED.getClassificatorId();
+      log.trace("saving send result for recipient: {}", recipient);
       if (docResponse.getFault() == null) {
         log.debug("Document was succesfuly sent to DHX");
         recipient.setDhxExternalReceiptId(docResponse.getReceiptId());
-        // recipient.setRecipientStatusId(11);
+         recipient.setRecipientStatusId(RecipientStatusEnum.SENT.getClassificatorId());
         recipient.setStatusId(successStatusId);
       } else {
         log.debug("Fault occured while sending document to DHX");
         log.debug("All attempts to send documents were done. Saving document as failed.");
         Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
-        // recipient.setRecipientStatusId(5);
+         recipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
         recipient.setStatusId(failedStatusId);
         // recipient.setSendingEndDate(new Date());
         String faultString = "";
@@ -266,12 +293,13 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       }
       if (allSent && !recipient.getTransport().getStatusId()
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
+        log.debug("all of the documents recipients are in received status, setting same status to the document.");
         recipient.getTransport().setStatusId(successStatusId);
-        documentRepository.save(recipient.getTransport().getDokument());
+       // documentRepository.save(recipient.getTransport().getDokument());
       }
       persistenceService.addStatusHistory(recipient);
-      recipientRepository.save(recipient);
-    } catch (Exception ex) {
+      recipientRepository.saveAndFlush(recipient);
+    } catch (Throwable ex) {
       log.error("Error occured while saving send results. " + ex.getMessage(), ex);
     }
   }

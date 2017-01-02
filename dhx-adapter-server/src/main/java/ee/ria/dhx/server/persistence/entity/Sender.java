@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "saatja")
 public class Sender extends BaseEntity implements Serializable {
+
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -131,6 +132,15 @@ public class Sender extends BaseEntity implements Serializable {
    */
   public void setTransport(Transport transport) {
     this.transport = transport;
+  }
+  
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return "Sender [senderId=" + senderId + ", organisation=" + organisation + ", personalCode="
+        + personalCode + ", structuralUnit=" + structuralUnit + "]";
   }
 
 }

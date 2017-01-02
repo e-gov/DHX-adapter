@@ -1245,15 +1245,17 @@ public class ServerIT {
 
 
   /**
-   * Test of getSendingOptions service. And check of organisations in database. Testing that some of
+   * Test of getSendingOptions service. And check of organisations in database. Testing when some of
    * the organisations are no longer DHX members, some of the representees changed the representor
-   * and some are no longer members, one representee is not representee anymore.
+   * and some are no longer members.
    * 
    * @throws IOException
    * @throws DhxException
    */
   @Test
   public void getSendingOptionsChanged() throws IOException, DhxException {
+    
+    //c
     AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params2.xml");
     Source requestEnvelope = new StreamSource(
         new ClassPathResource(resourceFolder + "getSendingOptions.xml").getFile());
@@ -1368,6 +1370,84 @@ public class ServerIT {
     assertEquals(false, org.getIsActive());
     
     mockServerSendingOptions.verify();
+    
+    
+    
+    //check that after chenging back, everithing is OK
+    AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params.xml");
+   responseEnvelope = new StreamSource(
+        new ClassPathResource(resourceFolder + "representationList_response.xml").getFile());
+    mockServerSendingOptions =
+        MockWebServiceServer.createServer(applicationContext);
+    mockServerSendingOptions.expect(
+        RequestMatchers.xpath("//ns9:representationList[1]", getDhxNamespaceMap()).exists())
+        .andRespond(ResponseCreators.withSoapEnvelope(responseEnvelope));
+    addressService.renewAddressList(); 
+    
+    orgs = organisationRepository.findAll();
+    iterator = orgs.iterator();
+    
+    
+    
+    org = iterator.next();
+    assertEquals("70006317", org.getRegistrationCode());
+    assertEquals("DHX.dvk", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX.raamatupidamine", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHXsubsystem", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX.adit", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertEquals("system", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals("DHX", org.getRepresentor().getSubSystem());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("510", org.getRegistrationCode());
+    assertEquals("rt", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(true, org.getIsActive());
+    
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertNull(org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(true, org.getIsActive());
+    mockServerSendingOptions.verify();
+
   }
 
   private SendDocument getSendDocumentRequest(DataHandler handler, String consignmentId,

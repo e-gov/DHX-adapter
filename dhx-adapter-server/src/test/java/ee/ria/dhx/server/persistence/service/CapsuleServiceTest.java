@@ -87,7 +87,6 @@ public class CapsuleServiceTest {
 		capsuleService.setDhxMarshallerService(dhxMarshallerService);
 		capsuleService.setOrganisationRepository(organisationRepository);
 		capsuleService.setPersistenceService(persistenceService);
-		capsuleService.setTreatContainerAsString(true);
 		when(capsuleConfig.getCurrentCapsuleVersion()).thenReturn(CapsuleVersionEnum.V21);
 		when(capsuleConfig.getXsdForVersion(CapsuleVersionEnum.V21))
 				.thenReturn("jar://Dvk_kapsel_vers_2_1_eng_est.xsd");

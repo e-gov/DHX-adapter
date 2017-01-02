@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -42,7 +43,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-// @Transactional
+@Transactional
 public class PersistenceService {
 
   @Autowired
@@ -214,6 +215,7 @@ public class PersistenceService {
         organisationRepository.findByRegistrationCodeAndSubSystem(member.getMemberCode(),
             member.getSubsystemCode());
     if (organisation == null) {
+      log.debug("Organisation is not found, creating new one.");
       newMember = true;
       organisation = new Organisation();
     }
@@ -228,6 +230,7 @@ public class PersistenceService {
     organisation.setRepresenteeStart(null);
     organisation.setRepresenteeEnd(null);
     if (member.getRepresentee() != null && !representorOnly) {
+      log.debug("Organisation is representee.");
       if (newMember) {
         // we cannot create new representor with representee. first
         // insert representor without representee, then representee
@@ -242,6 +245,7 @@ public class PersistenceService {
               member.getRepresentee().getRepresenteeCode(),
               member.getRepresentee().getRepresenteeSystem());
       if (representeeOrganisation == null) {
+        log.debug("Representee organisation is not found, creating new one.");
         representeeOrganisation = new Organisation();
       }
       representeeOrganisation.setIsActive(true);
@@ -354,6 +358,10 @@ public class PersistenceService {
     return dvkCode;
   }
 
+  /**
+   * Method creates and add new status history according to recipient's data.
+   * @param recipient recipient to create status history for
+   */
   public void addStatusHistory(Recipient recipient) {
     StatusHistory history = new StatusHistory();
     history.setRecipientStatusId(recipient.getRecipientStatusId());

@@ -82,6 +82,8 @@ public class Recipient extends BaseEntity implements Serializable {
   @ManyToOne
   @JoinColumn(name = "asutus_id")
   private Organisation organisation;
+  
+  private Boolean outgoing;
 
   // bi-directional many-to-one association to Klassifikaator
   // @ManyToOne
@@ -548,4 +550,39 @@ public class Recipient extends BaseEntity implements Serializable {
     this.metaxml = metaxml;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return "Recipient [recipientId=" + recipientId + ", structuralUnit=" + structuralUnit
+        + ", dhxExternalConsignmentId=" + dhxExternalConsignmentId + ", dhxExternalReceiptId="
+        + dhxExternalReceiptId + ", dhxInternalConsignmentId=" + dhxInternalConsignmentId
+        + ", dokIdTeisesServeris=" + dokIdTeisesServeris + ", faultActor=" + faultActor
+        + ", faultCode=" + faultCode + ", personalcode=" + personalcode + ", lastSendDate="
+        + lastSendDate + ", sendingStart=" + sendingStart + ", sendingEnd=" + sendingEnd
+        + ", statusChangeDate=" + statusChangeDate + ", statusHistory=" + statusHistory
+        + ", organisation=" + organisation + ", sendingTypeId=" + sendingTypeId + ", statusId="
+        + statusId + ", recipientStatusId=" + recipientStatusId + "]";
+  }
+
+  /**
+   * Returns the outgoing.
+   *
+   * @return the outgoing
+   */
+  public Boolean getOutgoing() {
+    return outgoing;
+  }
+
+  /**
+   * Sets the outgoing.
+   *
+   * @param outgoing the outgoing to set
+   */
+  public void setOutgoing(Boolean outgoing) {
+    this.outgoing = outgoing;
+  }
+
+  
 }

@@ -294,4 +294,17 @@ public class Document extends BaseEntity implements Serializable {
     this.outgoingDocument = outgoingDocument;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return "Document [documentId=" + documentId + ", guid=" + guid + ", capsuleVersion="
+        + capsuleVersion + ", storageDeadline=" + storageDeadline + ", size=" + size
+        + ", containerVersion=" + containerVersion + ", organisation=" + organisation
+        + ", folder=" + folder + ", transports=" + transports + ", outgoingDocument="
+        + outgoingDocument + "]";
+  }
+
+  
 }

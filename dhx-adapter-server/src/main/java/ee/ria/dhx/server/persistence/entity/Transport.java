@@ -236,4 +236,14 @@ public class Transport extends BaseEntity implements Serializable {
     this.recipients = recipients;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return "Transport [transportId=" + transportId + ", sendingStart=" + sendingStart
+        + ", sendingEnd=" + sendingEnd + ", senders=" + senders + ", statusId=" + statusId
+        + ", recipients=" + recipients + "]";
+  }
+
 }

@@ -21,6 +21,7 @@ import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import javax.activation.DataHandler;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,10 +47,10 @@ public class WsUtil {
       GZIPInputStream gzis = new GZIPInputStream(stream);
       return gzis;
     } catch (IOException ex) {
-      //if we got not base64, then throw specific error about it
-      if(ex.getMessage().indexOf("Illegal base64")>=0) {
+      // if we got not base64, then throw specific error about it
+      if (ex.getMessage().indexOf("Illegal base64") >= 0) {
         throw new DhxException(DhxExceptionEnum.EXTRACTION_ERROR,
-          "Not a base64 stream! " + ex.getMessage(), ex);
+            "Not a base64 stream! " + ex.getMessage(), ex);
       }
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured whle unzipping file. " + ex.getMessage(), ex);
@@ -105,7 +106,7 @@ public class WsUtil {
    * @return decoded stream
    * @throws DhxException thrown if error occurs
    */
-  public static InputStream base64decodeAndUnzip(InputStream stream) throws DhxException {
+  private static InputStream base64decodeAndUnzip(InputStream stream) throws DhxException {
     InputStream decoded = stream;
     decoded = base64Decode(decoded);
     return gzipDecompress(decoded);
@@ -172,6 +173,39 @@ public class WsUtil {
     } catch (IOException | SAXException | ParserConfigurationException ex) {
       throw new DhxException("Error occured while parsing XML. " + ex.getMessage(), ex);
     }
+  }
+
+  /**
+   * Method base64 decodes and unzips the handler's {@link InputStream}. If appears that handler's
+   * {@link InputStream} is not base64 encoded, then is will be only unzipped.
+   * 
+   * @param handler handler which stream needs to be decoded and unzipped
+   * @return decoded and unzipped {@link InputStream}
+   * @throws DhxException thrown if error occurs
+   */
+  public static InputStream base64DecodeIfNeededAndUnzip(DataHandler handler)
+      throws DhxException {
+    InputStream unzippedStream = null;
+    try {
+      try {
+        unzippedStream = WsUtil.base64decodeAndUnzip(handler.getInputStream());
+      } catch (DhxException ex) {
+        // if input is not base64, then try to just unzip it. it might be if
+        // Content-transfer-encoding is set to base64, then base64 is decoded automatically
+        if (ex.getExceptionCode().equals(DhxExceptionEnum.EXTRACTION_ERROR)) {
+          log.debug(
+              "attachment appears to be not encoded in base64, "
+                  + "trying to parse container without base64 decoding.");
+          unzippedStream = WsUtil.gzipDecompress(handler.getInputStream());
+        } else {
+          throw ex;
+        }
+      }
+    } catch (IOException ex) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "Error occured while parsing attachment." + ex.getMessage(), ex);
+    }
+    return unzippedStream;
   }
 
 }

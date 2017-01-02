@@ -59,6 +59,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -145,7 +146,7 @@ public class SoapService {
   @Setter
   Integer failedDocumentLifetime;
 
-  
+
   @Value("${dhx.resend.timeout}")
   @Setter
   Integer resendTimeout;
@@ -195,31 +196,51 @@ public class SoapService {
     Integer statusId = StatusEnum.IN_PROCESS.getClassificatorId();
     // not sent documents
     List<Recipient> recipients = recipientRepository
-        .findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNull(
+        .findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
             statusId, true);
     Date date = new Date();
-    date.setTime(date.getTime() - resendTimeout*1000*60);
-    log.debug("date: " + date);
+    date.setTime(date.getTime() - resendTimeout * 1000 * 60);
+    log.debug("date from which documents will be sent again: {}", date);
     // documents that tried to send, but maybe server were stopped and status stays the same
     List<Recipient> recipientsSent = recipientRepository
-        .findByStatusIdAndTransportDokumentOutgoingDocumentAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
+        .findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
             statusId, true, date);
     recipients.addAll(recipientsSent);
-    for (Recipient recipient : recipients) {
+    if (recipients != null) {
+      log.debug("found total recipients to send to DHX: " + recipients.size());
+    }
+    Recipient lockedRecipient = null;
+    /*List<Long> recipientIds = new ArrayList<Long>();
+    for(Recipient recipientUnlocked : recipients) {
+      recipientIds.add(recipientUnlocked.getRecipientId());
+    }
+
+    List<Recipient> lockedRecipients = recipientRepository.findByRecipientIdIn(recipientIds);*/
+    for (Recipient recipientUnlocked : recipients) {
       try {
-        Document document = recipient.getTransport().getDokument();
+        // doing query for every recipient to lock it for writing, in order for another thread not
+        // to update it
+        lockedRecipient = recipientUnlocked;
+            //recipientRepository.findByRecipientId(recipientUnlocked.getRecipientId());
+        //if recipient were updated by another transaction, then skip
+        if (lockedRecipient.getVersion()!= null && recipientUnlocked.getVersion()!= null && lockedRecipient.getVersion()!=recipientUnlocked.getVersion()) {
+          log.info("recipient were updated by another transaction, skiping it. {}", lockedRecipient );
+          continue;
+        }
+        Document document = lockedRecipient.getTransport().getDokument();
         Object container = capsuleService.getContainerFromDocument(document);
         capsuleService.formatCapsuleRecipientAndSender(container,
-            recipient.getTransport().getSenders().get(0).getOrganisation(),
-            recipient.getOrganisation(),
+            lockedRecipient.getTransport().getSenders().get(0).getOrganisation(),
+            lockedRecipient.getOrganisation(),
             true);
         File containerFile = dhxMarshallerService.marshall(container);
-        if (recipient.getTransport().getSenders() == null
-            || recipient.getTransport().getSenders().size() > 1) {
+        if (lockedRecipient.getTransport().getSenders() == null
+            || lockedRecipient.getTransport().getSenders().size() > 1) {
           throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
               "No sender is related to document or more than one sender is related!");
         }
-        Organisation sendeOrg = recipient.getTransport().getSenders().get(0).getOrganisation();
+        Organisation sendeOrg =
+            lockedRecipient.getTransport().getSenders().get(0).getOrganisation();
         InternalXroadMember senderMember = null;
         try {
           senderMember = addressService.getClientForMemberCode(sendeOrg.getRegistrationCode(),
@@ -229,35 +250,44 @@ public class SoapService {
               "Erro occured while searching org. ignoring error and continue!" + ex.getMessage(),
               ex);
         }
-        Organisation recipientOrg = recipient.getOrganisation();
+        Organisation recipientOrg = lockedRecipient.getOrganisation();
         InternalXroadMember recipientMember = addressService
             .getClientForMemberCode(recipientOrg.getRegistrationCode(),
                 recipientOrg.getSubSystem());
-        log.debug("Found recipient member: " + recipientMember.toString());
+        log.debug("Found recipient member: {}", recipientMember);
         OutgoingDhxPackage dhxPackage = null;
         // if sender org is null, then try sending with sender from
         // config
         if (senderMember != null) {
           dhxPackage = dhxPackageProviderService.getOutgoingPackage(containerFile,
-              recipient.getRecipientId().toString(), recipientMember, senderMember);
+              lockedRecipient.getRecipientId().toString(), recipientMember, senderMember);
         } else {
           dhxPackage = dhxPackageProviderService.getOutgoingPackage(containerFile,
-              recipient.getRecipientId().toString(), recipientMember);
+              lockedRecipient.getRecipientId().toString(), recipientMember);
         }
-        recipient.setDhxInternalConsignmentId(recipient.getRecipientId().toString());
-        recipient.setSendingStart(new Timestamp((new Date()).getTime()));
-        asyncDhxPackageService.sendPackage(dhxPackage);
+        lockedRecipient.setDhxInternalConsignmentId(lockedRecipient.getRecipientId().toString());
+        lockedRecipient.setSendingStart(new Timestamp((new Date()).getTime()));
+        saveRecipient(lockedRecipient);
+         //recipientRepository.save(lockedRecipient);
+         asyncDhxPackageService.sendPackage(dhxPackage);
       } catch (DhxException ex) {
         log.error("Error occured while sending document! " + ex.getMessage(), ex);
         Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
-        recipient.setStatusId(failedStatusId);
-        recipient.setFaultString(ex.getMessage());
-        recipient.setFaultCode(ex.getExceptionCode().toString());
-        recipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
-      } finally {
-        recipientRepository.save(recipient);
+        if (lockedRecipient != null) {
+          lockedRecipient.setStatusId(failedStatusId);
+          lockedRecipient.setFaultString(ex.getMessage());
+          lockedRecipient.setFaultCode(ex.getExceptionCode().toString());
+          lockedRecipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
+          recipientRepository.save(lockedRecipient);
+        }
       }
     }
+  }
+
+  @Loggable
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void saveRecipient(Recipient recipient) {
+    recipientRepository.saveAndFlush(recipient);
   }
 
   /**
@@ -283,6 +313,7 @@ public class SoapService {
     Organisation senderOrg =
         organisationRepository.findByRegistrationCodeAndSubSystem(sender.getMemberCode(),
             sender.getSubsystemCode());
+    log.debug("receiving document for organisation: {}", senderOrg);
     Folder folder = null;
     if (request.getKeha().getKaust() != null) {
       folder = folderRepository.findByName(request.getKeha().getKaust());
@@ -351,12 +382,17 @@ public class SoapService {
     if (senderOrg == null) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Senders organisation not found. organisation:" + senderMember.toString());
+    } else {
+      log.debug("Marking documents received for organisation: {}", senderOrg);
     }
     Boolean allSent = true;
     Boolean allFailed = true;
     Boolean found = false;
     for (TagasisideType status : request.getDokumendid()) {
       Document doc = documentRepository.findOne(status.getDhlId().longValue());
+      if (log.isTraceEnabled()) {
+        log.trace("marking document receiverd: {}", doc);
+      }
       if (doc == null) {
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Document is not found.");
       }
@@ -392,6 +428,9 @@ public class SoapService {
             recipient.setRecipientStatusId(status.getVastuvotjaStaatusId().intValue());
           }
           persistenceService.addStatusHistory(recipient);
+          if (log.isTraceEnabled()) {
+            log.trace("changed recipient: {}", recipient);
+          }
           recipientRepository.save(recipient);
         }
         if (recipient.getStatusId() != null
@@ -413,11 +452,15 @@ public class SoapService {
       }
       if (allSent && !doc.getTransports().get(0).getStatusId()
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
+        log.debug(
+            "all of the documwents reciepient are in status received, setting same status to document.");
         doc.getTransports().get(0).setStatusId(successStatusId);
         documentRepository.save(doc);
       }
       if (allFailed && !doc.getTransports().get(0).getStatusId()
           .equals(StatusEnum.FAILED.getClassificatorId())) {
+        log.debug(
+            "all of the documwents reciepient are in status failed, setting same status to document.");
         doc.getTransports().get(0).setStatusId(failedStatusId);
         documentRepository.save(doc);
       }
@@ -442,135 +485,134 @@ public class SoapService {
   public GetSendStatusResponse getSendStatus(GetSendStatus request,
       InternalXroadMember senderMember,
       InternalXroadMember recipientMember) throws DhxException {
-    try {
-      org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
-          WsUtil.base64decodeAndUnzip(
-              request.getKeha().getDokumendid().getHref().getInputStream()));
-      List<Long> dhlIds = new ArrayList<Long>();
-      NodeList list = xmlDoc.getElementsByTagName("dhl_id");
-      for (int i = 0; i < list.getLength(); i++) {
-        Node node = list.item(i);
-        log.debug("dhl id " + node.getTextContent());
-        dhlIds.add(Long.valueOf(node.getTextContent()));
-      }
-      if (dhlIds.size() == 0) {
-        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-            "No dhl ids are provided to get status for.");
-      }
-      list = xmlDoc.getElementsByTagName("dokument_guid");
-      if (list.getLength() > 0) {
-        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-            "Getting send status by dokument_guid is not supported");
-      }
-      List<Document> documents = documentRepository.findByDocumentIdIn(dhlIds);
-      ObjectFactory factory = new ObjectFactory();
-      GetSendStatusResponse response = factory.createGetSendStatusResponse();
-      response.setKeha(factory.createBase64BinaryType());
-      GetSendStatusV2ResponseTypeUnencoded responseAtt =
-          factory.createGetSendStatusV2ResponseTypeUnencoded();
-      for (Document doc : documents) {
-        GetSendStatusV2ResponseTypeUnencoded.Item item = factory
-            .createGetSendStatusV2ResponseTypeUnencodedItem();
-        StatusHistoryType history = null;
-        if (request.getKeha().isStaatuseAjalugu()) {
-          history = new StatusHistoryType();
-        }
-        item.setDhlId(doc.getDocumentId().toString());
-        item.setOlek(
-            StatusEnum.forClassificatorId(doc.getTransports().get(0).getStatusId())
-                .getClassificatorName());
-        for (Recipient recipient : doc.getTransports().get(0).getRecipients()) {
-          Edastus edastus = new Edastus();
-          if (recipient.getRecipientStatusId() != null) {
-            edastus.setVastuvotjaStaatusId(BigInteger.valueOf(recipient.getRecipientStatusId()));
-          }
-          edastus.setStaatus(
-              StatusEnum.forClassificatorId(recipient.getStatusId()).getClassificatorName());
-          AadressType adr = new AadressType();
-          adr.setRegnr(
-              persistenceService.toDvkCapsuleAddressee(
-                  recipient.getOrganisation().getRegistrationCode(),
-                  recipient.getOrganisation().getSubSystem()));
-          adr.setIsikukood(recipient.getPersonalcode());
-          // adr.setAllyksuseKood(recipient.getStructuralUnit());
-          adr.setAsutuseNimi(recipient.getOrganisation().getName());
-          edastus.setSaaja(adr);
-          edastus.setSaadud(ConversionUtil.toGregorianCalendar(recipient.getSendingStart()));
-
-          // edastus.setMetaxml(recipient.getMetaxml());
-          edastus.setMeetod("xtee");
-          if (recipient.getSendingEnd() != null) {
-            edastus.setLoetud(ConversionUtil.toGregorianCalendar(recipient.getSendingEnd()));
-          }
-          if (recipient.getFaultCode() != null) {
-            ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault fault =
-                new ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault();
-            fault.setFaultactor(recipient.getFaultActor());
-            fault.setFaultcode(recipient.getFaultCode());
-            fault.setFaultdetail(recipient.getFaultDetail());
-            fault.setFaultstring(recipient.getFaultString());
-            edastus.setFault(fault);
-          }
-          edastus.setEdastatud(ConversionUtil.toGregorianCalendar(recipient.getSendingStart()));
-          item.getEdastus().add(edastus);
-          if (request.getKeha().isStaatuseAjalugu()) {
-            for (StatusHistory recipientHistory : recipient.getStatusHistory()) {
-              Status status = new Status();
-              if (recipientHistory.getRecipientStatusId() != null) {
-                status.setVastuvotjaStaatusId(
-                    BigInteger.valueOf(recipientHistory.getRecipientStatusId()));
-              }
-              status.setStaatuseMuutmiseAeg(
-                  ConversionUtil.toGregorianCalendar(recipientHistory.getStatusChangeDate()));
-              StatusEnum statusEnum =
-                  StatusEnum.forClassificatorId(recipientHistory.getStatusId());
-              StatusType statusType = null;
-              switch (statusEnum) {
-                case RECEIVED:
-                  statusType = StatusType.SAADETUD;
-                  break;
-                case FAILED:
-                  statusType = StatusType.KATKESTATUD;
-                  break;
-                case IN_PROCESS:
-                  statusType = StatusType.SAATMISEL;
-                  break;
-                default:
-                  throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Unknown status of.");
-              }
-              status.setStaatus(statusType);
-              if (recipientHistory.getFaultCode() != null) {
-                ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault fault =
-                    new ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault();
-                fault.setFaultactor(recipient.getFaultActor());
-                fault.setFaultcode(recipient.getFaultCode());
-                fault.setFaultdetail(recipient.getFaultDetail());
-                fault.setFaultstring(recipient.getFaultString());
-                status.setFault(fault);
-              }
-              status.setStaatuseAjaluguId(
-                  BigInteger.valueOf(recipientHistory.getStatusHistoryId()));
-              StatusHistoryType.Status.Saaja saaja = new StatusHistoryType.Status.Saaja();
-              saaja.setRegnr(persistenceService.toDvkCapsuleAddressee(
-                  recipient.getOrganisation().getRegistrationCode(),
-                  recipient.getOrganisation().getSubSystem()));
-              saaja.setIsikukood(recipient.getPersonalcode());
-              saaja.setAllyksuseLyhinimetus(recipient.getStructuralUnit());
-              status.setSaaja(saaja);
-              // status.setMetaxml(value);
-              history.getStatus().add(status);
-            }
-          }
-          item.setStaatuseAjalugu(history);
-        }
-        responseAtt.getItem().add(item);
-      }
-      DataHandler handler = convertationService.createDatahandlerFromList(responseAtt.getItem());
-      response.getKeha().setHref(handler);
-      return response;
-    } catch (IOException ex) {
-      throw new DhxException("Error occured while getting attachment. " + ex.getMessage(), ex);
+    org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
+        WsUtil.base64DecodeIfNeededAndUnzip(
+            request.getKeha().getDokumendid().getHref()));
+    List<Long> dhlIds = new ArrayList<Long>();
+    NodeList list = xmlDoc.getElementsByTagName("dhl_id");
+    for (int i = 0; i < list.getLength(); i++) {
+      Node node = list.item(i);
+      log.debug("dhl id " + node.getTextContent());
+      dhlIds.add(Long.valueOf(node.getTextContent()));
     }
+    if (dhlIds.size() == 0) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "No dhl ids are provided to get status for.");
+    }
+    list = xmlDoc.getElementsByTagName("dokument_guid");
+    if (list.getLength() > 0) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "Getting send status by dokument_guid is not supported");
+    }
+    List<Document> documents = documentRepository.findByDocumentIdIn(dhlIds);
+    ObjectFactory factory = new ObjectFactory();
+    GetSendStatusResponse response = factory.createGetSendStatusResponse();
+    response.setKeha(factory.createBase64BinaryType());
+    GetSendStatusV2ResponseTypeUnencoded responseAtt =
+        factory.createGetSendStatusV2ResponseTypeUnencoded();
+    for (Document doc : documents) {
+      if (log.isTraceEnabled()) {
+        log.trace("getting send status for document: {}", doc);
+      }
+      GetSendStatusV2ResponseTypeUnencoded.Item item = factory
+          .createGetSendStatusV2ResponseTypeUnencodedItem();
+      StatusHistoryType history = null;
+      if (request.getKeha().isStaatuseAjalugu()) {
+        history = new StatusHistoryType();
+      }
+      item.setDhlId(doc.getDocumentId().toString());
+      item.setOlek(
+          StatusEnum.forClassificatorId(doc.getTransports().get(0).getStatusId())
+              .getClassificatorName());
+      for (Recipient recipient : doc.getTransports().get(0).getRecipients()) {
+        Edastus edastus = new Edastus();
+        if (recipient.getRecipientStatusId() != null) {
+          edastus.setVastuvotjaStaatusId(BigInteger.valueOf(recipient.getRecipientStatusId()));
+        }
+        edastus.setStaatus(
+            StatusEnum.forClassificatorId(recipient.getStatusId()).getClassificatorName());
+        AadressType adr = new AadressType();
+        adr.setRegnr(
+            persistenceService.toDvkCapsuleAddressee(
+                recipient.getOrganisation().getRegistrationCode(),
+                recipient.getOrganisation().getSubSystem()));
+        adr.setIsikukood(recipient.getPersonalcode());
+        // adr.setAllyksuseKood(recipient.getStructuralUnit());
+        adr.setAsutuseNimi(recipient.getOrganisation().getName());
+        edastus.setSaaja(adr);
+        edastus.setSaadud(ConversionUtil.toGregorianCalendar(recipient.getSendingStart()));
+
+        // edastus.setMetaxml(recipient.getMetaxml());
+        edastus.setMeetod("xtee");
+        if (recipient.getSendingEnd() != null) {
+          edastus.setLoetud(ConversionUtil.toGregorianCalendar(recipient.getSendingEnd()));
+        }
+        if (recipient.getFaultCode() != null) {
+          ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault fault =
+              new ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault();
+          fault.setFaultactor(recipient.getFaultActor());
+          fault.setFaultcode(recipient.getFaultCode());
+          fault.setFaultdetail(recipient.getFaultDetail());
+          fault.setFaultstring(recipient.getFaultString());
+          edastus.setFault(fault);
+        }
+        edastus.setEdastatud(ConversionUtil.toGregorianCalendar(recipient.getSendingStart()));
+        item.getEdastus().add(edastus);
+        if (request.getKeha().isStaatuseAjalugu()) {
+          for (StatusHistory recipientHistory : recipient.getStatusHistory()) {
+            Status status = new Status();
+            if (recipientHistory.getRecipientStatusId() != null) {
+              status.setVastuvotjaStaatusId(
+                  BigInteger.valueOf(recipientHistory.getRecipientStatusId()));
+            }
+            status.setStaatuseMuutmiseAeg(
+                ConversionUtil.toGregorianCalendar(recipientHistory.getStatusChangeDate()));
+            StatusEnum statusEnum =
+                StatusEnum.forClassificatorId(recipientHistory.getStatusId());
+            StatusType statusType = null;
+            switch (statusEnum) {
+              case RECEIVED:
+                statusType = StatusType.SAADETUD;
+                break;
+              case FAILED:
+                statusType = StatusType.KATKESTATUD;
+                break;
+              case IN_PROCESS:
+                statusType = StatusType.SAATMISEL;
+                break;
+              default:
+                throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Unknown status of.");
+            }
+            status.setStaatus(statusType);
+            if (recipientHistory.getFaultCode() != null) {
+              ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault fault =
+                  new ee.ria.dhx.server.types.ee.riik.schemas.dhl.Fault();
+              fault.setFaultactor(recipient.getFaultActor());
+              fault.setFaultcode(recipient.getFaultCode());
+              fault.setFaultdetail(recipient.getFaultDetail());
+              fault.setFaultstring(recipient.getFaultString());
+              status.setFault(fault);
+            }
+            status.setStaatuseAjaluguId(
+                BigInteger.valueOf(recipientHistory.getStatusHistoryId()));
+            StatusHistoryType.Status.Saaja saaja = new StatusHistoryType.Status.Saaja();
+            saaja.setRegnr(persistenceService.toDvkCapsuleAddressee(
+                recipient.getOrganisation().getRegistrationCode(),
+                recipient.getOrganisation().getSubSystem()));
+            saaja.setIsikukood(recipient.getPersonalcode());
+            saaja.setAllyksuseLyhinimetus(recipient.getStructuralUnit());
+            status.setSaaja(saaja);
+            // status.setMetaxml(value);
+            history.getStatus().add(status);
+          }
+        }
+        item.setStaatuseAjalugu(history);
+      }
+      responseAtt.getItem().add(item);
+    }
+    DataHandler handler = convertationService.createDatahandlerFromList(responseAtt.getItem());
+    response.getKeha().setHref(handler);
+    return response;
   }
 
   /**
@@ -623,7 +665,7 @@ public class SoapService {
 
   /**
    * Method deletes documents or content of the documents older than configured lifetime of the
-   * received and failed documents. In sending process documents are not deleted.
+   * received and failed documents. Documents with status INPROCESS are not deleted.
    * 
    * @param deleteWholeDocument delete whole document from database or only content.
    */
@@ -634,7 +676,7 @@ public class SoapService {
 
     Calendar failedDocumentDate = Calendar.getInstance();
     failedDocumentDate.add(Calendar.DAY_OF_YEAR, -failedDocumentLifetime);
-    log.debug("receivedDocumentDate: " + receivedDocumentDate.getTime());
+    log.debug("Deleting receivedDocumentDate: " + receivedDocumentDate.getTime());
     List<Document> documents =
         documentRepository.findByDateCreatedLessThanAndTransportsStatusId(
             receivedDocumentDate.getTime(), StatusEnum.RECEIVED.getClassificatorId());

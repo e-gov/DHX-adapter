@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.service;
 
+import com.jcabi.aspects.Loggable;
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.persistence.entity.Document;
@@ -69,8 +71,6 @@ public class CapsuleService {
   @Setter
   CapsuleConfig capsuleConfig;
 
-  @Setter
-  Boolean treatContainerAsString = true;
 
   @Autowired
   @Setter
@@ -97,6 +97,7 @@ public class CapsuleService {
    * @return - Document created from IncomingDhxPackage
    * @throws DhxException thrown if error occurs
    */
+  @Loggable
   public Document getDocumentFromIncomingContainer(IncomingDhxPackage pckg,
       CapsuleVersionEnum version)
       throws DhxException {
@@ -167,10 +168,10 @@ public class CapsuleService {
       recipient.setSendingStart(new Timestamp(new Date().getTime()));
       recipient.setStatusChangeDate(new Timestamp(new Date().getTime()));
       recipient.setRecipientStatusId(RecipientStatusEnum.ACCEPTED.getClassificatorId());
+      recipient.setOutgoing(false);
       DhxOrganisation dhxRecipientOrg = pckg.getRecipient();
       log.debug(
-          "Searching recipient organisation by code:" + dhxRecipientOrg.getCode() + " system:"
-              + dhxRecipientOrg.getSystem());
+          "Searching recipient organisation by code: {}  system: {}", dhxRecipientOrg.getCode(), dhxRecipientOrg);
       Organisation recipientOrg = organisationRepository
           .findByRegistrationCodeAndSubSystem(dhxRecipientOrg.getCode(),
               dhxRecipientOrg.getSystem());
@@ -208,6 +209,7 @@ public class CapsuleService {
    * @return {@link List} of containers parsed from {@link DataHandler}
    * @throws DhxException thrown if error occurs
    */
+  @Loggable
   public List<Object> getContainersList(DataHandler handler, CapsuleVersionEnum version)
       throws DhxException {
     if (handler == null) {
@@ -221,18 +223,10 @@ public class CapsuleService {
         // first try single contianer, because parsing multiple containers is more hack and does not
         // support for example container with XML declaration etc.
         try {
-          try {
-            attachmentStream = WsUtil.base64decodeAndUnzip(handler.getInputStream());
-          } catch (DhxException ex) {
-            // if input is not base64, then try to just unzip it. it might be if
-            // Content-transfer-encoding is set to base64, then base64 is decoded automatically
-            if (ex.getExceptionCode().equals(DhxExceptionEnum.EXTRACTION_ERROR)) {
-              attachmentStream = WsUtil.gzipDecompress(handler.getInputStream());
-            } else {
-              throw ex;
-            }
-          }
+          log.debug("trying to parse single container in attachment.");
+          attachmentStream = WsUtil.base64DecodeIfNeededAndUnzip(handler);
           DecContainer container = dhxMarshallerService.unmarshall(attachmentStream);
+          log.debug("single container from attachemnt parsed");
           ArrayList<Object> containers = new ArrayList<Object>();
           containers.add(container);
           return containers;
@@ -247,20 +241,11 @@ public class CapsuleService {
 
         // if single contianer failed try to parse multiple containers.
         try {
+          log.debug("trying to parse multiple containers from attachment.");
           // first create wrapper so then we can unmarshall
           tempFile = FileUtil.createPipelineFile();
           fos = new FileOutputStream(tempFile);
-          try {
-            attachmentStream = WsUtil.base64decodeAndUnzip(handler.getInputStream());
-          } catch (DhxException ex) {
-            // if input is not base64, then try to just unzip it. it might be if
-            // Content-transfer-encoding is set to base64, then base64 is decoded automatically
-            if (ex.getExceptionCode().equals(DhxExceptionEnum.EXTRACTION_ERROR)) {
-              attachmentStream = WsUtil.gzipDecompress(handler.getInputStream());
-            } else {
-              throw ex;
-            }
-          }
+          attachmentStream = WsUtil.base64DecodeIfNeededAndUnzip(handler);
           FileUtil.writeToFile(
               "<DocWrapper xmlns=\"http://producers.dhl.xrd.riik.ee/producer/dhl\">", fos);
           FileUtil.writeToFile(attachmentStream, fos);
@@ -278,6 +263,7 @@ public class CapsuleService {
           }
           List<Object> objects = new ArrayList<Object>();
           objects.addAll(containers);
+          log.debug("multiple containers from attachemnt parsed. total:" + objects.size());
           return objects;
         } catch (IOException ex) {
           throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
@@ -309,6 +295,7 @@ public class CapsuleService {
    * @return - created Document object
    * @throws DhxException thrown if error occurs
    */
+  @Loggable
   public Document getDocumentFromOutgoingContainer(InternalXroadMember senderMember,
       InternalXroadMember recipientMember, Object container, String folderName,
       CapsuleVersionEnum version)
@@ -327,12 +314,15 @@ public class CapsuleService {
     // just sends the documents, therefore add organisation if it is not
     // found
     if (senderOrg == null) {
+      log.debug(
+          "sender organisation is not found in database, need to create organiastion from InternalXroadMember.");
       if (senderMember.getRepresentee() != null) {
         Organisation representor = persistenceService
             .getOrganisationFromInternalXroadMemberAndSave(senderMember, true, false);
       }
       senderOrg = persistenceService.getOrganisationFromInternalXroadMemberAndSave(senderMember,
           false, false);
+      log.debug("sender organisation is created. organisation:" + senderOrg.toString());
     }
     document.setOrganisation(senderOrg);
     Integer inprocessStatusId = StatusEnum.IN_PROCESS.getClassificatorId();
@@ -345,12 +335,15 @@ public class CapsuleService {
     sender.setOrganisation(senderOrg);
     sender.setTransport(transport);
     CapsuleAdressee capsuleSender = capsuleConfig.getSenderFromContainer(container);
+    log.debug("sender from capsule: {}", capsuleSender);
     if (config.getCheckSender()) {
+      log.debug("checking if sender from capsule and sender in SOAP header are the same");
       Organisation capsuleSenderOrg = persistenceService.findOrg(capsuleSender.getAdresseeCode());
       if (!capsuleSenderOrg.equals(senderOrg)) {
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
             "Request sender and capsule sender do not match! ");
       }
+      log.debug("sender from capsule and sender in SOAP header are the same");
     }
     sender.setPersonalCode(capsuleSender.getPersonalCode());
     sender.setStructuralUnit(capsuleSender.getStructuralUnit());
@@ -359,8 +352,10 @@ public class CapsuleService {
     document.setOutgoingDocument(true);
     for (CapsuleAdressee containerRecipient : capsuleConfig
         .getAdresseesFromContainer(container)) {
+      log.debug("recipient from capsule: {}", containerRecipient);
       Recipient recipient = new Recipient();
       recipient.setTransport(transport);
+      recipient.setOutgoing(true);
       recipient.setStructuralUnit(containerRecipient.getStructuralUnit());
       recipient.setStatusId(inprocessStatusId);
       recipient.setStatusChangeDate(new Timestamp(new Date().getTime()));
@@ -373,8 +368,7 @@ public class CapsuleService {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
             "Unable to find recipients organisation");
       }
-      log.debug("Found recipient organisation: " + org.getRegistrationCode() + "/"
-          + org.getSubSystem());
+      log.debug("Found recipient organisation: {}/{}", org.getRegistrationCode(), org.getSubSystem());
       recipient.setOrganisation(org);
       transport.addRecipient(recipient);
     }
@@ -382,23 +376,21 @@ public class CapsuleService {
     return document;
   }
 
+  @Loggable
   private void validateAndSetContainerToDocument(Object container, Document document)
       throws DhxException {
     InputStream schemaStream = null;
     try {
-      if (treatContainerAsString) {
-        setDecMetadataFromDocument(container, document);
-        if (config.getCapsuleValidate()) {
-          schemaStream = FileUtil
-              .getFileAsStream(
-                  capsuleConfig.getXsdForVersion(capsuleConfig.getCurrentCapsuleVersion()));
-        }
-        StringWriter writer =
-            dhxMarshallerService.marshallToWriterAndValidate(container, schemaStream);
-        document.setContent(writer.toString());
-      } else {
-        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Unimplemented!");
+      setDecMetadataFromDocument(container, document);
+      if (config.getCapsuleValidate()) {
+        log.debug("validating document.");
+        schemaStream = FileUtil
+            .getFileAsStream(
+                capsuleConfig.getXsdForVersion(capsuleConfig.getCurrentCapsuleVersion()));
       }
+      StringWriter writer =
+          dhxMarshallerService.marshallToWriterAndValidate(container, schemaStream);
+      document.setContent(writer.toString());
     } finally {
       FileUtil.safeCloseStream(schemaStream);
     }
@@ -412,19 +404,16 @@ public class CapsuleService {
    * @return - created container object
    * @throws DhxException thrown if error occurs
    */
+  @Loggable
   public Object getContainerFromDocument(Document doc) throws DhxException {
     InputStream schemaStream = null;
     InputStream capsuleStream = null;
     InputStream stringStream = null;
     Object container = null;
     try {
-      if (treatContainerAsString) {
-        stringStream = new ByteArrayInputStream(doc.getContent().getBytes("UTF-8"));
-        container = dhxMarshallerService.unmarshallAndValidate(stringStream, schemaStream);
-        setDecMetadataFromDocument(container, doc);
-      } else {
-        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "UNIMPLEMENTED!");
-      }
+      stringStream = new ByteArrayInputStream(doc.getContent().getBytes("UTF-8"));
+      container = dhxMarshallerService.unmarshallAndValidate(stringStream, schemaStream);
+      setDecMetadataFromDocument(container, doc);
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured while getting or unpacking attachment" + ex.getMessage(), ex);
@@ -447,6 +436,7 @@ public class CapsuleService {
    * @param outgoingContainer defines wether it is incoming or outgoing container.
    * @throws DhxException thrown if error occurs
    */
+  @Loggable
   public void formatCapsuleRecipientAndSender(Object containerObject, Organisation sender,
       Organisation recipient,
       Boolean outgoingContainer) throws DhxException {
@@ -471,6 +461,7 @@ public class CapsuleService {
                 .toDvkCapsuleAddressee(recipient.getRegistrationCode(), recipient.getSubSystem());
             recipientOrganisationCodeToFind = recipient.getRegistrationCode();
           }
+          log.debug("senderOraganisationCode:" + senderOraganisationCode + " recipientOrganisationCode:" + recipientOrganisationCode);
           container.getTransport().getDecSender().setOrganisationCode(senderOraganisationCode);
           for (DecRecipient decRecipient : container.getTransport().getDecRecipient()) {
             if (decRecipient.getOrganisationCode().equals(recipientOrganisationCodeToFind)) {
@@ -486,6 +477,7 @@ public class CapsuleService {
     }
   }
 
+  @Loggable
   private String getFolderNameFromCapsule(Object containerObject) throws DhxException {
     if (containerObject == null) {
       return null;
@@ -505,6 +497,7 @@ public class CapsuleService {
     }
   }
 
+  @Loggable
   private void setDecMetadataFromDocument(Object containerObject, Document doc)
       throws DhxException {
     CapsuleVersionEnum version = CapsuleVersionEnum.forClass(containerObject.getClass());
@@ -512,16 +505,20 @@ public class CapsuleService {
       case V21:
         DecContainer container = (DecContainer) containerObject;
         if (container.getDecMetadata() == null) {
+          log.debug("creating DecMetadata");
           ObjectFactory factory = new ObjectFactory();
           container.setDecMetadata(factory.createDecContainerDecMetadata());
         }
         if (doc.getDocumentId() != null) {
+          log.debug("creating DocumentId: " + doc.getDocumentId());
           container.getDecMetadata().setDecId(BigInteger.valueOf(doc.getDocumentId()));
         } else if (container.getDecMetadata().getDecId() == null) {
+          log.debug("in order capsule to validate, setting random value as document id");
           // set random just to validate
           container.getDecMetadata().setDecId(BigInteger.valueOf(99999));
         }
         if (doc.getFolder() != null) {
+          log.debug("creating Folder: " + doc.getFolder());
           container.getDecMetadata().setDecFolder(doc.getFolder().getName());
         }
         XMLGregorianCalendar date = ConversionUtil.toGregorianCalendar(new Date());

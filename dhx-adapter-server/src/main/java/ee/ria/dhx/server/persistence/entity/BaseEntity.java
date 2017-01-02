@@ -21,17 +21,15 @@ import javax.persistence.Version;
 @MappedSuperclass
 public class BaseEntity {
 
-  @CreatedDate
   Date dateCreated;
   
-  @LastModifiedDate
   Date dateModified;
 
   @Version
   @Column(name = "VERSION")
   private Integer version;
 
- /* @PrePersist
+  @PrePersist
   public void beforeInsert() {
     dateCreated = new Date();
   }
@@ -39,7 +37,7 @@ public class BaseEntity {
   @PreUpdate
   public void beforeUpdate() {
     dateModified = new Date();
-  }*/
+  }
 
   /**
    * Returns the dateCreated.
