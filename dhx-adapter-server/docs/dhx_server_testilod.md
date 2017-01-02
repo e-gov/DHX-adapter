@@ -28,6 +28,10 @@
 		- [2.13. Õige kapsli saatmine DHX alamsüsteemile(DHX. prefiksiga X-tee alamsüsteemile)](#2.13)
 		- [2.14. DHX süsteemist tulnud dokumendi vastuvõtmine ’ARVED’ kaustast.](#2.14)
 		- [2.15. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on ’ARVED’ kaustas.](#2.15)
+		- [2.16.	DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatavale.](#2.16)
+		- [2.17.	DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatavale.](#2.17)
+		- [2.18.	DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatava alamsüsteemile.](#2.18)
+		- [2.19.	DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatava alamsüsteemile.](#2.19)		
 	- [3. DHX makettrakenduse testid](#dhx-makett-tests)
 	 	- [3.1.	Õige kapsli saatmine](#3.1)
 		- [3.2.	Vale kapsli saatmine](#3.2)
@@ -2803,6 +2807,236 @@ Märkus: manuses olev fail on kodeeritud kujul(base64 ja gZip).
    </soapenv:Body>
 </soapenv:Envelope>
 ```
+<a name="2.16"></a>
+### 2.16. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatavale.
+<pre>
+
+   Saatev süsteem : DHS 3 vahendatav
+   Kapsli adressaat :
+   Saadetis :
+</pre>
+
+#### **Verifitseerija toimimine (samm-sammuline):**
+
+-  Testija täidab testi 1.9
+- Testija saadab päringu DHX adapter serveri teenusesse receiveDocuments
+
+#### **Oodatav tulemus** :
+
+-  receiveDocuments päringu saatmisel vigu ei tekkinud ja päringu vastuses on olemas keha element. Manuses oleva faili sees on olemas esimeses sammus saadetud dokument.
+
+#### **Päringu näide:**
+```xml
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dhl="http://localhost:8084/dvk/services/dhlHttpSoapPort">
+    <soapenv:Header>
+       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer"
+      xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+      xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+    <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers"
+      xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+    </ns4:id>
+         <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer"
+      xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+      xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>generic-consumer</ns3:subsystemCode>
+    </ns4:client>
+     <ns4:service xmlns:ns2="http://dhx.x-road.eu/producer"
+      xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+      xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+      ns3:objectType="SERVICE">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>dhl</ns3:subsystemCode>
+      <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
+      <ns3:serviceVersion>v4</ns3:serviceVersion>
+    </ns4:service>
+    <ns4:userId xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers"
+      xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">EE38806190294
+    </ns4:userId>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <keha xsi:type="xsd:anyType">
+         <arv>50</arv>
+         </keha>
+      </dhl:receiveDocuments>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+<a name="2.17"></a>
+### 2.17. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatavale.
+<pre>
+
+   Saatev süsteem : DHS 3 vahendatav
+   Kapsli adressaat : 
+   Saadetis : 
+</pre>
+
+#### **Verifitseerija toimimine (samm-sammuline):**
+
+-  Testija täidab testi 1.9
+- Testija saadab päringu DHX adapter serveri teenusesse markDocumentReceived.v3
+	- Testija asendab markDocumentReceived päringu XML-i kehas dhlId elemendi sisu dokumendi saatmisel (test 1.9) saadud ID-ga.
+
+#### **Oodatav tulemus** :
+
+- receiveDocuments päringu saatmisel vigu ei tekkinud ja päringu vastuses on olemas keha element 'OK' sisuga.
+
+#### **Päringu näide:**
+```xml
+<soapenv:Envelope xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dhl="http://producers.dhl.xtee.riik.ee/producer/dhl" xmlns:xsi="xsi">
+    <soapenv:Header>
+       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+    <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+    </ns4:id>
+         <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+       <ns3:subsystemCode>generic-consumer</ns3:subsystemCode>
+    </ns4:client>
+        <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>dhl</ns3:subsystemCode>
+      <ns3:serviceCode>markDocumentsReceived</ns3:serviceCode>
+      <ns3:serviceVersion>v3</ns3:serviceVersion>
+    </ns4:service>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:markDocumentsReceived>
+         <keha>
+            <dokumendid xsi:type="SOAP-ENC:Array" SOAP-ENC:arrayType="dhl:asutus[3]">
+        <item>
+          <dhl_id>14320</dhl_id>
+        </item>
+      </dokumendid>
+         </keha>
+      </dhl:markDocumentsReceived>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+<a name="2.18"></a>
+### 2.18. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatava alamsüsteemile.
+<pre>
+
+   Saatev süsteem : DHS 3 vahendatava alamsüsteem
+   Kapsli adressaat :
+   Saadetis :
+</pre>
+
+#### **Verifitseerija toimimine (samm-sammuline):**
+
+-  Testija täidab testi 1.10
+- Testija saadab päringu DHX adapter serveri teenusesse receiveDocuments
+
+#### **Oodatav tulemus** :
+
+-  receiveDocuments päringu saatmisel vigu ei tekkinud ja päringu vastuses on olemas keha element. Manuses oleva faili sees on olemas esimeses sammus saadetud dokument.
+
+#### **Päringu näide:**
+```xml
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dhl="http://localhost:8084/dvk/services/dhlHttpSoapPort">
+    <soapenv:Header>
+       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer"
+      xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+      xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+    <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers"
+      xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+    </ns4:id>
+         <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer"
+      xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+      xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>generic-consumer</ns3:subsystemCode>
+    </ns4:client>
+     <ns4:service xmlns:ns2="http://dhx.x-road.eu/producer"
+      xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd"
+      xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+      ns3:objectType="SERVICE">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>dhl</ns3:subsystemCode>
+      <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
+      <ns3:serviceVersion>v4</ns3:serviceVersion>
+    </ns4:service>
+    <ns4:userId xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers"
+      xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">EE38806190294
+    </ns4:userId>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <keha xsi:type="xsd:anyType">
+         <arv>50</arv>
+         </keha>
+      </dhl:receiveDocuments>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+<a name="2.19"></a>
+### 2.19. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatava alamsüsteemile.
+<pre>
+
+   Saatev süsteem : DHS 3 vahendatava alamsüsteem
+   Kapsli adressaat : 
+   Saadetis : 
+</pre>
+
+#### **Verifitseerija toimimine (samm-sammuline):**
+
+-  Testija täidab testi 1.10
+- Testija saadab päringu DHX adapter serveri teenusesse markDocumentReceived.v3
+	- Testija asendab markDocumentReceived päringu XML-i kehas dhlId elemendi sisu dokumendi saatmisel (test 1.10) saadud ID-ga.
+
+#### **Oodatav tulemus** :
+
+- receiveDocuments päringu saatmisel vigu ei tekkinud ja päringu vastuses on olemas keha element 'OK' sisuga.
+
+#### **Päringu näide:**
+```xml
+<soapenv:Envelope xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dhl="http://producers.dhl.xtee.riik.ee/producer/dhl" xmlns:xsi="xsi">
+    <soapenv:Header>
+       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+    <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+    </ns4:id>
+         <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+       <ns3:subsystemCode>generic-consumer</ns3:subsystemCode>
+    </ns4:client>
+        <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>dhl</ns3:subsystemCode>
+      <ns3:serviceCode>markDocumentsReceived</ns3:serviceCode>
+      <ns3:serviceVersion>v3</ns3:serviceVersion>
+    </ns4:service>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:markDocumentsReceived>
+         <keha>
+            <dokumendid xsi:type="SOAP-ENC:Array" SOAP-ENC:arrayType="dhl:asutus[3]">
+        <item>
+          <dhl_id>14320</dhl_id>
+        </item>
+      </dokumendid>
+         </keha>
+      </dhl:markDocumentsReceived>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
 <a name="dhx-makett-tests"></a>
 ## 3. DHX makettrakenduse testid
 <a name="3.1"></a>
