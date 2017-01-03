@@ -2,7 +2,7 @@
 
 [ET](JUHEND.md) | EN
 
-# DHX-adapter usage guide
+# DHX-adapter Java library usage guide
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 

@@ -2,7 +2,7 @@
 
 ET | [EN](GUIDE.md)
 
-# DHX-adapteri kasutusjuhend
+# DHX-adapteri Java teegi kasutusjuhend
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 

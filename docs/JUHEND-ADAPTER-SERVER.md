@@ -1,0 +1,86 @@
+![](EL_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg)
+
+ET | [EN](GUIDE.md)
+
+# DHX-adapteri serveri kasutusjuhend
+
+![](DHX.PNG)  ![](X-ROAD.PNG)
+
+## Sissejuhatus
+DHX adapter server on serveri tarkvara, mis hõlbustab DHX dokumendivahetuse protokolli kasutusele võtmist.
+
+DHX adapter server pakub kahte erinevat SOAP veebiteenuste liidest:
+* DHX liides, mis implementeerib DHX operatsioonid sendDocument ja representationList
+* Vanale DVK-le sarnane liides, mis implementeerib opratsioonid sendDocuments, receiveDocuments, markDocumentsReceived, getSendStatus ja getSendingOptions
+
+DHX adapter server käitub puhver-serverina, võttes mõlema liidese kaudu vastu dokumente, salvestades kõigepealt need enda lokaalses puhver-andmebaasis, selleks et need addressaadile edastada.
+
+##Välised sõltuvused ja baasplatvorm
+
+Kompileerimiseks ja käivitamiseks on vajalik [Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
+
+Lokaalse andmebaasi serverina võib kasutada [Spring-Data](http://projects.spring.io/spring-data/) ja [Spring-Data-JPA] (http://projects.spring.io/spring-data-jpa/) poolt toetatud SQL andmebaasi servereid.
+**NB!** DHX adapter serveri töötamine on testitud [PostgreSQL](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.   
+
+Põhilised välised sõltuvused on toodud [DHX-adapteri Java teegi kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#v%C3%A4lised-s%C3%B5ltuvused-ja-baasplatvorm).
+
+Lisaks neile on täiendavad sõltuvused peamiselt andmbaasiga suhtlemise moodulitest:
+
+Grupp | Moodul | Versioon | Märkused
+------------ | ------------- | ------------- | -------------
+org.springframework.data | spring-data-commons | 1.12.5.RELEASE | Spring Data Commons
+org.springframework.boot | spring-boot-starter-data-jpa | 1.4.2.RELEASE | Spring data JPA starter
+org.springframework.data | spring-data-jpa | XXXXX | Spring Data JPA
+org.hibernate | hibernate-core | XXXX | Hibernate ORM Core
+org.hibernate | hibernate-entitymanager | XXXX | Hibernate ORM Entity manager 
+org.springframework.boot  | spring-boot-starter-jdbc | XXXX | Spring starter JDBC
+javax.transaction | javax.transaction-api | XXXXX | Java transaction API
+org.postgresql | postgresql | 9.4.1212 | PostgreSQL (juhul kui kasutatakse Postgre andmebaasi)
+
+
+##Ehitamine
+
+Alljärgnevalt on toodud näide, kuidas kaasata DHX adapteri teegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
+
+Ülaltoodud välised sõltuvused laetakse Maveni kasutamise korral automaatselt alla.
+
+Lisada oma DHS tarkvara ehitamise Maven pom.xml sisse järgmised sõltuvused:
+```xml
+		<dependency>
+			<groupId>ee.ria.dhx</groupId>
+			<artifactId>dhx-adapter-server</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+```
+
+##Teadaolevad probleemid (sõltuvuste konfliktid)
+
+Vaata [DHX-adapteri Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
+
+##Teegi laadimise häälestamine (web.xml ja applicationContext.xml)
+
+Vaata [DHX-adapteri Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
+
+##Häälestus fail (dhx-application.properties)
+
+Põhilised häälestus failis esinevad parameetrid on toodud  [DHX-adapteri Java teegi kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
+
+Lisaks neile tuleb täiendavalt lisada parameetrid
+
+Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
+------------ | ------------- | ------------- | -------------
+dhx.server.special-orgnisations |  | adit,kovtp,rt,eelnoud | DVK alamsüsteemide erandid, millele korral võib DVK teenusest kasutada ainult nime (ei ole vaja organistatsiooni koodi)
+dhx.server.delete-old-documents |  | delete-all | "delete-all" määrab et nii dokumendi metaandmed kui ka sisu (fail) kustutatakse perioodilise puhastus protsessi poolt. "delete-content" määrab et ainult sisu (fail) kustutatakse. Muu väärtus jätab kõik alles.
+dhx.server.delete-old-documents-freq | | */20 * * * * ? | Vanade dokumentide kustutamise taustatöö käivitamise periood. Kustutatakse ainult dokumendid, mis on vanemad kui alljärgnevate parameetritega määratud päevade arv (30 päeva). [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `*/20 * * * * ?` tähendab iga 20 sekundi järel.
+dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, õnnelikult vastu võetud ja edastatud dokument. Kustutamine sõltub ka parameetri "dhx.server.delete-old-documents" väärtusest.
+dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, probleemselt (veaga) edastatud dokument. Kustutamine sõltub ka parameetri "dhx.server.delete-old-documents" väärtusest. 
+dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti saatmisel staatusesse jäänud dokumente saata. Peaks olema suurem kui "document-resend-template" parameetris määratud aegade summa. Kasutatakse reaaalselt satmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.    
+spring.jpa.hibernate.ddl-auto | | update|
+spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx-adapter| Postgres andmbaasi hosti nimi8 (localhost), port (5432) ja andmbaasi nimi (dhx-adapter)
+spring.datasource.username | | postgres | Postgres andmbaasi kasutajanimi
+spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
+spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab et kasutame Postgres andmbaasi
+spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| 
+
+
+
