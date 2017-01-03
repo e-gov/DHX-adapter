@@ -65,7 +65,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -210,21 +209,23 @@ public class SoapService {
       log.debug("found total recipients to send to DHX: " + recipients.size());
     }
     Recipient lockedRecipient = null;
-    /*List<Long> recipientIds = new ArrayList<Long>();
-    for(Recipient recipientUnlocked : recipients) {
-      recipientIds.add(recipientUnlocked.getRecipientId());
-    }
-
-    List<Recipient> lockedRecipients = recipientRepository.findByRecipientIdIn(recipientIds);*/
+    /*
+     * List<Long> recipientIds = new ArrayList<Long>(); for(Recipient recipientUnlocked :
+     * recipients) { recipientIds.add(recipientUnlocked.getRecipientId()); }
+     * 
+     * List<Recipient> lockedRecipients = recipientRepository.findByRecipientIdIn(recipientIds);
+     */
     for (Recipient recipientUnlocked : recipients) {
       try {
         // doing query for every recipient to lock it for writing, in order for another thread not
         // to update it
         lockedRecipient = recipientUnlocked;
-            //recipientRepository.findByRecipientId(recipientUnlocked.getRecipientId());
-        //if recipient were updated by another transaction, then skip
-        if (lockedRecipient.getVersion()!= null && recipientUnlocked.getVersion()!= null && lockedRecipient.getVersion()!=recipientUnlocked.getVersion()) {
-          log.info("recipient were updated by another transaction, skiping it. {}", lockedRecipient );
+        // recipientRepository.findByRecipientId(recipientUnlocked.getRecipientId());
+        // if recipient were updated by another transaction, then skip
+        if (lockedRecipient.getVersion() != null && recipientUnlocked.getVersion() != null
+            && lockedRecipient.getVersion() != recipientUnlocked.getVersion()) {
+          log.info("recipient were updated by another transaction, skiping it. {}",
+              lockedRecipient);
           continue;
         }
         Document document = lockedRecipient.getTransport().getDokument();
@@ -268,8 +269,8 @@ public class SoapService {
         lockedRecipient.setDhxInternalConsignmentId(lockedRecipient.getRecipientId().toString());
         lockedRecipient.setSendingStart(new Timestamp((new Date()).getTime()));
         saveRecipient(lockedRecipient);
-         //recipientRepository.save(lockedRecipient);
-         asyncDhxPackageService.sendPackage(dhxPackage);
+        // recipientRepository.save(lockedRecipient);
+        asyncDhxPackageService.sendPackage(dhxPackage);
       } catch (DhxException ex) {
         log.error("Error occured while sending document! " + ex.getMessage(), ex);
         Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
@@ -453,14 +454,16 @@ public class SoapService {
       if (allSent && !doc.getTransports().get(0).getStatusId()
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
         log.debug(
-            "all of the documwents reciepient are in status received, setting same status to document.");
+            "all of the documwents reciepient are in status received, "
+            + "setting same status to document.");
         doc.getTransports().get(0).setStatusId(successStatusId);
         documentRepository.save(doc);
       }
       if (allFailed && !doc.getTransports().get(0).getStatusId()
           .equals(StatusEnum.FAILED.getClassificatorId())) {
         log.debug(
-            "all of the documwents reciepient are in status failed, setting same status to document.");
+            "all of the documwents reciepient are in status failed, "
+            + "setting same status to document.");
         doc.getTransports().get(0).setStatusId(failedStatusId);
         documentRepository.save(doc);
       }
@@ -656,7 +659,15 @@ public class SoapService {
       SendingOptionArrayType sendingOptions = new SendingOptionArrayType();
       sendingOptions.getSaatmisviis().add("dhl");
       institution.setSaatmine(sendingOptions);
-      institutions.getAsutus().add(institution);
+      if(request.getKeha().getAsutused() != null 
+          && request.getKeha().getAsutused().getAsutus() !=null 
+          && request.getKeha().getAsutused().getAsutus().size()>0) {
+        if(request.getKeha().getAsutused().getAsutus().contains(institution.getRegnr())) {
+          institutions.getAsutus().add(institution);
+        }
+      } else {
+        institutions.getAsutus().add(institution);
+      }
     }
     DataHandler handler = convertationService.createDatahandlerFromObject(institutions);
     response.getKeha().setHref(handler);

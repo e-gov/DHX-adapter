@@ -76,14 +76,10 @@ public class AsyncDhxPackageServiceImpl implements AsyncDhxPackageService {
                 .getExceptionCode().isBusinessException()) {
           log.info("Business exception occured while doing asynchronous sending. "
               + "No need to continue retries, stopping resending.");
-          /*dhxImplementationSpecificService.saveSendResult(result,
-              results);*/
           break;
         }
         if (result.getResponse().getFault() == null) {
           log.info("Successfull sending. Stopping resend.");
-         /*dhxImplementationSpecificService.saveSendResult(result,
-              results);*/
           break;
         }
         currentTimeout = getNextTimeout(currentRetry);
@@ -91,7 +87,8 @@ public class AsyncDhxPackageServiceImpl implements AsyncDhxPackageService {
         if (currentTimeout != null) {
           Thread.sleep(currentTimeout * 1000L);
         }
-      } while (currentTimeout != null);
+      }
+      while (currentTimeout != null);
       log.info("All needed retries done. Calling callback method. Total retry count: "
           + currentRetry);
       dhxImplementationSpecificService.saveSendResult(result, results);

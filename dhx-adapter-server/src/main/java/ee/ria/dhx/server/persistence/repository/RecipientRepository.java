@@ -6,7 +6,6 @@ import ee.ria.dhx.server.persistence.entity.Recipient;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -39,11 +38,12 @@ public interface RecipientRepository extends JpaRepository<Recipient, Long> {
 
   public Recipient findByTransportDokumentDocumentIdAndTransportDokumentFolderAndOrganisation(
       Integer documentId, Folder folder, Organisation org);
-  
-  /*@Lock(LockModeType.PESSIMISTIC_WRITE)
-  public List<Recipient> findByRecipientIdIn(List<Long> ids);
-  
-  @Lock(LockModeType.PESSIMISTIC_WRITE)
-  public Recipient findByRecipientId(Long id);*/
+
+  /*
+   * @Lock(LockModeType.PESSIMISTIC_WRITE) public List<Recipient> findByRecipientIdIn(List<Long>
+   * ids);
+   * 
+   * @Lock(LockModeType.PESSIMISTIC_WRITE) public Recipient findByRecipientId(Long id);
+   */
 
 }

@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -38,7 +41,9 @@ public class Document extends BaseEntity implements Serializable {
   @Column(name = "sailitustahtaeg")
   private Timestamp storageDeadline;
 
-  @Column(name = "sisu", columnDefinition = "TEXT")
+  @Column(name = "sisu")
+  @Lob
+  @Type(type="org.hibernate.type.MaterializedClobType")
   private String content;
 
   @Column(name = "suurus")
@@ -294,7 +299,9 @@ public class Document extends BaseEntity implements Serializable {
     this.outgoingDocument = outgoingDocument;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override
@@ -306,5 +313,5 @@ public class Document extends BaseEntity implements Serializable {
         + outgoingDocument + "]";
   }
 
-  
+
 }

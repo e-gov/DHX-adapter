@@ -6,49 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.transaction.Transactional;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-/*
- * import org.springframework.ws.test.server.MockWebServiceClient; import
- * org.springframework.ws.test.server.RequestCreator; import
- * org.springframework.ws.test.server.RequestCreators;
- */
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.oxm.mime.MimeContainer;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.ws.test.client.MockWebServiceServer;
-import org.springframework.ws.test.client.RequestMatchers;
-import org.springframework.ws.test.client.ResponseCreators;
-import org.springframework.ws.test.server.MockWebServiceClient;
-import org.springframework.ws.test.server.RequestCreators;
-import org.springframework.ws.test.server.ResponseMatchers;
-
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.RepoFactory4Test;
 import ee.ria.dhx.server.TestApp;
@@ -95,6 +52,49 @@ import ee.ria.dhx.util.ConversionUtil;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 import ee.ria.dhx.ws.service.impl.AddressServiceImplSpyProvider;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+/*
+ * import org.springframework.ws.test.server.MockWebServiceClient; import
+ * org.springframework.ws.test.server.RequestCreator; import
+ * org.springframework.ws.test.server.RequestCreators;
+ */
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.oxm.mime.MimeContainer;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.ws.test.client.MockWebServiceServer;
+import org.springframework.ws.test.client.RequestMatchers;
+import org.springframework.ws.test.client.ResponseCreators;
+import org.springframework.ws.test.server.MockWebServiceClient;
+import org.springframework.ws.test.server.RequestCreators;
+import org.springframework.ws.test.server.ResponseMatchers;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.transaction.Transactional;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 
 // import org.springframework.test.context.junit4.SpringRunner;
 
@@ -191,15 +191,18 @@ public class ServerIT {
         new InternalXroadMember("ee-dev", "GOV", "400", "DHX", "Name1", null);
     members.add(member);
   }
+
   private SendDocuments getSendDocumentsRequest(DecContainer... containers) throws DhxException {
     return getSendDocumentsRequest(true, containers);
   }
 
-  private SendDocuments getSendDocumentsRequest(Boolean encodeBase64, DecContainer... containers) throws DhxException {
+  private SendDocuments getSendDocumentsRequest(Boolean encodeBase64, DecContainer... containers)
+      throws DhxException {
     SendDocuments request = new SendDocuments();
     request.setKeha(new SendDocumentsV4RequestType());
     request.getKeha().setDokumendid(new Base64BinaryType());
-    request.getKeha().getDokumendid().setHref(getSendDocumentsAttachment(encodeBase64, containers));
+    request.getKeha().getDokumendid()
+        .setHref(getSendDocumentsAttachment(encodeBase64, containers));
     return request;
   }
 
@@ -243,7 +246,8 @@ public class ServerIT {
     return container;
   }
 
-  private DataHandler getSendDocumentsAttachment(Boolean encodeBase64, DecContainer... containers) throws DhxException {
+  private DataHandler getSendDocumentsAttachment(Boolean encodeBase64, DecContainer... containers)
+      throws DhxException {
     DocumentsArrayType docs = new DocumentsArrayType();
     for (DecContainer cont : containers) {
       docs.getDecContainer().add(cont);
@@ -256,7 +260,7 @@ public class ServerIT {
    * Tests whole flow. Starts with sendDocuments service, then document is sent to DHX and send
    * status is checked.
    * 
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
@@ -401,9 +405,9 @@ public class ServerIT {
     soapService.sendDocumentsToDhx();
 
   }
-  
-  
-  
+
+
+
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void sendDocumentsNormalNoBase64() throws DhxException {
@@ -443,7 +447,7 @@ public class ServerIT {
         doc.getTransports().get(0).getRecipients().get(0).getOrganisation()
             .getRegistrationCode());
 
-    
+
     // send document to DHX
     Mockito.reset(convertationService);
     Mockito.doCallRealMethod().when(marshaller).unmarshal(any(Source.class),
@@ -485,7 +489,7 @@ public class ServerIT {
    * Tests whole flow. Starts with sendDocuments service, then document is sent to DHX and send
    * status is checked.
    * 
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
@@ -514,9 +518,6 @@ public class ServerIT {
     assertEquals(2, keha.getDhlId().size());
     Long docId = Long.parseLong(keha.getDhlId().get(0));
     Document doc = documentRepository.findOne(docId);
-
-    Long docId2 = Long.parseLong(keha.getDhlId().get(1));
-    Document doc2 = documentRepository.findOne(docId2);
 
 
     assertEquals(true, doc.getOutgoingDocument());
@@ -599,6 +600,9 @@ public class ServerIT {
     sendDocumentResponse.setReceiptId("receiptId2");
     sendDocumentResponseEnvelope = IntegrationTestHelper.getEnvelope(client, service, null,
         sendDocumentResponse);
+
+    Long docId2 = Long.parseLong(keha.getDhlId().get(1));
+    Document doc2 = documentRepository.findOne(docId2);
     mockServerSendDOcument
         .expect(RequestMatchers
             .xpath("//ns9:sendDocument[1]/ns9:consignmentId[1]", getDhxNamespaceMap())
@@ -677,7 +681,7 @@ public class ServerIT {
    * status is checked. In sendDocuments there are multiple reciepient of different types
    * (representees, with subsystems etc).
    * 
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
@@ -968,7 +972,7 @@ public class ServerIT {
    * Tests whole flow. Starts with sendDocuments service, then document is sent to DHX and send
    * status is checked. Document sending to DHX will get an error. etc).
    * 
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Test
@@ -1160,8 +1164,8 @@ public class ServerIT {
   /**
    * Test of getSendingOptions service. And check of organisations in database.
    * 
-   * @throws IOException
-   * @throws DhxException
+   * @throws IOException thrown if error occurs thrown if error occurs
+   * @throws DhxException thrown if error occurs thrown if error occurs
    */
   @Test
   public void getSendingOptions() throws IOException, DhxException {
@@ -1249,13 +1253,13 @@ public class ServerIT {
    * the organisations are no longer DHX members, some of the representees changed the representor
    * and some are no longer members.
    * 
-   * @throws IOException
-   * @throws DhxException
+   * @throws IOException thrown if error occurs
+   * @throws DhxException thrown if error occurs
    */
   @Test
   public void getSendingOptionsChanged() throws IOException, DhxException {
-    
-    //c
+
+    // c
     AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params2.xml");
     Source requestEnvelope = new StreamSource(
         new ClassPathResource(resourceFolder + "getSendingOptions.xml").getFile());
@@ -1266,8 +1270,8 @@ public class ServerIT {
     mockServerSendingOptions.expect(
         RequestMatchers.xpath("//ns9:representationList[1]", getDhxNamespaceMap()).exists())
         .andRespond(ResponseCreators.withSoapEnvelope(responseEnvelope));
-    addressService.renewAddressList(); 
-    
+    addressService.renewAddressList();
+
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
         .andExpect(ResponseMatchers
             .xpath("//ns4:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
@@ -1276,7 +1280,7 @@ public class ServerIT {
         ArgumentCaptor.forClass(InstitutionArrayType.class);
     Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
     InstitutionArrayType items = argument.getValue();
-    
+
     assertEquals(6, items.getAsutus().size());
 
     assertEquals("dhl", items.getAsutus().get(0).getSaatmine().getSaatmisviis().get(0));
@@ -1308,9 +1312,9 @@ public class ServerIT {
 
     Iterable<Organisation> orgs = organisationRepository.findAll();
     Iterator<Organisation> iterator = orgs.iterator();
-    
-    
-    
+
+
+
     Organisation org = iterator.next();
     assertEquals("70006317", org.getRegistrationCode());
     assertEquals("DHX.dvk", org.getSubSystem());
@@ -1320,28 +1324,28 @@ public class ServerIT {
     assertEquals("30000001", org.getRegistrationCode());
     assertEquals("DHX", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("30000001", org.getRegistrationCode());
     assertEquals("DHX.raamatupidamine", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("40000001", org.getRegistrationCode());
     assertEquals("DHX", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("40000001", org.getRegistrationCode());
     assertEquals("DHXsubsystem", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
-    
+
+
     org = iterator.next();
     assertEquals("70000004", org.getRegistrationCode());
     assertEquals("DHX", org.getSubSystem());
     assertEquals(false, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("70000004", org.getRegistrationCode());
     assertEquals("DHX.adit", org.getSubSystem());
@@ -1354,41 +1358,41 @@ public class ServerIT {
     assertEquals("70006317", org.getRepresentor().getRegistrationCode());
     assertEquals("DHX.dvk", org.getRepresentor().getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("510", org.getRegistrationCode());
     assertEquals("rt", org.getSubSystem());
     assertNotNull(org.getRepresentor());
     assertEquals("30000001", org.getRepresentor().getRegistrationCode());
     assertEquals(false, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("500", org.getRegistrationCode());
     assertNull(org.getSubSystem());
     assertNotNull(org.getRepresentor());
     assertEquals("30000001", org.getRepresentor().getRegistrationCode());
     assertEquals(false, org.getIsActive());
-    
+
     mockServerSendingOptions.verify();
-    
-    
-    
-    //check that after chenging back, everithing is OK
+
+
+
+    // check that after chenging back, everithing is OK
     AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params.xml");
-   responseEnvelope = new StreamSource(
+    responseEnvelope = new StreamSource(
         new ClassPathResource(resourceFolder + "representationList_response.xml").getFile());
     mockServerSendingOptions =
         MockWebServiceServer.createServer(applicationContext);
     mockServerSendingOptions.expect(
         RequestMatchers.xpath("//ns9:representationList[1]", getDhxNamespaceMap()).exists())
         .andRespond(ResponseCreators.withSoapEnvelope(responseEnvelope));
-    addressService.renewAddressList(); 
-    
+    addressService.renewAddressList();
+
     orgs = organisationRepository.findAll();
     iterator = orgs.iterator();
-    
-    
-    
+
+
+
     org = iterator.next();
     assertEquals("70006317", org.getRegistrationCode());
     assertEquals("DHX.dvk", org.getSubSystem());
@@ -1398,28 +1402,28 @@ public class ServerIT {
     assertEquals("30000001", org.getRegistrationCode());
     assertEquals("DHX", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("30000001", org.getRegistrationCode());
     assertEquals("DHX.raamatupidamine", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("40000001", org.getRegistrationCode());
     assertEquals("DHX", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("40000001", org.getRegistrationCode());
     assertEquals("DHXsubsystem", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
-    
+
+
     org = iterator.next();
     assertEquals("70000004", org.getRegistrationCode());
     assertEquals("DHX", org.getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("70000004", org.getRegistrationCode());
     assertEquals("DHX.adit", org.getSubSystem());
@@ -1432,14 +1436,14 @@ public class ServerIT {
     assertEquals("30000001", org.getRepresentor().getRegistrationCode());
     assertEquals("DHX", org.getRepresentor().getSubSystem());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("510", org.getRegistrationCode());
     assertEquals("rt", org.getSubSystem());
     assertNotNull(org.getRepresentor());
     assertEquals("30000001", org.getRepresentor().getRegistrationCode());
     assertEquals(true, org.getIsActive());
-    
+
     org = iterator.next();
     assertEquals("500", org.getRegistrationCode());
     assertNull(org.getSubSystem());
@@ -1466,7 +1470,7 @@ public class ServerIT {
    * Tests whole flow. Starts with the document being sent from DHX(sendDocument service). Then the
    * document will be received(receiveDocuments) and marked as received(markDocumentsReceived).
    * 
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
@@ -1540,7 +1544,6 @@ public class ServerIT {
     assertEquals("40000001",
         items.get(0).getTransport().getDecRecipient().get(0).getOrganisationCode());
     assertNotEquals(BigInteger.valueOf(9999), items.get(0).getDecMetadata().getDecId());
-    BigInteger docId = items.get(0).getDecMetadata().getDecId();
 
     // mark documents received
     Mockito.reset(convertationService);
@@ -1550,6 +1553,7 @@ public class ServerIT {
     markDocumentsReceived.setKeha(new MarkDocumentsReceivedV3RequestType());
     List<TagasisideType> tagasisides = new ArrayList<TagasisideType>();
     TagasisideType tagasiside = new TagasisideType();
+    BigInteger docId = items.get(0).getDecMetadata().getDecId();
     tagasiside.setDhlId(docId);
     tagasiside.setVastuvotjaStaatusId(
         BigInteger.valueOf(RecipientStatusEnum.ACCEPTED.getClassificatorId()));
@@ -1591,7 +1595,7 @@ public class ServerIT {
    * Tests whole flow. Starts with the document being sent from DHX(sendDocument service). The
    * document will be sent to representee with subsystem.
    * 
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
@@ -1658,7 +1662,6 @@ public class ServerIT {
     assertEquals("subsystem.511",
         items.get(0).getTransport().getDecRecipient().get(1).getOrganisationCode());
     assertNotEquals(BigInteger.valueOf(9999), items.get(0).getDecMetadata().getDecId());
-    BigInteger docId = items.get(0).getDecMetadata().getDecId();
 
     // mark documents received
     Mockito.reset(convertationService);
@@ -1668,6 +1671,7 @@ public class ServerIT {
     markDocumentsReceived.setKeha(new MarkDocumentsReceivedV3RequestType());
     List<TagasisideType> tagasisides = new ArrayList<TagasisideType>();
     TagasisideType tagasiside = new TagasisideType();
+    BigInteger docId = items.get(0).getDecMetadata().getDecId();
     tagasiside.setDhlId(docId);
     tagasiside.setVastuvotjaStaatusId(
         BigInteger.valueOf(RecipientStatusEnum.ACCEPTED.getClassificatorId()));
@@ -1710,7 +1714,7 @@ public class ServerIT {
    * document from DHX will be faulty, expect that it will not be received and receiveDocumentswill
    * not give any documents.
    * 
-   * @throws DhxException
+   * @throws DhxException thrown if error occurs
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Test
@@ -1756,8 +1760,6 @@ public class ServerIT {
         any(MimeContainer.class));
     XRoadClientIdentifierType receiveClient = IntegrationTestHelper.getClient("511");
     receiveClient.setSubsystemCode("subsystem");
-    XRoadServiceIdentifierType receiveService =
-        IntegrationTestHelper.getService("40000001", "v4");
 
     // receive documents
     Mockito.reset(convertationService);
@@ -1765,6 +1767,8 @@ public class ServerIT {
         any(MimeContainer.class));
     ReceiveDocuments receiveDocumentsRequest = new ReceiveDocuments();
     receiveDocumentsRequest.setKeha(new ReceiveDocumentsV4RequestType());
+    XRoadServiceIdentifierType receiveService =
+        IntegrationTestHelper.getService("40000001", "v4");
     receiveService.setServiceVersion("v4");
     Source receiveDocumentsEnvelope =
         IntegrationTestHelper.getEnvelope(receiveClient, receiveService, null,

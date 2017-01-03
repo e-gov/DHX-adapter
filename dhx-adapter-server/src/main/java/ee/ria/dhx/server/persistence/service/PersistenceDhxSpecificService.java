@@ -2,7 +2,6 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
-
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.persistence.entity.Document;
@@ -30,15 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.context.MessageContext;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -101,7 +98,9 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   @Loggable
   public String receiveDocument(IncomingDhxPackage document, MessageContext context)
       throws DhxException {
-    log.debug("String receiveDocument(DhxDocument document) externalConsignmentId: {} recipient: {} service: {}",
+    log.debug(
+        "String receiveDocument(DhxDocument document) "
+        + "externalConsignmentId: {} recipient: {} service: {}",
         document.getExternalConsignmentId(), document.getRecipient(), document.getService());
     Document doc = capsuleService.getDocumentFromIncomingContainer(document,
         document.getParsedContainerVersion());
@@ -188,7 +187,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
             "checking if organisation needs to be deactivated organisation: {}", org);
       }
       // we need to check only active organisations
-      if (org.getIsActive() && (org.getOwnRepresentee()== null || !org.getOwnRepresentee())) {
+      if (org.getIsActive() && (org.getOwnRepresentee() == null || !org.getOwnRepresentee())) {
         found = false;
         for (InternalXroadMember member : members) {
           if (log.isTraceEnabled()) {
@@ -219,7 +218,9 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       if (!found) {
         if (log.isDebugEnabled()) {
           log.debug(
-              "organisation is not found in renewed address list, deactivating it. organisation: {}", org);
+              "organisation is not found in renewed address list, "
+              + "deactivating it. organisation: {}",
+              org);
         }
         org.setIsActive(false);
         changedOrgs.add(org);
@@ -230,7 +231,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
 
   @Override
   @Loggable
- // @Transactional(propagation = Propagation.REQUIRES_NEW)
+  // @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void saveSendResult(DhxSendDocumentResult finalResult,
       List<AsyncDhxSendDocumentResult> retryResults) {
     log.info("saveSendResult invoked.");
@@ -239,8 +240,9 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       Integer recipientId = Integer.parseInt(recipientIdStr);
       log.debug("searching recipient to save send result. " + recipientId);
       Recipient recipient = recipientRepository.findOne(new Long(recipientId));
-      if(recipient == null) {
-        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Recipient is not found in database. recipientId: " + recipientId);
+      if (recipient == null) {
+        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+            "Recipient is not found in database. recipientId: " + recipientId);
       }
       SendDocumentResponse docResponse = finalResult.getResponse();
       recipient.setSendingEnd(new Timestamp((new Date()).getTime()));
@@ -249,13 +251,13 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       if (docResponse.getFault() == null) {
         log.debug("Document was succesfuly sent to DHX");
         recipient.setDhxExternalReceiptId(docResponse.getReceiptId());
-         recipient.setRecipientStatusId(RecipientStatusEnum.SENT.getClassificatorId());
+        recipient.setRecipientStatusId(RecipientStatusEnum.SENT.getClassificatorId());
         recipient.setStatusId(successStatusId);
       } else {
         log.debug("Fault occured while sending document to DHX");
         log.debug("All attempts to send documents were done. Saving document as failed.");
         Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
-         recipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
+        recipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
         recipient.setStatusId(failedStatusId);
         // recipient.setSendingEndDate(new Date());
         String faultString = "";
@@ -293,9 +295,10 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       }
       if (allSent && !recipient.getTransport().getStatusId()
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
-        log.debug("all of the documents recipients are in received status, setting same status to the document.");
+        log.debug(
+            "all of the documents recipients are in received status, setting same status to the document.");
         recipient.getTransport().setStatusId(successStatusId);
-       // documentRepository.save(recipient.getTransport().getDokument());
+        // documentRepository.save(recipient.getTransport().getDokument());
       }
       persistenceService.addStatusHistory(recipient);
       recipientRepository.saveAndFlush(recipient);

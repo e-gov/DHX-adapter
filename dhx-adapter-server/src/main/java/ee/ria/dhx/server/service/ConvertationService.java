@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 
 /**
  * Class that converts Objects.
@@ -60,7 +58,7 @@ public class ConvertationService {
       zippedStream.finish();
       zippedStream.flush();
       zippedStream.close();
-      zippedStream= null;
+      zippedStream = null;
       base64Stream.flush();
       base64Stream.close();
       base64Stream = null;
@@ -103,7 +101,7 @@ public class ConvertationService {
       zippedStream.finish();
       zippedStream.flush();
       zippedStream.close();
-      zippedStream= null;
+      zippedStream = null;
       base64Stream.flush();
       base64Stream.close();
       base64Stream = null;

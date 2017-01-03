@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -32,10 +35,10 @@ public class StatusHistory implements Serializable {
   @Column(name = "fault_code")
   private String faultCode;
 
-  @Column(name = "fault_detail", columnDefinition = "TEXT")
+  @Column(name = "fault_detail", length = 2000)
   private String faultDetail;
 
-  @Column(name = "fault_string", columnDefinition = "TEXT")
+  @Column(name = "fault_string")
   private String faultString;
 
   private String metaxml;

@@ -133,8 +133,10 @@ public class Sender extends BaseEntity implements Serializable {
   public void setTransport(Transport transport) {
     this.transport = transport;
   }
-  
-  /* (non-Javadoc)
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override

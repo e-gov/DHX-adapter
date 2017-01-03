@@ -1,7 +1,5 @@
 package ee.ria.dhx.server.persistence.entity;
 
-import lombok.ToString;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
@@ -358,7 +356,9 @@ public class Organisation extends BaseEntity implements Serializable {
     this.representees = representees;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override
@@ -371,5 +371,5 @@ public class Organisation extends BaseEntity implements Serializable {
         + ", ownRepresentee=" + ownRepresentee + ", representor=" + representor + "]";
   }
 
-  
+
 }

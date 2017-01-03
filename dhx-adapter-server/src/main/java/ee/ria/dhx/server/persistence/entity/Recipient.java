@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,10 +14,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 /**
@@ -53,10 +55,10 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "fault_code")
   private String faultCode;
 
-  @Column(name = "fault_detail", columnDefinition = "TEXT")
+  @Column(name = "fault_detail", length = 2000)
   private String faultDetail;
 
-  @Column(name = "fault_string", columnDefinition = "TEXT")
+  @Column(name = "fault_string")
   private String faultString;
 
   @Column(name = "isikukood")
@@ -82,7 +84,7 @@ public class Recipient extends BaseEntity implements Serializable {
   @ManyToOne
   @JoinColumn(name = "asutus_id")
   private Organisation organisation;
-  
+
   private Boolean outgoing;
 
   // bi-directional many-to-one association to Klassifikaator
@@ -129,6 +131,7 @@ public class Recipient extends BaseEntity implements Serializable {
 
   /**
    * Adds statusHistory to array.
+   * 
    * @param statusHistory statusHistory to add
    * @return the statusHistory
    */
@@ -144,6 +147,7 @@ public class Recipient extends BaseEntity implements Serializable {
 
   /**
    * Removes statusHistory from array.
+   * 
    * @param statusHistory statusHistory to remove
    * @return the statusHistory
    */
@@ -550,7 +554,9 @@ public class Recipient extends BaseEntity implements Serializable {
     this.metaxml = metaxml;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override
@@ -584,5 +590,5 @@ public class Recipient extends BaseEntity implements Serializable {
     this.outgoing = outgoing;
   }
 
-  
+
 }
