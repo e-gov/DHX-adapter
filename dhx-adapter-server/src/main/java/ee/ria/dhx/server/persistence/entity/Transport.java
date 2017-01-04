@@ -58,6 +58,7 @@ public class Transport extends BaseEntity implements Serializable {
 
   /**
    * Adds sender to array.
+   * 
    * @param sender sender to add
    * @return the sender
    */
@@ -73,6 +74,7 @@ public class Transport extends BaseEntity implements Serializable {
 
   /**
    * Removes sender from array.
+   * 
    * @param sender sender to remove
    * @return the sender
    */
@@ -85,6 +87,7 @@ public class Transport extends BaseEntity implements Serializable {
 
   /**
    * Adds recipient to array.
+   * 
    * @param recipient recipient to add
    * @return the recipient
    */
@@ -100,6 +103,7 @@ public class Transport extends BaseEntity implements Serializable {
 
   /**
    * Removes recipient from array.
+   * 
    * @param recipient recipient to remove
    * @return the recipient
    */
@@ -236,7 +240,9 @@ public class Transport extends BaseEntity implements Serializable {
     this.recipients = recipients;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override

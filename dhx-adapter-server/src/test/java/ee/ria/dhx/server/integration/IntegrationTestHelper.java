@@ -1,5 +1,18 @@
 package ee.ria.dhx.server.integration;
 
+import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.exception.DhxExceptionEnum;
+import ee.ria.dhx.server.service.util.WsUtil;
+import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
+import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
+import ee.ria.dhx.types.eu.x_road.xsd.representation.ObjectFactory;
+import ee.ria.dhx.types.eu.x_road.xsd.representation.XRoadRepresentedPartyType;
+import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.ws.config.DhxConfig;
+import ee.ria.dhx.ws.context.AppContext;
+
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,19 +29,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-
-import ee.ria.dhx.exception.DhxException;
-import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.service.util.WsUtil;
-import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
-import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
-import ee.ria.dhx.types.eu.x_road.xsd.representation.ObjectFactory;
-import ee.ria.dhx.types.eu.x_road.xsd.representation.XRoadRepresentedPartyType;
-import ee.ria.dhx.util.FileUtil;
-import ee.ria.dhx.ws.config.DhxConfig;
-import ee.ria.dhx.ws.context.AppContext;
-import ee.ria.dhx.ws.service.DhxMarshallerService;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class IntegrationTestHelper {
@@ -71,8 +71,6 @@ public class IntegrationTestHelper {
           "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
               + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">"
               + " <soapenv:Header>";
-      String envelope2 = " </soapenv:Header> <soapenv:Body>";
-      String envelopePost = "</soapenv:Body></soapenv:Envelope>";
       StringWriter writer = new StringWriter();
       writer.write(envelopePre);
       ee.ria.dhx.types.eu.x_road.xsd.xroad.ObjectFactory factory =
@@ -84,6 +82,8 @@ public class IntegrationTestHelper {
       if (representee != null) {
         marshaller.marshal(reprFactory.createRepresentedParty(representee), writer);
       }
+      String envelope2 = " </soapenv:Header> <soapenv:Body>";
+      String envelopePost = "</soapenv:Body></soapenv:Envelope>";
       writer.write(envelope2);
       marshaller.marshal(body, writer);
       writer.write(envelopePost);

@@ -1,8 +1,5 @@
 package ee.ria.dhx.server.persistence.entity;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -22,7 +19,7 @@ import javax.persistence.Version;
 public class BaseEntity {
 
   Date dateCreated;
-  
+
   Date dateModified;
 
   @Version

@@ -34,12 +34,10 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -171,7 +169,8 @@ public class CapsuleService {
       recipient.setOutgoing(false);
       DhxOrganisation dhxRecipientOrg = pckg.getRecipient();
       log.debug(
-          "Searching recipient organisation by code: {}  system: {}", dhxRecipientOrg.getCode(), dhxRecipientOrg);
+          "Searching recipient organisation by code: {}  system: {}", dhxRecipientOrg.getCode(),
+          dhxRecipientOrg);
       Organisation recipientOrg = organisationRepository
           .findByRegistrationCodeAndSubSystem(dhxRecipientOrg.getCode(),
               dhxRecipientOrg.getSystem());
@@ -315,7 +314,8 @@ public class CapsuleService {
     // found
     if (senderOrg == null) {
       log.debug(
-          "sender organisation is not found in database, need to create organiastion from InternalXroadMember.");
+          "sender organisation is not found in database, "
+          + "need to create organiastion from InternalXroadMember.");
       if (senderMember.getRepresentee() != null) {
         Organisation representor = persistenceService
             .getOrganisationFromInternalXroadMemberAndSave(senderMember, true, false);
@@ -368,7 +368,8 @@ public class CapsuleService {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
             "Unable to find recipients organisation");
       }
-      log.debug("Found recipient organisation: {}/{}", org.getRegistrationCode(), org.getSubSystem());
+      log.debug("Found recipient organisation: {}/{}", org.getRegistrationCode(),
+          org.getSubSystem());
       recipient.setOrganisation(org);
       transport.addRecipient(recipient);
     }
@@ -461,7 +462,8 @@ public class CapsuleService {
                 .toDvkCapsuleAddressee(recipient.getRegistrationCode(), recipient.getSubSystem());
             recipientOrganisationCodeToFind = recipient.getRegistrationCode();
           }
-          log.debug("senderOraganisationCode:" + senderOraganisationCode + " recipientOrganisationCode:" + recipientOrganisationCode);
+          log.debug("senderOraganisationCode:" + senderOraganisationCode
+              + " recipientOrganisationCode:" + recipientOrganisationCode);
           container.getTransport().getDecSender().setOrganisationCode(senderOraganisationCode);
           for (DecRecipient decRecipient : container.getTransport().getDecRecipient()) {
             if (decRecipient.getOrganisationCode().equals(recipientOrganisationCodeToFind)) {

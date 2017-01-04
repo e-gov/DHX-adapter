@@ -7,7 +7,6 @@ import ee.ria.dhx.server.persistence.entity.Organisation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +27,9 @@ public interface DocumentRepository extends CrudRepository<Document, Long> {
       Integer statusId, Pageable pageable);
 
   List<Document> findByDocumentIdIn(List<Long> ids);
-  
-  List<Document> findByDateCreatedLessThanAndTransportsStatusId (Date dateCreated, Integer statusId);
+
+  List<Document> findByDateCreatedLessThanAndTransportsStatusId(Date dateCreated,
+      Integer statusId);
 
   Document findByDocumentId(Long id);
 }
