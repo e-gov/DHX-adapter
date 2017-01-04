@@ -38,28 +38,26 @@ javax.transaction | javax.transaction-api | XXXXX | Java transaction API
 org.postgresql | postgresql | 9.4.1212 | PostgreSQL (juhul kui kasutatakse Postgre andmebaasi)
 
 
-##Ehitamine
+##Paigaldamine
 
-Alljärgnevalt on toodud näide, kuidas kaasata DHX adapteri teegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
+### Paigalduspakett (WAR) - Tomcat ja PostgreSQL 
 
-Ülaltoodud välised sõltuvused laetakse Maveni kasutamise korral automaatselt alla.
+Create a deployable war file
+http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html
 
-Lisada oma DHS tarkvara ehitamise Maven pom.xml sisse järgmised sõltuvused:
-```xml
-		<dependency>
-			<groupId>ee.ria.dhx</groupId>
-			<artifactId>dhx-adapter-server</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-```
+### Paigalduspaketi ise ehitamine (mitte Tomcat või PostgreSQL) 
+
+Kui soovitakse kasutada 
+
+Vanemasse Java Servlet serveritesse paigaldamisel tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
+
+Selleks vaata täpsemalt [DHX-adapteri Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
+
 
 ##Teadaolevad probleemid (sõltuvuste konfliktid)
 
 Vaata [DHX-adapteri Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
-##Teegi laadimise häälestamine (web.xml ja applicationContext.xml)
-
-Vaata [DHX-adapteri Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
 
 ##Häälestus fail (dhx-application.properties)
 
@@ -81,6 +79,4 @@ spring.datasource.username | | postgres | Postgres andmbaasi kasutajanimi
 spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
 spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab et kasutame Postgres andmbaasi
 spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| 
-
-
 
