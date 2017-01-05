@@ -215,16 +215,19 @@ public class PersistenceService {
       newMember = true;
       organisation = new Organisation();
     }
-    organisation.setIsActive(true);
-    organisation.setMemberClass(member.getMemberClass());
-    organisation.setName(member.getName());
-    organisation.setRegistrationCode(member.getMemberCode());
-    organisation.setSubSystem(member.getSubsystemCode());
-    organisation.setXroadInstance(member.getXroadInstance());
-    organisation.setDhxOrganisation(true);
-    organisation.setRepresentor(null);
-    organisation.setRepresenteeStart(null);
-    organisation.setRepresenteeEnd(null);
+    //update representors data only if needed
+    if (member.getRepresentee() == null || representorOnly) {
+      organisation.setIsActive(true);
+      organisation.setMemberClass(member.getMemberClass());
+      organisation.setName(member.getName());
+      organisation.setRegistrationCode(member.getMemberCode());
+      organisation.setSubSystem(member.getSubsystemCode());
+      organisation.setXroadInstance(member.getXroadInstance());
+      organisation.setDhxOrganisation(true);
+      organisation.setRepresentor(null);
+      organisation.setRepresenteeStart(null);
+      organisation.setRepresenteeEnd(null);
+    }
     if (member.getRepresentee() != null && !representorOnly) {
       log.debug("Organisation is representee.");
       if (newMember) {

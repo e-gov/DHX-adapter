@@ -79,7 +79,6 @@ public class FileUtilTest {
     assertFalse(resultFile.exists());
   }
 
-  // TODO: think of some test to get classpathresource(jar://path_to_file)
 
   @Test
   public void getFileAsStreamTest() throws IOException, DhxException {

@@ -25,6 +25,7 @@ import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.ObjectFactory;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.ConversionUtil;
 import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
@@ -305,6 +306,10 @@ public class CapsuleService {
     }
     Document document = new Document();
     document.setCapsuleVersion(version.toString());
+    //set null as subsystem if provided empty string for example
+    if(StringUtil.isNullOrEmpty(senderMember.getSubsystemCode())) {
+      senderMember.setSubsystemCode(null);
+    }
     DhxOrganisation dhxSenderOrg = DhxOrganisationFactory.createDhxOrganisation(senderMember);
     Organisation senderOrg =
         organisationRepository.findByRegistrationCodeAndSubSystem(dhxSenderOrg.getCode(),

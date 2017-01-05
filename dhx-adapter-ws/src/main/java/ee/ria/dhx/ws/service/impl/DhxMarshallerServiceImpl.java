@@ -334,7 +334,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
         }
 
         public String getPrefix(String namespaceURI) {
-          return "";
+          return null;
         }
 
         public String getNamespaceURI(String prefix) {

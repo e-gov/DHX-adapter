@@ -45,6 +45,7 @@ import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.OutgoingDhxPackage;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.ConversionUtil;
+import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.AsyncDhxPackageService;
@@ -311,6 +312,10 @@ public class SoapService {
     } else {
       pageable = new PageRequest(0, 10);
     }
+    //set null as subsystem if provided empty string for example
+    if(StringUtil.isNullOrEmpty(sender.getSubsystemCode())) {
+      sender.setSubsystemCode(null);
+    }
     Organisation senderOrg =
         organisationRepository.findByRegistrationCodeAndSubSystem(sender.getMemberCode(),
             sender.getSubsystemCode());
@@ -322,8 +327,10 @@ public class SoapService {
     Integer inprocessStatusId = StatusEnum.IN_PROCESS.getClassificatorId();
     List<Document> docs = null;
     if (folder == null && request.getKeha().getKaust() == null) {
-      log.debug(
-          "searching by recipients organisation and status " + senderOrg.getOrganisationId());
+      if (senderOrg != null) {
+        log.debug(
+            "searching by recipients organisation and status " + senderOrg.getOrganisationId());
+      }
       docs = documentRepository
           .findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
               false,
@@ -370,6 +377,10 @@ public class SoapService {
     if (request.getDokumendid() == null || request.getDokumendid().size() == 0) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "No documents to mark received is provided in request.");
+    }
+    //set null as subsystem if provided empty string for example
+    if(StringUtil.isNullOrEmpty(senderMember.getSubsystemCode())) {
+      senderMember.setSubsystemCode(null);
     }
     Organisation senderOrg =
         organisationRepository.findByRegistrationCodeAndSubSystem(senderMember.getMemberCode(),
@@ -455,7 +466,7 @@ public class SoapService {
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
         log.debug(
             "all of the documwents reciepient are in status received, "
-            + "setting same status to document.");
+                + "setting same status to document.");
         doc.getTransports().get(0).setStatusId(successStatusId);
         documentRepository.save(doc);
       }
@@ -463,7 +474,7 @@ public class SoapService {
           .equals(StatusEnum.FAILED.getClassificatorId())) {
         log.debug(
             "all of the documwents reciepient are in status failed, "
-            + "setting same status to document.");
+                + "setting same status to document.");
         doc.getTransports().get(0).setStatusId(failedStatusId);
         documentRepository.save(doc);
       }
@@ -659,10 +670,10 @@ public class SoapService {
       SendingOptionArrayType sendingOptions = new SendingOptionArrayType();
       sendingOptions.getSaatmisviis().add("dhl");
       institution.setSaatmine(sendingOptions);
-      if(request.getKeha().getAsutused() != null 
-          && request.getKeha().getAsutused().getAsutus() !=null 
-          && request.getKeha().getAsutused().getAsutus().size()>0) {
-        if(request.getKeha().getAsutused().getAsutus().contains(institution.getRegnr())) {
+      if (request.getKeha().getAsutused() != null
+          && request.getKeha().getAsutused().getAsutus() != null
+          && request.getKeha().getAsutused().getAsutus().size() > 0) {
+        if (request.getKeha().getAsutused().getAsutus().contains(institution.getRegnr())) {
           institutions.getAsutus().add(institution);
         }
       } else {

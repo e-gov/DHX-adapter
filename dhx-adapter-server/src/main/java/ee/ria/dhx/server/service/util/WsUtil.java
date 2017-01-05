@@ -1,6 +1,7 @@
 package ee.ria.dhx.server.service.util;
 
 import ee.ria.dhx.exception.DhxException;
+
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.util.FileUtil;
 
@@ -10,6 +11,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,11 +20,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.util.Base64;
+// import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
+import javax.mail.MessagingException;
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -82,8 +87,12 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static InputStream base64Decode(InputStream stream) throws DhxException {
-    InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);
-    return base64DecoderStream;
+    try {
+      InputStream base64DecoderStream = javax.mail.internet.MimeUtility.decode(stream, "base64");
+      return base64DecoderStream;
+    } catch (MessagingException ex) {
+      throw new DhxException("Error occured while base64 encoding", ex);
+    }
   }
 
 
@@ -95,8 +104,13 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static OutputStream getBase64EncodeStream(OutputStream stream) throws DhxException {
-    OutputStream base64EncoderStream = Base64.getEncoder().wrap(stream);
-    return base64EncoderStream;
+    try {
+      BufferedOutputStream os = new BufferedOutputStream(stream);
+      OutputStream base64EncoderStream = javax.mail.internet.MimeUtility.encode(os, "base64");
+      return base64EncoderStream;
+    } catch (MessagingException ex) {
+      throw new DhxException("Error occured while base64 encoding", ex);
+    }
   }
 
   /**

@@ -54,10 +54,16 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
     }
     if (returnValueHandlers == null) {
       returnValueHandlers = new ArrayList<MethodReturnValueHandler>();
-    }
+    } 
     returnValueHandlers.addAll(methodProcessors());
     argumentResolvers.addAll(methodProcessors());
+    
+    
     argumentResolvers.add(new MessageContextMethodArgumentResolver());
+    
+    returnValueHandlers.addAll(defaultMethodEndpointAdapter().getMethodReturnValueHandlers());
+    argumentResolvers.addAll(defaultMethodEndpointAdapter().getMethodArgumentResolvers());
+    
     DefaultMethodEndpointAdapter adapter = new DefaultMethodEndpointAdapter();
     adapter.setMethodArgumentResolvers(argumentResolvers);
     adapter.setMethodReturnValueHandlers(returnValueHandlers);
