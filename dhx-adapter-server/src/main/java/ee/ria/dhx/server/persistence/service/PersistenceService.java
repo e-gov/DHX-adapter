@@ -126,8 +126,13 @@ public class PersistenceService {
       throw new DhxException(DhxExceptionEnum.DATA_ERROR,
           "Unable to find organisation using organisation code: " + capsuleOrganisationId);
     }
-    if (org.getIsActive() == null || !org.getIsActive() || org.getDhxOrganisation() == null
-        || !org.getDhxOrganisation()) {
+    //throw error if inactive or not DHXOrganisation and not own representee
+    if (org.getIsActive() == null || !org.getIsActive() 
+        || (
+            (org.getDhxOrganisation() == null|| !org.getDhxOrganisation())
+            && (org.getOwnRepresentee() == null || org.getOwnRepresentee() == false)
+            )
+        ) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Found organisation is either inactive or not registered as DHX orghanisation. "
               + "Organisation registration code:"
@@ -215,7 +220,7 @@ public class PersistenceService {
       newMember = true;
       organisation = new Organisation();
     }
-    //update representors data only if needed
+    // update representors data only if needed
     if (member.getRepresentee() == null || representorOnly) {
       organisation.setIsActive(true);
       organisation.setMemberClass(member.getMemberClass());

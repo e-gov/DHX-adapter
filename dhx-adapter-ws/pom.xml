@@ -8,7 +8,7 @@
 		<artifactId>DHX-adapter</artifactId>
 		<version>1.0.1</version>
 	</parent>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<artifactId>dhx-adapter-ws</artifactId>
 	<name>Web services</name>
 	<packaging>jar</packaging>

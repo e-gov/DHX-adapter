@@ -404,7 +404,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     if (client.getRepresentee() != null) {
       InternalXroadMember member = addressService.getClientForMemberCode(
           client.getMemberCode(), client.getSubsystemCode());
-      if (!member.getRepresentor()) {
+      if (member.getRepresentor()==null || member.getRepresentor() == false) {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
             "Xroad sender is representee, but member found in "
                 + "adressregistry is not representor. sender:"

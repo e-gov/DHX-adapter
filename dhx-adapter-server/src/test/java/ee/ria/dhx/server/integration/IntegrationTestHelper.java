@@ -119,10 +119,17 @@ public class IntegrationTestHelper {
           marshaller.marshal(obj, zippedStream);
         }
         zippedStream.finish();
+        zippedStream.flush();
+        zippedStream.close();
+        zippedStream = null;
         if (base64Stream != null) {
           base64Stream.flush();
+          base64Stream.close();
+          base64Stream = null;
         }
         fos.flush();
+        fos.close();
+        fos = null;
         DataSource datasource = new FileDataSource(file);
         return new DataHandler(datasource);
       } catch (IOException ex) {

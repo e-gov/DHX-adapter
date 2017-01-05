@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.util.Base64;
 // import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -87,12 +88,14 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static InputStream base64Decode(InputStream stream) throws DhxException {
-    try {
-      InputStream base64DecoderStream = javax.mail.internet.MimeUtility.decode(stream, "base64");
-      return base64DecoderStream;
-    } catch (MessagingException ex) {
-      throw new DhxException("Error occured while base64 encoding", ex);
-    }
+    // try {
+    InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);// javax.mail.internet.MimeUtility.decode(stream,
+                                                                       // "base64");
+    return base64DecoderStream;
+    /*
+     * } catch (MessagingException ex) { throw new
+     * DhxException("Error occured while base64 encoding", ex); }
+     */
   }
 
 
@@ -104,13 +107,15 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static OutputStream getBase64EncodeStream(OutputStream stream) throws DhxException {
-    try {
-      BufferedOutputStream os = new BufferedOutputStream(stream);
-      OutputStream base64EncoderStream = javax.mail.internet.MimeUtility.encode(os, "base64");
-      return base64EncoderStream;
-    } catch (MessagingException ex) {
-      throw new DhxException("Error occured while base64 encoding", ex);
-    }
+    // try {
+    BufferedOutputStream os = new BufferedOutputStream(stream);
+    OutputStream base64EncoderStream = Base64.getEncoder().wrap(os); // javax.mail.internet.MimeUtility.encode(os,
+                                                                     // "base64");
+    return base64EncoderStream;
+    /*
+     * } catch (MessagingException ex) { throw new
+     * DhxException("Error occured while base64 encoding", ex); }
+     */
   }
 
   /**
