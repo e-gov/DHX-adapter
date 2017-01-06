@@ -1,4 +1,4 @@
-![](EL_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg)
+![](EL_Regionaalarengu_Fond_horisontaalne.jpg)
 
 [ET](JUHEND.md) | EN
 
