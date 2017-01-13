@@ -34,7 +34,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 >
 > Lisaks tuleb silmas pidada, et esineb mõningaid väiksemaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud allpool. 
 
-## Erinevused vana DVK liidese ja dhc adpater serveri Sisemise liidese toimimise loogikas
+## Erinevused vana DVK liidese ja Adpateri Sisemise liidese toimimise loogikas
 
 
 
