@@ -32,7 +32,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 > 
 > Sisemises liideses on implementeeritud ainult hädavajalike DVK liidese operatsioonide viimased versioonid.
 >
-> Lisaks tuleb silmas pidada, et esineb mõningaid väiksemaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud allpool. 
+> Lisaks tuleb silmas pidada, et esineb mõningaid väiksemaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](JUHEND-ADAPTER-SERVER.md#erinevused-vana-dvk-liidese-ja-adpateri-sisemise-liidese-toimimise-loogikas). 
 
 ## Erinevused vana DVK liidese ja Adpateri Sisemise liidese toimimise loogikas
 
