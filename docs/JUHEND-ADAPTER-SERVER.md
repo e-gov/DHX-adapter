@@ -2,7 +2,7 @@
 
 ET | [EN](GUIDE.md)
 
-# DHX-adapteri serveri kasutusjuhend
+# DHX adapteri serveri kasutusjuhend
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
@@ -11,7 +11,7 @@ DHX adapter server on  tarkvara, mis hõlbustab DHX dokumendivahetuse protokolli
 
 ![](dhx-adapter-server.png)
 
-DHX adapter server pakub kahte erinevat SOAP veebiteenuste liidest:
+DHX adapter server pakub kahte erinevat [SOAP](https://www.w3.org/TR/2000/NOTE-SOAP-20000508/) veebiteenuste liidest:
 * Väline DHX liides (pildil kollane). DHX liides on suunatud väljapoole (teiste asutustega suhtlemiseks). DHX liides implementeerib DHX operatsiooni sendDocument. Vahendaja korral ka operatsiooni representationList (ei ole lihtsuse mõttes pildil kuvatud).
 * Sisemine liides (pildil roheline). See liides on suunatud sissepoole (asutuse lokaalvõrku). Seda liidest kasutab asutuse dokumendihaldussüsteem (DHS) dokumentide saatmiseks ja vastuvõtmiseks. See liides implementeerib operatsioonid sendDocuments, receiveDocuments, markDocumentsReceived, getSendStatus ja getSendingOptions (need on väga sarnaselt vanale [DVK liidesele](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md)).
 
