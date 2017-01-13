@@ -27,12 +27,15 @@ Märkused vana DVK X-tee liidese kasutajale:
 > Sisemist liidese operatsioonid on projekteeritud väga sarnaselt vanale [DVK liidesele](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md). 
 > Sisemise liidese SOAP teenuste XML nimeruumid ja implementeeritud operatsioonide struktuur on täpselt samad nagu vanas DVK liideses.
 > 
-> Üldjuhul peaks saama vanalt DVK X-tee liideselt üle minna uuele DHX protokollile, hakates uut dhx-adapter-server tarkvara, muutes DHS sees ümber DVK veebiteenuse võrguaadressi (endpoint URI aadressi).
+> Üldjuhul peaks saama vanalt DVK X-tee liideselt üle minna uuele DHX protokollile, hakates kasutama uut dhx-adapter-server tarkvara, muutes DHS sees ümber DVK veebiteenuse võrguaadressi (endpoint URI aadressi).
 > Kui varem pakkus seda teenust X-tee turvaserver, siis selle asemel pakub seda dhx-adapter-server'i sisemine liides.
 > 
 > Sisemises liideses on implementeeritud ainult hädavajalike DVK liidese operatsioonide viimased versioonid.
 >
 > Lisaks tuleb silmas pidada, et esineb mõningaid väiksemaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud allpool. 
+
+## Erinevused vana DVK liidese ja dhc adpater serveri Sisemise liidese toimimise loogikas
+
 
 
 ##Välised sõltuvused ja baasplatvorm
