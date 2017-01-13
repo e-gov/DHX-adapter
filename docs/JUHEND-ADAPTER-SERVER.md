@@ -9,6 +9,8 @@ ET | [EN](GUIDE.md)
 ## Sissejuhatus
 DHX adapter server on serveri tarkvara, mis hõlbustab DHX dokumendivahetuse protokolli kasutusele võtmist.
 
+![](dhx-adapter-server.png)
+
 DHX adapter server pakub kahte erinevat SOAP veebiteenuste liidest:
 * DHX liides, mis implementeerib DHX operatsioonid sendDocument ja representationList
 * Vanale DVK-le sarnane liides, mis implementeerib opratsioonid sendDocuments, receiveDocuments, markDocumentsReceived, getSendStatus ja getSendingOptions
