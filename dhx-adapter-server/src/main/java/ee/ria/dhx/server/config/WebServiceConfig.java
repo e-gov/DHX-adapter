@@ -2,6 +2,8 @@ package ee.ria.dhx.server.config;
 
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
@@ -17,15 +19,15 @@ import javax.xml.soap.SOAPException;
 
 @EnableWs
 @Configuration
+@Slf4j
 public class WebServiceConfig {
 
   private class DhxClientSoapFaultTranslatorExceptionResolver
       extends SoapFaultMappingExceptionResolver {
-    final Logger logger = LogManager.getLogger();
 
     @Override
     protected void customizeFault(Object endpoint, Exception ex, SoapFault fault) {
-      logger.error("Error occured while using SOAP service." + ex.getMessage(), ex);
+      log.error("Error occured while using SOAP service." + ex.getMessage(), ex);
       super.customizeFault(endpoint, ex, fault);
     }
   }

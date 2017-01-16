@@ -68,6 +68,7 @@ public class ExampleDhxImplementationSpecificService
         "String receiveDocument(DhxDocument document) externalConsignmentId: {}",
         document.getExternalConsignmentId());
     String receiptId = UUID.randomUUID().toString();
+    document.setParsedContainer(null);
     documents.add(document);
     return receiptId;
   }

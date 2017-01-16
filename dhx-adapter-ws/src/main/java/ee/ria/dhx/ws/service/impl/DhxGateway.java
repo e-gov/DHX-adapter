@@ -15,6 +15,7 @@ import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadObjectType;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.representation.XRoadRepresentedPartyType;
+import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxHttpComponentsMessageSender;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.config.SoapConfig;
@@ -417,8 +418,10 @@ public class DhxGateway extends WebServiceGatewaySupport {
           JAXBElement<XRoadRepresentedPartyType> xrdRepresented =
               (JAXBElement<XRoadRepresentedPartyType>) dhxMarshallerService
                   .unmarshall(ele.getSource());
-          representee = new DhxRepresentee(xrdRepresented.getValue()
-              .getPartyCode(), null, null, null, null);
+          if (!StringUtil.isNullOrEmpty(xrdRepresented.getValue().getPartyCode())) {
+            representee = new DhxRepresentee(xrdRepresented.getValue()
+                .getPartyCode(), null, null, null, null);
+          }
         }
         transformer.transform(ele.getSource(), respheader.getResult());
       }

@@ -100,12 +100,13 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       throws DhxException {
     log.debug(
         "String receiveDocument(DhxDocument document) "
-        + "externalConsignmentId: {} recipient: {} service: {}",
+            + "externalConsignmentId: {} recipient: {} service: {}",
         document.getExternalConsignmentId(), document.getRecipient(), document.getService());
     Document doc = capsuleService.getDocumentFromIncomingContainer(document,
         document.getParsedContainerVersion());
     log.trace("document created from incoming package: {}", doc);
     documentRepository.save(doc);
+    capsuleService.cleanupContainer(document.getParsedContainer());
     // by container definition and DHX protocol we know that those arrays
     // are all not null and only
     // have 1 object in it
@@ -222,7 +223,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
         if (log.isDebugEnabled()) {
           log.debug(
               "organisation is not found in renewed address list, "
-              + "deactivating it. organisation: {}",
+                  + "deactivating it. organisation: {}",
               org);
         }
         org.setIsActive(false);
@@ -307,6 +308,12 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       recipientRepository.saveAndFlush(recipient);
     } catch (Throwable ex) {
       log.error("Error occured while saving send results. " + ex.getMessage(), ex);
+    } finally {
+      try {
+        capsuleService.cleanupContainer(finalResult.getSentPackage().getParsedContainer());
+      } catch (DhxException ex) {
+        log.error("Error occured while cleaningup container.", ex);
+      }
     }
   }
 

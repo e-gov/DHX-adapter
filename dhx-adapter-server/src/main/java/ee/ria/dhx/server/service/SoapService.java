@@ -4,6 +4,7 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
+import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
@@ -136,6 +137,10 @@ public class SoapService {
   @Autowired
   @Setter
   SoapConfig soapConfig;
+  
+  @Autowired
+  @Setter
+  DhxServerConfig dhxServerConfig;
 
 
   @Value("${dhx.server.received-document-lifetime}")
@@ -180,8 +185,10 @@ public class SoapService {
               documents.getKeha().getKaust(), version);
       documentRepository.save(document);
       attachmentObj.getDhlId().add(document.getDocumentId().toString());
+     
 
     }
+    capsuleService.cleanupContainers(containers);
     DataHandler handler = convertationService.createDatahandlerFromObject(attachmentObj);
     response.getKeha().setHref(handler);
     return response;
@@ -355,6 +362,7 @@ public class SoapService {
       containers.add(container);
     }
     DataHandler handler = convertationService.createDatahandlerFromList(containers);
+    capsuleService.cleanupContainers(containers);
     att.setHref(handler);
     resp.setKeha(att);
     return resp;
@@ -690,9 +698,10 @@ public class SoapService {
    * received and failed documents. Documents with status INPROCESS are not deleted.
    * 
    * @param deleteWholeDocument delete whole document from database or only content.
+   * @throws DhxException thrown when error occurs
    */
   @Loggable
-  public void deleteOldDocuments(Boolean deleteWholeDocument) {
+  public void deleteOldDocuments(Boolean deleteWholeDocument) throws DhxException{
     Calendar receivedDocumentDate = Calendar.getInstance();
     receivedDocumentDate.add(Calendar.DAY_OF_YEAR, -receivedDocumentLifetime);
 
@@ -704,6 +713,12 @@ public class SoapService {
             receivedDocumentDate.getTime(), StatusEnum.RECEIVED.getClassificatorId());
     if (documents.size() > 0) {
       log.debug("Found received documents to delete: " + documents.size());
+    }
+    //delete file withcontent
+    for(Document doc : documents) {
+      if(doc.getContent() != null){
+        dhxServerConfig.getDocumentFile(doc.getContent()).delete();
+      }
     }
     if (deleteWholeDocument) {
       documentRepository.delete(documents);
@@ -718,6 +733,11 @@ public class SoapService {
         failedDocumentDate.getTime(), StatusEnum.FAILED.getClassificatorId());
     if (documents.size() > 0) {
       log.debug("Found failed documents to delete: " + documents.size());
+    }
+    for(Document doc : documents) {
+      if(doc.getContent() != null){
+        dhxServerConfig.getDocumentFile(doc.getContent()).delete();
+      }
     }
     if (deleteWholeDocument) {
       documentRepository.delete(documents);

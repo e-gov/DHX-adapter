@@ -2,28 +2,36 @@ package ee.ria.dhx.ws.service.impl;
 
 import com.jcabi.aspects.Loggable;
 
+import ee.ria.dhx.bigdata.BigDataMarshallHandler;
+import ee.ria.dhx.bigdata.BigDataXmlReader;
+import ee.ria.dhx.bigdata.ReflectionUtil;
+import ee.ria.dhx.bigdata.annotation.BigDataXmlElement;
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.xml.serialize.XMLSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.util.Iterator;
 
 import javax.annotation.PostConstruct;
 import javax.xml.XMLConstants;
@@ -31,17 +39,29 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+/**
+ * Version DhxMarshallerService for capsules with big data files. No limitation on data file size is
+ * set, data files from capsule are written to filesystem.
+ * <p>
+ * In order for big data logic to work, object parameter which might be BIG must be annotated with
+ * {@link BigDataXmlElement} annotation and be of type {@link File}. {@link XMLSerializer} is used
+ * during marshalling/unmarshalling process and does all the job except for the parameters annotated
+ * with {@link BigDataXmlElement}.
+ * 
+ * @author Aleksei Kokarev
+ *
+ */
 @Slf4j
 @Service("dhxMarshallerService")
 public class DhxMarshallerServiceImpl implements DhxMarshallerService {
@@ -51,6 +71,10 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
   @Autowired
   @Setter
   DhxConfig config;
+
+  @Autowired
+  @Setter
+  CapsuleConfig capsuleConfig;
 
   @Override
   public Unmarshaller getUnmarshaller() throws DhxException {
@@ -84,8 +108,6 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
   @PostConstruct
   public void init() throws JAXBException {
     jaxbContext = config.getJaxbContext();
-    // marshaller = jaxbMarshaller.getJaxbContext().createMarshaller();
-    // unmarshaller = jaxbMarshaller.getJaxbContext().createUnmarshaller();
   }
 
   /**
@@ -162,17 +184,12 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
   @Loggable
   public <T> T unmarshallAndValidate(final InputStream capsuleStream,
       InputStream schemaStream) throws DhxException {
-    try {
-      if (log.isDebugEnabled()) {
-        log.debug("unmarshalling file");
-      }
-      Unmarshaller unmarshaller = getUnmarshaller();
-      setSchemaForUnmarshaller(schemaStream, unmarshaller);
-      return unmarshallNoValidation(capsuleStream, unmarshaller);
-    } finally {
-      // wont set single schema for unmarshaller
-      // unmarshaller.setSchema(null);
+    if (log.isDebugEnabled()) {
+      log.debug("unmarshalling file");
     }
+    Unmarshaller unmarshaller = getUnmarshaller();
+    setSchemaForUnmarshaller(schemaStream, unmarshaller);
+    return unmarshallNoValidation(capsuleStream, unmarshaller);
   }
 
   /**
@@ -201,20 +218,58 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
           "Error occured while creating object from capsule. "
               + ex.getMessage(),
           ex);
-    } finally {
-      // wont set single schema for unmarshaller
-      // unmarshaller.setSchema(null);
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Loggable
   protected <T> T unmarshallNoValidation(final InputStream capsuleStream,
       Unmarshaller unmarshaller) throws DhxException {
+    return unmarshallNoValidation(capsuleStream, unmarshaller,
+        capsuleConfig.getCurrentCapsuleVersion().getContainerClass());
+  }
+
+  @SuppressWarnings("unchecked")
+  protected <T> T unmarshallNoValidation(final InputStream capsuleStream,
+      Unmarshaller unmarshaller, Class<? extends Object> bigDataClass) throws DhxException {
     try {
-      Object obj = (Object) unmarshaller.unmarshal(capsuleStream);
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      factory.setNamespaceAware(true);
+      SAXParser parser = factory.newSAXParser();
+      XMLReader xmlReader = parser.getXMLReader();
+
+      BigDataXmlReader bigDataXmlReader = new BigDataXmlReader(xmlReader, bigDataClass);
+      SAXSource source = new SAXSource(bigDataXmlReader, new InputSource(capsuleStream));
+      Object obj = (Object) unmarshaller.unmarshal(source);
+      log.debug("Found big data elements: " + bigDataXmlReader.getBigDataElements().size());
+      ReflectionUtil.setBigDataFieldsToObject(bigDataXmlReader.getBigDataElements(), obj);
       return (T) obj;
-    } catch (JAXBException ex) {
+    } catch (SAXException | JAXBException | ParserConfigurationException ex) {
+      log.error(ex.getMessage(), ex);
+
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while creating object with BIG DATA from capsule. " + ex.getMessage(),
+          ex);
+    }
+  }
+
+  /**
+   * Parses(unmarshalls) object from file.
+   * 
+   * @param capsuleFile file to parse
+   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
+   *        expected
+   * @return parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  @SuppressWarnings("unchecked")
+  @Loggable
+  public <T> T unmarshall(File capsuleFile, Class<? extends Object> bigDataClass)
+      throws DhxException {
+    try {
+      log.debug("Unmarshalling file: {}", capsuleFile.getAbsolutePath());
+      return (T) unmarshall(new FileInputStream(capsuleFile), bigDataClass);
+    } catch (FileNotFoundException ex) {
+      log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
               + ex.getMessage(),
@@ -222,8 +277,54 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     }
   }
 
+  /**
+   * Parses(unmarshalls) object from file.
+   * 
+   * @param capsuleStream - stream to parse
+   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
+   *        expected
+   * @return - parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
   @Loggable
-  private void setSchemaForUnmarshaller(InputStream schemaStream,
+  public <T> T unmarshall(final InputStream capsuleStream, Class<? extends Object> bigDataClass)
+      throws DhxException {
+
+    return unmarshallAndValidate(capsuleStream, null, bigDataClass);
+  }
+
+  /**
+   * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
+   * present.
+   * 
+   * @param capsuleStream - stream of to parse
+   * @param schemaStream - stream on XSD schema against which to validate. No validation is done if
+   *        stream is NULL
+   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
+   *        expected
+   * @return - parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  @Loggable
+  public <T> T unmarshallAndValidate(final InputStream capsuleStream,
+      InputStream schemaStream, Class<? extends Object> bigDataClass) throws DhxException {
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("unmarshalling file");
+      }
+      Unmarshaller unmarshaller = getUnmarshaller();
+      setSchemaForUnmarshaller(schemaStream, unmarshaller);
+      return unmarshallNoValidation(capsuleStream, unmarshaller, bigDataClass);
+    } finally {
+      // wont set single schema for unmarshaller
+      // unmarshaller.setSchema(null);
+    }
+  }
+
+
+
+  @Loggable
+  protected void setSchemaForUnmarshaller(InputStream schemaStream,
       Unmarshaller unmarshaller) throws DhxException {
     try {
       if (schemaStream != null) {
@@ -242,7 +343,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
   }
 
   @Loggable
-  private void setSchemaForMarshaller(InputStream schemaStream,
+  protected void setSchemaForMarshaller(InputStream schemaStream,
       Marshaller marshaller) throws DhxException {
     try {
       if (schemaStream != null) {
@@ -274,15 +375,48 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
         log.debug("marshalling container");
       }
       File outputFile = FileUtil.createPipelineFile();
-      getMarshaller().marshal(container, outputFile);
+      marshall(container, outputFile);
 
       return outputFile;
-    } catch (IOException | JAXBException ex) {
+    } catch (IOException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
           "Error occured while creating object from capsule. "
               + ex.getMessage(),
           ex);
+    }
+  }
+
+  /**
+   * Marshalls object to given file.
+   * 
+   * @param container object to marshall
+   * @param file file to marshall to
+   * @throws DhxException thrown if error occurs while marshalling object
+   */
+  @Loggable
+  @Override
+  public void marshall(Object container, File file) throws DhxException {
+    BufferedOutputStream bufStream = null;
+    FileOutputStream stream = null;
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("marshalling container");
+      }
+      stream = new FileOutputStream(file);
+      bufStream = new BufferedOutputStream(stream);
+      getMarshaller().marshal(container,
+          new BigDataMarshallHandler(capsuleConfig.getCurrentCapsuleVersion().getContainerClass(),
+              container, bufStream));
+      bufStream.flush();
+      stream.flush();
+    } catch (IOException | JAXBException ex) {
+      log.error(ex.getMessage(), ex);
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while creating object from capsule. " + ex.getMessage(), ex);
+    } finally {
+      FileUtil.safeCloseStream(stream);
+      FileUtil.safeCloseStream(bufStream);
     }
   }
 
@@ -325,29 +459,13 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       if (log.isDebugEnabled()) {
         log.debug("marshalling container");
       }
-      XMLOutputFactory outputFactory = XMLOutputFactory.newFactory();
-      XMLStreamWriter writer = outputFactory.createXMLStreamWriter(stream);
-      writer.setNamespaceContext(new NamespaceContext() {
-        @SuppressWarnings("rawtypes")
-        public Iterator getPrefixes(String namespaceURI) {
-          return null;
-        }
-
-        public String getPrefix(String namespaceURI) {
-          return null;
-        }
-
-        public String getNamespaceURI(String prefix) {
-          return null;
-        }
-      });
-      getMarshaller().marshal(container, writer);
-    } catch (JAXBException | XMLStreamException ex) {
+      getMarshaller().marshal(container,
+          new BigDataMarshallHandler(capsuleConfig.getCurrentCapsuleVersion().getContainerClass(),
+              container, stream));
+    } catch (IOException | JAXBException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
-          "Error occured while creating object from capsule. "
-              + ex.getMessage(),
-          ex);
+          "Error occured while creating object from capsule. " + ex.getMessage(), ex);
     }
   }
 
@@ -374,28 +492,6 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     }
   }
 
-  /**
-   * Marshalls object to node.
-   * 
-   * @param obj - object to marshall
-   * @param node - node into which object will be marshalled
-   * @throws DhxException - thrown if error occurs while marshalling object
-   */
-  @Loggable
-  public void marshallToNode(Object obj, Node node) throws DhxException {
-    try {
-      if (log.isDebugEnabled()) {
-        log.debug("marshalling object");
-      }
-      getMarshaller().marshal(obj, node);
-    } catch (JAXBException ex) {
-      log.error(ex.getMessage(), ex);
-      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
-          "Error occured while creating object from capsule. "
-              + ex.getMessage(),
-          ex);
-    }
-  }
 
   /**
    * Marshalls object to writer.
@@ -406,20 +502,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
    */
   @Loggable
   public StringWriter marshallToWriter(Object container) throws DhxException {
-    try {
-      if (log.isDebugEnabled()) {
-        log.debug("marshalling container");
-      }
-      StringWriter writer = new StringWriter();
-      getMarshaller().marshal(container, writer);
-      return writer;
-    } catch (JAXBException ex) {
-      log.error(ex.getMessage(), ex);
-      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
-          "Error occured while creating object from capsule. "
-              + ex.getMessage(),
-          ex);
-    }
+    return marshallToWriterAndValidate(container, null);
   }
 
   /**

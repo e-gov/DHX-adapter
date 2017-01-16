@@ -9,6 +9,8 @@
 
 package ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1;
 
+import ee.ria.dhx.bigdata.annotation.BigDataXmlElement;
+
 import org.w3c.dom.Element;
 
 import java.math.BigInteger;
@@ -975,8 +977,8 @@ public class DecContainer {
     protected String mimeType;
     @XmlElement(name = "FileSize")
     protected BigInteger fileSize;
-    @XmlElement(name = "ZipBase64Content", required = true)
-    protected String zipBase64Content;
+    @BigDataXmlElement(name = "ZipBase64Content")
+    protected java.io.File zipBase64Content;
 
     /**
      * Gets the value of the fileGuid property.
@@ -1084,7 +1086,7 @@ public class DecContainer {
      * @return possible object is {@link String }
      * 
      */
-    public String getZipBase64Content() {
+    public java.io.File getZipBase64Content() {
       return zipBase64Content;
     }
 
@@ -1094,7 +1096,7 @@ public class DecContainer {
      * @param value allowed object is {@link String }
      * 
      */
-    public void setZipBase64Content(String value) {
+    public void setZipBase64Content(java.io.File value) {
       this.zipBase64Content = value;
     }
 

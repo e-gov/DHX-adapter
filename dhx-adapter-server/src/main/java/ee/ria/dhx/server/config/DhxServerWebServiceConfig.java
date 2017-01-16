@@ -2,15 +2,22 @@ package ee.ria.dhx.server.config;
 
 
 
+import ee.ria.dhx.exception.DhxException;
+
+
 import ee.ria.dhx.server.endpoint.config.DhxServerEndpointConfig;
 import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
+import ee.ria.dhx.ws.service.DhxMarshallerService;
 
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
+
+import java.io.IOException;
 
 /**
  * Class creates beans needed for web services. Those beans are meant to use only if there is no
@@ -22,7 +29,7 @@ import org.springframework.ws.transport.http.MessageDispatcherServlet;
  */
 @Configuration
 public class DhxServerWebServiceConfig {
-
+  
 
   /**
    * Sets servlet registration bean. Registers web services on configured path

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
@@ -26,6 +27,7 @@ import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.Trans
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.Transport.DecSender;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.util.CapsuleVersionEnum;
+import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
@@ -35,6 +37,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -43,8 +46,10 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -76,11 +81,19 @@ public class CapsuleServiceTest {
 
   @Mock
   DhxConfig config;
+  
+  @Mock
+  DhxServerConfig serverConfig;
 
   CapsuleService capsuleService;
+  
+  @Rule
+  public TemporaryFolder testFolder = new TemporaryFolder(); 
+  String filename = "trying";
+  File testFile;
 
   @Before
-  public void init() throws DhxException {
+  public void init() throws DhxException, IOException {
     MockitoAnnotations.initMocks(this);
     capsuleService = new CapsuleService();
     capsuleService.setCapsuleConfig(capsuleConfig);
@@ -102,6 +115,11 @@ public class CapsuleServiceTest {
     when(persistenceService.getFolderByNameOrDefaultFolder("/")).thenReturn(folder);
     capsuleService.setConfig(config);
     when(config.getCapsuleValidate()).thenReturn(true);
+    capsuleService.setDhxServerConfig(serverConfig);
+    testFile = testFolder.newFile(filename);
+    when(serverConfig.createDocumentFile()).thenReturn(testFile);
+    
+    when(serverConfig.getDocumentFile(Mockito.anyString())).thenReturn(testFile);
 
   }
 
@@ -542,11 +560,11 @@ public class CapsuleServiceTest {
 
     DecContainer container = getDecContainer(client, service);
 
-    StringWriter writer = new StringWriter();
+    /*StringWriter writer = new StringWriter();
     writer.write("container string");
-    when(dhxMarshallerService.marshallToWriterAndValidate(Mockito.eq(container),
-        any(InputStream.class)))
-            .thenReturn(writer);
+    when(dhxMarshallerService.marshall(Mockito.eq(container),
+        any(File.class)))
+            .thenReturn(testFile);*/
     List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
     CapsuleAdressee adressee = new CapsuleAdressee("400", null, null);
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
@@ -565,7 +583,14 @@ public class CapsuleServiceTest {
     verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("400", "DHX");
     assertEquals("V21", document.getCapsuleVersion());
     assertEquals(folder, document.getFolder());
-    assertEquals("container string", document.getContent());
+    assertEquals(filename, document.getContent());
+    //test that file contents is OK
+   /* FileReader reader = new FileReader(testFile);
+    char[] buf = new char[FileUtil.BINARY_BUFFER_SIZE];
+    reader.read(buf);
+    assertEquals("container string", new String(buf));
+    reader.close();*/
+    
     assertEquals(clientOrg, document.getOrganisation());
     assertEquals(true, document.getOutgoingDocument());
     assertEquals(1, document.getTransports().size());

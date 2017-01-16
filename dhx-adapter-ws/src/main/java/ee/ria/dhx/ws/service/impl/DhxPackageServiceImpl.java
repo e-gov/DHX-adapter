@@ -100,6 +100,9 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       SendDocument document, InternalXroadMember client,
       InternalXroadMember service, MessageContext context)
       throws DhxException {
+    if (StringUtil.isNullOrEmpty(document.getConsignmentId())) {
+      throw new DhxException(DhxExceptionEnum.DATA_ERROR, "Consignment id is empty!");
+    }
     if (config.getCheckDuplicate()
         && dhxImplementationSpecificService.isDuplicatePackage(client,
             document.getConsignmentId())) {
@@ -225,7 +228,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
           schemaStream);
       List<CapsuleAdressee> adressees = capsuleConfig
           .getAdresseesFromContainer(container);
-      if (log.isDebugEnabled()) {
+      if (log.isDebugEnabled() && adressees != null) {
         for (CapsuleAdressee adressee : adressees) {
           log.debug(
               "Document data from capsule: recipient organisationCode: {}",
@@ -404,7 +407,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
     if (client.getRepresentee() != null) {
       InternalXroadMember member = addressService.getClientForMemberCode(
           client.getMemberCode(), client.getSubsystemCode());
-      if (member.getRepresentor()==null || member.getRepresentor() == false) {
+      if (member.getRepresentor() == null || member.getRepresentor() == false) {
         throw new DhxException(DhxExceptionEnum.WRONG_SENDER,
             "Xroad sender is representee, but member found in "
                 + "adressregistry is not representor. sender:"

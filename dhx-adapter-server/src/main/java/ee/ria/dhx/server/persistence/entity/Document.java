@@ -42,8 +42,6 @@ public class Document extends BaseEntity implements Serializable {
   private Timestamp storageDeadline;
 
   @Column(name = "sisu")
-  @Lob
-  @Type(type="org.hibernate.type.MaterializedClobType")
   private String content;
 
   @Column(name = "suurus")

@@ -22,7 +22,7 @@
     </RollingFile>
   </Appenders>
   <Loggers>
-    <Logger name="ee.ria" level="trace" additivity="false">
+    <Logger name="ee.ria" level="debug" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger>
