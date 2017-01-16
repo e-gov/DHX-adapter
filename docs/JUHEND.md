@@ -2,22 +2,22 @@
 
 ET | [EN](GUIDE.md)
 
-# DHX-adapteri Java teegi kasutusjuhend
+# DHX Java teegi kasutusjuhend
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
 ## Sissejuhatus
 
-DHX adapter on Java teek, milles on realiseeritud [dokumendi saatmise](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmise](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [aadressiraamatu koostamise](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) funktsionaalsus vastavalt [DHX protokolli](https://e-gov.github.io/DHX/) nõuetele.
+DHX Java teekides on realiseeritud [dokumendi saatmise](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmise](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [aadressiraamatu koostamise](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) funktsionaalsus vastavalt [DHX protokolli](https://e-gov.github.io/DHX/) nõuetele.
 
 Antud juhend on mõeldud kasutamiseks tarkvara arendajatele (DHX rakendajatele), kes soovivad hakata oma Dokumendihaldussüsteemis (DHS) kasutama DHX protokolli.
 
-DHX adapteri lähtekood asub aadressil https://github.com/e-gov/DHX-adapter
+DHX Java teekide lähtekood asub aadressil https://github.com/e-gov/DHX-adapter
 
 Selles asuvad kolm alamteeki
 - [dhx-adapter-core](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/) – selles asuvad klassid XML (Kapsli) ja SOAP objektide koostamiseks ja töötlemiseks,  vigade klassid ning mõned üldkasutatavad utiliit klassid
 - [dhx-adapter-ws](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/) – selles asuvad klassid dokumendi saatmiseks (SOAP client), aadressiraamatu koostamiseks (SOAP client) ja dokumendi vastuvõtmiseks (SOAP Service Endpoint)
-- [dhx-adapter-server](https://e-gov.github.io/DHX-adapter/dhx-adapter-server/doc/) – eraldiseisev adapter server (Variant C), mis puhverdab saabunud dokumendid vahe andmebaasis ja pakub vana [DVK liidese](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md) sarnaseid SOAP teenuseid
+- [dhx-adapter-server](https://e-gov.github.io/DHX-adapter/dhx-adapter-server/doc/) – eraldiseisev DHX adapterserver (Variant C), mis puhverdab saabunud dokumendid vahe andmebaasis ja pakub vana [DVK liidese](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md) sarnaseid SOAP teenuseid
 
 DHS-iga otse liidestamiseks tuleb kasutada 2 esimest teeki **dhx-adapter-core** ja **dhx-adapter-ws**.
 
@@ -25,20 +25,20 @@ DHS-iga otse liidestamiseks tuleb kasutada 2 esimest teeki **dhx-adapter-core** 
 
 ##Välised sõltuvused ja baasplatvorm
 
-DHX adapteri teekide kasutamisel tuleb arvestada et DHX adapter sõltub allpool toodud komponentidest.
+DHX Java teekide kasutamisel tuleb arvestada et need sõltuvad allpool toodud komponentidest.
 
 Kompileerimiseks ja käivitamiseks on vajalik [Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
 
-Kuna DHX adapteri teek pakub väljapoole veebiteenust (ei ole ainult teenuse klient), siis sõltutakse J2EE [Java Servlet API](https://en.wikipedia.org/wiki/Java_servlet) teegist, läbi [Spring Web Services](http://projects.spring.io/spring-ws/) mooduli).
+Kuna DHX Java teegid pakuvad väljapoole veebiteenust (ei ole ainult teenuse klient), siis sõltutakse J2EE [Java Servlet API](https://en.wikipedia.org/wiki/Java_servlet) teegist, läbi [Spring Web Services](http://projects.spring.io/spring-ws/) mooduli).
 
 XML töötluseks kasutatakse [Java Architecture for XML Binding - JAXB](https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/package-summary.html) teeki, mis on Java SE 7 osa.
 
-DHX adapteri Java teek baseerub Spring Framework arhitektuuril, kasutades selle mooduleid:
+DHX Java teek baseerub Spring Framework arhitektuuril, kasutades selle mooduleid:
 - Häälestamiseks ja laadimiseks (Spring AOP, Spring Context, jne)
 - HTTP SOAP kliendina päringute tegemiseks (Spring WS Client, Apache HttpClient)
 - HTTP SOAP veebiteenuse pakkumiseks (Spring WS Server Endpoint, Java Servlet API)
 
-DHX adapteri otsesed ja kaudsed välised sõltuvused on järgmised:
+DHX Java teegi otsesed ja kaudsed välised sõltuvused on järgmised:
 
 Grupp | Moodul | Versioon | Märkused
 ------------ | ------------- | ------------- | -------------
@@ -79,7 +79,7 @@ junit | junit | 4.12 | JUnit
 
 ##Ehitamine
 
-Alljärgnevalt on toodud näide, kuidas kaasata DHX adapteri teegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
+Alljärgnevalt on toodud näide, kuidas kaasata DHX JAvateegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
 
 Ülaltoodud välised sõltuvused laetakse Maveni kasutamise korral automaatselt alla.
 
@@ -125,7 +125,7 @@ Maven-ga, juhul kui mingi muu kasutatav teek (näiteks axis2-codegen) sõltub ne
 
 ##Teegi laadimise häälestamine (web.xml ja applicationContext.xml)
 
-Kõige lihtsam on DHX adapteri teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees, kasutades laadimiseks SpringFramework klasse [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) ja [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
+Kõige lihtsam on DHX Java teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees, kasutades laadimiseks SpringFramework klasse [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) ja [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
 Selleks tuleb [web.xml](https://cloud.google.com/appengine/docs/java/config/webxml) häälestusfaili lisada sektsioonid:
 ```xml
@@ -241,14 +241,14 @@ dhx.check-dhx-version | true |  | Kas dokumendi saabumisel kontrollida ka saatja
 dhx.accepted-dhx-protocol-versions | 1.0 |  | Milliseid protokolli versioone toetatakse dokumendi vastuvõtmisel. Komaga eraldatud list. näiteks tulevikus võib see olla `1.0,2.0`. Töötab koos eelmise parameetriga `dhx.check-dhx-version`
 dhx.marshall-context | `ee.ria.dhx. types.ee.riik.schemas. deccontainer.vers_2_1: ee.ria.dhx.types.eu. x_road.dhx.producer: ee.ria.dhx.types.eu. x_road.xsd.identifiers: ee.ria.dhx.types.eu. x_road.xsd. representation: ee.ria.dhx.types.eu. x_road.xsd.xroad` |  | Määrab millistes Java pakettides asuvaid XML tüüpide objekte püütakse JAXB parseriga töödelda. Kui SOAP päringus ja/või Kapsli XML-is saadetakse lisaandmeid kolmandatest nimeruumidest, siis võib siia lisada uusi tüüpe. Kaspli sees saab laiendatud elemente saata [RecordTypeSpecificMetadata](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd#L426) elmendi sees (lubatud `<xs:any namespace="##any">`)
 dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Määrab kust otsitakse Kapsli 2.1 versiooni XSD schema faili. Üldjuhul võetakse see `dhx-adapter-core` JAR-i seest.
-**dhx.renew-address-list-on-startup** | true |  | Määrab kas Java serveri startimise järel käivitatakse adressaatide nimekirja uuendamine. Adressaatide nimekirja uuendamine võib erijuhtudel võtta kaua aega (näiteks kui mõne vahendaja server on maas). Seepärast on DHX adapteri teegi kasutamisel mõistlik see puhverdada andmebaasis ja implementeerida `DhxImplementationSpecificService` [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). Sel juhul tuleks väärtustada `dhx.renew-address-list-on-startup=false`
+**dhx.renew-address-list-on-startup** | true |  | Määrab kas Java serveri startimise järel käivitatakse adressaatide nimekirja uuendamine. Adressaatide nimekirja uuendamine võib erijuhtudel võtta kaua aega (näiteks kui mõne vahendaja server on maas). Seepärast on DHX Java teegi kasutamisel mõistlik see puhverdada andmebaasis ja implementeerida `DhxImplementationSpecificService` [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). Sel juhul tuleks väärtustada `dhx.renew-address-list-on-startup=false`
 **address-renew-timeout** |  | 0 */20 * * * ? | Määrab [adressaatide nimekirja](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) uuendamise sageduse. [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `0 */20 * * * ?` tähendab iga 20 minuti järel. Võib soovi korral muuta, näiteks iga päeva kell 7:00 on `0 0 7 * * *`
 
 ##Funktsionaalsuse üldpõhimõtted
 
-DHX adapteri Java teegi põhifunktsionaalsus on [dokumendi saatmine](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmine](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamine.
+DHX Java teegi põhifunktsionaalsus on [dokumendi saatmine](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmine](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamine.
  
-Põhiline osa, mis DHX adapteri teegi kasutajat (arendajat) huvitab, asub pakettides
+Põhiline osa, mis DHX Java teegi kasutajat (arendajat) huvitab, asub pakettides
 - [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – java teenuste liidesed (service interfaces)
 - [ee.ria.dhx.ws.service.impl](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/impl/package-summary.html) – java teenuste realisatsioonid (service interface implementations)
 
@@ -261,7 +261,7 @@ Klass/liides | Kirjeldus
 [AsyncDhxPackageService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html) | Teenus dokumendi asünkroonseks saatmiseks
 [DhxMarshallerService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxMarshallerService.html) | Teenus XML objektide (Kapsli) koostamiseks 
 [DhxPackageProviderService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageProviderService.html) | Teenus saadetiste koostamiseks (SOAP päringu XML objektide koostamiseks)
-[DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) | Realisatsiooni spetsiifilised callback liidesed. Selle liidese implementatsiooni peaks DHX adapterit kasutav arendaja ise realiseerima.
+[DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html) | Realisatsiooni spetsiifilised callback liidesed. Selle liidese implementatsiooni peaks DHX Java teeki kasutav arendaja ise realiseerima.
 
 Arendaja jaoks kõige tähtsam neist on [DhxImplementationSpecificService](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html), mille meetodid peab arendaja peab ise realiseerima.
 
@@ -278,7 +278,7 @@ public class CustomDhxImplementationSpecificService
 }
 ```
 
-Siin `@Service` tag määrab, et DHX adapteri seest kasutav teenus `dhxImplementationSpecificService` on nüüd ülekirjutatud omatehtud klassiga. 
+Siin `@Service` tag määrab, et DHX Java teegi seest kasutav teenus `dhxImplementationSpecificService` on nüüd ülekirjutatud omatehtud klassiga. 
 Seega dokumendi vastuvõtmise ja saatmise automaatloogika kasutab nüüd „callback“ liidesena arendaja endaloodud klassi `CustomDhxImplementationSpecificService`.
 
 ##Aadressiraamatu koostamise ja kasutamise liides
