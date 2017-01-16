@@ -17,13 +17,15 @@ DHX adapter server pakub kahte erinevat [SOAP](https://www.w3.org/TR/2000/NOTE-S
 
 DHX adapter server käitub puhver serverina, võttes mõlema liidese kaudu vastu dokumente, salvestades kõigepealt need enda lokaalses andmebaasis/failisüsteemis, selleks et need hiljem addressaadile edastada.
 
+Välise DHX liidese toimimise loogikast arusaamine ei ole dhx-adapter-serveri kasutajale hädavajalik.
+
+## WSDL asukohad
+
 Välise DHX liidese [WSDL](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) asub dhx-adapter-serveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`.
 Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/ws`.
 
 Sisemisel liidese [WSDL]() asub dhx-adapater-serveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhxServer.wsdl`. 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
-
-Välise DHX liidese toimimise loogikast arusaamine ei ole dhx-adapter-serveri kasutajale hädavajalik. 
   
 ## Sisemine liides
 
@@ -47,7 +49,7 @@ Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise l
 ### sendDocuments (sisemine liides)
 
 SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
-Dokumendid peavad olema Kapsli 2.1 versioonis (vanemad Kapsli versioonid ei ole toetatud).
+Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd) versioonis (vanemad Kapsli versioonid ei ole toetatud).
 
 dhx-adapter-server võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
@@ -59,7 +61,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ### getSendStatus (sisemine liides)
 
-SOAP operatsiooni `getSendStatus.v1` kasutatakse saadetud dokumendi staatuse ja saatmisel ilmnenud vea info (fault) küsimiseks.
+SOAP operatsiooni `getSendStatus.v2` kasutatakse saadetud dokumendi staatuse ja saatmisel ilmnenud vea info (fault) küsimiseks.
 Võimalikud staatused on:
 * `saatmisel` – dokumenti üritatakse veel antud saajale edastada
 * `saadetud` – dokument sai edukalt antud saajale saadetud
@@ -70,7 +72,6 @@ Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov
 Märkused vana DVK X-tee liidese kasutajale:
 > Võrreldes DVK getSendStatus liidestega on dhx-adpater-serveris realiseeritud on ainult getSendStatus operatsioonide [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2) versioon.
 > Vanemat DVK sendDocuments versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-serveri ei paku.
-
 
 
 ## Erinevused vana DVK liidese ja Adapteri Sisemise liidese toimimise loogikas
