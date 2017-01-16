@@ -1,24 +1,24 @@
 ![](EL_Regionaalarengu_Fond_horisontaalne.jpg)
 
 
-# DHX adapteri serveri kasutusjuhend
+# DHX adapterserveri kasutusjuhend
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
 ## Sissejuhatus
-DHX adapter server on  tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
+DHX adapterserver on  tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
-Tarkvara paigaldamine on kirjeldatud eraldi dokumendis [DHX adapteri serveri paigaldusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/PAIGALDUS-ADAPTER-SERVER.md).
+Tarkvara paigaldamine on kirjeldatud eraldi dokumendis [DHX adapterserveri paigaldusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/PAIGALDUS-ADAPTER-SERVER.md).
 
 ![](dhx-adapter-server.png)
 
-DHX adapter server pakub kahte erinevat [SOAP](https://www.w3.org/TR/2000/NOTE-SOAP-20000508/) veebiteenuste liidest:
+DHX adapterserver pakub kahte erinevat [SOAP](https://www.w3.org/TR/2000/NOTE-SOAP-20000508/) veebiteenuste liidest:
 * Väline DHX liides (pildil kollane). DHX liides on suunatud väljapoole (teiste asutustega suhtlemiseks). DHX liides implementeerib DHX operatsiooni [sendDocument](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md). Vahendaja korral ka operatsiooni [representationList](https://github.com/e-gov/DHX/blob/master/files/representationList.md) (ei ole lihtsustamise eesmärgil pildil näidatud).
 * Sisemine liides (pildil roheline). See liides on suunatud sissepoole (asutuse lokaalvõrku). Seda liidest kasutab asutuse dokumendihaldussüsteem (DHS) dokumentide saatmiseks ja vastuvõtmiseks. See liides implementeerib operatsioonid sendDocuments, receiveDocuments, markDocumentsReceived, getSendStatus ja getSendingOptions. Sisemise liidese sünonüümina kasutatakse muudes dokumentides mõistet "DVK protokolli" liides.
 
-DHX adapter server käitub puhver serverina, võttes mõlema liidese kaudu vastu dokumente, salvestades kõigepealt need enda lokaalses andmebaasis/failisüsteemis, selleks et need hiljem addressaadile edastada.
+DHX adapterserver käitub puhver serverina, võttes mõlema liidese kaudu vastu dokumente, salvestades kõigepealt need enda lokaalses andmebaasis/failisüsteemis, selleks et need hiljem addressaadile edastada.
 
-Välise DHX liidese toimimise loogikast arusaamine ei ole dhx-adapter-serveri kasutajale hädavajalik.
+Välise DHX liidese toimimise loogikast arusaamine ei ole DHX adapterserveri kasutajale hädavajalik.
 
 ## WSDL asukohad
 
@@ -38,8 +38,8 @@ Märkused vana DVK X-tee liidese kasutajale:
 > Sisemist liidese operatsioonid on projekteeritud väga sarnaselt vanale [DVK liidesele](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md). 
 > Sisemise liidese SOAP teenuste XML nimeruumid ja implementeeritud operatsioonide struktuur on täpselt samad nagu vanas DVK liideses.
 > 
-> Enamasti peaks saama vanalt DVK X-tee liideselt üle minna uuele DHX protokollile, hakates kasutama uut dhx-adapter-server tarkvara, muutes DHS sees ümber DVK veebiteenuse võrguaadressi (endpoint URI aadressi).
-> Kui varem pakkus seda teenust X-tee turvaserver, siis selle asemel pakub seda dhx-adapter-serveri sisemine liides.
+> Enamasti peaks saama vanalt DVK X-tee liideselt üle minna uuele DHX protokollile, hakates kasutama uut DHX adapterserver tarkvara, muutes DHS sees ümber DVK veebiteenuse võrguaadressi (endpoint URI aadressi).
+> Kui varem pakkus seda teenust X-tee turvaserver, siis selle asemel pakub seda adapterserveri sisemine liides.
 > 
 > Sisemises liideses on implementeeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
@@ -52,7 +52,7 @@ Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise l
 SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
 Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd) versioonis (vanemad Kapsli versioonid ei ole toetatud).
 
-dhx-adapter-server võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
+DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
 Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni `getSendStatus`
 
@@ -75,7 +75,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 > Vanemat DVK getSendStatus versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-serveri ei paku.
 
 
-## Erinevused vana DVK liidese ja Adapteri Sisemise liidese toimimise loogikas
+## Erinevused vana DVK liidese ja adapterserveri sisemise liidese toimimise loogikas
 
 
 

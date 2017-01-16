@@ -1,15 +1,15 @@
 ![](EL_Regionaalarengu_Fond_horisontaalne.jpg)
 
 
-# DHX adapteri serveri paigaldusjuhend
+# DHX adapterserveri paigaldusjuhend
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
 ## Sissejuhatus
 
-DHX adapter server on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
+DHX adapterserveri on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
-dhx-adapter-serveri toimimise loogika on kirjeldatud [DHX adapteri serveri kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND-ADAPTER-SERVER.md). 
+DHX adapterserveri toimimise loogika on kirjeldatud [DHX adapterserveri kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND-ADAPTER-SERVER.md). 
 
 ##Tarkvara nõuded (baasplatvormi eeldused)
 
@@ -21,11 +21,11 @@ dhx-adapter-serveri toimimise loogika on kirjeldatud [DHX adapteri serveri kasut
 Märkus (muud andmebaasid):
 > Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [serveritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/).
 >
-> **NB!** DHX adapter serveri töötamine on testitud ainult [PostgreSQL 9.6](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.
+> **NB!** DHX adapterserveri töötamine on testitud ainult [PostgreSQL 9.6](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.
 >
 > Seega muude andmebaasi serverite kasutamine toimub omal riisikol ja ei pruugi töötada.
 >
-> Paigalduspaketina alla laetav WAR fail sisaldab ainult PostgreSQL ja Oracle andmebaasiga suhtlemise JDBC draivereid. Kui soovitakse kasutatakse muud andmebaasi, siis tuleb dhx-adapter-serveri WAR fail ise uuesti ehitada, muutes `pom.xml` failis sõltuvusi. 
+> Paigalduspaketina alla laetav WAR fail sisaldab ainult PostgreSQL ja Oracle andmebaasiga suhtlemise [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity) draivereid. Kui soovitakse kasutatakse muud andmebaasi, siis tuleb dhx-adapter-serveri WAR fail ise uuesti ehitada, muutes `pom.xml` failis sõltuvusi. 
 
 Märkus (muud web konteinerid):
 > Apache Tomcat tarkvara võib asendada mõne muu [Java Web konteineri](https://en.wikipedia.org/wiki/Web_container) tarkvaraga. 
@@ -56,19 +56,19 @@ Kui soovitakse kasutada
 
 Vanemasse Java Servlet serveritesse paigaldamisel tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
 
-Selleks vaata täpsemalt [DHX-adapteri Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
+Selleks vaata täpsemalt [DHX Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
 
 
 ##Teadaolevad probleemid (sõltuvuste konfliktid)
 
 Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
 
-Vaata [DHX-adapteri Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
+Vaata [DHX Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
 
 ##Häälestus fail (dhx-application.properties)
 
-Põhilised häälestus failis esinevad parameetrid on toodud  [DHX-adapteri Java teegi kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
+Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
 
 Lisaks neile tuleb täiendavalt lisada parameetrid
 
