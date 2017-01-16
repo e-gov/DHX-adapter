@@ -18,7 +18,7 @@ Kompileerimiseks ja käivitamiseks on vajalik [Java SE](https://en.wikipedia.org
 Lokaalse andmebaasi serverina võib kasutada [Spring-Data](http://projects.spring.io/spring-data/) ja [Spring-Data-JPA] (http://projects.spring.io/spring-data-jpa/) poolt toetatud SQL andmebaasi servereid.
 
 **NB!** DHX adapter serveri töötamine on testitud ainult [PostgreSQL 9.4](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega. 
-Muude andmebaasi serverite kasutamine on omal riisikol (kuigi võiks töötada ka [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/) andmebaasidega).
+Muude andmebaasi serverite kasutamine toimub omal riisikol (kuigi võiks töötada ka [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/) andmebaasidega).
 
 ##Riistvara nõuded (eeldused)
 
