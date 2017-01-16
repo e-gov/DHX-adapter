@@ -5,62 +5,60 @@
 - [Testimise strateegia](#test-strateegia)
 - [Testilood](#tests)
 
-  - [1\. DHX protokolli teenuste testimine](#dhx-tests)
+  - [1. DHX protokolli teenuste testimine](#dhx-tests)
 
     - [1.1 Õige kapsli saatmine](#1.1)
-    - [1.2\. Õige kapsli saatmine alamsüsteemile](#1.2)
-    - [1.3\. Vale kapsli saatmine](#1.3)
-    - [1.4\. Faili saatmine (fail ei ole kapsel)](#1.4)
-    - [1.5\. Duplikaadi kontroll](#1.5)
-    - [1.6\. Valele adressaadile saatmine](#1.6)
-    - [1.7\. Vahendatavate nimekirja küsimine DVK-st](#1.7)
-    - [1.8\. DVK süsteemist tulnud dokumentide vastuvõtmine](#1.8)
-    - [1.9\. Õige kapsli saatmine vahendatavale](#1.9)
-    - [1.10\. Õige kapsli saatmine vahendatava alamsüsteemile](#1.10)
+    - [1.2. Õige kapsli saatmine alamsüsteemile](#1.2)
+    - [1.3. Vale kapsli saatmine](#1.3)
+    - [1.4. Faili saatmine (fail ei ole kapsel)](#1.4)
+    - [1.5. Duplikaadi kontroll](#1.5)
+    - [1.6. Valele adressaadile saatmine](#1.6)
+    - [1.7. Vahendatavate nimekirja küsimine DVK-st](#1.7)
+    - [1.8. Õige kapsli saatmine. Kapslis on määratud 'ARVED' kaust](#1.8)
+    - [1.9. Õige kapsli saatmine vahendatavale](#1.9)
+    - [1.10. Õige kapsli saatmine vahendatava alamsüsteemile](#1.10)
 
-  - [2\. DVK protokolli teenuste testimine.](#dvk-tests)
+  - [2. DVK protokolli teenuste testimine.](#dvk-tests)
 
-    - [2.1\. Õige kapsli saatmine](#2.1)
-    - [2.2\. Vale kapsli saatmine](#2.2)
-    - [2.3\. Faili saatmine (fail ei ole kapsel)](#2.3)
-    - [2.4\. Vahendatavale saatmine](#2.4)
-    - [2.5\. Valele adressaadile saatmine](#2.5)
-    - [2.6\. DHX süsteemist tulnud dokumendi vastuvõtmine](#2.6)
-    - [2.7\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine](#2.7)
-    - [2.8\. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud alamsüsteemile.](#2.8)
-    - [2.9\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud alamsüsteemile.](#2.9)
-    - [2.10\. DVK adressaatide nimekirja pärimine.](#2.10)
-    - [2.11\. DHX-i saadetud dokumendi staatuse pärimine(saatmine õnnestus)](#2.11)
-    - [2.12\. DHX-i saadetud dokumendi staatuse pärimine(saatmine ebaõnnestus, adressaat ei ole üleval)](#2.12)
-    - [2.13\. Õige kapsli saatmine DHX alamsüsteemile(DHX. prefiksiga X-tee alamsüsteemile)](#2.13)
-    - [2.14\. DHX süsteemist tulnud dokumendi vastuvõtmine 'ARVED' kaustast.](#2.14)
-    - [2.15\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on 'ARVED' kaustas.](#2.15)
-    - [2.16\. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatavale.](#2.16)
-    - [2.17\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatavale.](#2.17)
-    - [2.18\. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatava alamsüsteemile.](#2.18)
-    - [2.19\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatava alamsüsteemile.](#2.19)
+    - [2.1. Õige kapsli saatmine](#2.1)
+    - [2.2. Vale kapsli saatmine](#2.2)
+    - [2.3. Faili saatmine (fail ei ole kapsel)](#2.3)
+    - [2.4. Vahendatavale saatmine](#2.4)
+    - [2.5. Valele adressaadile saatmine](#2.5)
+    - [2.6. DHX süsteemist tulnud dokumendi vastuvõtmine](#2.6)
+    - [2.7. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine](#2.7)
+    - [2.8. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud alamsüsteemile.](#2.8)
+    - [2.9. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud alamsüsteemile.](#2.9)
+    - [2.10. DVK adressaatide nimekirja pärimine.](#2.10)
+    - [2.11. DHX-i saadetud dokumendi staatuse pärimine(saatmine õnnestus)](#2.11)
+    - [2.12. DHX-i saadetud dokumendi staatuse pärimine(saatmine ebaõnnestus, adressaat ei ole üleval)](#2.12)
+    - [2.13. Õige kapsli saatmine DHX alamsüsteemile(DHX. prefiksiga X-tee alamsüsteemile)](#2.13)
+    - [2.14. DHX süsteemist tulnud dokumendi vastuvõtmine 'ARVED' kaustast.](#2.14)
+    - [2.15. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on 'ARVED' kaustas.](#2.15)
+    - [2.16. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatavale.](#2.16)
+    - [2.17. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatavale.](#2.17)
+    - [2.18. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatava alamsüsteemile.](#2.18)
+    - [2.19. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatava alamsüsteemile.](#2.19)
 
-  - [3\. DHX makettrakenduse testid](#dhx-makett-tests)
+  - [3. DHX makettrakenduse testid](#dhx-makett-tests)
 
-    - [3.1\. Õige kapsli saatmine](#3.1)
+    - [3.1. Õige kapsli saatmine](#3.1)
 
-      - [3.2\. Vale kapsli saatmine](#3.2)
-      - [3.3\. Faili saatmine (fail ei ole kapsel)](#3.3)
-      - [3.4\. Duplikaadi kontroll](#3.4)
-      - [3.5\. DVK süsteemist tulnud dokumendi vastuvõtmine](#3.5)
+      - [3.2. Vale kapsli saatmine](#3.2)
+      - [3.3. Faili saatmine (fail ei ole kapsel)](#3.3)
+      - [3.4. Duplikaadi kontroll](#3.4)
+      - [3.5. DVK süsteemist tulnud dokumendi vastuvõtmine](#3.5)
 
 - [Testplaan](#testplaan)
 
-[]()
-
+<a name="test-strateegia"></a>
 # Testimise strateegia
 
 Käesolev dokument määratleb seoses DHX protokolli kasutuselevõtmisega DHX adapter serveri testimise ulatuse, korralduse ja üksikasjad. DHX adapter serveri testimiseks tehakse otse SOAP päringud (nii vastavalt DHX protokollile kui ka vastavalt DVK protokollile, kuna DHX adapter server pakub mõlemad). SOAP päringute tegemiseks on soovitatav kasutada SOAP UI-d.
 
 Iga punkti 1 ja punkti 2 testloo juures on olemas näidis-XML, mida võib kasutada testimiseks. Enne XML-i saatmist tuleb veenduda ja vajadusel muuta XML-i header-i _service_ ja _client_ elemendid, täites neid vajalikute andmetega (saatva süsteemi ja adressaadi andmetega). Juhul kui XML-i keha enne saatmist vajab muutmist, siis vastav info on kajastatud testiloos. SOAP päringu saatmisel tuleb veenduda et päring saadetakse õigele X-tee turvaserverile (saatva süsteemi turvaserverile). Lisaks juhul kui testiloo käigus saadedakse kapsli, siis tuleb veenduda et kapsli adresssaat ja kapsli saatja on õiged(vastavad testiloos kirjeldatud saatja süsteemile ja kapsli adressadile).
 
-[]()
-
+<a name="tests"></a>
 # Testilood
 
 ## **Tähistused:**
@@ -77,13 +75,12 @@ Iga testiloo juures on kirjas, millised X-tee liikmed on vajalikud konkreetse te
 
 Iga SOAP sõnumi X-tee headeri, service elemendi tuleb täita DHX adapter serveri andmetega, ehk iga SOAP sõnum tuleb saata DHX adapter serverisse.
 
-[]()
+<a name="dhx-tests"></a>
+## 1. DHX protokolli teenuste testimine
 
-## 1\. DHX protokolli teenuste testimine
 
-[]()
-
-### 1.1\. Õige kapsli saatmine
+<a name="1.1"></a>
+### 1.1. Õige kapsli saatmine
 
 ```
 Saatev süsteem : DHS 2
@@ -95,7 +92,7 @@ Saadetis : korrektselt kapseldatud fail
 
 - Testija saadab päringu DHX teenusesse sendDocument
 
-  - Testija asendab sendDocument päringu XML-i kehas consignmentId elemendi sisu unikaalse id-ga(näiteks suvalise tekstiga).
+  - Testija asendab sendDocument päringu XML-i kehas consignmentId elemendi sisu unikaalse id-ga (näiteks suvalise tekstiga).
   - SOAP päringu manuseks tuleb lisada korrektselt kapseldatud fail. Manuse ContentId-na tuleb panna 'doc'.
 
 #### **Oodatav tulemus** :
@@ -240,9 +237,9 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
+<a name="1.2"></a>
 
-### 1.2\. Õige kapsli saatmine alamsüsteemile
+### 1.2. Õige kapsli saatmine alamsüsteemile
 
 ```
 Saatev süsteem : DHS 2
@@ -254,7 +251,7 @@ Saadetis : korrektselt kapseldatud fail
 
 - Testija saadab päringu DHX teenusesse sendDocument
 
-  - Testija asendab sendDocument päringu XML-i kehas consignmentId elemendi sisu unikaalse id-ga(näiteks suvalise tekstiga). Märkus: Vajadusel (juhul kui testi tehakse mitte selle adressaadiga, kelle andmed on esitatud näites) tuleb muuta ka recipient ja recipientSystem(asutuse alamsüsteem) elemendid XML-i kehas.
+  - Testija asendab sendDocument päringu XML-i kehas consignmentId elemendi sisu unikaalse id-ga (näiteks suvalise tekstiga). Märkus: Vajadusel (juhul kui testi tehakse mitte selle adressaadiga, kelle andmed on esitatud näites) tuleb muuta ka recipient ja recipientSystem (asutuse alamsüsteem) elemendid XML-i kehas.
   - SOAP päringu manuseks tuleb panna korrektselt kapseldatud fail. Manuse ContentId-na tuleb panna 'doc'.
 
 #### **Oodatav tulemus** :
@@ -399,9 +396,9 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
+<a name="1.3"></a>
 
-### 1.3\. Vale kapsli saatmine
+### 1.3. Vale kapsli saatmine
 
 ```
 Saatev süsteem : DHS 2
@@ -413,7 +410,7 @@ Saadetis : kapsli fail, mis ei vasta Elektroonilise andmevahetuse metaandmete lo
 
 - Testija saadab päringu DHX teenusesse sendDocument
 
-  - Testija asendab sendDocument päringu XML-i kehas consignmentId elemendi sisu unikaalse id-ga(näiteks suvalise tekstiga).
+  - Testija asendab sendDocument päringu XML-i kehas consignmentId elemendi sisu unikaalse id-ga (näiteks suvalise tekstiga).
   - SOAP päringu manuseks tuleb lisada kapsli fail, mis ei vasta Elektroonilise andmevahetuse metaandmete loendile 2.1 (nt puudu kohustuslik väli), aga on XML fail õige XML vorminguga. Manuse ContentId-na tuleb panna 'doc'.
 
 #### **Oodatav tulemus** :
@@ -549,9 +546,8 @@ Saadetis : kapsli fail, mis ei vasta Elektroonilise andmevahetuse metaandmete lo
 </DecContainer>
 ```
 
-[]()
-
-### 1.4\. Faili saatmine (fail ei ole kapsel)
+<a name="1.4"></a>
+### 1.4. Faili saatmine (fail ei ole kapsel)
 
 ```
 Saatev süsteem : DHS 2
@@ -610,9 +606,8 @@ Saadetis : fail, mis ei ole XML või XML vale vorminguga.
 Test fail.
 ```
 
-[]()
-
-### 1.5\. Duplikaadi kontroll
+<a name="1.5"></a>
+### 1.5. Duplikaadi kontroll
 
 ```
 Saatev süsteem : DHS 2
@@ -770,9 +765,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 1.6\. Valele adressaadile saatmine
+<a name="1.6"></a>
+### 1.6. Valele adressaadile saatmine
 
 ```
 Saatev süsteem : DHS 2
@@ -929,9 +923,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 1.7\. Vahendatavate nimekirja küsimine DVK-st.
+<a name="1.7"></a>
+### 1.7. Vahendatavate nimekirja küsimine DVK-st.
 
 ```
 Saatev süsteem : DHS 2
@@ -977,9 +970,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 1.8\. Õige kapsli saatmine. Kapslis on määratud 'ARVED' kaust.
+<a name="1.8"></a>
+### 1.8. Õige kapsli saatmine. Kapslis on määratud 'ARVED' kaust.
 
 ```
 Saatev süsteem : DHS 2
@@ -1137,9 +1129,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 1.9\. Õige kapsli saatmine vahendatavale
+<a name="1.9"></a>
+### 1.9. Õige kapsli saatmine vahendatavale
 
 ```
 Saatev süsteem : DHS 2
@@ -1297,9 +1288,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 1.10\. Õige kapsli saatmine vahendatava alamsüsteemile
+<a name="1.10"></a>
+### 1.10. Õige kapsli saatmine vahendatava alamsüsteemile
 
 ```
 Saatev süsteem : DHS 2
@@ -1458,13 +1448,12 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
+<a name="dvk-tests"></a>
+## 2. DVK protokolli teenuste testimine.
 
-## 2\. DVK protokolli teenuste testimine.
+<a name="2.1"></a>
 
-[]()
-
-### 2.1\. Õige kapsli saatmine
+### 2.1. Õige kapsli saatmine
 
 ```
 Saatev süsteem : DHS 3
@@ -1622,9 +1611,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 2.2\. Vale kapsli saatmine
+<a name="2.2"></a>
+### 2.2. Vale kapsli saatmine
 
 ```
 Saatev süsteem : DHS 3
@@ -1778,9 +1766,8 @@ Saadetis : kapsli fail, mis ei vasta Elektroonilise andmevahetuse metaandmete lo
 </DecContainer>
 ```
 
-[]()
-
-### 2.3\. Faili saatmine (fail ei ole kapsel)
+<a name="2.3"></a>
+### 2.3. Faili saatmine (fail ei ole kapsel)
 
 ```
 Saatev süsteem : DHS 3
@@ -1847,9 +1834,8 @@ Saadetis : fail mis ei ole XML või XML vale vorminguga.
 Test fail.
 ```
 
-[]()
-
-### 2.4\. Vahendatavale saatmine
+<a name="2.4"></a>
+### 2.4. Vahendatavale saatmine
 
 ```
 Saatev süsteem : DHS 3
@@ -2013,9 +1999,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 2.5\. Valele adressaadile saatmine
+<a name="2.5"></a>
+### 2.5. Valele adressaadile saatmine
 
 ```
 Saatev süsteem : DHS 3
@@ -2179,9 +2164,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 2.6\. DHX süsteemist tulnud dokumendi vastuvõtmine
+<a name="2.6"></a>
+### 2.6. DHX süsteemist tulnud dokumendi vastuvõtmine
 
 ```
 Saatev süsteem : DHS 3
@@ -2220,8 +2204,6 @@ Saadetis :
       <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
       <ns3:serviceVersion>v4</ns3:serviceVersion>
     </ns4:service>
-    <ns4:userId xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">EE38806190294
-    </ns4:userId>
    </soapenv:Header>
    <soapenv:Body>
       <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
@@ -2233,9 +2215,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.7\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine
+<a name="2.7"></a>
+### 2.7. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine
 
 ```
 Saatev süsteem : DHS 3
@@ -2291,9 +2272,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.8\. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud alamsüsteemile.
+<a name="2.8"></a>
+### 2.8. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud alamsüsteemile.
 
 ```
 Saatev süsteem : DHS 3 alamsüsteem
@@ -2340,9 +2320,6 @@ Saadetis :
       <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
       <ns3:serviceVersion>v4</ns3:serviceVersion>
     </ns4:service>
-    <ns4:userId xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers"
-      xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">EE38806190294
-    </ns4:userId>
    </soapenv:Header>
    <soapenv:Body>
       <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
@@ -2354,9 +2331,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.9\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud alamsüsteemile.
+<a name="2.9"></a>
+### 2.9. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud alamsüsteemile.
 
 ```
 Saatev süsteem : DHS 3 alamsüsteem
@@ -2412,9 +2388,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.10\. Aadressaatide nimekirja pärimine.
+<a name="2.10"></a>
+### 2.10. Aadressaatide nimekirja pärimine.
 
 ```
 Saatev süsteem : DHS 3
@@ -2470,9 +2445,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.11\. DHX-i saadetud dokumendi staatuse pärimine(saatmine õnnestus)
+<a name="2.11"></a>
+### 2.11. DHX-i saadetud dokumendi staatuse pärimine(saatmine õnnestus)
 
 ```
 Saatev süsteem : DHS 3
@@ -2533,9 +2507,8 @@ Saadetis :
 <item><dhl_id>14322</dhl_id></item>
 ```
 
-[]()
-
-### 2.12\. DHX-i saadetud dokumendi staatuse pärimine(saatmine ebaõnnestus, adressaat ei ole üleval)
+<a name="2.12"></a>
+### 2.12. DHX-i saadetud dokumendi staatuse pärimine(saatmine ebaõnnestus, adressaat ei ole üleval)
 
 ```
 Saatev süsteem : DHS 3
@@ -2604,9 +2577,8 @@ Saadetis : korrektselt kapseldatud fail
 <item><dhl_id>14322</dhl_id></item>
 ```
 
-[]()
-
-### 2.13\. Õige kapsli saatmine DHX alamsüsteemile(DHX. prefiksiga X-tee alamsüsteemile)
+<a name="2.13"></a>
+### 2.13. Õige kapsli saatmine DHX alamsüsteemile(DHX. prefiksiga X-tee alamsüsteemile)
 
 ```
 Saatev süsteem : DHS 3
@@ -2770,9 +2742,8 @@ Saadetis : korrektselt kapseldatud fail
 </DecContainer>
 ```
 
-[]()
-
-### 2.14\. DHX süsteemist tulnud dokumendi vastuvõtmine 'ARVED' kaustast.
+<a name="2.14"></a>
+### 2.14. DHX süsteemist tulnud dokumendi vastuvõtmine 'ARVED' kaustast.
 
 ```
 Saatev süsteem : DHS 3
@@ -2811,8 +2782,6 @@ Saadetis :
       <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
       <ns3:serviceVersion>v4</ns3:serviceVersion>
     </ns4:service>
-    <ns4:userId xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">EE38806190294
-    </ns4:userId>
    </soapenv:Header>
    <soapenv:Body>
       <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
@@ -2825,9 +2794,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.15\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on 'ARVED' kaustas.
+<a name="2.15"></a>
+### 2.15. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on 'ARVED' kaustas.
 
 ```
 Saatev süsteem : DHS 3
@@ -2883,9 +2851,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.16\. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatavale.
+<a name="2.16"></a>
+### 2.16. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatavale.
 
 ```
 Saatev süsteem : DHS 3 vahendatav
@@ -2923,8 +2890,6 @@ Saadetis :
       <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
       <ns3:serviceVersion>v4</ns3:serviceVersion>
     </ns4:service>
-    <ns4:userId xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">EE38806190294
-    </ns4:userId>
    </soapenv:Header>
    <soapenv:Body>
       <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
@@ -2936,9 +2901,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.17\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatavale.
+<a name="2.17"></a>
+### 2.17. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatavale.
 
 ```
 Saatev süsteem : DHS 3 vahendatav
@@ -2994,9 +2958,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.18\. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatava alamsüsteemile.
+<a name="2.18"></a>
+### 2.18. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud vahendatava alamsüsteemile.
 
 ```
 Saatev süsteem : DHS 3 vahendatava alamsüsteem
@@ -3035,8 +2998,6 @@ Saadetis :
       <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
       <ns3:serviceVersion>v4</ns3:serviceVersion>
     </ns4:service>
-    <ns4:userId xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">EE38806190294
-    </ns4:userId>
    </soapenv:Header>
    <soapenv:Body>
       <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
@@ -3048,9 +3009,8 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
-
-### 2.19\. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatava alamsüsteemile.
+<a name="2.19"></a>
+### 2.19. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud vahendatava alamsüsteemile.
 
 ```
 Saatev süsteem : DHS 3 vahendatava alamsüsteem
@@ -3106,13 +3066,11 @@ Saadetis :
 </soapenv:Envelope>
 ```
 
-[]()
+<a name="dhx-makett-tests"></a>
+## 3. DHX makettrakenduse testid
 
-## 3\. DHX makettrakenduse testid
-
-[]()
-
-### 3.1\. Õige kapsli saatmine
+<a name="3.1"></a>
+### 3.1. Õige kapsli saatmine
 
 ```
 Saatev süsteem : DHS makett
@@ -3133,9 +3091,8 @@ Saatev süsteem : DHS makett
 - saatvale süsteemile on saadetud õige vastuskood
 - kajastatud nii saatva süsteemi sündmuste logis
 
-[]()
-
-### 3.2\. Vale kapsli saatmine
+<a name="3.2"></a>
+### 3.2. Vale kapsli saatmine
 
 ```
 Saatev süsteem : DHS makett
@@ -3156,9 +3113,8 @@ Saatev süsteem : DHS makett
 - vastuses on DHX.Validation koodiga fault
 - kajastatud sündmuste logis
 
-[]()
-
-### 3.3\. Faili saatmine (fail ei ole kapsel)
+<a name="3.3"></a>
+### 3.3. Faili saatmine (fail ei ole kapsel)
 
 ```
 Saatev süsteem : DHS makett
@@ -3179,9 +3135,8 @@ Saatev süsteem : DHS makett
 - vastuses on DHX.Validation koodiga fault
 - kajastatud sündmuste logis
 
-[]()
-
-### 3.4\. Duplikaadi kontroll
+<a name="3.4"></a>
+### 3.4. Duplikaadi kontroll
 
 ```
 Saatev süsteem : DHS makett
@@ -3204,9 +3159,8 @@ Saatev süsteem : DHS makett
 - vastuses on DHX.Duplicate koodiga fault
 - kajastatud sündmuste logis
 
-[]()
-
-### 3.5\. DVK süsteemist tulnud dokumendi vastuvõtmine
+<a name="3.5"></a>
+### 3.5. DVK süsteemist tulnud dokumendi vastuvõtmine
 
 ```
 Saatev süsteem : DHS makett
