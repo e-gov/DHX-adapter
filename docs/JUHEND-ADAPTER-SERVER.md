@@ -25,7 +25,7 @@ Välise DHX liidese toimimise loogikast arusaamine ei ole DHX adapterserveri kas
 Välise DHX liidese [WSDL](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) asub dhx-adapter-serveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`.
 Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/ws`.
 
-Sisemisel liidese [WSDL]() asub dhx-adapater-serveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhxServer.wsdl`. 
+Sisemisel liidese [WSDL]() asub dhx-adapater-serveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhl.wsdl`. 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
   
 ## Sisemine liides

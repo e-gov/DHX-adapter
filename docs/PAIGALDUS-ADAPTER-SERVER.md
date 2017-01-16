@@ -51,7 +51,6 @@ Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi
 
 Laadida alla ja installeerida PostgreSQL andmebaasi versioon [9.6.x](https://www.postgresql.org/download/).
 
-
 #### Java 8 SE
 
 Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
@@ -63,6 +62,9 @@ Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.
 
 2) Vajadusel muuta operatsioonisüsteemi keskkonna muutuja "JRE_HOME" home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
 Näiteks Windows keskkonnas JRE_HOME=`C:\Program Files\jre1.8.0_112`. 
+
+Luua setenv.bat või setenv.sh
+https://tomcat.apache.org/tomcat-8.0-doc/monitoring.html
 
 3) Vajadusel muuta ümber Tomcat pordi number (vaikimisi 8080) failis `apache-tomcat-7.x.x/conf/server.xml`.
 ```xml
@@ -174,7 +176,9 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 ### Paigalduspaketi ise ehitamine (mitte Tomcat või mitte PostgreSQL/Oracle) 
 
-Kui soovitakse kasutada
+Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
+
+
 
 Create a deployable war file
 http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html
