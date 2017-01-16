@@ -30,9 +30,9 @@ Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/
   
 ## Sisemine liides
 
-Sisemist liidest kasutab asutuse DHS tarkvara. 
-Sisemsie liidese kasutamisel käitub DHS tarkvara SOAP kliendina (DHS tarkvara ei pea ise ühtegi teenust pakkuma).
+Sisemist liidest kasutab asutuse DHS tarkvara dokumentide saatmiseks ja vastuvõtmiseks.
 
+Sisemise liidese kasutamisel käitub DHS tarkvara SOAP kliendina (DHS tarkvara ei pea ise ühtegi teenust pakkuma).
 
 Märkused vana DVK X-tee liidese kasutajale: 
 > Sisemist liidese operatsioonid on projekteeritud väga sarnaselt vanale [DVK liidesele](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md). 
@@ -88,7 +88,7 @@ Lokaalse andmebaasi serverina võib kasutada [Spring-Data](http://projects.sprin
 
 Põhilised välised sõltuvused on toodud [DHX-adapteri Java teegi kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#v%C3%A4lised-s%C3%B5ltuvused-ja-baasplatvorm).
 
-Lisaks neile on täiendavad sõltuvused peamiselt andmbaasiga suhtlemise moodulitest:
+Lisaks neile on täiendavad sõltuvused peamiselt andmebaasiga suhtlemise moodulitest:
 
 Grupp | Moodul | Versioon | Märkused
 ------------ | ------------- | ------------- | -------------

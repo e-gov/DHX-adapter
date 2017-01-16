@@ -47,9 +47,9 @@ dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauak
 dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, probleemselt (veaga) edastatud dokument. Kustutamine sõltub ka parameetri "dhx.server.delete-old-documents" väärtusest. 
 dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti saatmisel staatusesse jäänud dokumente saata. Peaks olema suurem kui "document-resend-template" parameetris määratud aegade summa. Kasutatakse reaaalselt satmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.    
 spring.jpa.hibernate.ddl-auto | | update|
-spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx-adapter| Postgres andmbaasi hosti nimi8 (localhost), port (5432) ja andmbaasi nimi (dhx-adapter)
-spring.datasource.username | | postgres | Postgres andmbaasi kasutajanimi
+spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx-adapter| Postgres andmebaasi hosti nimi8 (localhost), port (5432) ja andmebaasi nimi (dhx-adapter)
+spring.datasource.username | | postgres | Postgres andmebaasi kasutajanimi
 spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
-spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab et kasutame Postgres andmbaasi
+spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab et kasutame Postgres andmebaasi
 spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| 
 
