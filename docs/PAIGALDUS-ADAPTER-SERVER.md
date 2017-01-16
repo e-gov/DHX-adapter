@@ -13,9 +13,9 @@ dhx-adapter-serveri toimimise loogika on kirjeldatud [DHX adapteri serveri kasut
 
 ##Tarkvara nõuded (baasplatvormi eeldused)
 
-Käivitamiseks on vajalik [Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
-
-Lokaalse andmbaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) versioone.
+* **Java JRE 1.7**. Käivitamiseks on vajalik [Java JRE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
+* **Tomcat 7**. Tarkvara käivitamiseks on vajalik [Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
+* **PostgreSQL 9.6** või **Oracle 11g**. Lokaalse andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) versioone.
 
 Märkus:
 > Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [servereritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/).
