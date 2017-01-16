@@ -45,7 +45,7 @@ Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi
 
 ##Paigaldamine
 
-### Olemasoleva paigalduspakettiga (WAR) - Tomcat ja PostgeSQL
+### Olemasoleva paigalduspaketiga (WAR) - Tomcat ja PostgeSQL
 
 #### PostgreSQL 9.6
 
@@ -113,7 +113,7 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-### Olemasoleva paigalduspakettiga (WAR) - Tomcat ja Oracle 11g Express edition
+### Olemasoleva paigalduspaketiga (WAR) - Tomcat ja Oracle 11g Express edition
 
 #### Oracle 11g Express Edition
 
@@ -132,16 +132,16 @@ grant unlimited tablespace to dhxadapter;
 
 #### Java 8 SE
 
-Vaata ülaltpoolt.
+Vaata [eespoolt](#java-8-se)
 
 
 #### Apache Tomcat 7
 
-Vaata ülaltpoolt. 
+Vaata [eespoolt](#apache-tomcat-7) 
 
 #### DHX adapterserver WAR
 
-Vaata ülaltpoolt. 
+Vaata [eespoolt](#dhx-adapterserver-war) 
 
 #### Muuta dhx-application.properties
 
@@ -172,7 +172,7 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-### Paigalduspaketi ise ehitamine (mitte Tomcat või PostgreSQL) 
+### Paigalduspaketi ise ehitamine (mitte Tomcat või mitte PostgreSQL/Oracle) 
 
 Kui soovitakse kasutada
 
