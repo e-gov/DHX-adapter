@@ -20,9 +20,9 @@ Lokaalse andmebaasi serverina võib kasutada [Spring-Data](http://projects.sprin
 
 ##Riistvara nõuded (eeldused)
 
-Mälu 1GB 
-Ketas 
-Protsessor
+* Mälu 1GB 
+* Ketas 100Gb ?
+* Protsessor
 
 
 ##Paigaldamine
