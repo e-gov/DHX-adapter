@@ -35,7 +35,7 @@ Märkus (muud web konteinerid):
 
 ##Riistvara nõuded (eeldused)
  
-Minimalsed nõuded riistvarale on järgmised:
+Minimaalsed nõuded riistvarale on järgmised:
 * Muutmälu 2GB
 * Kõvaketas 70 Gb
 * Protsessor 2 GHz x 2 tuuma
@@ -45,14 +45,73 @@ Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi
 
 ##Paigaldamine
 
-### Paigalduspakett (WAR) - Tomcat ja PostgreSQL 
+### Olemasoleva paigalduspakettiga (WAR) - Tomcat ja PostgeSQL
 
-Create a deployable war file
-http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html
+#### PostgreSQL 9.6
+
+Laadida alla ja installeerida PostgreSQL andmebaasi versioon [9.6.x](https://www.postgresql.org/download/).
+
+
+#### Java 8 SE
+
+Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
+
+#### Apache Tomcat 7
+
+Laadida alla ja installeerida [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
+
+Vajadusel muuta operatsioonisüsteemi keskkonna muutuja "JRE_HOME" home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
+Näiteks Windows keskonnas JRE_HOME= `C:\Program Files\jre1.8.0_112`. 
+
+Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+
+#### DHX adapterserver WAR
+
+1) Laadida alla DHX adapterserveri WAR fail `dhx-adapter-server.war`.
+
+2) Kopeerida see Tomcat `apache-tomcat-7.x.x/webapps` alamkataloogi
+(Näiteks Windows keskkonnas `C:\Program Files\apache-tomcat-7.0.73\webapps\` alamkataloogi).
+
+3) Tomcat püüab seejärel automaatselt WAR faili avada ja paigaldada (deploy).
+
+4) Tekib uus alamkataloog `webapps/dhx-adapter-server`.
+Aga kuna WAR fail sisaldab valesid andmebaasi ühenduse parameetreid, siis Tomcat konsoolile/logisse kuvatakse viga.
+
+
+5) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
+
+```properites
+soap.security-server=http://10.0.13.198
+soap.xroad-instance=ee-dev
+soap.member-class=GOV
+soap.member-code=40000001
+
+documents.folder=C:\\dhx_docs\\
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/dhx_adapter_dev
+spring.datasource.username=postgres
+spring.datasource.password=123456
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL94Dialect
+```
+
+6) Teha Tomcati restart.
+
+Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux jt).
+
+Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+
+7) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+
+
 
 ### Paigalduspaketi ise ehitamine (mitte Tomcat või PostgreSQL) 
 
-Kui soovitakse kasutada 
+Kui soovitakse kasutada
+
+Create a deployable war file
+http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html
+ 
 
 Vanemasse Java Servlet serveritesse paigaldamisel tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
 
