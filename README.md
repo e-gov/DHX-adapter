@@ -10,7 +10,7 @@ Tarkvarakomponendid DHX-i rakendajatele.
 
 DHX adaptertarkvara koosneb kahest osast:
 
-- __DHX Java teegid__ (adapteriteegid) sisaldavad funktsionaalsust dokumendi saatmiseks, vastuvõtmiseks ja aadressiraamatu koostamiseks. DHX-i võimekuse saab luua, lõimides teegid dokumentihaldussüsteemi vm dokumente vahetava süsteemi tarkvarasse;
+- __DHX Java teegid__ (adapteriteegid) sisaldavad funktsionaalsust dokumendi saatmiseks, vastuvõtmiseks ja aadressiraamatu koostamiseks. DHX-i võimekuse saab luua, lõimides teegid dokumendihaldussüsteemi vm dokumente vahetava süsteemi tarkvarasse;
 - __DHX adapterserver__ on eraldipaigaldatav rakendus, mis X-tee poole räägib DHX protokolli, dokumendihaldussüsteemi poole aga pakub vana DVK (Dokumendivahetuskeskuse) liidesele sarnast SOAP-liidest.
 
 [Kasutamise juhend](docs/JUHEND.md)
