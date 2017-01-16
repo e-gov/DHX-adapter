@@ -14,7 +14,7 @@ dhx-adapter-serveri toimimise loogika on kirjeldatud [DHX adapteri serveri kasut
 ##Tarkvara nõuded (baasplatvormi eeldused)
 
 * **Java SE 8** või **Java SE 7**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
-* **Tomcat 7**. Tarkvara käivitamiseks on vajalik [Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
+* **Apache Tomcat 7**. Tarkvara käivitamiseks on vajalik [Apache Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
 * **PostgreSQL 9.6** või **Oracle 11g**. Andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) (kaasa arvatud 11g Express Edition) versioone.
 * Operatsioonisüsteem - Java poolt [toetatud süsteem](https://www.java.com/en/download/help/sysreq.xml).
 
@@ -24,6 +24,14 @@ Märkus:
 > **NB!** DHX adapter serveri töötamine on testitud ainult [PostgreSQL 9.6](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.
 >
 > Seega muude andmebaasi serverite kasutamine toimub omal riisikol ja ei pruugi töötada.
+>
+> Paigalduspaketina alla laetav WAR fail sisaldab ainult PostgreSQL ja Oracle andmebaasiga suhtlemise JDBC draivereid. Kui soovitakse kasutatakse muud andmebaasi, siis tuleb dhx-adapter-serveri WAR fail ise uuesti ehitada, muutes pom.xml failis sõltuvusi. 
+
+Märkus:
+> Apache Tomcat tarkvara võib asendada mõne muu [Java Web konteineri](https://en.wikipedia.org/wiki/Web_container) tarkvaraga. 
+> Näiteks [GlassFish](https://glassfish.java.net/),  [WildFly (JBoss)](http://wildfly.org/) või [Jetty](http://www.eclipse.org/jetty/).
+>
+> Paigalduspaketina alla laetav WAR fail sisaldab ainult Apache Tomcat serverisse paigaldamise `spring-boot-starter` mooduleid. Kui soovitakse kasutatakse muud Java serverit, siis tuleb dhx-adapter-serveri WAR fail ise uuesti ehitada, muutes pom.xml failis sõltuvusi.
 
 ##Riistvara nõuded (eeldused)
  
