@@ -4,8 +4,6 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 
-import org.w3c.dom.Node;
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -94,6 +92,16 @@ public interface DhxMarshallerService {
   public File marshall(Object container) throws DhxException;
 
   /**
+   * Marshalls object to given file.
+   * 
+   * @param container object to marshall
+   * @param file file to marshall to
+   * @throws DhxException thrown if error occurs while marshalling object
+   */
+  @Loggable
+  public void marshall(Object container, File file) throws DhxException;
+
+  /**
    * Marshalls object to outputStream.
    * 
    * @param container - object to marshall
@@ -129,7 +137,7 @@ public interface DhxMarshallerService {
    * @param node - node into which object will be marshalled
    * @throws DhxException - thrown if error occurs while marshalling object
    */
-  public void marshallToNode(Object obj, Node node) throws DhxException;
+  // public void marshallToNode(Object obj, Node node) throws DhxException;
 
   /**
    * Marshalls object to writer.

@@ -87,8 +87,7 @@ public class AsyncDhxPackageServiceImpl implements AsyncDhxPackageService {
         if (currentTimeout != null) {
           Thread.sleep(currentTimeout * 1000L);
         }
-      }
-      while (currentTimeout != null);
+      } while (currentTimeout != null);
       log.info("All needed retries done. Calling callback method. Total retry count: "
           + currentRetry);
       dhxImplementationSpecificService.saveSendResult(result, results);

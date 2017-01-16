@@ -1,3 +1,4 @@
+![](EL_Regionaalarengu_Fond_horisontaalne.jpg)
 # Sisukord
 - [Testimise strateegia](#test-strateegia)
 - [Testilood](#tests)

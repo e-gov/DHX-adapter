@@ -7,8 +7,10 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.RepoFactory4Test;
 import ee.ria.dhx.server.TestApp;
+import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.server.persistence.entity.Document;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
@@ -49,12 +51,18 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.util.ConversionUtil;
+import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 import ee.ria.dhx.ws.service.impl.AddressServiceImplSpyProvider;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 /*
@@ -79,6 +87,7 @@ import org.springframework.ws.test.server.RequestCreators;
 import org.springframework.ws.test.server.ResponseMatchers;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -110,6 +119,7 @@ import javax.xml.transform.stream.StreamSource;
 @TestPropertySource("classpath:test-application.properties")
 @ContextConfiguration(classes = {TestApp.class, RepoFactory4Test.class})
 @Transactional
+@Slf4j
 public class ServerIT {
 
   @Autowired
@@ -147,9 +157,17 @@ public class ServerIT {
 
   @Autowired
   PersistenceService persistenceService;
+  
+  @Autowired
+  DhxServerConfig dhxServerConfig;
+
+  
+  @Rule
+  public TemporaryFolder testFolder = new TemporaryFolder(); 
 
   @Before
   public void init() throws DhxException, IOException {
+    dhxServerConfig.setDocumentsFolder(System.getProperty("java.io.tmpdir", ""));
     AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params.xml");
     mockClient = MockWebServiceClient.createClient(applicationContext);
     mockServer = MockWebServiceServer.createServer(applicationContext);
@@ -166,7 +184,16 @@ public class ServerIT {
         any(MimeContainer.class));
     addressService.renewAddressList();
     Mockito.reset(convertationService);
-
+  }
+  
+  public void cleanup () throws DhxException{
+    log.debug("cleaning up");
+    Iterable <Document> docs = documentRepository.findAll();
+    for(Document doc : docs) {
+      log.debug("deleting doc ");
+      File docFile = dhxServerConfig.getDocumentFile(doc.getContent());
+      docFile.delete();
+    }
   }
 
   private Map<String, String> getDhxNamespaceMap() {
@@ -240,9 +267,18 @@ public class ServerIT {
     container.getFile().get(0).setFileGuid("25892e17-80f6-415f-9c65-7395632f0211");
     container.getFile().get(0).setFileName("name");
     container.getFile().get(0).setMimeType("text");
+    try {
+    File file = testFolder.newFile();
+    container.getFile().get(0).setZipBase64Content(file);
+    FileWriter fw = new FileWriter(file);
+    fw.write("Content here");
+    fw.close();
+    } catch(IOException ex) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Error", ex);
+    }
     container.getFile().get(0).setFileSize(BigInteger.valueOf(1212));
     container.getFile().get(0).setRecordMainComponent(true);
-    container.getFile().get(0).setZipBase64Content("content");
+  //  container.getFile().get(0).setZipBase64Content("content");
     return container;
   }
 
@@ -403,7 +439,7 @@ public class ServerIT {
     // send document to DHX. just to check that no new requests will be
     // sent.
     soapService.sendDocumentsToDhx();
-
+    cleanup();
   }
 
 
@@ -481,7 +517,7 @@ public class ServerIT {
     doc = documentRepository.findOne(docId);
     assertEquals("receiptId1",
         doc.getTransports().get(0).getRecipients().get(0).getDhxExternalReceiptId());
-
+    cleanup();
   }
 
 
@@ -672,7 +708,7 @@ public class ServerIT {
     // send document to DHX. just to check that no new requests will be
     // sent.
     soapService.sendDocumentsToDhx();
-
+    cleanup();
   }
 
 
@@ -965,7 +1001,7 @@ public class ServerIT {
     assertEquals(StatusEnum.RECEIVED.getClassificatorName(), edastus.getStaatus());
     assertNull(edastus.getFault());
     assertNotNull(edastus.getLoetud());
-
+    cleanup();
   }
 
   /**
@@ -1158,7 +1194,7 @@ public class ServerIT {
         items.get(0).getStaatuseAjalugu().getStatus().get(3).getFault().getFaultcode());
     assertEquals("Fault string",
         items.get(0).getStaatuseAjalugu().getStatus().get(3).getFault().getFaultstring());
-
+    cleanup();
   }
 
   /**
@@ -1589,6 +1625,7 @@ public class ServerIT {
     assertEquals(0, items.size());
 
     file.delete();
+    cleanup();
   }
 
   /**
@@ -1707,6 +1744,7 @@ public class ServerIT {
     assertEquals(0, items.size());
 
     file.delete();
+    cleanup();
   }
 
   /**
@@ -1783,17 +1821,19 @@ public class ServerIT {
     assertEquals(0, items.size());
 
     file.delete();
+    cleanup();
   }
 
   @Test
-  public void deleteOldDocuments() {
+  public void deleteOldDocuments() throws DhxException{
 
     // Date controlDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.DAY_OF_YEAR, -31);
 
     Document document = new Document();
-    document.setContent("Content");
+    File file = dhxServerConfig.createDocumentFile();
+    document.setContent(file.getName());
     document.addTransport(new Transport());
     document.getTransports().get(0).addSender(new Sender());
     document.getTransports().get(0).addRecipient(new Recipient());

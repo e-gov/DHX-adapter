@@ -1,6 +1,7 @@
 package ee.ria.dhx.server.endpoint.config;
 
 
+import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import java.util.List;
 public class DhxServerEndpointConfig extends WsConfigurationSupport {
 
   @Autowired
-  DhxConfig config;
+  DhxServerConfig config;
 
   @Autowired
   Jaxb2Marshaller marshaller;
