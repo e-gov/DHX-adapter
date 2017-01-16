@@ -13,26 +13,29 @@ dhx-adapter-serveri toimimise loogika on kirjeldatud [DHX adapteri serveri kasut
 
 ##Tarkvara nõuded (baasplatvormi eeldused)
 
-* **Java JRE 1.7**. Käivitamiseks on vajalik [Java JRE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
+* **Java SE 8** või **Java SE 7**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
 * **Tomcat 7**. Tarkvara käivitamiseks on vajalik [Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
-* **PostgreSQL 9.6** või **Oracle 11g**. Lokaalse andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) (kaasa arvatud 11g Express Edition) versioone.
+* **PostgreSQL 9.6** või **Oracle 11g**. Andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) (kaasa arvatud 11g Express Edition) versioone.
+* Operatsioonisüsteem - Java poolt [toetatud süsteem](https://www.java.com/en/download/help/sysreq.xml).
 
 Märkus:
-> Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [servereritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/).
+> Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [serveritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/).
 >
 > **NB!** DHX adapter serveri töötamine on testitud ainult [PostgreSQL 9.6](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.
 >
 > Seega muude andmebaasi serverite kasutamine toimub omal riisikol ja ei pruugi töötada.
 
 ##Riistvara nõuded (eeldused)
+ 
+Minimalsed nõuded riistvarale on järgmised:
+* Muutmälu 2GB
+* Kõvaketas 70 Gb
+* Protsessor 2 GHz x 2 tuuma
 
-* Mälu 1GB 
-* Ketas 100Gb ?
-* Protsessor
-
+Optimaalsed riistvara nõuded sõltuvad asutuse poolt saadetavate dokumentide arvust ja suurusest. 
+Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi. Soovitav on minimaalsed nõuded kahega korrutada. 
 
 ##Paigaldamine
-
 
 ### Paigalduspakett (WAR) - Tomcat ja PostgreSQL 
 
