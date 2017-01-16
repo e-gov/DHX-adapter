@@ -114,6 +114,12 @@ public class AsyncDhxPackageServiceImpl implements AsyncDhxPackageService {
     DhxSendDocumentResult result = null;
     try {
       result = dhxPackageService.sendPackage(outgoingPackage);
+      if (log.isDebugEnabled() && result.getResponse() != null
+          && result.getResponse().getFault() != null) {
+        log.debug("Current retry ended with error: {}, {}",
+            result.getResponse().getFault().getFaultCode(),
+            result.getResponse().getFault().getFaultString());
+      }
     } catch (Exception ex) {
       log.info("Package sending ended with error" + ex.getMessage(), ex);
       DhxExceptionEnum faultCode = DhxExceptionEnum.TECHNICAL_ERROR;

@@ -2,6 +2,7 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.config.DhxServerConfig;
@@ -31,7 +32,7 @@ import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
-import ee.ria.dhx.ws.service.impl.DhxBigDataMarshallerServiceImpl;
+import ee.ria.dhx.ws.service.impl.DhxMarshallerServiceImpl;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -267,8 +268,8 @@ public class CapsuleService {
           fos = null;
           attachmentStream = null;
           DocumentsArrayType docs = null;
-          if(dhxMarshallerService instanceof DhxBigDataMarshallerServiceImpl) {
-            docs = ((DhxBigDataMarshallerServiceImpl)dhxMarshallerService).unmarshall(tempFile, DocumentsArrayType.class);
+          if(dhxMarshallerService instanceof DhxMarshallerServiceImpl) {
+            docs = ((DhxMarshallerServiceImpl)dhxMarshallerService).unmarshall(tempFile, DocumentsArrayType.class);
           } else {
             docs = dhxMarshallerService.unmarshall(tempFile);
           }

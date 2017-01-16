@@ -92,7 +92,7 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
    * 
    * @return SimpleWsdl11Definition
    */
-  @Bean(name = "dhxServer")
+  @Bean(name = "dhl")
   public SimpleWsdl11Definition defaultWsdl11Definition() {
     Resource wsdlResource = new ClassPathResource(config.getWsdlFile());
     SimpleWsdl11Definition wsdlDef = new SimpleWsdl11Definition(wsdlResource);
