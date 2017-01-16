@@ -56,14 +56,22 @@ Laadida alla ja installeerida PostgreSQL andmebaasi versioon [9.6.x](https://www
 
 Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
 
+
 #### Apache Tomcat 7
 
-Laadida alla ja installeerida [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
+1) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
 
-Vajadusel muuta operatsioonisüsteemi keskkonna muutuja "JRE_HOME" home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
-Näiteks Windows keskonnas JRE_HOME= `C:\Program Files\jre1.8.0_112`. 
+2) Vajadusel muuta operatsioonisüsteemi keskkonna muutuja "JRE_HOME" home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
+Näiteks Windows keskkonnas JRE_HOME=`C:\Program Files\jre1.8.0_112`. 
 
-Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+3) Vajadusel muuta ümber Tomcat pordi number (vaikimisi 8080) failis `apache-tomcat-7.x.x/conf/server.xml`.
+```xml
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+```
+
+4) Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
 
 #### DHX adapterserver WAR
 
@@ -77,8 +85,9 @@ Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või
 4) Tekib uus alamkataloog `webapps/dhx-adapter-server`.
 Aga kuna WAR fail sisaldab valesid andmebaasi ühenduse parameetreid, siis Tomcat konsoolile/logisse kuvatakse viga.
 
+#### Muuta dhx-application.properties
 
-5) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
+1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
 ```properites
 soap.security-server=http://10.0.13.198
@@ -94,16 +103,74 @@ spring.datasource.password=123456
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL94Dialect
 ```
+Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
-6) Teha Tomcati restart.
+2) Teha Tomcati restart.
 
 Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux jt).
 
 Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
 
-7) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+
+### Olemasoleva paigalduspakettiga (WAR) - Tomcat ja Oracle 11g Express edition
+
+#### Oracle 11g Express Edition
+
+1) Laadida alla ja installeerida [Oracle 11g XE](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
+
+2) Logida oracle andmbaasi SYS kasutaja ja luua uus kasutaja (schema):
+```sql
+create user dhxadapter
+  identified by dhxadapter123
+  DEFAULT TABLESPACE USERS;
+
+grant connect to dhxadapter;
+grant resource to dhxadapter;
+grant unlimited tablespace to dhxadapter;
+```
+
+#### Java 8 SE
+
+Vaata ülaltpoolt.
 
 
+#### Apache Tomcat 7
+
+Vaata ülaltpoolt. 
+
+#### DHX adapterserver WAR
+
+Vaata ülaltpoolt. 
+
+#### Muuta dhx-application.properties
+
+1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
+
+```properites
+soap.security-server=http://10.0.13.198
+soap.xroad-instance=ee-dev
+soap.member-class=GOV
+soap.member-code=40000001
+
+documents.folder=C:\\dhx_docs\\
+
+spring.datasource.url=jdbc:oracle:thin:dhxadapter/dhxadapter123@localhost:1521:xe
+spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
+spring.datasource.username=dhxadapter
+spring.datasource.password=dhxadapter123
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.datasource.type=oracle.jdbc.pool.OracleDataSource
+```
+Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
+
+2) Teha Tomcati restart.
+
+Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux jt).
+
+Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+
+3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
 ### Paigalduspaketi ise ehitamine (mitte Tomcat või PostgreSQL) 
 
