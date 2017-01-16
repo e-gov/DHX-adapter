@@ -11,7 +11,22 @@ DHX adapter server on  tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DH
 
 dhx-adapter-serveri toimimise loogika on kirjeldatud [DHX adapteri serveri kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND-ADAPTER-SERVER.md). 
 
+##Tarkvara nõuded (baasplatvormi eeldused)
+
+Kompileerimiseks ja käivitamiseks on vajalik [Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
+
+Lokaalse andmebaasi serverina võib kasutada [Spring-Data](http://projects.spring.io/spring-data/) ja [Spring-Data-JPA] (http://projects.spring.io/spring-data-jpa/) poolt toetatud SQL andmebaasi servereid.
+**NB!** DHX adapter serveri töötamine on testitud [PostgreSQL](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.   
+
+##Riistvara nõuded (eeldused)
+
+Mälu 1GB 
+Ketas 
+Protsessor
+
+
 ##Paigaldamine
+
 
 ### Paigalduspakett (WAR) - Tomcat ja PostgreSQL 
 

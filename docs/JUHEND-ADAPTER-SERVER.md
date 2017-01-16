@@ -72,33 +72,10 @@ Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov
 
 Märkused vana DVK X-tee liidese kasutajale:
 > Võrreldes DVK getSendStatus liidestega on dhx-adpater-serveris realiseeritud on ainult getSendStatus operatsioonide [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2) versioon.
-> Vanemat DVK sendDocuments versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-serveri ei paku.
+> Vanemat DVK getSendStatus versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-serveri ei paku.
 
 
 ## Erinevused vana DVK liidese ja Adapteri Sisemise liidese toimimise loogikas
 
-
-
-##Välised sõltuvused ja baasplatvorm
-
-Kompileerimiseks ja käivitamiseks on vajalik [Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (või uuem) versioon.
-
-Lokaalse andmebaasi serverina võib kasutada [Spring-Data](http://projects.spring.io/spring-data/) ja [Spring-Data-JPA] (http://projects.spring.io/spring-data-jpa/) poolt toetatud SQL andmebaasi servereid.
-**NB!** DHX adapter serveri töötamine on testitud [PostgreSQL](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.   
-
-Põhilised välised sõltuvused on toodud [DHX-adapteri Java teegi kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#v%C3%A4lised-s%C3%B5ltuvused-ja-baasplatvorm).
-
-Lisaks neile on täiendavad sõltuvused peamiselt andmebaasiga suhtlemise moodulitest:
-
-Grupp | Moodul | Versioon | Märkused
------------- | ------------- | ------------- | -------------
-org.springframework.data | spring-data-commons | 1.12.5.RELEASE | Spring Data Commons
-org.springframework.boot | spring-boot-starter-data-jpa | 1.4.2.RELEASE | Spring data JPA starter
-org.springframework.data | spring-data-jpa | XXXXX | Spring Data JPA
-org.hibernate | hibernate-core | XXXX | Hibernate ORM Core
-org.hibernate | hibernate-entitymanager | XXXX | Hibernate ORM Entity manager 
-org.springframework.boot  | spring-boot-starter-jdbc | XXXX | Spring starter JDBC
-javax.transaction | javax.transaction-api | XXXXX | Java transaction API
-org.postgresql | postgresql | 9.4.1212 | PostgreSQL (juhul kui kasutatakse Postgre andmebaasi)
 
 
