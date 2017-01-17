@@ -58,38 +58,38 @@ Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.
 
 #### Apache Tomcat 7
 
-1) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
+1. Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
 
-2) Vajadusel muuta operatsioonisüsteemi keskkonna muutuja "JRE_HOME" home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
+2. Vajadusel muuta operatsioonisüsteemi keskkonna muutuja "JRE_HOME" home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
 Näiteks Windows keskkonnas JRE_HOME=`C:\Program Files\jre1.8.0_112`. 
 
 Luua setenv.bat või setenv.sh
 https://tomcat.apache.org/tomcat-8.0-doc/monitoring.html
 
-3) Vajadusel muuta ümber Tomcat pordi number (vaikimisi 8080) failis `apache-tomcat-7.x.x/conf/server.xml`.
+3. Vajadusel muuta ümber Tomcat pordi number (vaikimisi 8080) failis `apache-tomcat-7.x.x/conf/server.xml`.
 ```xml
     <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" />
 ```
 
-4) Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+4. Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
 
 #### DHX adapterserver WAR
 
-1) Laadida alla DHX adapterserveri WAR fail `dhx-adapter-server.war`.
+1. Laadida alla DHX adapterserveri WAR fail `dhx-adapter-server.war`.
 
-2) Kopeerida see Tomcat `apache-tomcat-7.x.x/webapps` alamkataloogi
+2. Kopeerida see Tomcat `apache-tomcat-7.x.x/webapps` alamkataloogi
 (Näiteks Windows keskkonnas `C:\Program Files\apache-tomcat-7.0.73\webapps\` alamkataloogi).
 
-3) Tomcat püüab seejärel automaatselt WAR faili avada ja paigaldada (deploy).
+3. Tomcat püüab seejärel automaatselt WAR faili avada ja paigaldada (deploy).
 
 4) Tekib uus alamkataloog `webapps/dhx-adapter-server`.
 Aga kuna WAR fail sisaldab valesid andmebaasi ühenduse parameetreid, siis Tomcat konsoolile/logisse kuvatakse viga.
 
 #### Muuta dhx-application.properties
 
-1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
+1. Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
 ```properites
 soap.security-server=http://10.0.13.198
@@ -107,13 +107,22 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL94Dial
 ```
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
-2) Teha Tomcati restart.
+2. Teha Tomcati restart.
 
 Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux jt).
 
 Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
 
-3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+Märkus:
+> Andmebaasi ühenduse esmakordsel avamisel kontrollitakse kas vajalikud andmbaasi tabelid on juba olemas. 
+> Kui tabeleid ei ole, siis luuakse need automaatselt (eraldi SQL skriptiga ei ole vaja andmebaasi tabeleid luua)
+>
+> Selle määrab `dhx-application.properties` failis parameeter `spring.jpa.hibernate.ddl-auto=update` .
+> Vaata [Spring boot juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html#howto-initialize-a-database-using-hibernate).
+
+3. Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+
+4. Paigaldada Tomcat Windows Servicena või Linux deemonina. Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux jt)
 
 ### Olemasoleva paigalduspaketiga (WAR) - Tomcat ja Oracle 11g Express edition
 
@@ -147,7 +156,7 @@ Vaata [eespoolt](#dhx-adapterserver-war)
 
 #### Muuta dhx-application.properties
 
-1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
+1. Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
 ```properites
 soap.security-server=http://10.0.13.198
@@ -166,18 +175,26 @@ spring.datasource.type=oracle.jdbc.pool.OracleDataSource
 ```
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
-2) Teha Tomcati restart.
+2. Teha Tomcati restart.
 
 Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux jt).
 
 Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
 
-3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+Märkus:
+> Andmebaasi ühenduse esmakordsel avamisel kontrollitakse kas vajalikud andmbaasi tabelid on juba olemas. 
+> Kui tabeleid ei ole, siis luuakse need automaatselt (eraldi SQL skriptiga ei ole vaja andmebaasi tabeleid luua)
+>
+> Selle määrab `dhx-application.properties` failis parameeter `spring.jpa.hibernate.ddl-auto=update` .
+> Vaata [Spring boot juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html#howto-initialize-a-database-using-hibernate).
+
+3. Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+
+4. Paigaldada Tomcat Windows Servicena või Linux deemonina. Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux jt)
 
 ### Paigalduspaketi ise ehitamine (mitte Tomcat või mitte PostgreSQL/Oracle) 
 
 Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
-
 
 
 Create a deployable war file
