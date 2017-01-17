@@ -1,18 +1,18 @@
 ![](EL_Regionaalarengu_Fond_horisontaalne.jpg)
 
-[ET](JUHEND.md) | EN
+[ET](java-teegid-kasutusjuhend.md) | EN
 
-# DHX-adapter Java library usage guide
+# DHX Java library usage guide
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
 ## Introduction
 
-DHX adapter is Java software library that implements [DHX protocol](https://e-gov.github.io/DHX/EN.html) functionality for [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat). 
+DHX Java library implements [DHX protocol](https://e-gov.github.io/DHX/EN.html) functionality for [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat). 
 
 This guide is intended for software developers (DHX implementers), who wish to use DHX protocol in their document management system (DMS).
 
-Source code of DHX Adapter is located at https://github.com/e-gov/DHX-adapter
+Source code of DHX Java library is located at https://github.com/e-gov/DHX-adapter
 
 It contains three sub-packages
 - [dhx-adapter-core](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/) – contains classes for creating and parsing XML objects (Capsule and SOAP), exception classes and some general utility classes
@@ -25,20 +25,20 @@ The two first packages **dhx-adapter-core** and **dhx-adapter-ws** are for direc
 
 ##Base platform and external dependencies
 
-DHX adapter packages depends on the components shown below.
+DHX Java library depends on the components shown below.
 
-[Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (or newer) version is needed for compiling and running the DHX adapter. 
+[Java SE](https://en.wikipedia.org/wiki/Java_Platform,_Standard_Edition) 1.7 (or newer) version is needed for compiling and running the DHX Java library. 
 
-As DHX adapter package provides web services (is not only web client), it depends on J2EE [Java Servlet API](https://en.wikipedia.org/wiki/Java_servlet), by using [Spring Web Services](http://projects.spring.io/spring-ws/).
+As DHX Java library package provides web services (is not only web client), it depends on J2EE [Java Servlet API](https://en.wikipedia.org/wiki/Java_servlet), by using [Spring Web Services](http://projects.spring.io/spring-ws/).
 
 [Java Architecture for XML Binding - JAXB](https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/package-summary.html) API is used for XML marshalling (is part of Java SE 7).
 
-DHX adapter Java package is based on Spring Framework architecture by using extensively its sub-modules:
+DHX Java library is based on Spring Framework architecture by using extensively its sub-modules:
 - For configuration and initializing (Spring AOP, Spring Context, etc)
 - For making HTTP SOAP client request (Spring WS Client, Apache HttpClient)
 - For providing HTTP SOAP web service (Spring WS Server Endpoint, Java Servlet API)
 
-Direct and indirect external references (dependencies) of DHX adapter are following
+Direct and indirect external references (dependencies) of DHX Java library are following
 
 Group | Package | Version | Notes
 ------------ | ------------- | ------------- | -------------
@@ -79,7 +79,7 @@ junit | junit | 4.12 | JUnit
 
 ##Building
 
-The following example is given on how to involve the DHX adapter package in existing (or new) software project, by using [Apache Maven](https://maven.apache.org/).
+The following example is given on how to involve the DHX Java library in existing (or new) software project, by using [Apache Maven](https://maven.apache.org/).
 
 The above external dependencies are downloaded automatically by Maven.
 
@@ -127,7 +127,7 @@ With Maven, if third party library (for axample axis2-codegen) depends on these,
 
 ##Loading setup (web.xml and applicationContext.xml)
 
-The simplest way is to use DHX adapter inside Web (Servlet) Container (Tomcat, Jetty, etc), by using Spring Framework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
+The simplest way is to use DHX Java library inside Web (Servlet) Container (Tomcat, Jetty, etc), by using Spring Framework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
 The [web.xml](https://cloud.google.com/appengine/docs/java/config/webxml) must be supplemented with sections:
 ```xml
@@ -248,7 +248,7 @@ dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Specifi
 
 ##General principles
 
-Main functions of DHX adapter Java library are [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat).
+Main functions of DHX Java library are [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat).
  
 Main functionality, that are of interest to developer (DHX implementer), are in packages 
 - [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – Java service interfaces
@@ -280,7 +280,7 @@ public class CustomDhxImplementationSpecificService
 }
 ```
 
-Above, the `@Service` tag specifies that DHX adapter uses now `dhxImplementationSpecificService` custom implementation. 
+Above, the `@Service` tag specifies that DHX Java library uses now `dhxImplementationSpecificService` custom implementation. 
 Therefore the document receiving and sending internal functionality uses `CustomDhxImplementationSpecificService` as callback interface now.
 
 ##Address book creation and renewal interface

@@ -1,6 +1,6 @@
 ![](EL_Regionaalarengu_Fond_horisontaalne.jpg)
 
-ET | [EN](GUIDE.md)
+ET | [EN](java-teegid-kasutusjuhend.md)
 
 # DHX Java teegi kasutusjuhend
 

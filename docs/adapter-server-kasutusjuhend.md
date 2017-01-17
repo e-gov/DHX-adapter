@@ -6,9 +6,9 @@
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
 ## Sissejuhatus
-DHX adapterserver on  tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
+DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
-Tarkvara paigaldamine on kirjeldatud eraldi dokumendis [DHX adapterserveri paigaldusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/PAIGALDUS-ADAPTER-SERVER.md).
+Tarkvara paigaldamine on kirjeldatud eraldi dokumendis [DHX adapterserveri paigaldusjuhend](adapter-server-paigaldusjuhend.md).
 
 ![](dhx-adapter-server.png)
 
@@ -43,7 +43,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 > 
 > Sisemises liideses on implementeeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
-> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](JUHEND-ADAPTER-SERVER.md#erinevused-vana-dvk-liidese-ja-adapteri-sisemise-liidese-toimimise-loogikas). 
+> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](#erinevused-vana-dvk-liidese-ja-adapteri-sisemise-liidese-toimimise-loogikas). 
 
 Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
 
