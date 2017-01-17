@@ -166,7 +166,7 @@ soap.member-code=40000001
 
 documents.folder=C:\\dhx_docs\\
 
-spring.datasource.url=jdbc:oracle:thin:dhxadapter/dhxadapter123@localhost:1521:xe
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:xe
 spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
 spring.datasource.username=dhxadapter
 spring.datasource.password=dhxadapter123
@@ -245,7 +245,7 @@ Oracle 11G kasutamise korral tuleb muuta järgmiste parameetrite väärtused.
 
 Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 ------------ | ------------- | ------------- | -------------
-spring.datasource.url | | jdbc:oracle:thin:dhxadapter/dhxadapter123@localhost:1521:xe | Oracle andmebaasi host, port ja SID.
+spring.datasource.url | | jdbc:oracle:thin:@localhost:1521:xe | Oracle andmebaasi host, port ja SID.
 spring.jpa.database-platform | | org.hibernate.dialect.Oracle10gDialect | Määrab et kasutame Oracle andmebaasi.
 spring.datasource.username | | dhxadapter | Oracle andmebaasi kasutajanimi
 spring.datasource.password | | dhxadapter123 | Oracle andmebaasi kasutaja parool 
@@ -258,17 +258,27 @@ Märkus:
 >  ```
 >  soap.security-server=http://10.0.13.198
 >  soap.xroad-instance=ee
+>  soap.member-class=GOV
+>  soap.member-code=40000001
+>  documents.folder = C:\\dhx_docs\\
+>  spring.datasource.url=jdbc:postgresql://localhost:5432/dhx-adapter
+>  spring.datasource.username=postgres
+>  spring.datasource.password= 1*2*3
+>  spring.datasource.driver-class-name=org.postgresql.Driver
+>  spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 >  ```
 >
->  `soap.member-class=GOV`
->  `soap.member-code=40000001`
-> documents.folder = C:\\dhx_docs\\
->
-> spring.datasource.url=jdbc:postgresql://localhost:5432/dhx-adapter
-> spring.datasource.username=postgres
-> spring.datasource.password= 1*2*3
-> spring.datasource.driver-class-name=org.postgresql.Driver
-> spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
+> Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud. 
+
+
+##Klastrisse paigaldamine (Failover/Load balancing)
+
+DHX adapterserveri võib paigaldada klastrisse (ehk mitmele serverikobara sõlmele). 
+
+Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
+* Andmebaas, kus puhverdatakse metaandmeid
+* Failisüsteemi kataloog, kus puhverdatakse Kapsli dokumendi faile
+
 
 
 
