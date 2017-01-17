@@ -277,7 +277,7 @@ DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Fai
 
 Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
 * Andmebaas, kus puhverdatakse metaandmeid
-* Failisüsteemi kataloog, kus puhverdatakse Kapsli dokumendi faile
+* Failisüsteemi kataloog, kus puhverdatakse Kapsli dokumendi faile (parameeter `documents.folder`)
 
 Näiteks üks võimalik paigalduse variant oleks järgmine
 
