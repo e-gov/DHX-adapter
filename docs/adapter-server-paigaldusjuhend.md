@@ -58,7 +58,7 @@ Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.
 
 #### Apache Tomcat 7
 
-##### 1 ) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
+##### 1) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
 
 ##### 2) Vajadusel muuta operatsioonisüsteemi keskkonna muutuja "JRE_HOME" home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
 Näiteks Windows keskkonnas JRE_HOME=`C:\Program Files\jre1.8.0_112`. 
