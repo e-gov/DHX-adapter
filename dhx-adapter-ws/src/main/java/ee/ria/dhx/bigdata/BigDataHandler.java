@@ -1,5 +1,7 @@
 package ee.ria.dhx.bigdata;
 
+import com.jcabi.aspects.Loggable;
+
 import ee.ria.dhx.bigdata.annotation.BigDataXmlElement;
 import ee.ria.dhx.exception.DhxException;
 
@@ -156,7 +158,7 @@ public abstract class BigDataHandler implements ContentHandler {
   }
 
   @Override
-  // @Loggable
+  @Loggable(Loggable.TRACE)
   public void endElement(String uri, String localName, String qname) throws SAXException {
     if (currentObjPath.size() > 0) {
       String element = currentObjPath.pop();

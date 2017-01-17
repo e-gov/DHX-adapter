@@ -1,6 +1,8 @@
 package ee.ria.dhx.bigdata;
 
 
+import com.jcabi.aspects.Loggable;
+
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.util.FileUtil;
@@ -50,6 +52,7 @@ public class BigDataUnmarshallHandler extends BigDataHandler {
 
   @SuppressWarnings("unchecked")
   @Override
+  @Loggable(Loggable.TRACE)
   protected void handleBigDataStartElement(Field dataField, Stack<String> currentPath,
       Stack<String> currentObjPath, String uri, String localName, String qname,
       Attributes attributes) throws DhxException {
@@ -73,11 +76,13 @@ public class BigDataUnmarshallHandler extends BigDataHandler {
   }
 
   @Override
+  @Loggable(Loggable.TRACE)
   protected void handleBigDataCharacters(char[] chars) throws IOException {
     writer.write(chars);
   }
 
   @Override
+  @Loggable(Loggable.TRACE)
   protected void handleBigDataEndElement(String uri, String localName, String qname)
       throws IOException, SAXException {
     writer.close();
