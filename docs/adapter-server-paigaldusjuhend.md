@@ -203,19 +203,19 @@ http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-
 
 Vanemasse Java Servlet serveritesse paigaldamisel tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
 
-Selleks vaata täpsemalt [DHX Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
+Selleks vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
 
 
 ##Teadaolevad probleemid (sõltuvuste konfliktid)
 
 Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
 
-Vaata [DHX Java teegi kasutusjuhend](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
+Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
 
 ##Häälestus fail (dhx-application.properties)
 
-Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/JUHEND.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
+Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](java-teegid-kasutusjuhend.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
 
 Lisaks neile tuleb täiendavalt lisada parameetrid
 
@@ -234,6 +234,7 @@ spring.jpa.hibernate.ddl-auto | | update| Määrab et esimesel serveri käivitam
 PostgreSQL korral tuleb muuta järgmiste parameetrite väärtused.
 
 Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
+------------ | ------------- | ------------- | -------------
 spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx-adapter| Postgres andmebaasi hosti nimi8 (localhost), port (5432) ja andmebaasi nimi (dhx-adapter)
 spring.datasource.username | | postgres | Postgres andmebaasi kasutajanimi
 spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
@@ -243,6 +244,7 @@ spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Di
 Oracle 11G kasutamise korral tuleb muuta järgmiste parameetrite väärtused.
 
 Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
+------------ | ------------- | ------------- | -------------
 spring.datasource.url | | jdbc:oracle:thin:dhxadapter/dhxadapter123@localhost:1521:xe | Oracle andmebaasi host, port ja SID.
 spring.jpa.database-platform | | org.hibernate.dialect.Oracle10gDialect | Määrab et kasutame Oracle andmebaasi.
 spring.datasource.username | | dhxadapter | Oracle andmebaasi kasutajanimi
@@ -250,6 +252,23 @@ spring.datasource.password | | dhxadapter123 | Oracle andmebaasi kasutaja parool
 spring.datasource.driver-class-name | | oracle.jdbc.OracleDriver | Määrab et kasutame Oracle JDBC draiverit.
 spring.datasource.type | | oracle.jdbc.pool.OracleDataSource | Määrab et ksutame Oracle data source
 
+Märkus:
+> Enamikel juhtudel piisab kui muuta järgmiste parameetrite väärtused
+>
+>  ```
+>  soap.security-server=http://10.0.13.198
+>  soap.xroad-instance=ee
+>  ```
+>
+>  `soap.member-class=GOV`
+>  `soap.member-code=40000001`
+> documents.folder = C:\\dhx_docs\\
+>
+> spring.datasource.url=jdbc:postgresql://localhost:5432/dhx-adapter
+> spring.datasource.username=postgres
+> spring.datasource.password= 1*2*3
+> spring.datasource.driver-class-name=org.postgresql.Driver
+> spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 
 
 
