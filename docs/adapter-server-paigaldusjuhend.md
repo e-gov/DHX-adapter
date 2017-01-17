@@ -263,7 +263,7 @@ Märkus:
 >  documents.folder = C:\\dhx_docs\\
 >  spring.datasource.url=jdbc:postgresql://localhost:5432/dhx-adapter
 >  spring.datasource.username=postgres
->  spring.datasource.password= 1*2*3
+>  spring.datasource.password=1*2*3
 >  spring.datasource.driver-class-name=org.postgresql.Driver
 >  spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 >  ```
@@ -278,6 +278,20 @@ DHX adapterserveri võib paigaldada klastrisse (ehk mitmele serverikobara sõlme
 Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
 * Andmebaas, kus puhverdatakse metaandmeid
 * Failisüsteemi kataloog, kus puhverdatakse Kapsli dokumendi faile
+
+Näiteks üks võimalik paigalduse variant oleks järgmine
+
+![](dhx-adapter-cluster1.png)
+
+* X-read Security server - X-tee turvaserver mille kaudu suheldakse turvaliselt teiste asutustega
+* Failover/Loadbalancer - Kas tarkvaraline (näiteks [Apache HTTPD](https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html)) või riistvaraline (näiteks [F5 big-ip](https://f5.com/), [loadbalancer.org](http://loadbalancer.org/) või [Citrix NetScaler](https://www.citrix.com/products/netscaler-adc/)) failover ja/või load-balancer komponent.  
+* dhx-adapter-server (Node A) - Klastri esimene server, mis pakub SOAP teenuseid.
+* dhx-adapter-server (Node B) - Klastri teine server, mis pakub SOAP teenuseid.
+* Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (Kapsli) failid
+* Database Server (shared database) - jagatud andmebaas, millesse ajutiselt salvestatakse edastatavate dokumentide metaandmed
+* Document management System (DHS) - Asutuse dokumendihaldusssüsteem (näiteks Delta, Amphora vms).
+ 
+
 
 
 
