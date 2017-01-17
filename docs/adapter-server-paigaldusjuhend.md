@@ -119,9 +119,9 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 #### Oracle 11g Express Edition
 
-1) Laadida alla ja installeerida [Oracle 11g XE](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
+1. Laadida alla ja installeerida [Oracle 11g XE](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
 
-2) Logida oracle andmbaasi SYS kasutaja ja luua uus kasutaja (schema):
+2. Logida oracle andmebaasi SYS kasutaja ja luua uus kasutaja (schema):
 ```sql
 create user dhxadapter
   identified by dhxadapter123
