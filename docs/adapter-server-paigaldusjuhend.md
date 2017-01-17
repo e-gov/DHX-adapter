@@ -273,7 +273,7 @@ Märkus:
 
 ##Klastrisse paigaldamine (Failover/Load balancing)
 
-DHX adapterserveri võib paigaldada klastrisse (ehk mitmele serverikobara sõlmele). 
+DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 
 Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
 * Andmebaas, kus puhverdatakse metaandmeid
@@ -283,16 +283,24 @@ Näiteks üks võimalik paigalduse variant oleks järgmine
 
 ![](dhx-adapter-cluster1.png)
 
-* X-read Security server - X-tee turvaserver mille kaudu suheldakse turvaliselt teiste asutustega
-* Failover/Loadbalancer - Kas tarkvaraline (näiteks [Apache HTTPD](https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html)) või riistvaraline (näiteks [F5 big-ip](https://f5.com/), [loadbalancer.org](http://loadbalancer.org/) või [Citrix NetScaler](https://www.citrix.com/products/netscaler-adc/)) failover ja/või load-balancer komponent.  
-* dhx-adapter-server (Node A) - Klastri esimene server, mis pakub SOAP teenuseid.
-* dhx-adapter-server (Node B) - Klastri teine server, mis pakub SOAP teenuseid.
-* Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (Kapsli) failid
+Legend:
+* X-road Security server - X-tee turvaserver, mille kaudu suheldakse turvaliselt teiste asutustega
+* Failover/Loadbalancer - tarkvaraline (näiteks [Apache HTTPD](https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html)) või riistvaraline (näiteks [F5 big-ip](https://f5.com/), [loadbalancer.org](http://loadbalancer.org/) või [Citrix NetScaler](https://www.citrix.com/products/netscaler-adc/)) failover ja/või load-balancer komponent.  
+* dhx-adapter-server (Node A) - klastri esimene server, mis pakub SOAP teenuseid.
+* dhx-adapter-server (Node B) - klastri teine server, mis pakub SOAP teenuseid.
+* Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (Kapsli) failid. 
 * Database Server (shared database) - jagatud andmebaas, millesse ajutiselt salvestatakse edastatavate dokumentide metaandmed
 * Document management System (DHS) - Asutuse dokumendihaldusssüsteem (näiteks Delta, Amphora vms).
  
-
-
+Klastrisse paigaldamisel tuleb arvestada et: 
+* Jagatud failisüsteem määratakse parameetriga `documents.folder`.
+Selleks tuleb see määrata klastri sõlme külge näiteks eradli võrgukettana (määrates Windows keskonnas näiteks `documents.folder=D:\\dhx_docs\\`, või linux keskkonnas näiteks `documents.folder=/mnt/dhxshare`).
+* Dokumentide DHX-i edastamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess.
+See tausta protsess loeb edastamata dokumente jagatud andmebaasist. Selleks, et sõlmed A ja B ei edastaks sama dokumenti samaaegselt (ehk topelt), kasutatakse pessimistlikku lukustamist (sisuliselt päringus määratakse `SELECT ... FOR UPDATE`, vaata täpsemalt [LockModeType.PESSIMISTIC_WRITE](http://docs.oracle.com/javaee/7/api/javax/persistence/LockModeType.html#PESSIMISTIC_WRITE) ja [PostgreSQL row level locks](https://www.postgresql.org/docs/9.6/static/explicit-locking.html#LOCKING-ROWS)). 
+Juhul kui soovitakse, et dokumentide DHX-i edastamist teeks ainult üks klastri sõlm (näiteks A), siis võib teisel sõlmel B muuta parameetri `dhx.server.send-to-dhx` väärtuseks väga pikk periood (näiteks `0 0 0 31 12 ?` määrab et ainult 31.detsembri keskööl).
+* Vanade dokumentide ja failide kustutamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess. 
+Selles taustaprotsessis kirjet failide lukustamist ei kasutata. Need tausta protsessid võivad proovida sama dokumenti ja faili samaaegselt kustutada (Viga kirjutatakse logisse ja seda võib ignoreerida). 
+Kindluse mõttes on mõistlik ühes klastri sõlmes dokumentide kustutamine keelata (määrata `dhx.server.delete-old-documents=none`).
 
 
 
