@@ -275,6 +275,7 @@ Märkus:
 
 DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 
+
 Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
 * Andmebaas, kus puhverdatakse metaandmeid
 * Failisüsteemi kataloog, kus puhverdatakse Kapsli dokumendi faile (parameeter `documents.folder`)
