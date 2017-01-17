@@ -30,6 +30,6 @@ DHX Adapter software consists of two parts:
 
 - __DHX adapter server__ - separately installed application that towards X-Road talks DHX protocol, and towards document management system provides a SOAP interface similar to old DEC (Document Exchange Centre) interface.
   * [DHX adapterserver usage guide (estonian)](docs/adapter-server-kasutusjuhend.md)
-  * [DHX adapterserveri installation guide (estonian)](docs/adapter-server-paigaldusjuhend.md)
+  * [DHX adapterserver installation guide (estonian)](docs/adapter-server-paigaldusjuhend.md)
 
 
