@@ -276,8 +276,8 @@ Märkus:
 DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 
 Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
-* Andmebaas, kus puhverdatakse metaandmeid
-* Failisüsteemi kataloog, kus puhverdatakse Kapsli dokumendi faile (parameeter `documents.folder`)
+* Andmebaas, kuhe salvestatakse metaandmed
+* Failisüsteemi kataloog, kus salvestatakse dokumendi (Kapsli) failid (parameeter `documents.folder`)
 
 Näiteks üks võimalik paigalduse variant oleks järgmine
 
@@ -312,3 +312,13 @@ Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb
 
 ### Monitooringu liidesed
 ### Logimine
+
+## Edastamise vigade uurimimine
+
+Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
+
+![](dhx-adapter-database.png)
+
+Tabelite kirjeldused:
+* DOKUMENT - sisaldab dokumendi andmeid. Väljal SISU salvestatakse faili nimi (c:\dhs_docs\ kataloogis).
+* 
