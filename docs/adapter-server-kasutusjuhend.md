@@ -43,7 +43,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 > 
 > Sisemises liideses on implementeeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
-> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](#erinevused-vana-dvk-liidese-ja-adapteri-sisemise-liidese-toimimise-loogikas). 
+> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](#erinevused-vana-dvk-liidese-ja-adapterserveri-sisemise-liidese-toimimise-loogikas). 
 
 Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
 
