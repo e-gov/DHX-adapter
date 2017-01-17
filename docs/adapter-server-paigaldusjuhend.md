@@ -13,7 +13,7 @@ DHX adapterserveri toimimise loogika on kirjeldatud [DHX adapterserveri kasutusj
 
 Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
-![](dhx-adapter-deployment1.png)
+![](dhx-adapter-deployment.png)
 
 ##Tarkvara nõuded (baastarkvara eeldused)
 
