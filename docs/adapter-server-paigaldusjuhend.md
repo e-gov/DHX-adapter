@@ -253,7 +253,7 @@ spring.datasource.driver-class-name | | oracle.jdbc.OracleDriver | Määrab et k
 spring.datasource.type | | oracle.jdbc.pool.OracleDataSource | Määrab et ksutame Oracle data source
 
 Märkus:
-> Enamikel juhtudel piisab kui muuta järgmiste parameetrite väärtused
+> Enamikel juhtudel piisab kui muuta ainult järgmiste parameetrite väärtused
 >
 >  ```
 >  soap.security-server=http://10.0.13.198
