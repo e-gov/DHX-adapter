@@ -302,6 +302,13 @@ Juhul kui soovitakse, et dokumentide DHX-i edastamist teeks ainult üks klastri 
 Selles taustaprotsessis kirjete ega failide lukustamist ei kasutata. Seega need tausta protsessid võivad proovida sama dokumenti ja faili samaaegselt kustutada (Viga kirjutatakse logisse ja seda võib ignoreerida). 
 Kindluse mõttes on mõistlik ühes klastri sõlmes dokumentide kustutamine keelata (määrata `dhx.server.delete-old-documents=none`).
 
+Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb ainult X-tee turvaserver, sõlmega B suhtleb ainult asutuse DHS süsteem.
 
+![](dhx-adapter-cluster2.png)
 
+# DHX adapterserveri haldusjuhend
 
+## Monitooring
+
+### Monitooringu liidesed
+### Logimine
