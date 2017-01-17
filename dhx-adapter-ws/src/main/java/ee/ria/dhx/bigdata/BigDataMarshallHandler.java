@@ -56,7 +56,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
   }
 
   @Override
-  @Loggable
+  @Loggable(Loggable.TRACE)
   protected void handleBigDataStartElement(Field dataField, Stack<String> currentPath,
       Stack<String> currentObjPath, String uri, String localName, String qname,
       Attributes attributes) throws DhxException {
@@ -95,7 +95,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
   }
 
   @Override
-  @Loggable
+  @Loggable(Loggable.TRACE)
   protected void handleBigDataEndElement(String uri, String localName, String qname)
       throws IOException, SAXException {
     getHandler().endElement(uri, localName, qname);

@@ -113,17 +113,21 @@ public class DhxPackageProviderServiceImpl implements DhxPackageProviderService 
       String dhxProtocolVersion) throws DhxException {
     OutgoingDhxPackage document = new OutgoingDhxPackage(recipient, sender,
         FileUtil.getDatahandlerFromFile(capsuleFile), consignmentId, dhxProtocolVersion);
+    InputStream fileStream = null;
     try {
       if (dhxConfig.getCapsuleValidate()) {
         log.debug("Validating capsule is enabled");
-        dhxMarshallerService.validate(document.getDocumentFile()
-            .getInputStream(), schemaStream);
+        fileStream = document.getDocumentFile()
+            .getInputStream();
+        dhxMarshallerService.validate(fileStream, schemaStream);
       } else {
         log.debug("Validating capsule is disabled");
       }
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.WS_ERROR,
           "Error occured while reading or writing capsule file.", ex);
+    }finally {
+      FileUtil.safeCloseStream(fileStream);
     }
     return document;
   }
