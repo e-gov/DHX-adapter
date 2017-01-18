@@ -9,7 +9,7 @@
 
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
-DHX adapterserveri toimimise loogika on kirjeldatud [DHX adapterserveri kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/adapter-server-kasutusjuhend.md).
+DHX adapterserveri toimimise loogika on kirjeldatud [DHX adapterserveri kasutusjuhendis](adapter-server-kasutusjuhend.md).
 
 DHX adapterserveri haldamine on kirjeldatud [DHX adapterserveri haldusjuhendis](adapter-server-haldusjuhend.md).
 
@@ -224,9 +224,9 @@ Vaata [eespoolt](#416-paigaldada-tomcat-windows-servicena-või-linux-deemonina)
 
 ### 4.3. Paigalduspaketi ise ehitamine
 
-Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat või mitte PostgreSQL/Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
+Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat) või kasutada muud andmebaasi serverit (mitte PostgreSQL ega Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
 
-Kui soovitakse paigaldada Java Servlet spetsifikatsiooni 3.0 või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisesest [pom.xml](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
+Kui soovitakse paigaldada [Java Servlet spetsifikatsiooni 3.0](http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/) või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisesest [pom.xml](../dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
 Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html).
 
 Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
@@ -262,7 +262,7 @@ Märkus:
 
 Alternatiiviks on laadida ojdbc6.jar vanem versioon alla siit(https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
 
-Alterantiiviks (kui ei kastuta Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-server/pom.xml) sees välja kommenteerida read:
+Alterantiiviks (kui ei kastuta Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](../dhx-adapter-server/pom.xml) sees välja kommenteerida read:
 ```xml
 		<dependency>
 			<groupId>com.oracle</groupId>
