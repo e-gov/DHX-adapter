@@ -64,7 +64,7 @@ Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.
 
 #### Apache Tomcat 7
 
-1) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
+1) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi) või uuem versioon.
 
 
 2) Tekitada kataloogi  `apache-tomcat-7.x.x/bin` uus fail nimega `setenv.bat` (Windows) või `setenv.sh` (Linux/Unix).
@@ -220,18 +220,100 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 #### Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
-Vaata [eespoolt](#apache-tomcat-7) 
+Vaata [eespoolt](#paigaldada-tomcat-windows-servicena-või-linux-deemonina) 
 
-### Paigalduspaketi ise ehitamine  
+### Paigalduspaketi ise ehitamine
 
 Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat või mitte PostgreSQL/Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
 
 Kui soovitakse paigaldada Java Servlet spetsifikatsiooni 3.0 või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisesest [pom.xml](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
 Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html).
- 
 
 Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
 Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
+
+#### Instaleerida Apache Maven ehitustarkvara
+
+1) Laadida alla ja instaleerida [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JDK) 7 või 8 või uuem.
+
+Märkus:
+> Ainult Java Runtime Environment (JRE) ei ole piisav Maveni kasutamiseks.  
+
+Pärast instaleerimist veenduda et keskkonna muutuja JAVA_HOME viitab õigesse JDK kataloogi (näiteks `C:\Program Files\Java\jdk1.8.0_121`).
+
+Käsurealt saab seda kontrollida käsuga `echo %JAVA_HOME%` (Windows) või `echo $JAVA_HOME` (Linux/Unix). 
+
+Kui ei viita, siis paranda JAVA_HOME.
+
+1) Laadida alla [Maven](https://maven.apache.org/download.cgi). 
+
+
+2) Pakkida see lahti, näiteks kataloogi `C:\Program Files`, nii et tekib kataloog `C:\Program Files\apache-maven-3.3.9\`
+
+3) Lisada tekkinud kataloogi "bin" alamakataloog (näiteks `C:\Program Files\apache-maven-3.3.9\bin`) PATH keskkonna muutujasse.
+Alternatiiv on kasutada "mvn.cmd" (Windows) või "mvn" (Linux shell) skirpte täispika kataloogi teega.
+
+#### Laadida alla Oracle JDBC draiver (ojdbc6.jar)
+
+Laadida alla Oracle JDBC draiver [ojdbc6.jar](http://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html) (nõuab registreerimist ja sisselogimist).
+
+Märkus:
+> Oracle ei ole ise oma JDBC draiverite JARE maven central reposse soovinud üles laadida, seepärast peab selle käistis alla laadima ja Maven lokaalsesse REPOsse paigaldama.
+
+#### Paigaldada ojdbc6.jar lokaalsesse Maven reposse
+
+Selleks minna kataloogi kuhu ojdbc6.jar alla laeti, näiteks:
+```cmd
+cd C:\Users\kasutaja\Downloads 
+```
+
+Käivitada seal Maven käsk:
+```cmd
+mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4 -Dpackaging=jar
+```
+
+#### Laadida alla DHX-adapter lähtekood
+
+Laadida alla ("download" või "git clone") DHX-adapter [lähtekood](https://github.com/e-gov/DHX-adapter).
+
+
+#### Kompilleerida lähtekood Maven-iga
+
+1) Käsurealt minna lähetkoodi kataloogi.
+
+Näiteks:
+```cmd
+cd C:\Users\kasutaja\git\DHX-adapter
+```
+
+2) Käivitada Maven ehitamine
+
+```cmd
+mvn clean install
+```
+
+Selle väljundiks peaks olema SUCCESS:
+```
+[INFO] Reactor Summary:
+[INFO]
+[INFO] DHX-adapter ....................................... SUCCESS [2.903s]
+[INFO] dhx-adapter-core .................................. SUCCESS [10.183s]
+[INFO] Web services ...................................... SUCCESS [35.038s]
+[INFO] dhx-adapter-server ................................ SUCCESS [1:13.734s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+```
+
+Kompileeritud JAR failid tekivad Maven lokaalsesse reposse kataloogi `C:\Users\kasutaja\.m2\repository\ee\ria\dhx` (Windows) või   `/home/kasutaja/.m2/repository/ee/ria/dhx` (Linux/Unix).
+
+#### Paigaldada WAR fail
+
+1) Võtta Maven lokaalsest repost ( `../kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.0`) tekkinud fail `dhx-adapter-server-1.0.0.war` 
+ja nimetada see ümber `dhx-adapter-server.war`.
+
+2) Teostada WAR paigaldamine Web Konteiner (Tomcat) serverisse. Vaata [ülalpoolt](#olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql).
+ 
 
 
 ##Teadaolevad probleemid (sõltuvuste konfliktid)
