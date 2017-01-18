@@ -220,7 +220,7 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 #### 4.2.6. Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
-Vaata [eespoolt](#paigaldada-tomcat-windows-servicena-või-linux-deemonina) 
+Vaata [eespoolt](#416-paigaldada-tomcat-windows-servicena-või-linux-deemonina) 
 
 ### 4.3. Paigalduspaketi ise ehitamine
 
