@@ -189,7 +189,7 @@ Märkus:
 
 Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
 
-Näiteks käivitades käsurealt: `service.bat install`.
+Näiteks käivitades käsurealt: `service.bat install`
 
 Vaata täpsemalt [Tomcat Windows service HOW-TO](https://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html).
 
