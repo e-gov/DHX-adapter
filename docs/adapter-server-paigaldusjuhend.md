@@ -80,7 +80,7 @@ Minimaalsed nõuded riistvarale on järgmised:
 * Protsessor 2 GHz x 2 tuuma
 
 Optimaalsed riistvara nõuded sõltuvad asutuse poolt saadetavate dokumentide arvust ja suurusest. 
-Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi. *Soovitav on minimaalsed nõuded kahega korrutada*. 
+Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi. **Soovitav on minimaalsed nõuded kahega korrutada**. 
 
 ## 4. Paigaldamine
 
