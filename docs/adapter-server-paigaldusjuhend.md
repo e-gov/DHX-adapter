@@ -152,7 +152,8 @@ Märkus:
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-4) Paigaldada Tomcat Windows Servicena või Linux deemonina. 
+#### Paigaldada Tomcat Windows Servicena või Linux deemonina. 
+
 Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
 
 Näiteks käivitades käsurealt: `service.bat install`.
@@ -215,21 +216,11 @@ Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/
 
 Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
-Märkus:
-> Andmebaasi ühenduse esmakordsel avamisel kontrollitakse kas vajalikud andmebaasi tabelid on juba olemas. 
-> Kui tabeleid ei ole, siis luuakse need automaatselt (eraldi SQL skriptiga ei ole vaja andmebaasi tabeleid luua)
->
-> Selle määrab `dhx-application.properties` failis parameeter `spring.jpa.hibernate.ddl-auto=update` .
-> Vaata [Spring boot juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html#howto-initialize-a-database-using-hibernate).
-
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-4) Paigaldada Tomcat Windows Servicena või Linux deemonina. 
-Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
+#### Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
-Näiteks käivitades käsurealt: `service.bat install`.
-
-Vaata täpsemalt [Tomcat Windows service HOW-TO](https://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html).
+Vaata [eespoolt](#apache-tomcat-7) 
 
 ### Paigalduspaketi ise ehitamine  
 
