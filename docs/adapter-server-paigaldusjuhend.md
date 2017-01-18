@@ -152,7 +152,13 @@ Märkus:
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-4) Paigaldada Tomcat Windows Servicena või Linux deemonina. Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix)
+4) Paigaldada Tomcat Windows Servicena või Linux deemonina. 
+Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
+
+Näiteks käivitades käsurealt: `service.bat install`.
+
+Vaata täpsemalt [Tomcat Windows service HOW-TO](https://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html).
+
 
 ### Olemasoleva paigalduspaketiga (WAR) - Tomcat ja Oracle 11g Express edition
 
@@ -220,7 +226,9 @@ Märkus:
 
 4) Paigaldada Tomcat Windows Servicena või Linux deemonina. 
 Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
+
 Näiteks käivitades käsurealt: `service.bat install`.
+
 Vaata täpsemalt [Tomcat Windows service HOW-TO](https://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html).
 
 ### Paigalduspaketi ise ehitamine  
