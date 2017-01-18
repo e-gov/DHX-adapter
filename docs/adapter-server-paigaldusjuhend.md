@@ -117,7 +117,7 @@ Märkus (Java mälu suurus):
 4) Tekib uus alamkataloog `webapps/dhx-adapter-server`.
 Aga kuna WAR fail sisaldab valesid andmebaasi ühenduse parameetreid, siis Tomcat konsoolile/logisse kuvatakse viga.
 
-#### Muuta dhx-application.properties
+#### 4.1.5. Muuta dhx-application.properties
 
 1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
@@ -152,7 +152,7 @@ Märkus:
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-#### Paigaldada Tomcat Windows Servicena või Linux deemonina. 
+#### 4.1.6. Paigaldada Tomcat Windows Servicena või Linux deemonina. 
 
 Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
 
@@ -161,9 +161,9 @@ Näiteks käivitades käsurealt: `service.bat install`.
 Vaata täpsemalt [Tomcat Windows service HOW-TO](https://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html).
 
 
-### Olemasoleva paigalduspaketiga (WAR) - Tomcat ja Oracle 11g Express edition
+### 4.2. Olemasoleva paigalduspaketiga (WAR) - Tomcat ja Oracle 11g Express edition
 
-#### Oracle 11g Express Edition
+#### 4.2.1. Oracle 11g Express Edition
 
 1) Laadida alla ja installeerida [Oracle 11g XE](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
 
@@ -178,20 +178,20 @@ grant resource to dhxadapter;
 grant unlimited tablespace to dhxadapter;
 ```
 
-#### Java 8 SE
+#### 4.2.2. Java 8 SE
 
-Vaata [eespoolt](#java-8-se)
+Vaata [eespoolt](#412-java-8-se)
 
 
-#### Apache Tomcat 7
+#### 4.2.3. Apache Tomcat 7
 
-Vaata [eespoolt](#apache-tomcat-7) 
+Vaata [eespoolt](#413-apache-tomcat-7) 
 
-#### DHX adapterserver WAR
+#### 4.2.4. DHX adapterserver WAR
 
-Vaata [eespoolt](#dhx-adapterserver-war) 
+Vaata [eespoolt](#414-dhx-adapterserver-war) 
 
-#### Muuta dhx-application.properties
+#### 4.2.5. Muuta dhx-application.properties
 
 1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
@@ -218,11 +218,11 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-#### Paigaldada Tomcat Windows Servicena või Linux deemonina.
+#### 4.2.6. Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
 Vaata [eespoolt](#paigaldada-tomcat-windows-servicena-või-linux-deemonina) 
 
-### Paigalduspaketi ise ehitamine
+### 4.3. Paigalduspaketi ise ehitamine
 
 Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat või mitte PostgreSQL/Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
 
@@ -232,7 +232,7 @@ Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/referenc
 Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
 Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
 
-#### Installeerida Apache Maven ehitustarkvara
+#### 4.3.1. Installeerida Apache Maven ehitustarkvara
 
 1) Laadida alla ja instaleerida [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JDK) 7 või 8 või uuem.
 
@@ -253,7 +253,7 @@ Kui ei viita, siis paranda JAVA_HOME.
 4) Lisada tekkinud kataloogi "bin" alamakataloog (näiteks `C:\Program Files\apache-maven-3.3.9\bin`) PATH keskkonna muutujasse.
 Alternatiiv on kasutada "mvn.cmd" (Windows) või "mvn" (Linux shell) skripte täispika kataloogi teega.
 
-#### Laadida alla Oracle JDBC draiver (ojdbc6.jar)
+#### 4.3.2. Laadida alla Oracle JDBC draiver (ojdbc6.jar)
 
 Laadida alla Oracle JDBC draiver [ojdbc6.jar](http://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html) (nõuab registreerimist ja sisselogimist).
 
@@ -262,7 +262,7 @@ Alternatiivisk on laadida ojdbc6.jar vanem versioon alla siit(https://code.lds.o
 Märkus:
 > Oracle ei ole soovinud ise oma JDBC draiverite JAR faile Central Maven reposse üles laadida, seepärast peab selle käsitsi alla laadima ja Maven lokaalsesse REPOsse paigaldama.
 
-#### Paigaldada ojdbc6.jar lokaalsesse Maven reposse
+#### 4.3.3. Paigaldada ojdbc6.jar lokaalsesse Maven reposse
 
 Selleks minna kataloogi kuhu ojdbc6.jar alla laeti, näiteks:
 ```cmd
@@ -274,12 +274,12 @@ Käivitada seal Maven käsk:
 mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4 -Dpackaging=jar
 ```
 
-#### Laadida alla DHX-adapter lähtekood
+#### 4.3.4. Laadida alla DHX-adapter lähtekood
 
 Laadida alla ("download" või "git clone") DHX-adapter [lähtekood](https://github.com/e-gov/DHX-adapter).
 
 
-#### Kompilleerida lähtekood Maven-iga
+#### 4.3.5. Kompilleerida lähtekood Maven-iga
 
 1) Käsurealt minna lähtekoodi kataloogi. Näiteks:
 ```cmd
@@ -307,12 +307,12 @@ Selle väljundiks peaks olema SUCCESS:
 
 Kompileeritud JAR failid tekivad Maven lokaalsesse reposse kataloogi `C:\Users\kasutaja\.m2\repository\ee\ria\dhx` (Windows) või   `/home/kasutaja/.m2/repository/ee/ria/dhx` (Linux/Unix).
 
-#### Paigaldada WAR fail
+#### 4.3.6. Paigaldada WAR fail
 
 1) Võtta Maven lokaalsest repost ( `../kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.0`) tekkinud fail `dhx-adapter-server-1.0.0.war` 
 ja nimetada see ümber `dhx-adapter-server.war`.
 
-2) Teostada WAR paigaldamine Web Konteiner (Tomcat) serverisse. Vaata [ülalpoolt](#olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql).
+2) Teostada WAR paigaldamine Web Konteiner (Tomcat) serverisse. Vaata [eespool](#41-olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql).
  
 
 
