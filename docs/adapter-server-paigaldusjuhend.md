@@ -5,6 +5,39 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
+Sisukord
+=================
+
+  * [DHX adapterserveri paigaldusjuhend](#dhx-adapterserveri-paigaldusjuhend)
+    * [1\. Sissejuhatus](#1-sissejuhatus)
+    * [2\. Tarkvara nõuded (baastarkvara eeldused)](#2-tarkvara-n%C3%B5uded-baastarkvara-eeldused)
+    * [3\. Riistvara nõuded (eeldused)](#3-riistvara-n%C3%B5uded-eeldused)
+    * [4\. Paigaldamine](#4-paigaldamine)
+      * [4\.1\. Olemasoleva paigalduspaketiga (WAR) \- Tomcat ja PostgeSQL](#41-olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql)
+        * [4\.1\.1\. PostgreSQL 9\.6](#411-postgresql-96)
+        * [4\.1\.2 Java 8 SE](#412-java-8-se)
+        * [4\.1\.3\. Apache Tomcat 7](#413-apache-tomcat-7)
+        * [4\.1\.4\. DHX adapterserver WAR](#414-dhx-adapterserver-war)
+        * [4\.1\.5\. Muuta dhx\-application\.properties](#415-muuta-dhx-applicationproperties)
+        * [4\.1\.6\. Paigaldada Tomcat Windows Servicena või Linux deemonina\.](#416-paigaldada-tomcat-windows-servicena-v%C3%B5i-linux-deemonina)
+      * [4\.2\. Olemasoleva paigalduspaketiga (WAR) \- Tomcat ja Oracle 11g Express edition](#42-olemasoleva-paigalduspaketiga-war---tomcat-ja-oracle-11g-express-edition)
+        * [4\.2\.1\. Oracle 11g Express Edition](#421-oracle-11g-express-edition)
+        * [4\.2\.2\. Java 8 SE](#422-java-8-se)
+        * [4\.2\.3\. Apache Tomcat 7](#423-apache-tomcat-7)
+        * [4\.2\.4\. DHX adapterserver WAR](#424-dhx-adapterserver-war)
+        * [4\.2\.5\. Muuta dhx\-application\.properties](#425-muuta-dhx-applicationproperties)
+        * [4\.2\.6\. Paigaldada Tomcat Windows Servicena või Linux deemonina\.](#426-paigaldada-tomcat-windows-servicena-v%C3%B5i-linux-deemonina)
+      * [4\.3\. Paigalduspaketi ise ehitamine](#43-paigalduspaketi-ise-ehitamine)
+        * [4\.3\.1\. Installeerida Apache Maven ehitustarkvara](#431-installeerida-apache-maven-ehitustarkvara)
+        * [4\.3\.2\. Laadida alla Oracle JDBC draiver (ojdbc6\.jar)](#432-laadida-alla-oracle-jdbc-draiver-ojdbc6jar)
+        * [4\.3\.3\. Paigaldada ojdbc6\.jar lokaalsesse Maven reposse](#433-paigaldada-ojdbc6jar-lokaalsesse-maven-reposse)
+        * [4\.3\.4\. Laadida alla DHX\-adapter lähtekood](#434-laadida-alla-dhx-adapter-l%C3%A4htekood)
+        * [4\.3\.5\. Kompilleerida lähtekood Maven\-iga](#435-kompilleerida-l%C3%A4htekood-maven-iga)
+        * [4\.3\.6\. Paigaldada WAR fail](#436-paigaldada-war-fail)
+    * [5\. Teadaolevad probleemid (sõltuvuste konfliktid)](#5-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
+    * [6\. Häälestus fail (dhx\-application\.properties)](#6-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
+    * [7\. Klastrisse paigaldamine (Failover/Load balancing)](#7-klastrisse-paigaldamine-failoverload-balancing)
+
 ## 1. Sissejuhatus
 
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
