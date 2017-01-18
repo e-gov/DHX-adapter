@@ -268,7 +268,7 @@ Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutus
 
 #### 4.3.1. Installeerida Apache Maven ehitustarkvara
 
-1) Laadida alla ja instaleerida [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JDK) 7 või 8 või uuem.
+1) Laadida alla ja installeerida [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JDK) 7 või 8 või uuem.
 
 Märkus:
 > Ainult Java Runtime Environment (JRE) ei ole piisav Maveni kasutamiseks.  
