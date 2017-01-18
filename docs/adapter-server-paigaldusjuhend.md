@@ -5,7 +5,7 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
-## 1) Sissejuhatus
+## 1. Sissejuhatus
 
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
@@ -17,7 +17,7 @@ Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
 ![](dhx-adapter-deployment.png)
 
-## 2) Tarkvara nõuded (baastarkvara eeldused)
+## 2. Tarkvara nõuded (baastarkvara eeldused)
 
 * **Java SE 8** või **Java SE 7**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
 * **Apache Tomcat 7**. Tarkvara käivitamiseks on vajalik [Apache Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
@@ -39,7 +39,7 @@ Märkus (muud Java web serverid):
 >
 > Paigalduspaketina alla laetav WAR fail sisaldab ainult Apache Tomcat serverisse paigaldamise `spring-boot-starter` [mooduleid](https://spring.io/blog/2014/03/07/deploying-spring-boot-applications). Kui soovitakse kasutatakse muud Java serverit, siis tuleb dhx-adapter-serveri WAR fail ise uuesti ehitada, muutes `pom.xml` failis sõltuvusi.
 
-##Riistvara nõuded (eeldused)
+## 3. Riistvara nõuded (eeldused)
  
 Minimaalsed nõuded riistvarale on järgmised:
 * Muutmälu 2GB
@@ -49,20 +49,20 @@ Minimaalsed nõuded riistvarale on järgmised:
 Optimaalsed riistvara nõuded sõltuvad asutuse poolt saadetavate dokumentide arvust ja suurusest. 
 Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi. Soovitav on minimaalsed nõuded kahega korrutada. 
 
-##Paigaldamine
+## 4. Paigaldamine
 
-### Olemasoleva paigalduspaketiga (WAR) - Tomcat ja PostgeSQL
+### 4.1. Olemasoleva paigalduspaketiga (WAR) - Tomcat ja PostgeSQL
 
-#### PostgreSQL 9.6
+#### 4.1.1. PostgreSQL 9.6
 
 Laadida alla ja installeerida PostgreSQL andmebaasi versioon [9.6.x](https://www.postgresql.org/download/).
 
-#### Java 8 SE
+#### 4.1.2 Java 8 SE
 
 Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
 
 
-#### Apache Tomcat 7
+#### 4.1.3. Apache Tomcat 7
 
 1) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi) või uuem versioon.
 
@@ -105,7 +105,7 @@ Märkus (Java mälu suurus):
 
 4) Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
-#### DHX adapterserver WAR
+#### 4.1.4. DHX adapterserver WAR
 
 1) Laadida alla DHX adapterserveri WAR fail `dhx-adapter-server.war`.
 
