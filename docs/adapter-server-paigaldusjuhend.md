@@ -74,14 +74,14 @@ Lisada sellesse faili allolevad read.
 Windows:
 ```bat
 set JRE_HOME="C:\Program Files\Java\jre1.8.0_112"
-set CATALINA_OPTS=-Xms1024m -Xmx1024m -Djava.awt.headless=true -server
+set CATALINA_OPTS=-Xms2048m -Xmx2048m -Djava.awt.headless=true -server
 exit /b 0
 ```
 
 Linux/Unix:
 ```sh
 JRE_HOME=/usr/java/latest
-CATALINA_OPTS="-Xms1024m -Xmx1024m -Djava.awt.headless=true -server"
+CATALINA_OPTS="-Xms2048m -Xmx2048m -Djava.awt.headless=true -server"
 CATALINA_PID="$CATALINA_BASE/tomcat.pid"
 ```
 
