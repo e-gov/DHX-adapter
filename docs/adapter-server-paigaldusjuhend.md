@@ -86,24 +86,24 @@ CATALINA_PID="$CATALINA_BASE/tomcat.pid"
 ```
 
 Märkus (JRE_HOME):
-> Näites toodud JRE_HOME kataloogitee (`C:\Program Files\JAva\jre1.8.0_112` või `/usr/java/latest`) asendada vastvalt enda installatsioonile.
+> Näites toodud JRE_HOME kataloogitee (`C:\Program Files\Java\jre1.8.0_112` või `/usr/java/latest`) asendada vastavalt enda installatsioonile.
 
 Märkus (Java mälu suurus):
 > CATALINA_OPTS parameetris määratakse Tomcat Java protsessi poolt kasutatava mälu suurus.
 > 
-> Kui kasutatakse minimaalset riistvaralist häälestus (masinas muutmälu 2Gb), siis võiks see olla 1Gb ehk `-Xms1024m -Xmx1024m`
+> Kui kasutatakse minimaalset riistvaralist häälestust (masinas muutmälu 2Gb), siis võiks see olla 1Gb ehk `-Xms1024m -Xmx1024m`
 > 
-> Kui kasutatakse optimaalsemat riistvaralist häälestus (masinas muutmälu 4Gb-8Gb), siis võiks see olla 2Gb kuni 4Gb ehk `-Xms2048m -Xmx2048m` või `-Xms4096m -Xmx4096m`. 
+> Kui kasutatakse optimaalsemat riistvaralist häälestust (masinas muutmälu 4Gb-8Gb), siis võiks see olla 2Gb kuni 4Gb ehk `-Xms2048m -Xmx2048m` või `-Xms4096m -Xmx4096m`
 
 
-3) Vajadusel muuta ümber Tomcat pordi number (vaikimisi 8080) failis `apache-tomcat-7.x.x/conf/server.xml`.
+3) Soovi korral muuta ümber Tomcat TCP/IP pordi number (vaikimisi 8080) failis `apache-tomcat-7.x.x/conf/server.xml`.
 ```xml
     <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" />
 ```
 
-4) Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+4) Käivitada Tomcat skriptiga `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
 #### DHX adapterserver WAR
 
@@ -139,9 +139,9 @@ Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale k
 
 2) Teha Tomcati restart.
 
-Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux jt).
+Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux/Unix).
 
-Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
 Märkus:
 > Andmebaasi ühenduse esmakordsel avamisel kontrollitakse kas vajalikud andmebaasi tabelid on juba olemas. 
@@ -152,7 +152,7 @@ Märkus:
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-4) Paigaldada Tomcat Windows Servicena või Linux deemonina. Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux jt)
+4) Paigaldada Tomcat Windows Servicena või Linux deemonina. Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix)
 
 ### Olemasoleva paigalduspaketiga (WAR) - Tomcat ja Oracle 11g Express edition
 
@@ -205,9 +205,9 @@ Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale k
 
 2) Teha Tomcati restart.
 
-Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux jt).
+Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux/Unix).
 
-Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux jt).
+Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
 Märkus:
 > Andmebaasi ühenduse esmakordsel avamisel kontrollitakse kas vajalikud andmebaasi tabelid on juba olemas. 
@@ -218,7 +218,10 @@ Märkus:
 
 3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-4) Paigaldada Tomcat Windows Servicena või Linux deemonina. Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux jt)
+4) Paigaldada Tomcat Windows Servicena või Linux deemonina. 
+Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
+Näiteks käivitades käsurealt: `service.bat install`.
+Vaata täpsemalt [Tomcat Windows service HOW-TO](https://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html).
 
 ### Paigalduspaketi ise ehitamine  
 
