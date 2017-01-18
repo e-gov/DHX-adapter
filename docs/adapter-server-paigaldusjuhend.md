@@ -262,7 +262,7 @@ Märkus:
 
 Alternatiiviks on laadida ojdbc6.jar vanem versioon alla [siit](https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
 
-Alterantiiviks (kui ei kastuta Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](../dhx-adapter-server/pom.xml) sees välja kommenteerida read:
+Alternatiiviks (kui ei kastuta Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](../dhx-adapter-server/pom.xml) seest eemaldada read:
 ```xml
 		<dependency>
 			<groupId>com.oracle</groupId>
@@ -318,21 +318,21 @@ Kompileeritud JAR failid tekivad Maven lokaalsesse reposse kataloogi `C:\Users\k
 
 #### 4.3.6. Paigaldada WAR fail
 
-1) Võtta Maven lokaalsest repost ( `../kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.0`) tekkinud fail `dhx-adapter-server-1.0.0.war` 
+1) Võtta Maven lokaalsest repost ( `kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.0`) tekkinud fail `dhx-adapter-server-1.0.0.war` 
 ja nimetada see ümber `dhx-adapter-server.war`.
 
 2) Teostada WAR paigaldamine Web Konteiner (Tomcat) serverisse. Vaata [eespool](#41-olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql).
  
 
 
-##Teadaolevad probleemid (sõltuvuste konfliktid)
+## 5. Teadaolevad probleemid (sõltuvuste konfliktid)
 
 Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
 
 Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
 
-##Häälestus fail (dhx-application.properties)
+## 6. Häälestus fail (dhx-application.properties)
 
 Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](java-teegid-kasutusjuhend.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
 
@@ -388,7 +388,7 @@ Märkus:
 > Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud. 
 
 
-##Klastrisse paigaldamine (Failover/Load balancing)
+## 7. Klastrisse paigaldamine (Failover/Load balancing)
 
 DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 
