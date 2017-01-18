@@ -66,11 +66,35 @@ Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.
 
 1) Laadida alla ja installeerida (pakkida lahti) [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
 
-2) Vajadusel muuta operatsioonisüsteemi keskkonna muutuja `JRE_HOME` home väärtuseks installeeritud Java 8 SE JRE kataloogitee. 
-Näiteks Windows keskkonnas JRE_HOME=`C:\Program Files\jre1.8.0_112`. 
 
-Luua setenv.bat või setenv.sh
-https://tomcat.apache.org/tomcat-8.0-doc/monitoring.html
+2) Tekitada kataloogi  `apache-tomcat-7.x.x/bin` uus fail nimega `setenv.bat` (Windows) või `setenv.sh` (Linux/Unix).
+
+Lisada sellesse faili allolevad read.
+
+Windows:
+```bat
+set JRE_HOME="C:\Program Files\Java\jre1.8.0_112"
+set CATALINA_OPTS=-Xms1024m -Xmx1024m -Djava.awt.headless=true -server
+exit /b 0
+```
+
+Linux/Unix:
+```sh
+JRE_HOME=/usr/java/latest
+CATALINA_OPTS="-Xms1024m -Xmx1024m -Djava.awt.headless=true -server"
+CATALINA_PID="$CATALINA_BASE/tomcat.pid"
+```
+
+Märkus (JRE_HOME):
+> Näites toodud JRE_HOME kataloogitee (`C:\Program Files\JAva\jre1.8.0_112` või `/usr/java/latest`) asendada vastvalt enda installatsioonile.
+
+Märkus (Java mälu suurus):
+> CATALINA_OPTS parameetris määratakse Tomcat Java protsessi poolt kasutatava mälu suurus.
+> 
+> Kui kasutatakse minimaalset riistvaralist häälestus (masinas muutmälu 2Gb), siis võiks see olla 1Gb ehk `-Xms1024m -Xmx1024m`
+> 
+> Kui kasutatakse optimaalsemat riistvaralist häälestus (masinas muutmälu 4Gb-8Gb), siis võiks see olla 2Gb kuni 4Gb ehk `-Xms2048m -Xmx2048m` või `-Xms4096m -Xmx4096m`. 
+
 
 3) Vajadusel muuta ümber Tomcat pordi number (vaikimisi 8080) failis `apache-tomcat-7.x.x/conf/server.xml`.
 ```xml

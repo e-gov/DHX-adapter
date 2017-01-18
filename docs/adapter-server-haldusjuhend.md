@@ -16,6 +16,10 @@ DHX adapterserveri paigaldamine on kirjeldatud [DHX adapterserveri paigaldusjuhe
 ## Monitooring
 
 ### Monitooringu liidesed
+
+https://tomcat.apache.org/tomcat-8.0-doc/monitoring.html
+
+
 ### Logimine
 
 ## Edastamise vigade uurimimine
