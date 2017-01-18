@@ -295,7 +295,7 @@ Märkus:
 
 Alternatiiviks on laadida ojdbc6.jar vanem versioon alla [siit](https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
 
-Alternatiiviks (kui ei kastuta Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](../dhx-adapter-server/pom.xml) seest eemaldada read:
+Alternatiiviks (kui ei kasututa Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](../dhx-adapter-server/pom.xml) seest eemaldada read:
 ```xml
 		<dependency>
 			<groupId>com.oracle</groupId>
