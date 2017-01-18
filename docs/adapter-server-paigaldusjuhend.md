@@ -257,10 +257,19 @@ Alternatiiv on kasutada "mvn.cmd" (Windows) või "mvn" (Linux shell) skripte tä
 
 Laadida alla Oracle JDBC draiver [ojdbc6.jar](http://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html) (nõuab registreerimist ja sisselogimist).
 
-Alternatiivisk on laadida ojdbc6.jar vanem versioon alla siit(https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
-
 Märkus:
 > Oracle ei ole soovinud ise oma JDBC draiverite JAR faile Central Maven reposse üles laadida, seepärast peab selle käsitsi alla laadima ja Maven lokaalsesse REPOsse paigaldama.
+
+Alternatiiviks on laadida ojdbc6.jar vanem versioon alla siit(https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
+
+Alterantiiviks (kui ei kastuta Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-server/pom.xml) sees välja kommenteerida read:
+```xml
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.4</version>
+		</dependency>
+```
 
 #### 4.3.3. Paigaldada ojdbc6.jar lokaalsesse Maven reposse
 
