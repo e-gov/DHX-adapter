@@ -15,9 +15,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPMessage;
 
 /**
  * Class creates beans needed for web services. Those beans are meant to use only if there is no
@@ -47,9 +53,19 @@ public class DhxServerWebServiceConfig {
     applicationAnnotationContext.register(DhxEndpointConfig.class);
     servlet.setApplicationContext(applicationAnnotationContext);
     servlet.setTransformWsdlLocations(true);
+    servlet.setMessageFactoryBeanName("messageFactory");
     ServletRegistrationBean servletBean = new ServletRegistrationBean(servlet, "/" + "ws" + "/*");
     servletBean.setName("dhx");
     return servletBean;
+  }
+  
+  @Bean(name = "messageFactory")
+  public SaajSoapMessageFactory messageFactory () {
+    SaajSoapMessageFactory smf = new SaajSoapMessageFactory();
+    Map<String, String> props = new HashMap<String, String>();
+    props.put(SOAPMessage.WRITE_XML_DECLARATION, Boolean.toString(true));
+    smf.setMessageProperties(props);
+    return smf;
   }
 
   /**
