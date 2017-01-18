@@ -226,7 +226,8 @@ Vaata [eespoolt](#416-paigaldada-tomcat-windows-servicena-või-linux-deemonina)
 
 Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat) või kasutada muud andmebaasi serverit (mitte PostgreSQL ega Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
 
-Kui soovitakse paigaldada [Java Servlet spetsifikatsiooni 3.0](http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/) või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisesest [pom.xml](../dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
+Kui soovitakse paigaldada Java Servlet spetsifikatsiooni [3.0](http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/) või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisesest [pom.xml](../dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
+
 Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html).
 
 Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
@@ -245,8 +246,7 @@ Käsurealt saab seda kontrollida käsuga `echo %JAVA_HOME%` (Windows) või `echo
 
 Kui ei viita, siis paranda JAVA_HOME.
 
-2) Laadida alla [Maven](https://maven.apache.org/download.cgi). 
-
+2) Laadida alla [Apache Maven](https://maven.apache.org/download.cgi). 
 
 3) Pakkida see lahti, näiteks kataloogi `C:\Program Files`, nii et tekib kataloog `C:\Program Files\apache-maven-3.3.9\`
 
@@ -260,7 +260,7 @@ Laadida alla Oracle JDBC draiver [ojdbc6.jar](http://www.oracle.com/technetwork/
 Märkus:
 > Oracle ei ole soovinud ise oma JDBC draiverite JAR faile Central Maven reposse üles laadida, seepärast peab selle käsitsi alla laadima ja Maven lokaalsesse REPOsse paigaldama.
 
-Alternatiiviks on laadida ojdbc6.jar vanem versioon alla siit(https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
+Alternatiiviks on laadida ojdbc6.jar vanem versioon alla [siit](https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
 
 Alterantiiviks (kui ei kastuta Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-server/pom.xml](../dhx-adapter-server/pom.xml) sees välja kommenteerida read:
 ```xml
