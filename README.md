@@ -16,6 +16,7 @@ DHX adaptertarkvara koosneb kahest osast:
 - __DHX adapterserver__ on eraldipaigaldatav rakendus, mis X-tee poole räägib DHX protokolli, dokumendihaldussüsteemi poole aga pakub vana DVK (Dokumendivahetuskeskuse) liidesele sarnast SOAP-liidest.
   * [DHX adapterserveri kasutusjuhend](docs/adapter-server-kasutusjuhend.md)
   * [DHX adapterserveri paigaldusjuhend](docs/adapter-server-paigaldusjuhend.md)
+  * [DHX adapterserveri haldusjuhend](docs/adapter-server-haldusjuhend.md)
 
 
 
@@ -31,5 +32,6 @@ DHX Adapter software consists of two parts:
 - __DHX adapter server__ - separately installed application that towards X-Road talks DHX protocol, and towards document management system provides a SOAP interface similar to old DEC (Document Exchange Centre) interface.
   * [DHX adapterserver usage guide (estonian)](docs/adapter-server-kasutusjuhend.md)
   * [DHX adapterserver installation guide (estonian)](docs/adapter-server-paigaldusjuhend.md)
+  * [DHX adapterserveri administration guide (estonian)](docs/adapter-server-haldusjuhend.md)
 
 

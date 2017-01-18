@@ -11,6 +11,8 @@ DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/
 
 DHX adapterserveri toimimise loogika on kirjeldatud [DHX adapterserveri kasutusjuhendis](https://github.com/e-gov/DHX-adapter/blob/master/docs/adapter-server-kasutusjuhend.md).
 
+DHX adapterserveri haldamine on kirjeldatud [DHX adapterserveri haldusjuhendis](adapter-server-haldusjuhend.md).
+
 Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
 ![](dhx-adapter-deployment.png)
@@ -19,7 +21,7 @@ Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
 * **Java SE 8** või **Java SE 7**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
 * **Apache Tomcat 7**. Tarkvara käivitamiseks on vajalik [Apache Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
-* **PostgreSQL 9.6** või **Oracle 11g**. Andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) (kaasa arvatud 11g Express Edition) versioone.
+* **PostgreSQL 9.6** või **Oracle 11g**. Andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) (kaasa arvatud 11g Express Edition) või uuemaid versioone.
 * Operatsioonisüsteem - Java poolt [toetatud süsteem](https://www.java.com/en/download/help/sysreq.xml).
 
 Märkus (muud andmebaasid):
@@ -194,18 +196,16 @@ Märkus:
 
 4) Paigaldada Tomcat Windows Servicena või Linux deemonina. Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux jt)
 
-### Paigalduspaketi ise ehitamine (mitte Tomcat või mitte PostgreSQL/Oracle) 
+### Paigalduspaketi ise ehitamine  
 
-Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
+Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat või mitte PostgreSQL/Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
 
-
-Create a deployable war file
-http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html
+Kui soovitakse paigaldada Java Servlet spetsifikatsiooni 3.0 või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisesest [pom.xml](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
+Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html).
  
 
-Vanemasse Java Servlet serveritesse paigaldamisel tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
-
-Selleks vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
+Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
+Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
 
 
 ##Teadaolevad probleemid (sõltuvuste konfliktid)
@@ -294,7 +294,7 @@ Legend:
  
 Klastrisse paigaldamisel tuleb arvestada et: 
 * Jagatud failisüsteem määratakse parameetriga `documents.folder`.
-Selleks tuleb see määrata klastri sõlme külge näiteks eradli võrgukettana (määrates Windows keskkonnas näiteks `documents.folder=D:\\dhx_docs\\`, või linux keskkonnas näiteks `documents.folder=/mnt/dhxshare`).
+Selleks tuleb see määrata klastri sõlme külge näiteks eralsi võrgukettana (määrates Windows keskkonnas näiteks `documents.folder=D:\\dhx_docs\\`, või linux keskkonnas näiteks `documents.folder=/mnt/dhxshare`).
 * Dokumentide DHX-i edastamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess.
 See tausta protsess loeb edastamata dokumente jagatud andmebaasist. Selleks, et sõlmed A ja B ei edastaks sama dokumenti samaaegselt (ehk topelt), kasutatakse pessimistlikku lukustamist (sisuliselt päringus määratakse `SELECT ... FOR UPDATE`, vaata täpsemalt [LockModeType.PESSIMISTIC_WRITE](http://docs.oracle.com/javaee/7/api/javax/persistence/LockModeType.html#PESSIMISTIC_WRITE) ja [PostgreSQL row level locks](https://www.postgresql.org/docs/9.6/static/explicit-locking.html#LOCKING-ROWS)). 
 Juhul kui soovitakse, et dokumentide DHX-i edastamist teeks ainult üks klastri sõlm (näiteks A), siis võib teisel sõlmel B muuta parameetri `dhx.server.send-to-dhx` väärtuseks väga pikk periood (näiteks `0 0 0 31 12 ?` määrab et ainult 31.detsembri keskööl).
@@ -306,19 +306,3 @@ Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb
 
 ![](dhx-adapter-cluster2.png)
 
-# DHX adapterserveri haldusjuhend
-
-## Monitooring
-
-### Monitooringu liidesed
-### Logimine
-
-## Edastamise vigade uurimimine
-
-Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
-
-![](dhx-adapter-database.png)
-
-Tabelite kirjeldused:
-* DOKUMENT - sisaldab dokumendi andmeid. Väljal SISU salvestatakse faili nimi (c:\dhs_docs\ kataloogis).
-* 
