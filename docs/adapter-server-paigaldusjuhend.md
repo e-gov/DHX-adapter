@@ -5,7 +5,7 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
-## Sissejuhatus
+## 1) Sissejuhatus
 
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
@@ -17,7 +17,7 @@ Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
 ![](dhx-adapter-deployment.png)
 
-##Tarkvara nõuded (baastarkvara eeldused)
+## 2) Tarkvara nõuded (baastarkvara eeldused)
 
 * **Java SE 8** või **Java SE 7**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
 * **Apache Tomcat 7**. Tarkvara käivitamiseks on vajalik [Apache Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
@@ -232,7 +232,7 @@ Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/referenc
 Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
 Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
 
-#### Instaleerida Apache Maven ehitustarkvara
+#### Installeerida Apache Maven ehitustarkvara
 
 1) Laadida alla ja instaleerida [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JDK) 7 või 8 või uuem.
 
@@ -245,20 +245,22 @@ Käsurealt saab seda kontrollida käsuga `echo %JAVA_HOME%` (Windows) või `echo
 
 Kui ei viita, siis paranda JAVA_HOME.
 
-1) Laadida alla [Maven](https://maven.apache.org/download.cgi). 
+2) Laadida alla [Maven](https://maven.apache.org/download.cgi). 
 
 
-2) Pakkida see lahti, näiteks kataloogi `C:\Program Files`, nii et tekib kataloog `C:\Program Files\apache-maven-3.3.9\`
+3) Pakkida see lahti, näiteks kataloogi `C:\Program Files`, nii et tekib kataloog `C:\Program Files\apache-maven-3.3.9\`
 
-3) Lisada tekkinud kataloogi "bin" alamakataloog (näiteks `C:\Program Files\apache-maven-3.3.9\bin`) PATH keskkonna muutujasse.
-Alternatiiv on kasutada "mvn.cmd" (Windows) või "mvn" (Linux shell) skirpte täispika kataloogi teega.
+4) Lisada tekkinud kataloogi "bin" alamakataloog (näiteks `C:\Program Files\apache-maven-3.3.9\bin`) PATH keskkonna muutujasse.
+Alternatiiv on kasutada "mvn.cmd" (Windows) või "mvn" (Linux shell) skripte täispika kataloogi teega.
 
 #### Laadida alla Oracle JDBC draiver (ojdbc6.jar)
 
 Laadida alla Oracle JDBC draiver [ojdbc6.jar](http://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html) (nõuab registreerimist ja sisselogimist).
 
+Alternatiivisk on laadida ojdbc6.jar vanem versioon alla siit(https://code.lds.org/nexus/content/groups/main-repo/com/oracle/ojdbc6/).
+
 Märkus:
-> Oracle ei ole ise oma JDBC draiverite JARE maven central reposse soovinud üles laadida, seepärast peab selle käistis alla laadima ja Maven lokaalsesse REPOsse paigaldama.
+> Oracle ei ole soovinud ise oma JDBC draiverite JAR faile Central Maven reposse üles laadida, seepärast peab selle käsitsi alla laadima ja Maven lokaalsesse REPOsse paigaldama.
 
 #### Paigaldada ojdbc6.jar lokaalsesse Maven reposse
 
@@ -279,9 +281,7 @@ Laadida alla ("download" või "git clone") DHX-adapter [lähtekood](https://gith
 
 #### Kompilleerida lähtekood Maven-iga
 
-1) Käsurealt minna lähetkoodi kataloogi.
-
-Näiteks:
+1) Käsurealt minna lähtekoodi kataloogi. Näiteks:
 ```cmd
 cd C:\Users\kasutaja\git\DHX-adapter
 ```
