@@ -38,6 +38,7 @@ Sisukord
     * [6\. Häälestus fail (dhx\-application\.properties)](#6-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
     * [7\. Klastrisse paigaldamine (Failover/Load balancing)](#7-klastrisse-paigaldamine-failoverload-balancing)
     * [8\. Teadaolevad probleemid (sõltuvuste konfliktid)](#8-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
+    * [9\. Paigalduse testimine (SoapUI)](#9-paigalduse-testimine-soapui)
 
 ## 1. Sissejuhatus
 
@@ -547,7 +548,7 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
       </dhl:getSendingOptions>
    </soapenv:Body>
 </soapenv:Envelope>
-```xml
+```
 
-4) Kävitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
+5) Kävitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
 
