@@ -42,7 +42,7 @@ Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) pro
 
 **3)** Üleval ripploendis kuvatakse teenuse aadress. Valida seal "Edit current" ja sisestada aadressiks `http://localhost:8080/dhx-adapter-server/wsServer` (muuta vajadusel host ja port).
 
-**4)** Sisestada Request XML väljale järgmine väärtus, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (asutuse enda registrikood) nong käivitada päring.
+**4)** Sisestada Request XML väljale järgmine väärtus, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (asutuse enda registrikood) ning käivitada päring.
 
 ```xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
@@ -101,18 +101,55 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
 
-### 4.1. sendDocuments (sisemine liides)
+### 4.1. getSendingOptions (sisemine liides)
+
+Seda operatsiooni kasutatakse [DHX aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) küsimiseks.
+
+See tagastab kõik asutused kellele võib üle DHX protokolli dokumente saata.
+
+Märkus:
+> DHX adapterserveri `getSendingOptions` realisatsioon ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
+> Kui asutuse DHS süsteem neid vana DVK korral kasutas, siis DHX protokollile üle kolimisel peaks ta need kusagilt mujalt küsima. 
+
+Päringu väljund on sarnane DVK väljundile, iga asutuse kohta on seal: 
+```xml
+<asutus>
+  <regnr>30000001</regnr>
+  <nimi>Hõbekuuli OÜ</nimi>
+  <saatmine>
+    <saatmisviis>dhl</saatmisviis>
+  </saatmine>
+ </asutus>
+```
+See sisaldab asutuse kohta kolme välja:
+* `<regnr>` - asutuse registrikood või alamsüsteemi kood.
+* `<nimi>` - Asutuse või alamsüsteemi nimi.
+* `<saatmisviis>` - alati konstant `dhl`.
+
+Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
+Samuti pole neid mõtet `getSendingOptions.v3` päringu sisendis ette anda, sest neid ignoreeritakse.
+
+Vaata `getSendingOptions.v2` saatmise näidet dokumendist Testilood - [2.10. Aadressaatide nimekirja pärimine](adapter-server-testilood.md#2.10).
+
+Lisaks vaata kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1),
+[getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3)
+
+Märkused vana DVK X-tee liidese kasutajale:
+> DHX adpaterserveris on realiseeritud kõik getSendStatus operatsiooni versioonid [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1), [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3).
+
+
+### 4.2. sendDocuments (sisemine liides)
 
 SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
 Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd) versioonis (vanemad Kapsli versioonid ei ole toetatud).
 
 DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
-Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStatus](#42-getsendstatus-sisemine-liides).
+Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStatus](#43-getsendstatus-sisemine-liides).
 
-`sendDocuments.v4` saatmise näidet vaata dokumendist Testilood - [2.1. Õige kapsli saatmine](adapter-server-testilood.md#2.1).
+Vaata `sendDocuments.v4` saatmise näidet dokumendist Testilood - [2.1. Õige kapsli saatmine](adapter-server-testilood.md#2.1).
  
- Lisaks vaata kirjeldust vana DVK spetsifikatsiooni [sendDocuments.v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4). 
+ Lisaks vaata kirjeldust vana DVK spetsifikatsioonis [sendDocuments.v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4). 
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
 > DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.1).
 
@@ -122,7 +159,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 > Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) dhx-adpater-server ei paku.
 
 
-### 4.2. getSendStatus (sisemine liides)
+### 4.3. getSendStatus (sisemine liides)
 
 SOAP operatsiooni `getSendStatus` kasutatakse saadetud dokumendi staatuse ja saatmisel ilmnenud vea info (fault) küsimiseks.
 
@@ -131,15 +168,14 @@ Võimalikud staatused on:
 * `saadetud` – dokument sai edukalt antud saajale saadetud
 * `katkestatud` – dokumenti ei õnnestunud antud saajale saata.
 
-`getSendStatus.v2` saatmise näidet vaata dokumendist Testilood - [2.11. DHX-i saadetud dokumendi staatuse pärimine](adapter-server-testilood.md#2.11).
+Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#edastatud-dokumentide-staatuse-kontroll).
 
-Lisaks vaata kirjeldust vana DVK spetsifikatsiooni [getSendStatus.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1). ja [getSendStatus.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
+Vaata `getSendStatus.v2` saatmise näidet dokumendist Testilood - [2.11. DHX-i saadetud dokumendi staatuse pärimine](adapter-server-testilood.md#2.11).
+
+Lisaks vaata kirjeldust vana DVK spetsifikatsioonis [getSendStatus.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1). ja [getSendStatus.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
  
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
 > DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.11).
-
-
-Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#edastatud-dokumentide-staatuse-kontroll).
 
 Märkused vana DVK X-tee liidese kasutajale:
 > DHX adpaterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
@@ -147,7 +183,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ## 5. Erinevused DVK liidesega võrreldes
 
-* 
+* `getSendSTatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`.
 
 * SWAREF manuse cid väärtus peab olema URL kodeeritud (DVK korral see ei tohtinud olla URL kodeeritud)
 
