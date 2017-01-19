@@ -393,12 +393,6 @@ Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v
 
 **3.3)** Lisada õigus globaalsele X-tee grupile "Kõik X-tee kasutajad". 
 
-Märkus:
-> Erijuhul, kui asutus ei oma X-teega liitumise võimekust, võib ta kasutada DHX vahendajat.
-> Aga sel juhul asutus ise ei pea DHX adapterserveit paigaldama, vaid ta suhtleb vahendaja DHX adapaterserveriga või vahendaja poolt pakutavate teenustega.
-> Selle kohta loe täpsemalt [DHX vahendamine](https://e-gov.github.io/DHX/#6-vahendamine) ja [X-tee teenuste vahendamine](https://moodle.ria.ee/mod/page/view.php?id=382).
-
-
 ## 6. Häälestus fail (dhx-application.properties)
 
 Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](java-teegid-kasutusjuhend.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
