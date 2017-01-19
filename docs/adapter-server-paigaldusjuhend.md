@@ -35,9 +35,9 @@ Sisukord
         * [4\.3\.5\. Kompilleerida lähtekood Maven\-iga](#435-kompilleerida-l%C3%A4htekood-maven-iga)
         * [4\.3\.6\. Paigaldada WAR fail](#436-paigaldada-war-fail)
     * [5\. DHX teenuste registreerimine ja avamine X-tee turvaserveris](#5-dhx-teenuste-registreerimine-ja-avamine-x-tee-turvaserveris)
-    * [6\. Teadaolevad probleemid (sõltuvuste konfliktid)](#6-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
-    * [7\. Häälestus fail (dhx\-application\.properties)](#7-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
-    * [8\. Klastrisse paigaldamine (Failover/Load balancing)](#8-klastrisse-paigaldamine-failoverload-balancing)
+    * [6\. Häälestus fail (dhx\-application\.properties)](#6-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
+    * [7\. Klastrisse paigaldamine (Failover/Load balancing)](#7-klastrisse-paigaldamine-failoverload-balancing)
+    * [8\. Teadaolevad probleemid (sõltuvuste konfliktid)](#8-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
 
 ## 1. Sissejuhatus
 
@@ -369,17 +369,7 @@ Märkus:
 > Selle kohta loe täpsemalt [DHX vahendamine](https://e-gov.github.io/DHX/#6-vahendamine) ja [X-tee teenuste vahendamine](https://moodle.ria.ee/mod/page/view.php?id=382).
 
 
-
-
-
-## 6. Teadaolevad probleemid (sõltuvuste konfliktid)
-
-Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
-
-Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
-
-
-## 7. Häälestus fail (dhx-application.properties)
+## 6. Häälestus fail (dhx-application.properties)
 
 Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](java-teegid-kasutusjuhend.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
 
@@ -435,7 +425,7 @@ Märkus:
 > Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud. 
 
 
-## 8. Klastrisse paigaldamine (Failover/Load balancing)
+## 7. Klastrisse paigaldamine (Failover/Load balancing)
 
 DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 
@@ -469,4 +459,10 @@ Kindluse mõttes on mõistlik ühes klastri sõlmes dokumentide kustutamine keel
 Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb ainult X-tee turvaserver, sõlmega B suhtleb ainult asutuse DHS süsteem:
 
 ![](dhx-adapter-cluster2.png)
+
+## 8. Teadaolevad probleemid (sõltuvuste konfliktid)
+
+Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
+
+Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
