@@ -505,3 +505,49 @@ Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus t
 
 Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
+## 9. Paigalduse testimine (SoapUI)
+
+Paigaldust saab soovi korral testida [SoapUI](https://www.soapui.org/) programmiga.
+
+Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võib olla kindel et toimivad:
+* DHX adapterserveri ja andmebaasi vaheline ühendus
+* DHX adapterserveri ja X-tee turvaserveri vaheline ühendus
+
+1) Avada SoapUI ja lisada uus projekt, sisestades WSDL aadressiks `http://localhost:8080/dhx-adapter-server/wsServer/dhl.wsdl` (muuta vajadusel host ja port).
+
+2) Genereeritud projekti all avada `getSendingOptions`->`Reqest1`.
+
+3) Üleval ripploendis kuvatakse teenuse aadress. Valida seal "Edit current" ja sisestada aadressiks `http://localhost:8080/dhx-adapter-server/wsServer` (muuta vajadusel host ja port).
+
+4) Sisestada Rrquest XML väljale järgmine väärtus, muutes endale vastavaks väärtused `ee-dev`, `GOV` ja `40000001` (registrikood)
+
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
+   <soapenv:Header>
+      <xro:protocolVersion>4.0</xro:protocolVersion>
+      <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
+      <xro:service iden:objectType="SERVICE">
+         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+         <iden:memberClass>GOV</iden:memberClass>
+         <iden:memberCode>40000001</iden:memberCode>
+         <iden:subsystemCode>DHX</iden:subsystemCode>
+         <iden:serviceCode>getSendingOptions</iden:serviceCode>
+         <iden:serviceVersion>v2</iden:serviceVersion>
+      </xro:service>
+      <xro:client iden:objectType="?">
+         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+         <iden:memberClass>GOV</iden:memberClass>
+         <iden:memberCode>40000001</iden:memberCode>
+         <iden:subsystemCode>DHX</iden:subsystemCode>
+      </xro:client>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:getSendingOptions>
+         <keha></keha>
+      </dhl:getSendingOptions>
+   </soapenv:Body>
+</soapenv:Envelope>
+```xml
+
+4) Kävitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
+
