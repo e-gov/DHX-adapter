@@ -527,7 +527,7 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
    <soapenv:Header>
       <xro:protocolVersion>4.0</xro:protocolVersion>
       <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
-      <xro:service iden:objectType="SERVICE">
+      <xro:service>
          <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
          <iden:memberClass>GOV</iden:memberClass>
          <iden:memberCode>40000001</iden:memberCode>
@@ -535,7 +535,7 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
          <iden:serviceCode>getSendingOptions</iden:serviceCode>
          <iden:serviceVersion>v2</iden:serviceVersion>
       </xro:service>
-      <xro:client iden:objectType="?">
+      <xro:client>
          <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
          <iden:memberClass>GOV</iden:memberClass>
          <iden:memberCode>40000001</iden:memberCode>
