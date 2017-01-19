@@ -400,9 +400,9 @@ Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v
 **3.3)** Lisada õigus globaalsele X-tee grupile "Kõik X-tee kasutajad"
 
 Märkus:
-> Üldjuhul piisab õiguste andmisest ainult "sendDocument" teenusele, ning "representationList" võib ignoreerida.
+> Üldjuhul piisab õiguste andmisest ainult "sendDocument" teenusele, ning "representationList" teenust võib ignoreerida.
 > 
-> "representationList" teenuseõiguste andmine on vajalik ainult siis, kui asutus käitub [DHX vahendajana](https://e-gov.github.io/DHX/#6-vahendamine).   
+> "representationList" teenusele õiguste andmine on vajalik ainult siis, kui asutus käitub [DHX vahendajana](https://e-gov.github.io/DHX/#6-vahendamine).   
 
 ## 6. Häälestus fail (dhx-application.properties)
 
