@@ -51,7 +51,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
 
-### sendDocuments (sisemine liides)
+### 3.1. sendDocuments (sisemine liides)
 
 SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
 Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd) versioonis (vanemad Kapsli versioonid ei ole toetatud).
@@ -60,11 +60,11 @@ DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SO
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
 Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStatus](#getsendstatus-sisemine-liides).
 
-`sendDocuments.v4` saatmise näidet vaata dokumendist [Testilood - 2.1. Õige kapsli saatmine](https://github.com/e-gov/DHX-adapter/blob/master/docs/adapter-server-testilood.md#2.1).
+`sendDocuments.v4` saatmise näidet vaata dokumendist Testilood - [2.1. Õige kapsli saatmine](adapter-server-testilood.md#2.1).
  
- Lisaks vaata kirjeldust vanast DVK spetsifikatsiooni [sendDocuments.v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4). 
+ Lisaks vaata kirjeldust vana DVK spetsifikatsiooni [sendDocuments.v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4). 
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](https://github.com/e-gov/DHX-adapter/blob/master/docs/adapter-server-testilood.md#2.1).
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.1).
 
 Märkused vana DVK X-tee liidese kasutajale:
 > Võrreldes DVK sendDocuments liidestega on dhx-adpater-serveris realiseeritud on ainult sendDocuments operatsioonide [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4) versioon, mis eeldab et dokumendi Kapsel on 2.1 formaadis.
@@ -72,20 +72,27 @@ Märkused vana DVK X-tee liidese kasutajale:
 > Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) dhx-adpater-server ei paku.
 
 
-### getSendStatus (sisemine liides)
+### 3.2. getSendStatus (sisemine liides)
 
-SOAP operatsiooni `getSendStatus.v2` kasutatakse saadetud dokumendi staatuse ja saatmisel ilmnenud vea info (fault) küsimiseks.
+SOAP operatsiooni `getSendStatus` kasutatakse saadetud dokumendi staatuse ja saatmisel ilmnenud vea info (fault) küsimiseks.
+
 Võimalikud staatused on:
 * `saatmisel` – dokumenti üritatakse veel antud saajale edastada
 * `saadetud` – dokument sai edukalt antud saajale saadetud
 * `katkestatud` – dokumenti ei õnnestunud antud saajale saata.
 
+`getSendStatus.v2` saatmise näidet vaata dokumendist Testilood - [2.11. DHX-i saadetud dokumendi staatuse pärimine](adapter-server-testilood.md#2.11).
+
+Lisaks vaata kirjeldust vana DVK spetsifikatsiooni [getSendStatus.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1). ja [getSendStatus.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
+ 
+> **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.11).
+
+
 Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#edastatud-dokumentide-staatuse-kontroll).
 
 Märkused vana DVK X-tee liidese kasutajale:
-> Võrreldes DVK getSendStatus liidestega on dhx-adpater-serveris realiseeritud on ainult getSendStatus operatsioonide [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2) versioon.
->
-> Vanemat DVK getSendStatus versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-server ei paku.
+> DHX adpaterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
 
 
 ## 4. Erinevused DVK liidesega võrreldes
@@ -94,7 +101,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 * SWAREF manuse cid väärtus peab olema URL kodeeritud (DVK korral see ei tohtinud olla URL kodeeritud)
 
-## Vahendajana saatmine/vastuvõtmine
+## 5. Vahendajana saatmine/vastuvõtmine
 
 Asutus võib DHX adpaterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine). 
 
