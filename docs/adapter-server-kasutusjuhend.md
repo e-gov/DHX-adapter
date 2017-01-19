@@ -32,7 +32,57 @@ Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<POR
 Sisemisel liidese [WSDL](../dhx-adapter-server/src/main/resources/dhl.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhl.wsdl`. 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
   
-## 3. Sisemine liides
+### 3. SoapUI-ga testimine
+
+Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) programmiga.
+
+**1)** Avada SoapUI ja lisada uus projekt, sisestades WSDL aadressiks `http://localhost:8080/dhx-adapter-server/wsServer/dhl.wsdl` (muuta vajadusel host ja port).
+
+**2)** Genereeritud projekti all avada näiteks `dhlSoapBinding`->`getSendingOptions`->`Request 1`.
+
+**3)** Üleval ripploendis kuvatakse teenuse aadress. Valida seal "Edit current" ja sisestada aadressiks `http://localhost:8080/dhx-adapter-server/wsServer` (muuta vajadusel host ja port).
+
+**4)** Sisestada Request XML väljale järgmine väärtus, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (asutuse enda registrikood) nong käivitada päring.
+
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
+   <soapenv:Header>
+      <xro:protocolVersion>4.0</xro:protocolVersion>
+      <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
+      <xro:service>
+         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+         <iden:memberClass>GOV</iden:memberClass>
+         <iden:memberCode>40000001</iden:memberCode>
+         <iden:subsystemCode>DHX</iden:subsystemCode>
+         <iden:serviceCode>getSendingOptions</iden:serviceCode>
+         <iden:serviceVersion>v2</iden:serviceVersion>
+      </xro:service>
+      <xro:client>
+         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+         <iden:memberClass>GOV</iden:memberClass>
+         <iden:memberCode>40000001</iden:memberCode>
+         <iden:subsystemCode>DHX</iden:subsystemCode>
+      </xro:client>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:getSendingOptions>
+         <keha></keha>
+      </dhl:getSendingOptions>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+Märkus:
+> Vastuseks saadud manused on gzip pakitud ja seejärel BASE64 kodeeritud.
+> 
+> Need saab Linux/unix alla lahti kodeerida salvestades manuse faili "result.txt" ja käivitades seejärel:
+> ``` 
+>  cat result.txt | base64 -d | gunzip
+> ```
+
+
+
+## 4. Sisemine liides
 
 Sisemist liidest kasutab asutuse DHS tarkvara dokumentide saatmiseks ja vastuvõtmiseks.
 
@@ -47,11 +97,11 @@ Märkused vana DVK X-tee liidese kasutajale:
 > 
 > Sisemises liideses on implementeeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
-> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](#4-erinevused-dvk-liidesega-võrreldes). 
+> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](#5-erinevused-dvk-liidesega-võrreldes). 
 
 Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
 
-### 3.1. sendDocuments (sisemine liides)
+### 4.1. sendDocuments (sisemine liides)
 
 SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
 Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd) versioonis (vanemad Kapsli versioonid ei ole toetatud).
@@ -72,7 +122,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 > Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) dhx-adpater-server ei paku.
 
 
-### 3.2. getSendStatus (sisemine liides)
+### 4.2. getSendStatus (sisemine liides)
 
 SOAP operatsiooni `getSendStatus` kasutatakse saadetud dokumendi staatuse ja saatmisel ilmnenud vea info (fault) küsimiseks.
 
@@ -95,13 +145,13 @@ Märkused vana DVK X-tee liidese kasutajale:
 > DHX adpaterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
 
 
-## 4. Erinevused DVK liidesega võrreldes
+## 5. Erinevused DVK liidesega võrreldes
 
 * 
 
 * SWAREF manuse cid väärtus peab olema URL kodeeritud (DVK korral see ei tohtinud olla URL kodeeritud)
 
-## 5. Vahendajana saatmine/vastuvõtmine
+## 6. Vahendajana saatmine/vastuvõtmine
 
 Asutus võib DHX adpaterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine). 
 
