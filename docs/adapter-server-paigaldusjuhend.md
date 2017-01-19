@@ -172,7 +172,9 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL94Dial
 ```
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
-2) Teha Tomcati restart.
+2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/tmp/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.   
+
+3) Teha Tomcati restart.
 
 Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux/Unix).
 
@@ -185,7 +187,7 @@ Märkus:
 > Selle määrab `dhx-application.properties` failis parameeter `spring.jpa.hibernate.ddl-auto=update` .
 > Vaata [Spring boot juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html#howto-initialize-a-database-using-hibernate).
 
-3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+4) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
 #### 4.1.6. Paigaldada Tomcat Windows Servicena või Linux deemonina. 
 
@@ -245,13 +247,15 @@ spring.datasource.type=oracle.jdbc.pool.OracleDataSource
 ```
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
-2) Teha Tomcati restart.
+2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/tmp/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.
+
+3) Teha Tomcati restart.
 
 Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux/Unix).
 
 Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
-3) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+4) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
 #### 4.2.6. Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
