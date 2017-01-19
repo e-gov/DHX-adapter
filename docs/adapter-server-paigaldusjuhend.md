@@ -520,7 +520,7 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 
 3) Üleval ripploendis kuvatakse teenuse aadress. Valida seal "Edit current" ja sisestada aadressiks `http://localhost:8080/dhx-adapter-server/wsServer` (muuta vajadusel host ja port).
 
-4) Sisestada Request XML väljale järgmine väärtus, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (registrikood)
+4) Sisestada Request XML väljale järgmine väärtus, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (asutuse enda registrikood)
 
 ```xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
@@ -550,5 +550,5 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 </soapenv:Envelope>
 ```
 
-5) Kävitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
+5) Käivitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
 
