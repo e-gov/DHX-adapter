@@ -446,8 +446,8 @@ PostgreSQL korral tuleb muuta järgmiste parameetrite väärtused.
 
 Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 ------------ | ------------- | ------------- | -------------
-spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx-adapter| Postgres andmebaasi hosti nimi8 (localhost), port (5432) ja andmebaasi nimi (dhx-adapter)
-spring.datasource.username | | postgres | Postgres andmebaasi kasutajanimi
+spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx_adapter| Postgres andmebaasi host (localhost), port (5432) ja andmebaasi nimi (dhx_adapter)
+spring.datasource.username | | dhxuser | Postgres andmebaasi kasutajanimi
 spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
 spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab et kasutame Postgres JDBC draiverit
 spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| Määrab et kasutame Posgres 9.4, 9.5 või 9.6 versiooni.
@@ -470,8 +470,8 @@ Märkus:
 >  soap.member-class=GOV
 >  soap.member-code=40000001
 >  documents.folder = C:\\dhx_docs\\
->  spring.datasource.url=jdbc:postgresql://localhost:5432/dhx-adapter
->  spring.datasource.username=postgres
+>  spring.datasource.url=jdbc:postgresql://localhost:5432/dhx_adapter
+>  spring.datasource.username=dhxuser
 >  spring.datasource.password=1*2*3
 >  spring.datasource.driver-class-name=org.postgresql.Driver
 >  spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
