@@ -567,3 +567,10 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 
 5) Käivitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
 
+Märkus:
+> Vastuseks saadud manus on gzip pakitud ja seejärel BASE64 kodeeritud.
+> 
+> Selle võib Linux/unix alla lahti kodeerida salvestades manuse faili "result.txt" ja käivitades seejärel:
+> ``` 
+>  cat result.txt | base64 -d | gunzip
+> ```
