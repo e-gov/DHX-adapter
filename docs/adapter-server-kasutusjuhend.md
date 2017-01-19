@@ -32,7 +32,7 @@ Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<POR
 Sisemisel liidese [WSDL](../dhx-adapter-server/src/main/resources/dhl.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhl.wsdl`. 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
   
-### 3. SoapUI-ga testimine
+### 3. SoapUI testimine
 
 Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) programmiga.
 
@@ -80,7 +80,7 @@ Märkus:
 >  cat result.txt | base64 -d | gunzip
 > ```
 
-
+SoapUI-ga testimise kohta loe eraldi dokumentatsioonist [SoapUI testide käivitamise juhend](adapter-server-soapui-test-juhend.md) ja [Testlood](adapter-server-testilood.md). 
 
 ## 4. Sisemine liides
 
@@ -108,7 +108,7 @@ Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/m
 
 DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
-Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStatus](#getsendstatus-sisemine-liides).
+Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStatus](#42-getsendstatus-sisemine-liides).
 
 `sendDocuments.v4` saatmise näidet vaata dokumendist Testilood - [2.1. Õige kapsli saatmine](adapter-server-testilood.md#2.1).
  
