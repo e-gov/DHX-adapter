@@ -2,7 +2,6 @@ package ee.ria.dhx.server.persistence.service;
 
 import com.jcabi.aspects.Loggable;
 
-
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.config.DhxServerConfig;
@@ -38,23 +37,18 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.activation.DataHandler;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -98,7 +92,7 @@ public class CapsuleService {
   @Autowired
   @Setter
   DhxServerConfig dhxServerConfig;
-  
+
   /**
    * Methods creates Document object from IncomingDhxPackage. Created object is not saved in
    * database. If document senders's organisation is not found, it is created and saved.
@@ -268,8 +262,9 @@ public class CapsuleService {
           fos = null;
           attachmentStream = null;
           DocumentsArrayType docs = null;
-          if(dhxMarshallerService instanceof DhxMarshallerServiceImpl) {
-            docs = ((DhxMarshallerServiceImpl)dhxMarshallerService).unmarshall(tempFile, DocumentsArrayType.class);
+          if (dhxMarshallerService instanceof DhxMarshallerServiceImpl) {
+            docs = ((DhxMarshallerServiceImpl) dhxMarshallerService).unmarshall(tempFile,
+                DocumentsArrayType.class);
           } else {
             docs = dhxMarshallerService.unmarshall(tempFile);
           }
@@ -323,8 +318,8 @@ public class CapsuleService {
     }
     Document document = new Document();
     document.setCapsuleVersion(version.toString());
-    //set null as subsystem if provided empty string for example
-    if(StringUtil.isNullOrEmpty(senderMember.getSubsystemCode())) {
+    // set null as subsystem if provided empty string for example
+    if (StringUtil.isNullOrEmpty(senderMember.getSubsystemCode())) {
       senderMember.setSubsystemCode(null);
     }
     DhxOrganisation dhxSenderOrg = DhxOrganisationFactory.createDhxOrganisation(senderMember);
@@ -337,7 +332,7 @@ public class CapsuleService {
     if (senderOrg == null) {
       log.debug(
           "sender organisation is not found in database, "
-          + "need to create organiastion from InternalXroadMember.");
+              + "need to create organiastion from InternalXroadMember.");
       if (senderMember.getRepresentee() != null) {
         Organisation representor = persistenceService
             .getOrganisationFromInternalXroadMemberAndSave(senderMember, true, false);
@@ -414,9 +409,11 @@ public class CapsuleService {
       File docFile = dhxServerConfig.createDocumentFile();
       dhxMarshallerService.marshall(container, docFile);
       document.setContent(docFile.getName());
-     /* StringWriter writer =
-          dhxMarshallerService.marshallToWriterAndValidate(container, schemaStream);*/
-     // document.setContent(writer.toString());
+      /*
+       * StringWriter writer = dhxMarshallerService.marshallToWriterAndValidate(container,
+       * schemaStream);
+       */
+      // document.setContent(writer.toString());
     } finally {
       FileUtil.safeCloseStream(schemaStream);
     }
@@ -440,8 +437,8 @@ public class CapsuleService {
     try {
       File file = dhxServerConfig.getDocumentFile(doc.getContent());
       stringStream = new FileInputStream(file);
-     // String cps = WsUtil.readInput(stringStream);
-     // log.debug("trying to unmarshall capsule: " + cps);
+      // String cps = WsUtil.readInput(stringStream);
+      // log.debug("trying to unmarshall capsule: " + cps);
       container = dhxMarshallerService.unmarshallAndValidate(stringStream, schemaStream);
       setDecMetadataFromDocument(container, doc);
     } catch (IOException ex) {
@@ -507,14 +504,16 @@ public class CapsuleService {
             "Unable to find adressees for given verion. version:" + version.toString());
     }
   }
-  
+
   /**
-   * When all actions with contianer are complete, delete file which might be related to the container.
+   * When all actions with contianer are complete, delete file which might be related to the
+   * container.
+   * 
    * @param containerObject container to cleanup
    * @throws DhxException thrown when error occurs
    */
   @Loggable
-  public void cleanupContainer (Object containerObject) throws DhxException{
+  public void cleanupContainer(Object containerObject) throws DhxException {
     if (containerObject == null) {
       return;
     }
@@ -523,10 +522,11 @@ public class CapsuleService {
       case V21:
         DecContainer container = (DecContainer) containerObject;
         if (container != null && container.getFile() != null) {
-          for(ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.File decFile : container.getFile()) {
-            if(decFile.getZipBase64Content() != null) {
-             decFile.getZipBase64Content().delete(); 
-            }            
+          for (ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer.File decFile : container
+              .getFile()) {
+            if (decFile.getZipBase64Content() != null) {
+              decFile.getZipBase64Content().delete();
+            }
           }
         }
         break;
@@ -535,9 +535,15 @@ public class CapsuleService {
             "Unable to cleanup container of given version. version:" + version.toString());
     }
   }
-  
-  public void cleanupContainers (List<? extends Object> containers) throws DhxException{
-    for(Object obj : containers) {
+
+  /**
+   * When all actions with contianer are complete, delete file which might be related to the
+   * container.
+   * @param containers list of container to cleanup
+   * @throws DhxException thrown if error occurs
+   */
+  public void cleanupContainers(List<? extends Object> containers) throws DhxException {
+    for (Object obj : containers) {
       cleanupContainer(obj);
     }
   }

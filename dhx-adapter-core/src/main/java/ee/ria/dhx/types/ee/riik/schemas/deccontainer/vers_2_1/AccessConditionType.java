@@ -36,8 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 public enum AccessConditionType {
 
   @XmlEnumValue("Avalik")
-  AVALIK("Avalik"),
-  AK("AK");
+  AVALIK("Avalik"), AK("AK");
   private final String value;
 
   AccessConditionType(String v) {

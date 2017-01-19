@@ -44,8 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XRoadServiceIdentifierType")
 public class XRoadServiceIdentifierType
-    extends XRoadIdentifierType
-{
+    extends XRoadIdentifierType {
 
 
 }

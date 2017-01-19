@@ -41,6 +41,8 @@ public class BigDataUnmarshallHandler extends BigDataHandler {
   /**
    * 
    * @param handler - content handler which will process all not BIG DATA elements.
+   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
+   *        expected
    * @param bigDataElements - list of big data elements to which found big data elements will be
    *        written
    */

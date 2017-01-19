@@ -40,14 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum XRoadObjectType {
 
-  MEMBER,
-  SUBSYSTEM,
-  SERVER,
-  GLOBALGROUP,
-  LOCALGROUP,
-  SECURITYCATEGORY,
-  SERVICE,
-  CENTRALSERVICE;
+  MEMBER, SUBSYSTEM, SERVER, GLOBALGROUP, LOCALGROUP, SECURITYCATEGORY, SERVICE, CENTRALSERVICE;
 
   public String value() {
     return name();

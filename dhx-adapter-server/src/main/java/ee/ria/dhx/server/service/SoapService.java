@@ -22,13 +22,17 @@ import ee.ria.dhx.server.service.util.WsUtil;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.AadressType;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.Edastus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptions;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsResponse;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionRefsArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedV3RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ObjectFactory;
@@ -46,6 +50,7 @@ import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.OutgoingDhxPackage;
 import ee.ria.dhx.util.CapsuleVersionEnum;
 import ee.ria.dhx.util.ConversionUtil;
+import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.AddressService;
@@ -63,10 +68,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ws.context.MessageContext;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -76,6 +86,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.activation.DataHandler;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Class that gets SOAP request objects(from DVK services), processes requests and gives SOAP
@@ -137,7 +151,7 @@ public class SoapService {
   @Autowired
   @Setter
   SoapConfig soapConfig;
-  
+
   @Autowired
   @Setter
   DhxServerConfig dhxServerConfig;
@@ -185,7 +199,7 @@ public class SoapService {
               documents.getKeha().getKaust(), version);
       documentRepository.save(document);
       attachmentObj.getDhlId().add(document.getDocumentId().toString());
-     
+
 
     }
     capsuleService.cleanupContainers(containers);
@@ -319,8 +333,8 @@ public class SoapService {
     } else {
       pageable = new PageRequest(0, 10);
     }
-    //set null as subsystem if provided empty string for example
-    if(StringUtil.isNullOrEmpty(sender.getSubsystemCode())) {
+    // set null as subsystem if provided empty string for example
+    if (StringUtil.isNullOrEmpty(sender.getSubsystemCode())) {
       sender.setSubsystemCode(null);
     }
     Organisation senderOrg =
@@ -352,7 +366,6 @@ public class SoapService {
       log.debug("found docs: " + docs.size());
     }
     ObjectFactory fact = new ObjectFactory();
-    ReceiveDocumentsResponse resp = fact.createReceiveDocumentsResponse();
     Base64BinaryType att = fact.createBase64BinaryType();
     List<Object> containers = new ArrayList<Object>();
     for (Document doc : docs) {
@@ -364,30 +377,133 @@ public class SoapService {
     DataHandler handler = convertationService.createDatahandlerFromList(containers);
     capsuleService.cleanupContainers(containers);
     att.setHref(handler);
+    ReceiveDocumentsResponse resp = fact.createReceiveDocumentsResponse();
     resp.setKeha(att);
     return resp;
+  }
+
+  /**
+   * Because we need to support multiple different versions, therefore we need to parse the body and
+   * set it to request manually.
+   */
+  private void setMarkDocumentsReceivedRequestBody(MarkDocumentsReceived requestWrapper,
+      MessageContext context, InternalXroadMember recipientMember) throws DhxException {
+    MarkDocumentsReceivedV3RequestType request = null;
+    if (!StringUtil.isNullOrEmpty(requestWrapper.getKeha().getDokumendid().getHrefString())
+        || requestWrapper.getKeha() != null) {
+      /*
+       * (requestWrapper.getAny() != null && requestWrapper.getAny().size() > 0 &&
+       * requestWrapper.getAny().get(0).getTagName().equals("keha") &&
+       * requestWrapper.getAny().get(0).getFirstChild() != null &&
+       * requestWrapper.getAny().get(0).getFirstChild().getLocalName().equals("dokumendid")) {
+       */
+      // Node keha = requestWrapper.getAny().get(0);
+      // Node dokumendid = requestWrapper.getAny().get(0).getFirstChild();
+      log.debug("Found keha and dokumendid elements in request.");
+      if (!recipientMember.getServiceVersion().equals("v3")) {
+        /*
+         * log.debug("Dealing with request in body(v3)."); request =
+         * dhxMarshallerService.unmarshall(keha); } else
+         */ {
+          /*
+           * for (int i = 0; i < dokumendid.getAttributes().getLength(); i++) { Node att =
+           * dokumendid.getAttributes().item(i); if (att.getLocalName().equals("href")) { String
+           * content = att.getTextContent();
+           */
+          log.debug("Dealing with request in attachment defined in href(v2, v1).");
+          InputStream attachmentStream = null;
+          FileOutputStream fos = null;
+          File tempFile = null;
+          try {
+            tempFile = FileUtil.createPipelineFile();
+            fos = new FileOutputStream(tempFile);
+            DataHandler attachmentHandler = WsUtil.extractAttachment(context,
+                requestWrapper.getKeha().getDokumendid().getHrefString());
+            // first try extract
+            if (recipientMember.getServiceVersion().equals("v2")) {
+              attachmentStream = WsUtil.base64DecodeIfNeededAndUnzip(attachmentHandler);
+              FileUtil.writeToFile(
+                  "<dokumendid>", fos);
+              FileUtil.writeToFile(attachmentStream, fos);
+              FileUtil.writeToFile("</dokumendid>", fos);
+              fos.flush();
+              FileUtil.safeCloseStream(fos);
+              FileUtil.safeCloseStream(attachmentStream);
+              fos = null;
+              attachmentStream = null;
+              Dokumendid docs = dhxMarshallerService.unmarshall(tempFile);
+              request = new MarkDocumentsReceivedV3RequestType();
+              request.setDokumendid(docs);
+            } else if (recipientMember.getServiceVersion().equals("v1")) {
+              request = new MarkDocumentsReceivedV3RequestType();
+              List<TagasisideType> taagsisideList = new ArrayList<TagasisideType>();
+              request.setDokumendid(new Dokumendid());
+              request.getDokumendid().setTagasisided(taagsisideList);
+              org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
+                WsUtil.base64DecodeIfNeededAndUnzip(
+                    attachmentHandler));
+              NodeList list = xmlDoc.getElementsByTagName("dhl_id");
+              for (int j = 0; j < list.getLength(); j++) {
+                Node node = list.item(j);
+                log.debug("dhl id " + node.getTextContent());
+                TagasisideType tagasiside = new TagasisideType();
+                tagasiside.setDhlId(BigInteger.valueOf(Long.valueOf(node.getTextContent())));
+                taagsisideList.add(tagasiside);
+              }
+              if (taagsisideList.size() == 0) {
+                throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+                    "No dhl ids are provided to get status for.");
+              }
+            }
+          } catch (IOException ex) {
+            throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+                "Error occured while parsing attachment." + ex.getMessage(), ex);
+          } finally {
+            FileUtil.safeCloseStream(attachmentStream);
+            FileUtil.safeCloseStream(fos);
+            if (tempFile != null) {
+              tempFile.delete();
+            }
+          }
+          // break;
+        }
+        requestWrapper.setKeha(request);
+      }
+      // }
+    } else {
+      throw new DhxException("Request is empty or invalid!");
+    }
   }
 
   /**
    * Method marks documents with status provided in request. Documents which will be marked are
    * parameters provided in request.
    * 
-   * @param request - SOAP request object
-   * @param senderMember - sender of the request(from SOAP header)
-   * @param recipientMember - recipient of the request(from SOAP header)
-   * @return - SOAP response object
+   * @param requestWrapper SOAP request object
+   * @param senderMember sender of the request(from SOAP header)
+   * @param recipientMember recipient of the request(from SOAP header)
+   * @param context SOAP context, used for attachment parsing
+   * @return SOAP response object
    * @throws DhxException thrown if error occurs
    */
   @Loggable
   public MarkDocumentsReceivedResponse markDocumentReceived(
-      MarkDocumentsReceivedV3RequestType request,
-      InternalXroadMember senderMember, InternalXroadMember recipientMember) throws DhxException {
-    if (request.getDokumendid() == null || request.getDokumendid().size() == 0) {
+      MarkDocumentsReceived requestWrapper,
+      InternalXroadMember senderMember, InternalXroadMember recipientMember,
+      MessageContext context) throws DhxException {
+    // if (requestWrapper.getKeha() == null) {
+    setMarkDocumentsReceivedRequestBody(requestWrapper, context, recipientMember);
+    // }
+    MarkDocumentsReceivedV3RequestType request = requestWrapper.getKeha();
+
+    if (request == null || request.getDokumendid() == null
+        || request.getDokumendid().getTagasisided() == null
+        || request.getDokumendid().getTagasisided().size() == 0) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "No documents to mark received is provided in request.");
     }
-    //set null as subsystem if provided empty string for example
-    if(StringUtil.isNullOrEmpty(senderMember.getSubsystemCode())) {
+    // set null as subsystem if provided empty string for example
+    if (StringUtil.isNullOrEmpty(senderMember.getSubsystemCode())) {
       senderMember.setSubsystemCode(null);
     }
     Organisation senderOrg =
@@ -408,7 +524,7 @@ public class SoapService {
     Boolean allSent = true;
     Boolean allFailed = true;
     Boolean found = false;
-    for (TagasisideType status : request.getDokumendid()) {
+    for (TagasisideType status : request.getDokumendid().getTagasisided()) {
       Document doc = documentRepository.findOne(status.getDhlId().longValue());
       if (log.isTraceEnabled()) {
         log.trace("marking document receiverd: {}", doc);
@@ -637,30 +753,90 @@ public class SoapService {
     return response;
   }
 
+  private void setGetSendingOptionsRequestBody(GetSendingOptions requestWrapper,
+      MessageContext context, InternalXroadMember recipientMember) throws DhxException {
+    GetSendingOptionsV2RequestType request = new GetSendingOptionsV2RequestType();
+    if (requestWrapper.getAny() != null && requestWrapper.getAny().size() > 0
+        && requestWrapper.getAny().get(0).getTagName().equals("keha")) {
+      Node keha = requestWrapper.getAny().get(0);
+      log.debug("Found keha element in request.");
+      if (recipientMember.getServiceVersion().equals("v1")
+          || recipientMember.getServiceVersion().equals("v2")) {
+        log.debug("Dealing with request in body(v1, v2).");
+        request = new GetSendingOptionsV2RequestType();
+        InstitutionRefsArrayType institutions = new InstitutionRefsArrayType();
+        request.setAsutused(institutions);
+        NodeList list = keha.getOwnerDocument().getElementsByTagName("asutus");
+        if (list != null) {
+          for (int j = 0; j < list.getLength(); j++) {
+            Node node = list.item(j);
+            log.debug("asutus " + node.getTextContent());
+            institutions.getAsutus().add(node.getTextContent());
+          }
+        }
+      } else {
+        for (int i = 0; i < keha.getAttributes().getLength(); i++) {
+          Node att = keha.getAttributes().item(i);
+          if (att.getLocalName().equals("href")) {
+            String content = att.getTextContent();
+            log.debug("Dealing with request in attachment defined in href(v3).");
+            DataHandler attachmentHandler = WsUtil.extractAttachment(context, content);
+            org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
+                WsUtil.base64DecodeIfNeededAndUnzip(
+                    attachmentHandler));
+            InstitutionRefsArrayType institutions = new InstitutionRefsArrayType();
+            request.setAsutused(institutions);
+            NodeList list = keha.getOwnerDocument().getElementsByTagName("asutus");
+            if (list != null) {
+              for (int j = 0; j < list.getLength(); j++) {
+                Node node = list.item(j);
+                log.debug("asutus " + node.getTextContent());
+                institutions.getAsutus().add(node.getTextContent());
+              }
+            }
+          }
+          break;
+        }
+      }
+    } else {
+      throw new DhxException("Request is empty or invalid!");
+    }
+    requestWrapper.setKeha(request);
+  }
+
   /**
    * Method returns list of organisations that are able to receive the documents using DHX protocol.
    * 
-   * @param request - SOAP request object
-   * @param senderMember - sender of the request(from SOAP header)
-   * @param recipientMember - recipient of the request(from SOAP header)
-   * @return - SOAP response object
+   * @param request SOAP request object
+   * @param senderMember sender of the request(from SOAP header)
+   * @param recipientMember recipient of the request(from SOAP header)
+   * @param context Soap message context
+   * @return SOAP response object
    * @throws DhxException thrown if error occurs
    */
   @Loggable
   public GetSendingOptionsResponse getSendingOptions(GetSendingOptions request,
       InternalXroadMember senderMember,
-      InternalXroadMember recipientMember) throws DhxException {
-    // request.getKeha().getAsutused().getAsutus()
+      InternalXroadMember recipientMember, MessageContext context) throws DhxException {
+    if (request.getKeha() == null) {
+      setGetSendingOptionsRequestBody(request, context, recipientMember);
+    }
     GetSendingOptionsResponse response = new GetSendingOptionsResponse();
-    response.setKeha(new Base64BinaryType());
-    InstitutionArrayType institutions = new InstitutionArrayType();
+    // new InstitutionArrayType();
+    ObjectFactory fact = new ObjectFactory();
+    InstitutionArrayType institutions = fact.createInstitutionArrayType();
     for (InternalXroadMember org : addressService.getAdresseeList()) {
       InstitutionType institution = new InstitutionType();
       if (org.getRepresentee() == null) {
         institution.setRegnr(
             persistenceService.toDvkCapsuleAddressee(org.getMemberCode(),
                 org.getSubsystemCode()));
-        institution.setNimi(org.getName());
+        String subsystem = "";
+        if (!StringUtil.isNullOrEmpty(org.getSubsystemCode())
+            && !soapConfig.getDhxSubsystemPrefix().equals(org.getSubsystemCode())) {
+          subsystem = "(" + org.getSubsystemCode() + ")";
+        }
+        institution.setNimi(org.getName() + subsystem);
 
       } else {
         Date curDate = new Date();
@@ -673,6 +849,11 @@ public class SoapService {
         institution.setRegnr(
             persistenceService.toDvkCapsuleAddressee(org.getRepresentee().getRepresenteeCode(),
                 org.getRepresentee().getRepresenteeSystem()));
+        String subsystem = "";
+        if (!StringUtil.isNullOrEmpty(org.getRepresentee().getRepresenteeSystem()) && !soapConfig
+            .getDhxSubsystemPrefix().equals(org.getRepresentee().getRepresenteeSystem())) {
+          subsystem = "(" + org.getRepresentee().getRepresenteeSystem() + ")";
+        }
         institution.setNimi(org.getRepresentee().getRepresenteeName());
       }
       SendingOptionArrayType sendingOptions = new SendingOptionArrayType();
@@ -688,8 +869,37 @@ public class SoapService {
         institutions.getAsutus().add(institution);
       }
     }
-    DataHandler handler = convertationService.createDatahandlerFromObject(institutions);
-    response.getKeha().setHref(handler);
+    if (recipientMember.getServiceVersion().equals("v1")
+        || recipientMember.getServiceVersion().equals("v2")) {
+      try {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(false);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        org.w3c.dom.Document document = db.newDocument();
+        dhxMarshallerService.getMarshaller().marshal(institutions, document);
+        List<Element> eles = new ArrayList<Element>();
+        eles.add(document.getDocumentElement());
+        response.setAny(eles);
+      } catch (JAXBException | ParserConfigurationException ex) {
+        throw new DhxException("Error occured while marshalling response.", ex);
+      }
+    } else {
+      try {
+        DataHandler handler = convertationService.createDatahandlerFromObject(institutions);
+        String contentId = WsUtil.addAttachment(context, handler);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(false);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        org.w3c.dom.Document document = db.newDocument();
+        dhxMarshallerService.getMarshaller().marshal(new InstitutionArrayType(), document);
+        document.getDocumentElement().setAttribute("href", contentId);
+        List<Element> eles = new ArrayList<Element>();
+        eles.add(document.getDocumentElement());
+        response.setAny(eles);
+      } catch (JAXBException | ParserConfigurationException ex) {
+        throw new DhxException("Error occured while marshalling response.", ex);
+      }
+    }
     return response;
   }
 
@@ -701,7 +911,7 @@ public class SoapService {
    * @throws DhxException thrown when error occurs
    */
   @Loggable
-  public void deleteOldDocuments(Boolean deleteWholeDocument) throws DhxException{
+  public void deleteOldDocuments(Boolean deleteWholeDocument) throws DhxException {
     Calendar receivedDocumentDate = Calendar.getInstance();
     receivedDocumentDate.add(Calendar.DAY_OF_YEAR, -receivedDocumentLifetime);
 
@@ -714,9 +924,9 @@ public class SoapService {
     if (documents.size() > 0) {
       log.debug("Found received documents to delete: " + documents.size());
     }
-    //delete file withcontent
-    for(Document doc : documents) {
-      if(doc.getContent() != null){
+    // delete file withcontent
+    for (Document doc : documents) {
+      if (doc.getContent() != null) {
         dhxServerConfig.getDocumentFile(doc.getContent()).delete();
       }
     }
@@ -734,8 +944,8 @@ public class SoapService {
     if (documents.size() > 0) {
       log.debug("Found failed documents to delete: " + documents.size());
     }
-    for(Document doc : documents) {
-      if(doc.getContent() != null){
+    for (Document doc : documents) {
+      if (doc.getContent() != null) {
         dhxServerConfig.getDocumentFile(doc.getContent()).delete();
       }
     }

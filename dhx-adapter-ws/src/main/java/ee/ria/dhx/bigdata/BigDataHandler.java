@@ -67,7 +67,8 @@ public abstract class BigDataHandler implements ContentHandler {
       throws IOException, SAXException;
 
   /**
-   * BigDataHandler
+   * BigDataHandler contructor.
+   * 
    * @param handler content handler which will process all not BIG DATA elements
    * @param bigDataClass class which is planned to parse BIG DATA in or null
    */
@@ -77,7 +78,8 @@ public abstract class BigDataHandler implements ContentHandler {
   }
 
   /**
-   * BigDataHandler
+   * BigDataHandler  contructor.
+   * 
    * @param bigDataClass class which is planned to parse BIG DATA in or null
    */
   public BigDataHandler(Class<? extends Object> bigDataClass) {

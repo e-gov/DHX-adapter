@@ -24,6 +24,7 @@ import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.persistence.service.CapsuleService;
 import ee.ria.dhx.server.persistence.service.PersistenceService;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Fault;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusResponse;
@@ -33,6 +34,7 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSending
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedV3RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocuments;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocumentsResponse;
@@ -356,7 +358,9 @@ public class SoapServiceTest {
   // not sender recipient, multiple recipients/documents, fault
   @Test
   public void markDocumentReceived() throws DhxException {
+    MarkDocumentsReceived requestWrapper = new MarkDocumentsReceived();
     MarkDocumentsReceivedV3RequestType request = new MarkDocumentsReceivedV3RequestType();
+    requestWrapper.setKeha(request);
     TagasisideType status = new TagasisideType();
     List<TagasisideType> statuss = new ArrayList<TagasisideType>();
     status.setDhlId(BigInteger.valueOf(10));
@@ -364,7 +368,8 @@ public class SoapServiceTest {
     XMLGregorianCalendar cal = ConversionUtil.toGregorianCalendar(new Date());
     status.setStaatuseMuutmiseAeg(cal);
     statuss.add(status);
-    request.setDokumendid(statuss);
+    request.setDokumendid(new Dokumendid());
+    request.getDokumendid().setTagasisided(statuss);
     // request.setKaust("");
     InternalXroadMember senderMember = getMember("sender", null);
     InternalXroadMember recipientMember = getMember("recipient", null);
@@ -379,7 +384,8 @@ public class SoapServiceTest {
     recipient.setOrganisation(senderOrg);
     doc.getTransports().get(0).addRecipient(recipient);
     when(documentRepository.findOne(10L)).thenReturn(doc);
-    soapService.markDocumentReceived(request, senderMember, recipientMember);
+    recipientMember.setServiceVersion("v3");
+    soapService.markDocumentReceived(requestWrapper, senderMember, recipientMember, null);
     verify(documentRepository, times(1)).save(doc);
     verify(recipientRepository, times(1)).save(recipient);
     assertEquals(StatusEnum.RECEIVED.getClassificatorId(),
@@ -393,7 +399,9 @@ public class SoapServiceTest {
 
   @Test
   public void markDocumentReceivedFault() throws DhxException {
+    MarkDocumentsReceived requestWrapper = new MarkDocumentsReceived();
     MarkDocumentsReceivedV3RequestType request = new MarkDocumentsReceivedV3RequestType();
+    requestWrapper.setKeha(request);
     TagasisideType status = new TagasisideType();
     List<TagasisideType> statuss = new ArrayList<TagasisideType>();
     status.setDhlId(BigInteger.valueOf(10));
@@ -407,7 +415,8 @@ public class SoapServiceTest {
     XMLGregorianCalendar cal = ConversionUtil.toGregorianCalendar(new Date());
     status.setStaatuseMuutmiseAeg(cal);
     statuss.add(status);
-    request.setDokumendid(statuss);
+    request.setDokumendid(new Dokumendid());
+    request.getDokumendid().setTagasisided(statuss);
     // request.setKaust("");
     InternalXroadMember senderMember = getMember("sender", null);
     InternalXroadMember recipientMember = getMember("recipient", null);
@@ -422,7 +431,8 @@ public class SoapServiceTest {
     recipient.setOrganisation(senderOrg);
     doc.getTransports().get(0).addRecipient(recipient);
     when(documentRepository.findOne(10L)).thenReturn(doc);
-    soapService.markDocumentReceived(request, senderMember, recipientMember);
+    recipientMember.setServiceVersion("v3");
+    soapService.markDocumentReceived(requestWrapper, senderMember, recipientMember, null);
     verify(recipientRepository, times(1)).save(recipient);
     assertEquals(StatusEnum.FAILED.getClassificatorId(),
         doc.getTransports().get(0).getStatusId());
@@ -439,7 +449,9 @@ public class SoapServiceTest {
 
   @Test
   public void markDocumentReceivedRecipientNotFound() throws DhxException {
+    MarkDocumentsReceived requestWrapper = new MarkDocumentsReceived();
     MarkDocumentsReceivedV3RequestType request = new MarkDocumentsReceivedV3RequestType();
+    requestWrapper.setKeha(request);
     TagasisideType status = new TagasisideType();
     List<TagasisideType> statuss = new ArrayList<TagasisideType>();
     status.setDhlId(BigInteger.valueOf(10));
@@ -453,7 +465,8 @@ public class SoapServiceTest {
     XMLGregorianCalendar cal = ConversionUtil.toGregorianCalendar(new Date());
     status.setStaatuseMuutmiseAeg(cal);
     statuss.add(status);
-    request.setDokumendid(statuss);
+    request.setDokumendid(new Dokumendid());
+    request.getDokumendid().setTagasisided(statuss);
     // request.setKaust("");
     InternalXroadMember senderMember = getMember("sender", null);
     InternalXroadMember recipientMember = getMember("recipient", null);
@@ -472,14 +485,17 @@ public class SoapServiceTest {
     when(documentRepository.findOne(10L)).thenReturn(doc);
     expectedEx.expect(DhxException.class);
     expectedEx.expectMessage("That document is not sent to recipient organisation");
-    soapService.markDocumentReceived(request, senderMember, recipientMember);
+    recipientMember.setServiceVersion("v3");
+    soapService.markDocumentReceived(requestWrapper, senderMember, recipientMember, null);
     verify(recipientRepository, times(0)).save(recipient);
 
   }
 
   @Test
   public void markDocumentReceivedMultiple() throws DhxException {
+    MarkDocumentsReceived requestWrapper = new MarkDocumentsReceived();
     MarkDocumentsReceivedV3RequestType request = new MarkDocumentsReceivedV3RequestType();
+    requestWrapper.setKeha(request);
     TagasisideType status = new TagasisideType();
     List<TagasisideType> statuss = new ArrayList<TagasisideType>();
     status.setDhlId(BigInteger.valueOf(10));
@@ -500,7 +516,8 @@ public class SoapServiceTest {
     fault.setFaultactor("actor");
     status2.setFault(fault);
     statuss.add(status2);
-    request.setDokumendid(statuss);
+    request.setDokumendid(new Dokumendid());
+    request.getDokumendid().setTagasisided(statuss);
     // request.setKaust("");
     InternalXroadMember senderMember = getMember("sender", null);
     InternalXroadMember recipientMember = getMember("recipient", null);
@@ -529,7 +546,8 @@ public class SoapServiceTest {
     recipient3.setOrganisation(otherOrg);
     doc2.getTransports().get(0).addRecipient(recipient3);
     when(documentRepository.findOne(11L)).thenReturn(doc2);
-    soapService.markDocumentReceived(request, senderMember, recipientMember);
+    recipientMember.setServiceVersion("v3");
+    soapService.markDocumentReceived(requestWrapper, senderMember, recipientMember, null);
     verify(documentRepository, times(1)).save(doc);
     verify(documentRepository, times(0)).save(doc2);
     verify(recipientRepository, times(1)).save(recipient);
@@ -723,13 +741,13 @@ public class SoapServiceTest {
     GetSendingOptions request = new GetSendingOptions();
     request.setKeha(new GetSendingOptionsV2RequestType());
     GetSendingOptionsResponse resp =
-        soapService.getSendingOptions(request, senderMember, recipientMember);
+        soapService.getSendingOptions(request, senderMember, recipientMember, null);
     ArgumentCaptor<InstitutionArrayType> argument =
         ArgumentCaptor.forClass(InstitutionArrayType.class);
     Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
     InstitutionArrayType items = argument.getValue();
     verify(addressService, times(1)).getAdresseeList();
-    assertEquals(handler, resp.getKeha().getHref());
+    //assertEquals(handler, resp.getKeha().getHref());
     assertEquals(6, items.getAsutus().size());
 
     assertEquals("dhl", items.getAsutus().get(0).getSaatmine().getSaatmisviis().get(0));

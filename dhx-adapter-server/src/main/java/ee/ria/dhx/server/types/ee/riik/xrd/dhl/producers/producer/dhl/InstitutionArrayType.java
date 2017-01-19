@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "keha")
+@XmlRootElement(name = "keha", namespace = "")
 @XmlType(name = "institutionArrayType", propOrder = {
     "asutus"
 })

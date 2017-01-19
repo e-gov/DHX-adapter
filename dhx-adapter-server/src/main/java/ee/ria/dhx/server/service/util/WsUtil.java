@@ -1,17 +1,21 @@
 package ee.ria.dhx.server.service.util;
 
-import ee.ria.dhx.exception.DhxException;
+import com.jcabi.aspects.Loggable;
 
+import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.util.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.ws.context.MessageContext;
+import org.springframework.ws.mime.Attachment;
+import org.springframework.ws.soap.saaj.SaajSoapMessage;
+import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -20,17 +24,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.util.Base64;
-// import java.util.Base64;
+import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
-import javax.mail.MessagingException;
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.soap.AttachmentPart;
 
 /**
  * Utility methods for web services and attachments.
@@ -40,6 +42,12 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 @Slf4j
 public class WsUtil {
+
+  private static final String ATTACHMENT_CONTENT_ENCODING = "gzip";
+  private static final String ATTACHMENT_CONTENT_TYPE =
+      "{http://www.w3.org/2001/XMLSchema}base64Binary";
+  private static final String ATTACHMENT_CONTENT_TRANSFER_ENCDING = "binary";
+  private static final String ATTACHMENT_CONTENT_ID_PREFIX = " cid:";
 
   /**
    * Creates InputStream that will GZIP decompress the stream from input.
@@ -88,14 +96,8 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static InputStream base64Decode(InputStream stream) throws DhxException {
-    // try {
-    InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);// javax.mail.internet.MimeUtility.decode(stream,
-                                                                       // "base64");
+    InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);
     return base64DecoderStream;
-    /*
-     * } catch (MessagingException ex) { throw new
-     * DhxException("Error occured while base64 encoding", ex); }
-     */
   }
 
 
@@ -107,15 +109,9 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static OutputStream getBase64EncodeStream(OutputStream stream) throws DhxException {
-    // try {
     BufferedOutputStream os = new BufferedOutputStream(stream);
-    OutputStream base64EncoderStream = Base64.getEncoder().wrap(os); // javax.mail.internet.MimeUtility.encode(os,
-                                                                     // "base64");
+    OutputStream base64EncoderStream = Base64.getEncoder().wrap(os);
     return base64EncoderStream;
-    /*
-     * } catch (MessagingException ex) { throw new
-     * DhxException("Error occured while base64 encoding", ex); }
-     */
   }
 
   /**
@@ -225,6 +221,60 @@ public class WsUtil {
           "Error occured while parsing attachment." + ex.getMessage(), ex);
     }
     return unzippedStream;
+  }
+
+  /**
+   * Method finds and returns {@link DataHandler} of the attachment by attachment content id.
+   * 
+   * @param messageContext context to search for attachment
+   * @param attachmentContentId content id of the attachment to find
+   * @return {@link DataHandler} of the found attachment
+   * @throws DhxException thrown if error occurs
+   */
+  @Loggable
+  public static DataHandler extractAttachment(
+      MessageContext messageContext, String attachmentContentId) throws DhxException {
+    SaajSoapMessage soapRequest = (SaajSoapMessage) messageContext
+        .getRequest();
+    if (attachmentContentId.startsWith("cid:")) {
+      attachmentContentId = attachmentContentId.substring(4);
+    }
+    log.debug("searching for attachment with content id: " + attachmentContentId);
+    Attachment att = soapRequest.getAttachment(attachmentContentId);
+    if (att == null) {
+      att = soapRequest.getAttachment("<" + attachmentContentId + ">");
+    }
+    if (att == null) {
+      return null;
+    }
+    return att.getDataHandler();
+
+  }
+
+  /**
+   * Method adds attachment to the context and returns generated content id of the attachment.
+   * 
+   * @param messageContext context to add attachment to
+   * @param attachmentHandler {@link DataHandler} of the attachment to add
+   * @return content id of the added attachment
+   * @throws DhxException thrown if error occurs
+   */
+  @Loggable
+  public static String addAttachment(
+      MessageContext messageContext, DataHandler attachmentHandler) throws DhxException {
+    SaajSoapMessage soapResponse = (SaajSoapMessage) messageContext
+        .getResponse();
+    AttachmentPart part = soapResponse.getSaajMessage().createAttachmentPart(attachmentHandler);
+    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TYPE, ATTACHMENT_CONTENT_TYPE);
+    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_ENCODING,
+        ATTACHMENT_CONTENT_ENCODING);
+    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TRANSFER_ENCODING,
+        ATTACHMENT_CONTENT_TRANSFER_ENCDING);
+    String contentId = UUID.randomUUID().toString();
+    part.setContentId(contentId);
+    soapResponse.getSaajMessage().addAttachmentPart(part);
+    return ATTACHMENT_CONTENT_ID_PREFIX + contentId;
+
   }
 
 }

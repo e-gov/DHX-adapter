@@ -12,6 +12,7 @@ public @interface BigDataXmlElement {
 
   /**
    * Returns name of the corresponding XML element.
+   * 
    * @return - name of the corresponding XML element
    */
   public String name();

@@ -10,12 +10,9 @@
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -48,16 +45,38 @@ public class MarkDocumentsReceivedV3RequestType {
 
   protected String kaust;
 
-  @XmlElementWrapper(name = "dokumendid")
-  @XmlElement(name = "item")
-  protected List<TagasisideType> dokumendid;
+
+  @XmlElement(name = "dokumendid")
+  Dokumendid dokumendid;
+
+  /*
+   * @XmlElementWrapper(name = "dokumendid")
+   * 
+   * @XmlElement(name = "item") protected List<TagasisideType> dokumendid;
+   */
 
 
-  public List<TagasisideType> getDokumendid() {
+  /*
+   * public List<TagasisideType> getDokumendid() { return dokumendid; }
+   * 
+   * public void setDokumendid(List<TagasisideType> dokumendid) { this.dokumendid = dokumendid; }
+   */
+
+  /**
+   * Returns the dokumendid.
+   *
+   * @return the dokumendid
+   */
+  public Dokumendid getDokumendid() {
     return dokumendid;
   }
 
-  public void setDokumendid(List<TagasisideType> dokumendid) {
+  /**
+   * Sets the dokumendid.
+   *
+   * @param dokumendid the dokumendid to set
+   */
+  public void setDokumendid(Dokumendid dokumendid) {
     this.dokumendid = dokumendid;
   }
 

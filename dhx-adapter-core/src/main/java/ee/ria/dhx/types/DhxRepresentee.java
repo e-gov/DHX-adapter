@@ -85,6 +85,7 @@ public class DhxRepresentee {
 
   /**
    * Returns the representeeCode.
+   * 
    * @return the representeeCode
    */
   public String getRepresenteeCode() {
@@ -93,6 +94,7 @@ public class DhxRepresentee {
 
   /**
    * Sets the representeeCode.
+   * 
    * @param representeeCode the representeeCode to set
    */
   public void setRepresenteeCode(String representeeCode) {
@@ -101,6 +103,7 @@ public class DhxRepresentee {
 
   /**
    * Returns the startDate.
+   * 
    * @return the startDate
    */
   public Date getStartDate() {
@@ -109,6 +112,7 @@ public class DhxRepresentee {
 
   /**
    * Sets the startDate.
+   * 
    * @param startDate the startDate to set
    */
   public void setStartDate(Date startDate) {
@@ -117,6 +121,7 @@ public class DhxRepresentee {
 
   /**
    * Returns the endDate.
+   * 
    * @return the endDate
    */
   public Date getEndDate() {
@@ -125,6 +130,7 @@ public class DhxRepresentee {
 
   /**
    * Sets the endDate.
+   * 
    * @param endDate the endDate to set
    */
   public void setEndDate(Date endDate) {
@@ -133,6 +139,7 @@ public class DhxRepresentee {
 
   /**
    * Returns the representeeName.
+   * 
    * @return the representeeName
    */
   public String getRepresenteeName() {
@@ -141,6 +148,7 @@ public class DhxRepresentee {
 
   /**
    * Sets the representeeName.
+   * 
    * @param representeeName the representeeName to set
    */
   public void setRepresenteeName(String representeeName) {
@@ -149,6 +157,7 @@ public class DhxRepresentee {
 
   /**
    * Returns the representeeSystem.
+   * 
    * @return the representeeSystem
    */
   public String getRepresenteeSystem() {
@@ -157,6 +166,7 @@ public class DhxRepresentee {
 
   /**
    * Sets the representeeSystem.
+   * 
    * @param representeeSystem the representeeSystem to set
    */
   public void setRepresenteeSystem(String representeeSystem) {

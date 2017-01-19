@@ -40,8 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XRoadSecurityCategoryIdentifierType")
 public class XRoadSecurityCategoryIdentifierType
-    extends XRoadIdentifierType
-{
+    extends XRoadIdentifierType {
 
 
 }

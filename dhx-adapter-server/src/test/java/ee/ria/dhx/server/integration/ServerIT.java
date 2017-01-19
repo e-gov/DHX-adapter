@@ -29,12 +29,14 @@ import ee.ria.dhx.server.types.ee.riik.schemas.dhl.Edastus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.DocumentRefsArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.DocumentsArrayType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedV3RequestType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ObjectFactory;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocuments;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocumentsV4RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.SendDocuments;
@@ -85,6 +87,7 @@ import org.springframework.ws.test.client.ResponseCreators;
 import org.springframework.ws.test.server.MockWebServiceClient;
 import org.springframework.ws.test.server.RequestCreators;
 import org.springframework.ws.test.server.ResponseMatchers;
+import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -102,6 +105,10 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.transaction.Transactional;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
@@ -1510,7 +1517,7 @@ public class ServerIT {
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
-  public void sendDocumentNormal() throws DhxException {
+  public void sendDocumentNormal() throws DhxException, JAXBException, ParserConfigurationException {
 
     // receive documents. check that there are no documents to receive
     // before document from DHX is sent
@@ -1586,7 +1593,9 @@ public class ServerIT {
     Mockito.doCallRealMethod().when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     MarkDocumentsReceived markDocumentsReceived = new MarkDocumentsReceived();
-    markDocumentsReceived.setKeha(new MarkDocumentsReceivedV3RequestType());
+    //markDocumentsReceived.setKeha(new MarkDocumentsReceivedV3RequestType());
+    ObjectFactory fact = new ObjectFactory();
+    MarkDocumentsReceivedV3RequestType v3Req = fact.createMarkDocumentsReceivedV3RequestType();
     List<TagasisideType> tagasisides = new ArrayList<TagasisideType>();
     TagasisideType tagasiside = new TagasisideType();
     BigInteger docId = items.get(0).getDecMetadata().getDecId();
@@ -1594,7 +1603,18 @@ public class ServerIT {
     tagasiside.setVastuvotjaStaatusId(
         BigInteger.valueOf(RecipientStatusEnum.ACCEPTED.getClassificatorId()));
     tagasisides.add(tagasiside);
-    markDocumentsReceived.getKeha().setDokumendid(tagasisides);
+    v3Req.setDokumendid(new Dokumendid());
+    v3Req.getDokumendid().setTagasisided(tagasisides);
+  /*  DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setNamespaceAware(true);
+    DocumentBuilder db = dbf.newDocumentBuilder();
+    org.w3c.dom.Document document = db.newDocument();
+    dhxMarshallerService.getMarshaller().marshal(v3Req, document);
+    List<Element> eles = new ArrayList<Element>();
+    eles.add(document.getDocumentElement());*/
+    markDocumentsReceived.setKeha(v3Req);
+    //markDocumentsReceived.setAny(eles);
+
     receiveService.setServiceVersion("v3");
     Source markDocumentsReceivedEnvelope =
         IntegrationTestHelper.getEnvelope(receiveClient, receiveService, null,
@@ -1636,7 +1656,7 @@ public class ServerIT {
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
-  public void sendDocumentToSpecial() throws DhxException {
+  public void sendDocumentToSpecial() throws DhxException, JAXBException, ParserConfigurationException {
 
     // insert org with subsystem as own representee
     Organisation specialOrg = new Organisation();
@@ -1705,7 +1725,9 @@ public class ServerIT {
     Mockito.doCallRealMethod().when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     MarkDocumentsReceived markDocumentsReceived = new MarkDocumentsReceived();
-    markDocumentsReceived.setKeha(new MarkDocumentsReceivedV3RequestType());
+    
+
+    MarkDocumentsReceivedV3RequestType v3Req = new MarkDocumentsReceivedV3RequestType();
     List<TagasisideType> tagasisides = new ArrayList<TagasisideType>();
     TagasisideType tagasiside = new TagasisideType();
     BigInteger docId = items.get(0).getDecMetadata().getDecId();
@@ -1713,7 +1735,19 @@ public class ServerIT {
     tagasiside.setVastuvotjaStaatusId(
         BigInteger.valueOf(RecipientStatusEnum.ACCEPTED.getClassificatorId()));
     tagasisides.add(tagasiside);
-    markDocumentsReceived.getKeha().setDokumendid(tagasisides);
+    v3Req.setDokumendid(new Dokumendid());
+    v3Req.getDokumendid().setTagasisided(tagasisides);
+    
+    /*DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setNamespaceAware(true);
+    DocumentBuilder db = dbf.newDocumentBuilder();
+    org.w3c.dom.Document document = db.newDocument();
+    dhxMarshallerService.getMarshaller().marshal(v3Req, document);
+    List<Element> eles = new ArrayList<Element>();
+    eles.add(document.getDocumentElement());
+    //markDocumentsReceived.setAny(eles);*/
+    markDocumentsReceived.setKeha(v3Req);
+    
     receiveService.setServiceVersion("v3");
     Source markDocumentsReceivedEnvelope =
         IntegrationTestHelper.getEnvelope(receiveClient, receiveService, null,

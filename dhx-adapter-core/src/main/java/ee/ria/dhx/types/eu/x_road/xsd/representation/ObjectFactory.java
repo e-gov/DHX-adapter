@@ -53,6 +53,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   * 
    * @param value value
    * @return created object
    */
@@ -63,6 +64,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   * 
    * @param value value
    * @return created object
    */
@@ -73,6 +75,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link XRoadRepresentedPartyType }{@code >}
+   * 
    * @param value value
    * @return created object
    */

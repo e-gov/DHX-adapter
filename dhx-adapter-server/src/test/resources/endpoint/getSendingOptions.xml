@@ -25,7 +25,7 @@
 			<ns3:memberCode>40000001</ns3:memberCode>
 			<ns3:subsystemCode>DHX</ns3:subsystemCode>
 			<ns3:serviceCode>getSendingOptions</ns3:serviceCode>
-			<ns3:serviceVersion>v2</ns3:serviceVersion>
+			<ns3:serviceVersion>v3</ns3:serviceVersion>
 		</ns4:service>
 	</soapenv:Header>
 

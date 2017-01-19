@@ -2,27 +2,20 @@ package ee.ria.dhx.server.config;
 
 
 
-import ee.ria.dhx.exception.DhxException;
-
-
 import ee.ria.dhx.server.endpoint.config.DhxServerEndpointConfig;
 import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
-import ee.ria.dhx.ws.service.DhxMarshallerService;
 
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
 
 /**
@@ -35,7 +28,7 @@ import javax.xml.soap.SOAPMessage;
  */
 @Configuration
 public class DhxServerWebServiceConfig {
-  
+
 
   /**
    * Sets servlet registration bean. Registers web services on configured path
@@ -58,9 +51,9 @@ public class DhxServerWebServiceConfig {
     servletBean.setName("dhx");
     return servletBean;
   }
-  
+
   @Bean(name = "messageFactory")
-  public SaajSoapMessageFactory messageFactory () {
+  public SaajSoapMessageFactory messageFactory() {
     SaajSoapMessageFactory smf = new SaajSoapMessageFactory();
     Map<String, String> props = new HashMap<String, String>();
     props.put(SOAPMessage.WRITE_XML_DECLARATION, Boolean.toString(true));

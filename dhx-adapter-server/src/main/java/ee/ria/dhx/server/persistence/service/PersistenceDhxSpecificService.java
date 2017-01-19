@@ -20,6 +20,7 @@ import ee.ria.dhx.types.DhxSendDocumentResult;
 import ee.ria.dhx.types.IncomingDhxPackage;
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
+import ee.ria.dhx.util.FileDataHandler;
 import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
@@ -300,7 +301,8 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       if (allSent && !recipient.getTransport().getStatusId()
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
         log.debug(
-            "all of the documents recipients are in received status, setting same status to the document.");
+            "all of the documents recipients are in received status, "
+            + "setting same status to the document.");
         recipient.getTransport().setStatusId(successStatusId);
         // documentRepository.save(recipient.getTransport().getDokument());
       }
@@ -313,6 +315,9 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
         capsuleService.cleanupContainer(finalResult.getSentPackage().getParsedContainer());
       } catch (DhxException ex) {
         log.error("Error occured while cleaningup container.", ex);
+      }
+      if (finalResult.getSentPackage().getDocumentFile() instanceof FileDataHandler) {
+        ((FileDataHandler) finalResult.getSentPackage().getDocumentFile()).deleteFile();
       }
     }
   }

@@ -23,6 +23,7 @@ public class DhxSendDocumentResult {
 
   /**
    * Returns the sentPackage.
+   * 
    * @return the sentPackage
    */
   public OutgoingDhxPackage getSentPackage() {
@@ -31,6 +32,7 @@ public class DhxSendDocumentResult {
 
   /**
    * Sets the sentPackage.
+   * 
    * @param sentPackage the sentPackage to set
    */
   public void setSentPackage(OutgoingDhxPackage sentPackage) {
@@ -39,6 +41,7 @@ public class DhxSendDocumentResult {
 
   /**
    * Returns the response.
+   * 
    * @return the response of the service
    */
   public SendDocumentResponse getResponse() {
@@ -47,6 +50,7 @@ public class DhxSendDocumentResult {
 
   /**
    * Sets the response.
+   * 
    * @param response the response to set
    */
   public void setResponse(SendDocumentResponse response) {
@@ -55,6 +59,7 @@ public class DhxSendDocumentResult {
 
   /**
    * Returns the occuredException.
+   * 
    * @return the Exception occured while sendind the document
    */
   public Exception getOccuredException() {
@@ -63,6 +68,7 @@ public class DhxSendDocumentResult {
 
   /**
    * Sets the occuredException.
+   * 
    * @param occuredException the occuredException to set
    */
   public void setOccuredException(Exception occuredException) {
