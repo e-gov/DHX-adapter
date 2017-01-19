@@ -63,8 +63,7 @@ Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStat
 `sendDocuments.v4` saatmise näidet vaata dokumendist [Testilood - 2.1. Õige kapsli saatmine](https://github.com/e-gov/DHX-adapter/blob/master/docs/adapter-server-testilood.md#2.1).
  
  Lisaks vaata kirjeldust vanast DVK spetsifikatsiooni [sendDocuments.v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4). 
-> **NB!* DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt).
-> 
+> **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
 > DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](https://github.com/e-gov/DHX-adapter/blob/master/docs/adapter-server-testilood.md#2.1).
 
 Märkused vana DVK X-tee liidese kasutajale:
