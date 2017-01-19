@@ -35,9 +35,9 @@ Sisukord
         * [4\.3\.5\. Kompilleerida lähtekood Maven\-iga](#435-kompilleerida-l%C3%A4htekood-maven-iga)
         * [4\.3\.6\. Paigaldada WAR fail](#436-paigaldada-war-fail)
     * [5\. DHX teenuste registreerimine ja avamine X-tee turvaserveris](#5-dhx-teenuste-registreerimine-ja-avamine-x-tee-turvaserveris)
-    * [6\. Teadaolevad probleemid (sõltuvuste konfliktid)](#5-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
-    * [7\. Häälestus fail (dhx\-application\.properties)](#6-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
-    * [8\. Klastrisse paigaldamine (Failover/Load balancing)](#7-klastrisse-paigaldamine-failoverload-balancing)
+    * [6\. Teadaolevad probleemid (sõltuvuste konfliktid)](#6-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
+    * [7\. Häälestus fail (dhx\-application\.properties)](#7-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
+    * [8\. Klastrisse paigaldamine (Failover/Load balancing)](#8-klastrisse-paigaldamine-failoverload-balancing)
 
 ## 1. Sissejuhatus
 
