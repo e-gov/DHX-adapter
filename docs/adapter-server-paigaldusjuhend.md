@@ -395,7 +395,7 @@ Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v
 
 **3.1)** Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures avada teenused "Services".
 
-**3.2**) Teenuse "sendDocuments" peal valida "Access Rights" ja seejärel "Add Subjects"-
+**3.2**) Teenuse "sendDocument" peal valida "Access Rights" ja seejärel "Add Subjects"-
 
 **3.3)** Lisada õigus globaalsele X-tee grupile "Kõik X-tee kasutajad"
 
