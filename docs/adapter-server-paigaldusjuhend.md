@@ -375,13 +375,13 @@ Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v
 
 Välise DHX liidese WSDL asub DHX adapterserveris üldjuhul aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`.
 
-Välise DHX liidse teenuse URL (Service URL) asub DHX adapterserveris üldjuhul aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws`.
+Välise DHX liidese teenuse URL (Service URL) asub DHX adapterserveris üldjuhul aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws`.
 
 **2.1)** Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures klikata "Services". 
 
 **2.2)** Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega).
 
-**2.3)** Seejärel valida tekkinud teenuse "sendDocument" peal "Edit" ja siestada "Service URL" väärtuseks välise DHX liidse teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega)
+**2.3)** Seejärel valida tekkinud teenuse "sendDocument" peal "Edit" ja siestada "Service URL" väärtuseks välise DHX liidese teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega)
 
 Märkus:
 > Üldjuhul piisab häälestamisest ainult "sendDocument" teenusele, ning "representationList" teenust võib ignoreerida.
