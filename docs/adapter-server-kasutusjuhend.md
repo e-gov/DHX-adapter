@@ -105,7 +105,7 @@ Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise l
 
 Seda operatsiooni kasutatakse [DHX aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) küsimiseks.
 
-See tagastab kõik asutused kellele võib üle DHX protokolli dokumente saata.
+See tagastab kõik asutused kellele võib üle DHX protokolli dokumente saata. 
 
 Märkus:
 > DHX adapterserveri `getSendingOptions` realisatsioon ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
@@ -122,8 +122,8 @@ Päringu väljund on sarnane DVK väljundile, iga asutuse kohta on seal:
  </asutus>
 ```
 See sisaldab asutuse kohta kolme välja:
-* `<regnr>` - asutuse registrikood või alamsüsteemi kood.
-* `<nimi>` - Asutuse või alamsüsteemi nimi.
+* `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Aga kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
+* `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni põhjal.
 * `<saatmisviis>` - alati konstant `dhl`.
 
 Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
@@ -183,7 +183,9 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ## 5. Erinevused DVK liidesega võrreldes
 
-* `getSendSTatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`.
+* DHX Adapterserveri `getSendingOptions` realisatsioon ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
+
+* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`.
 
 * SWAREF manuse cid väärtus peab olema URL kodeeritud (DVK korral see ei tohtinud olla URL kodeeritud)
 
