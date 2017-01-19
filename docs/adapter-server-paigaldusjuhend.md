@@ -369,7 +369,7 @@ Selle kohta vaata täpsemalt [X-tee rakendusjuhendist](https://moodle.ria.ee/mod
 
 Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punkt "4.2. ADDING A SECURITY SERVER CLIENT".
 
-**2)** Lisada DHX adpaterserveri välise DHX liidese WSDL ja teenuse URL uue turvaserveri kliendi juurde.
+**2)** Lisada DHX adapaterserveri välise DHX liidese WSDL ja teenuse URL uue turvaserveri kliendi juurde.
 
 Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punktid "6.1. ADDING A WSDL" ja "6.6. CHANGING THE PARAMETERS OF A SERVICE".
 
@@ -379,9 +379,9 @@ Välise DHX liidse teenuse URL (Service URL) asub DHX adapterserveris üldjuhul 
 
 **2.1)** Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures klikata "Services". 
 
-**2.2)** Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades `<HOST>` ja `<PORT>` enda DHX adpaterserveri väärtustega).
+**2.2)** Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega).
 
-**2.3)** Seejärel tekkinud teenuse peal valida "Edit" ja siestada "Service URL" väärtuseks välise DHX liidse teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adpaterserveri väärtustega)
+**2.3)** Seejärel tekkinud teenuse peal valida "Edit" ja siestada "Service URL" väärtuseks välise DHX liidse teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega)
  
 **3)** Määrata juurdepääsuõiguseid uuele teenusele.
 
@@ -395,7 +395,7 @@ Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v
 
 Märkus:
 > Erijuhul, kui asutus ei oma X-teega liitumise võimekust, võib ta kasutada DHX vahendajat.
-> Aga sel juhul asutus ise ei pea DHX adapterserveit paigaldama, vaid ta suhtleb vahendaja DHX adpaterserveriga või vahendaja poolt pakutavate teenustega.
+> Aga sel juhul asutus ise ei pea DHX adapterserveit paigaldama, vaid ta suhtleb vahendaja DHX adapaterserveriga või vahendaja poolt pakutavate teenustega.
 > Selle kohta loe täpsemalt [DHX vahendamine](https://e-gov.github.io/DHX/#6-vahendamine) ja [X-tee teenuste vahendamine](https://moodle.ria.ee/mod/page/view.php?id=382).
 
 
