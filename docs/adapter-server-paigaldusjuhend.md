@@ -34,9 +34,10 @@ Sisukord
         * [4\.3\.4\. Laadida alla DHX\-adapter lähtekood](#434-laadida-alla-dhx-adapter-l%C3%A4htekood)
         * [4\.3\.5\. Kompilleerida lähtekood Maven\-iga](#435-kompilleerida-l%C3%A4htekood-maven-iga)
         * [4\.3\.6\. Paigaldada WAR fail](#436-paigaldada-war-fail)
-    * [5\. Teadaolevad probleemid (sõltuvuste konfliktid)](#5-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
-    * [6\. Häälestus fail (dhx\-application\.properties)](#6-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
-    * [7\. Klastrisse paigaldamine (Failover/Load balancing)](#7-klastrisse-paigaldamine-failoverload-balancing)
+    * [5\. DHX teenuste registreerimine ja avamine X-tee turvaserveris]()
+    * [6\. Teadaolevad probleemid (sõltuvuste konfliktid)](#5-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
+    * [7\. Häälestus fail (dhx\-application\.properties)](#6-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
+    * [8\. Klastrisse paigaldamine (Failover/Load balancing)](#7-klastrisse-paigaldamine-failoverload-balancing)
 
 ## 1. Sissejuhatus
 
@@ -78,6 +79,7 @@ Minimaalsed nõuded riistvarale on järgmised:
 * Muutmälu 2GB
 * Kõvaketas 70 Gb
 * Protsessor 2 GHz x 2 tuuma
+* Võrgukaart 100 Mbps
 
 Optimaalsed riistvara nõuded sõltuvad asutuse poolt saadetavate dokumentide arvust ja suurusest. 
 Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi. **Soovitav on minimaalsed nõuded kahega korrutada**. 
@@ -358,14 +360,26 @@ ja nimetada see ümber `dhx-adapter-server.war`.
  
 
 
-## 5. Teadaolevad probleemid (sõltuvuste konfliktid)
+## 5. DHX teenuste registreerimine ja avamine X-tee turvaserveris    
+
+Järgnevalt eeldatakse, et asutus on X-tee liikmeks registreerunud, paigaldanud X-tee turvaserveri ja registreerinud enda [DHX*](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx) alamsüsteemi(d) [RIHAs](https://riha.eesti.ee/riha/main). Selle kohta vaata täpsemalt [X-tee kasutamise juhendist](https://moodle.ria.ee/mod/page/view.php?id=288).
+
+Märkus:
+> Erijuhul, kui asutus ei oma X-teega liitumise võimekust, võib ta kasutada DHX vahendajat.
+> Selle kohta loe täpsemalt [DHX vahendamine](https://e-gov.github.io/DHX/#6-vahendamine) ja [X-tee teenuste vahendamine](https://moodle.ria.ee/mod/page/view.php?id=382).
+
+
+
+
+
+## 6. Teadaolevad probleemid (sõltuvuste konfliktid)
 
 Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
 
 Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
 
-## 6. Häälestus fail (dhx-application.properties)
+## 7. Häälestus fail (dhx-application.properties)
 
 Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](java-teegid-kasutusjuhend.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
 
@@ -421,7 +435,7 @@ Märkus:
 > Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud. 
 
 
-## 7. Klastrisse paigaldamine (Failover/Load balancing)
+## 8. Klastrisse paigaldamine (Failover/Load balancing)
 
 DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 

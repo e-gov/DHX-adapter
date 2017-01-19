@@ -62,7 +62,7 @@ Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni `getSendStat
 
 Märkused vana DVK X-tee liidese kasutajale:
 > Võrreldes DVK sendDocuments liidestega on dhx-adpater-serveris realiseeritud on ainult sendDocuments operatsioonide [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4) versioon, mis eeldab et dokumendi Kapsel on 2.1 formaadis.
-> Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) dhx-adpater-serveri ei paku.
+> Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) dhx-adpater-server ei paku.
 
 ### getSendStatus (sisemine liides)
 
@@ -76,10 +76,19 @@ Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov
 
 Märkused vana DVK X-tee liidese kasutajale:
 > Võrreldes DVK getSendStatus liidestega on dhx-adpater-serveris realiseeritud on ainult getSendStatus operatsioonide [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2) versioon.
-> Vanemat DVK getSendStatus versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-serveri ei paku.
+> Vanemat DVK getSendStatus versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-server ei paku.
 
 
 ## Erinevused vana DVK liidese ja adapterserveri sisemise liidese toimimise loogikas
 
+* 
+
+* SWAREF manuse cid väärtus peab olema URL kodeeritud (DVK korral see ei tohtinud olla URL kodeeritud)
+
+## Vahendajana saatmine/vastuvõtmine
+
+Asutus võib DHX adpaterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine). 
 
 
+
+ 
