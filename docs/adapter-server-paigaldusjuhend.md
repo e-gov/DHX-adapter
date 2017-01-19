@@ -516,7 +516,7 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 
 1) Avada SoapUI ja lisada uus projekt, sisestades WSDL aadressiks `http://localhost:8080/dhx-adapter-server/wsServer/dhl.wsdl` (muuta vajadusel host ja port).
 
-2) Genereeritud projekti all avada `getSendingOptions`->`Reqest1`.
+2) Genereeritud projekti all avada `dhlSoapBinding`->``getSendingOptions`->`Request 1`.
 
 3) Üleval ripploendis kuvatakse teenuse aadress. Valida seal "Edit current" ja sisestada aadressiks `http://localhost:8080/dhx-adapter-server/wsServer` (muuta vajadusel host ja port).
 
