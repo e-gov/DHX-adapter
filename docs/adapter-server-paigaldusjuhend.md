@@ -93,6 +93,21 @@ Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi
 
 Laadida alla ja installeerida PostgreSQL andmebaasi versioon [9.6.x](https://www.postgresql.org/download/).
 
+Loo uus andmebaasi kasutaja (Role). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createrole.html)
+```sql
+CREATE USER dhxuser WITH PASSWORD '123';
+``` 
+
+Loo uus andmebaas (näiteks nimega `dhx_adapter`). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createdatabase.html).
+```sql
+CREATE DATABASE dhx_adapter;
+```
+
+Anna loodud kasutajale kõik selle andmebaasi õigused.
+```sql
+GRANT ALL PRIVILEGES ON DATABASE dhx_adapter to dhxuser;
+```
+
 #### 4.1.2 Java 8 SE
 
 Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
@@ -165,8 +180,8 @@ soap.member-code=40000001
 
 documents.folder=C:\\dhx_docs\\
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/dhx_adapter_dev
-spring.datasource.username=postgres
+spring.datasource.url=jdbc:postgresql://localhost:5432/dhx_adapter
+spring.datasource.username=dhxuser
 spring.datasource.password=123456
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL94Dialect
