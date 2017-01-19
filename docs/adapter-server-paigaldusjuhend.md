@@ -381,7 +381,13 @@ Välise DHX liidse teenuse URL (Service URL) asub DHX adapterserveris üldjuhul 
 
 **2.2)** Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega).
 
-**2.3)** Seejärel tekkinud teenuse peal valida "Edit" ja siestada "Service URL" väärtuseks välise DHX liidse teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega)
+**2.3)** Seejärel valida tekkinud teenuse "sendDocument" peal "Edit" ja siestada "Service URL" väärtuseks välise DHX liidse teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega)
+
+Märkus:
+> Üldjuhul piisab häälestamisest ainult "sendDocument" teenusele, ning "representationList" teenust võib ignoreerida.
+> 
+> "representationList" teenuse häälestamine on vajalik ainult siis, kui asutus käitub [DHX vahendajana](https://e-gov.github.io/DHX/#6-vahendamine).   
+
  
 **3)** Määrata juurdepääsuõiguseid uuele teenusele.
 
@@ -389,9 +395,14 @@ Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v
 
 **3.1)** Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures avada teenused "Services".
 
-**3.2**) Teenuse juures valida "Access Rights" ja seejärel "Add Subjects"-
+**3.2**) Teenuse "sendDocuments" peal valida "Access Rights" ja seejärel "Add Subjects"-
 
-**3.3)** Lisada õigus globaalsele X-tee grupile "Kõik X-tee kasutajad". 
+**3.3)** Lisada õigus globaalsele X-tee grupile "Kõik X-tee kasutajad"
+
+Märkus:
+> Üldjuhul piisab õiguste andmisest ainult "sendDocument" teenusele, ning "representationList" võib ignoreerida.
+> 
+> "representationList" teenuseõiguste andmine on vajalik ainult siis, kui asutus käitub [DHX vahendajana](https://e-gov.github.io/DHX/#6-vahendamine).   
 
 ## 6. Häälestus fail (dhx-application.properties)
 
