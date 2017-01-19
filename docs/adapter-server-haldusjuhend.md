@@ -5,7 +5,7 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
-## Sissejuhatus
+## 1. Sissejuhatus
 
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 

@@ -5,7 +5,7 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
-## Sissejuhatus
+## 1. Sissejuhatus
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
 DHX adapterserveri kasutusjuhend on vajalik eelkõige tarkvara arendajale, kes teostab Dokumendihaldus süsteemi (DHS) ja DHX adapterserveri liidestamist. 
@@ -24,7 +24,7 @@ DHX adapterserver käitub puhver serverina, võttes mõlema liidese kaudu vastu 
 
 Välise DHX liidese toimimise loogikast arusaamine ei ole DHX adapterserveri kasutajale hädavajalik.
 
-## WSDL asukohad
+## 2. WSDL asukohad
 
 Välise DHX liidese [WSDL](../dhx-adapter-ws/src/main/resources/dhx.wsdl) asub DHX adapterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`.
 Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/ws`.
@@ -32,7 +32,7 @@ Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<POR
 Sisemisel liidese [WSDL](../dhx-adapter-server/src/main/resources/dhl.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhl.wsdl`. 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
   
-## Sisemine liides
+## 3. Sisemine liides
 
 Sisemist liidest kasutab asutuse DHS tarkvara dokumentide saatmiseks ja vastuvõtmiseks.
 
@@ -58,11 +58,14 @@ Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/m
 
 DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
-Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni `getSendStatus`
+Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStatus]()
 
 Märkused vana DVK X-tee liidese kasutajale:
 > Võrreldes DVK sendDocuments liidestega on dhx-adpater-serveris realiseeritud on ainult sendDocuments operatsioonide [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4) versioon, mis eeldab et dokumendi Kapsel on 2.1 formaadis.
+>
 > Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) dhx-adpater-server ei paku.
+
+
 
 ### getSendStatus (sisemine liides)
 
@@ -76,10 +79,11 @@ Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov
 
 Märkused vana DVK X-tee liidese kasutajale:
 > Võrreldes DVK getSendStatus liidestega on dhx-adpater-serveris realiseeritud on ainult getSendStatus operatsioonide [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2) versioon.
+>
 > Vanemat DVK getSendStatus versiooni [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) dhx-adpater-server ei paku.
 
 
-## Erinevused vana DVK liidese ja adapterserveri sisemise liidese toimimise loogikas
+## 4. Erinevused DVK liidesega võrreldes
 
 * 
 
