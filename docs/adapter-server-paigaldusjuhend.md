@@ -362,10 +362,37 @@ ja nimetada see ümber `dhx-adapter-server.war`.
 
 ## 5. DHX teenuste registreerimine ja avamine X-tee turvaserveris    
 
-Järgnevalt eeldatakse, et asutus on X-tee liikmeks registreerunud, paigaldanud X-tee turvaserveri ja registreerinud enda [DHX*](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx) alamsüsteemi(d) [RIHAs](https://riha.eesti.ee/riha/main). Selle kohta vaata täpsemalt [X-tee kasutamise juhendist](https://moodle.ria.ee/mod/page/view.php?id=288).
+Järgnevalt eeldatakse, et asutus on X-tee liikmeks registreerunud, paigaldanud X-tee turvaserveri ja registreerinud enda [DHX*](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx) alamsüsteemi(d) [RIHAs](https://riha.eesti.ee/riha/main). 
+Selle kohta vaata täpsemalt [X-tee kasutamise juhendist](https://moodle.ria.ee/mod/page/view.php?id=288).
+
+1) Lisada turvaserveris uus klient enda asutuse DHX alamsüsteemile ja registreerida see (Turvaserveris menüü `Configuration`->`Security Server Clients`->`Add Client`). 
+Vaata [X-tee kasutusjuhendist](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punkt "4.2. ADDING A SECURITY SERVER CLIENT".
+
+2) Lisada DHX adpaterserveri välise DHX liidese WSDL ja teenuse URL uue turvaserveri kliendi juurde.
+Vaata [X-tee kasutusjuhendist](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punktid "6.1. ADDING A WSDL" ja "6.6. CHANGING THE PARAMETERS OF A SERVICE".
+
+Välise DHX liidese WSDL asub DHX adapterserveris üldjuhul aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`.
+
+Välise DHX liidse teenuse URL (Service URL) asub DHX adapterserveris üldjuhul aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws`.
+
+Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures klikata "Services". 
+
+Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades <HOST> ja <PORT>).
+
+Seejärel tekkinud teenuse peal valida "Edit" ja siestada "Service URL" väärtuseks  välise DHX liidse teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades <HOST> ja <PORT>)
+ 
+3) Määrata juurdepääsuõiguseid uuele teenusele
+Vaata [X-tee kasutusjuhendist](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punkt "7.1. CHANGING THE ACCESS RIGHTS OF A SERVICE".
+
+
+Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures avada teenused "Services".
+Teenuse juures valida "Access Rights" ja seejärel "Add Subjects"-
+
+Lisada õigus globaalsele X-tee grupile "Kõik X-tee kasutajad". 
 
 Märkus:
 > Erijuhul, kui asutus ei oma X-teega liitumise võimekust, võib ta kasutada DHX vahendajat.
+> Aga sel juhul asutus ise ei pea DHX adapterserveit paigaldama, vaid ta suhtleb vahendaja DHX adpaterserveriga või vahendaja poolt pakutavate teenustega.
 > Selle kohta loe täpsemalt [DHX vahendamine](https://e-gov.github.io/DHX/#6-vahendamine) ja [X-tee teenuste vahendamine](https://moodle.ria.ee/mod/page/view.php?id=382).
 
 
