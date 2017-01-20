@@ -8,7 +8,7 @@ SoapUI on tarkvara mis võimaldab lihtsal viisil teha SOAP päringuid. SoapUI al
 
 Antud juhend kirjeldab DVK-s DHX protokolliga seotud muudatuste testimiseks tehtud SoapUI testide konfigureerimist ja käivitamist. 
 
-SoapUi testid on tehtud ja nimetatud vastavalt [testilugudele](../dvk_dhx_testilod.md).
+SoapUi testid on tehtud ja nimetatud vastavalt [testilugudele](adapter-server-testilood.md).
 
 ## SoapUI testide konfigureerimine
 
