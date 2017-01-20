@@ -123,11 +123,11 @@ Päringu väljund on sarnane DVK väljundile, iga asutuse kohta on seal:
 ```
 See sisaldab asutuse kohta kolme välja:
 * `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Aga kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
-* `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni põhjal.
+* `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni ja vahendajate [representationList]((https://github.com/e-gov/DHX/blob/master/files/representationList.md)) teenuse väljundite põhjal.
 * `<saatmisviis>` - alati konstant `dhl`.
 
 Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
-Samuti pole neid mõtet `getSendingOptions.v3` päringu sisendis ette anda, sest neid ignoreeritakse.
+Samuti pole neid mõtet `getSendingOptions.v3` päringu sisendis ette anda, sest neid ignoreeritakse. Samuti ignoreeritakse sisendis välju `<vahetatud_dokumente_vahemalt>`, `<vahetatud_dokumente_kuni>` ja `<vastuvotmata_dokumente_ootel>`.
 
 Vaata `getSendingOptions.v2` saatmise näidet dokumendist Testilood - [2.10. Aadressaatide nimekirja pärimine](adapter-server-testilood.md#2.10).
 
@@ -141,7 +141,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 ### 4.2. sendDocuments (sisemine liides)
 
 SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
-Dokumendid peavad olema Kapsli [2.1](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd) versioonis (vanemad Kapsli versioonid ei ole toetatud).
+Dokumendid peavad olema Kapsli [2.1](https://riha.eesti.ee/riha/main/xml/elektroonilise_andmevahetuse_metaandmete_loend/1) versioonis (vanemad Kapsli versioonid ei ole toetatud).
 
 DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
@@ -181,11 +181,13 @@ Märkused vana DVK X-tee liidese kasutajale:
 > DHX adpaterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
 
 
-## 5. Erinevused DVK liidesega võrreldes
+## 5. Kokkuvõtte erinevustest (DVK liidesega võrreldes)
 
-* DHX Adapterserveri `getSendingOptions` realisatsioon ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
+* DHX Adapterserveri `getSendingOptions` päring ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
 
-* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`.
+* DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab Kaplsi 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
+
+* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
 
 * SWAREF manuse cid väärtus peab olema URL kodeeritud (DVK korral see ei tohtinud olla URL kodeeritud)
 
