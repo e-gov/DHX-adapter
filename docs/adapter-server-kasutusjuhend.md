@@ -197,7 +197,7 @@ Samuti ignoreeritakse sisendis välju `<vahetatud_dokumente_vahemalt>`, `<vaheta
 ### 4.2. sendDocuments (sisemine liides)
 
 SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
-Dokumendid peavad olema Kapsli [2.1](https://riha.eesti.ee/riha/main/xml/elektroonilise_andmevahetuse_metaandmete_loend/1) versioonis (vanemad Kapsli versioonid ei ole toetatud).
+Dokumendid peavad olema [Kapsli 2.1 versioonis](https://riha.eesti.ee/riha/main/xml/elektroonilise_andmevahetuse_metaandmete_loend/1). Vanemad Kapsli versioonid ei ole toetatud.
 
 DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
