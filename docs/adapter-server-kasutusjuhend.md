@@ -42,35 +42,7 @@ Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) pro
 
 **3)** Üleval ripploendis kuvatakse teenuse aadress. Valida seal "Edit current" ja sisestada aadressiks `http://localhost:8080/dhx-adapter-server/wsServer` (muuta vajadusel host ja port).
 
-**4)** Sisestada Request XML väljale järgmine väärtus, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (asutuse enda registrikood) ning käivitada päring.
-
-```xml
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
-   <soapenv:Header>
-      <xro:protocolVersion>4.0</xro:protocolVersion>
-      <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
-      <xro:service>
-         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
-         <iden:memberClass>GOV</iden:memberClass>
-         <iden:memberCode>40000001</iden:memberCode>
-         <iden:subsystemCode>DHX</iden:subsystemCode>
-         <iden:serviceCode>getSendingOptions</iden:serviceCode>
-         <iden:serviceVersion>v2</iden:serviceVersion>
-      </xro:service>
-      <xro:client>
-         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
-         <iden:memberClass>GOV</iden:memberClass>
-         <iden:memberCode>40000001</iden:memberCode>
-         <iden:subsystemCode>DHX</iden:subsystemCode>
-      </xro:client>
-   </soapenv:Header>
-   <soapenv:Body>
-      <dhl:getSendingOptions>
-         <keha></keha>
-      </dhl:getSendingOptions>
-   </soapenv:Body>
-</soapenv:Envelope>
-```
+**4)** Sisestada Request XML väljale SOAP päring, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (asutuse enda registrikood) ning käivitada päring.
 
 Märkus:
 > Vastuseks saadud manused on gzip pakitud ja seejärel BASE64 kodeeritud.
@@ -111,6 +83,82 @@ Märkus:
 > DHX adapterserveri `getSendingOptions` realisatsioon ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
 > Kui asutuse DHS süsteem neid vana DVK korral kasutas, siis DHX protokollile üle kolimisel peaks ta need kusagilt mujalt küsima. 
 
+Päringu näide:
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+ xmlns:xro="http://x-road.eu/xsd/xroad.xsd" 
+ xmlns:iden="http://x-road.eu/xsd/identifiers" 
+ xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
+   <soapenv:Header>
+      <xro:protocolVersion>4.0</xro:protocolVersion>
+      <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
+      <xro:service>
+         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+         <iden:memberClass>COM</iden:memberClass>
+         <iden:memberCode>10560025</iden:memberCode>
+         <iden:subsystemCode>DHX</iden:subsystemCode>
+         <iden:serviceCode>getSendingOptions</iden:serviceCode>
+         <iden:serviceVersion>v2</iden:serviceVersion>
+      </xro:service>
+      <xro:client>
+         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+         <iden:memberClass>COM</iden:memberClass>
+         <iden:memberCode>10560025</iden:memberCode>
+         <iden:subsystemCode>DHX</iden:subsystemCode>
+      </xro:client>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:getSendingOptions>
+         <keha></keha>
+      </dhl:getSendingOptions>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+Vastuse näide:
+```xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header>
+      <xro:protocolVersion xmlns:xro="http://x-road.eu/xsd/xroad.xsd">4.0</xro:protocolVersion>
+      <xro:id xmlns:xro="http://x-road.eu/xsd/xroad.xsd">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
+      <xro:service xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
+         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee-dev</iden:xRoadInstance>
+         <iden:memberClass xmlns:iden="http://x-road.eu/xsd/identifiers">COM</iden:memberClass>
+         <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">10560025</iden:memberCode>
+         <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">DHX</iden:subsystemCode>
+         <iden:serviceCode xmlns:iden="http://x-road.eu/xsd/identifiers">getSendingOptions</iden:serviceCode>
+         <iden:serviceVersion xmlns:iden="http://x-road.eu/xsd/identifiers">v2</iden:serviceVersion>
+      </xro:service>
+      <xro:client xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
+         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee-dev</iden:xRoadInstance>
+         <iden:memberClass xmlns:iden="http://x-road.eu/xsd/identifiers">COM</iden:memberClass>
+         <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">10560025</iden:memberCode>
+         <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">DHX</iden:subsystemCode>
+      </xro:client>
+   </SOAP-ENV:Header>
+   <SOAP-ENV:Body>
+      <ns4:getSendingOptionsResponse xmlns:ns10="http://x-road.eu/xsd/identifiers"
+       xmlns:ns11="http://x-road.eu/xsd/representation.xsd"
+       xmlns:ns12="http://x-road.eu/xsd/xroad.xsd"
+       xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+       xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl"
+       xmlns:ns5="http://www.riik.ee/schemas/dhl"
+       xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#"
+       xmlns:ns7="http://www.w3.org/2000/09/xmldsig#"
+       xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic"
+       xmlns:ns9="http://dhx.x-road.eu/producer">
+         <keha href="4a095fa0-b922-4746-bda2-d3498f0c5f06@dhx_4703433375683078305"/>
+      </ns4:getSendingOptionsResponse>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+```
+
+Päringu vastuse `<keha>` element viitab manusele `href="4a095fa0-b922-4746-bda2-d3498f0c5f06@dhx_4703433375683078305"`, mille väärtus on näiteks:
+```
+H4sIAAAAAAAAAMWUv27bMBDG9z6FoM4mKct/EoNRkDZDOwQtuqSdAkZkpINN0uCRtvIufY1u3fxipRVIioCmXRxEE3n3HX/f3QHil43eJDvlEKy5SDPC0sviHTeYr9aqFknMGlwZnF2ktffbFaX7/Z44gDVRimJZKy2QynqT9tKzXirrhjQTZ4UkKtCtszKUyg3KjPXSQdagpE5tnUJlvPDRFomhoSjva7oHkUQ+aZzsfXWZsbEsewHXtJcRZT7qF9tXr6GCa1vSXUZywt4P4sVIvM+JdRWdMsYoO6dRJBGqZ/Lpv2epytLGzsFE/8fF3E3vMjpUL/+3iYlWXkxE8FbH8ZVD5fkL7YOMk4YHiKy04AKDD1hwpyrjCrlbk2XsZJFnS06fYtyAhuIbxHEkn82DxcNv9EppSK4imtM2zVEIr2MT3Ql3AFhEf5w+D3S3o5B27LGHjM0XjE3nY/6Hr7fJR2swbDyY6vTUnLVfNqZ+Ovy6V+sQNpB8Ofw8PdUJEbcWtiDFUUfexsXsr9QbMHBctIOgk++np2K4x8cI0ORt+Msn6mxMvWo1yY/X7Pf1ybT7oxd/ABLnvIDyBQAA
+```
+ 
+
 Päringu väljund on sarnane DVK väljundile, iga asutuse kohta on seal: 
 ```xml
 <asutus>
@@ -128,8 +176,6 @@ See sisaldab asutuse kohta kolme välja:
 
 Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
 Samuti pole neid mõtet `getSendingOptions.v3` päringu sisendis ette anda, sest neid ignoreeritakse. Samuti ignoreeritakse sisendis välju `<vahetatud_dokumente_vahemalt>`, `<vahetatud_dokumente_kuni>` ja `<vastuvotmata_dokumente_ootel>`.
-
-Vaata `getSendingOptions.v2` saatmise näidet dokumendist Testilood - [2.10. Aadressaatide nimekirja pärimine](adapter-server-testilood.md#2.10).
 
 Lisaks vaata kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1),
 [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3)
