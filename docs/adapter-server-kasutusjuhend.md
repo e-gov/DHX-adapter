@@ -42,7 +42,7 @@ Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) pro
 
 **3)** Üleval ripploendis kuvatakse teenuse aadress. Valida seal "Edit current" ja sisestada aadressiks `http://localhost:8080/dhx-adapter-server/wsServer` (muuta vajadusel host ja port).
 
-**4)** Sisestada Request XML väljale SOAP päring, muutes endale sobivaks väärtused `ee-dev`, `GOV` ja `40000001` (asutuse enda registrikood) ning käivitada päring.
+**4)** Sisestada Request XML väljale SOAP päring, muutes endale sobivaks elementide `<xRoadInstance>`, `<memberClass>` ja `<memberCode>` (asutuse registrikood) väärtused (näiteks `ee-dev`, `GOV` ja `40000001`) ning käivitada päring.
 
 Märkus:
 > Vastuseks saadud manused on gzip pakitud ja seejärel BASE64 kodeeritud.
@@ -79,9 +79,12 @@ Seda operatsiooni kasutatakse [DHX aadressiraamatu](https://e-gov.github.io/DHX/
 
 See tagastab kõik asutused kellele võib üle DHX protokolli dokumente saata. 
 
-Märkus:
-> DHX adapterserveri `getSendingOptions` realisatsioon ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
-> Kui asutuse DHS süsteem neid vana DVK korral kasutas, siis DHX protokollile üle kolimisel peaks ta need kusagilt mujalt küsima. 
+Lisaks kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1),
+[getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3)
+
+Märkused vana DVK X-tee liidese kasutajale:
+> DHX adpaterserveris on realiseeritud kõik getSendStatus operatsiooni versioonid [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1), [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3).
+
 
 Päringu näide:
 ```xml
@@ -157,32 +160,42 @@ Päringu vastuse `<keha>` element viitab manusele `href="4a095fa0-b922-4746-bda2
 ```
 H4sIAAAAAAAAAMWUv27bMBDG9z6FoM4mKct/EoNRkDZDOwQtuqSdAkZkpINN0uCRtvIufY1u3fxipRVIioCmXRxEE3n3HX/f3QHil43eJDvlEKy5SDPC0sviHTeYr9aqFknMGlwZnF2ktffbFaX7/Z44gDVRimJZKy2QynqT9tKzXirrhjQTZ4UkKtCtszKUyg3KjPXSQdagpE5tnUJlvPDRFomhoSjva7oHkUQ+aZzsfXWZsbEsewHXtJcRZT7qF9tXr6GCa1vSXUZywt4P4sVIvM+JdRWdMsYoO6dRJBGqZ/Lpv2epytLGzsFE/8fF3E3vMjpUL/+3iYlWXkxE8FbH8ZVD5fkL7YOMk4YHiKy04AKDD1hwpyrjCrlbk2XsZJFnS06fYtyAhuIbxHEkn82DxcNv9EppSK4imtM2zVEIr2MT3Ql3AFhEf5w+D3S3o5B27LGHjM0XjE3nY/6Hr7fJR2swbDyY6vTUnLVfNqZ+Ovy6V+sQNpB8Ofw8PdUJEbcWtiDFUUfexsXsr9QbMHBctIOgk++np2K4x8cI0ORt+Msn6mxMvWo1yY/X7Pf1ybT7oxd/ABLnvIDyBQAA
 ```
- 
 
-Päringu väljund on sarnane DVK väljundile, iga asutuse kohta on seal: 
+Mis dekodeeritult (base64 -d | gunzip) on näiteks:
 ```xml
-<asutus>
+<?xml version="1.0"?>
+<ns6:keha xmlns:ns2="http://www.riik.ee/schemas/dhl" xmlns:ns8="http://dhx.x-road.eu/producer" 
+   xmlns:ns10="http://x-road.eu/xsd/representation.xsd" xmlns:ns6="http://producers.dhl.xrd.riik.ee/producer/dhl" 
+   xmlns:ns11="http://x-road.eu/xsd/xroad.xsd" xmlns:ns4="http://www.sk.ee/DigiDoc/v1.3.0#" 
+   xmlns:ns5="http://www.w3.org/2000/09/xmldsig#" xmlns:ns3="http://www.riik.ee/schemas/deccontainer/vers_2_1/" 
+   xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://x-road.eu/xsd/identifiers">
+ <asutus>
   <regnr>30000001</regnr>
   <nimi>Hõbekuuli OÜ</nimi>
   <saatmine>
     <saatmisviis>dhl</saatmisviis>
   </saatmine>
  </asutus>
-```
+ <asutus>
+  <regnr>dvk.70006317</regnr>
+  <nimi>Riigi Infosüsteemi Amet</nimi>
+  <saatmine>
+    <saatmisviis>dhl</saatmisviis>
+  </saatmine>
+ </asutus>
+</ns6:keha> 
+```xml
+
 See sisaldab asutuse kohta kolme välja:
 * `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Aga kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
 * `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni ja vahendajate [representationList]((https://github.com/e-gov/DHX/blob/master/files/representationList.md)) teenuse väljundite põhjal.
 * `<saatmisviis>` - alati konstant `dhl`.
 
+
 Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
-Samuti pole neid mõtet `getSendingOptions.v3` päringu sisendis ette anda, sest neid ignoreeritakse. Samuti ignoreeritakse sisendis välju `<vahetatud_dokumente_vahemalt>`, `<vahetatud_dokumente_kuni>` ja `<vastuvotmata_dokumente_ootel>`.
-
-Lisaks vaata kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1),
-[getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3)
-
-Märkused vana DVK X-tee liidese kasutajale:
-> DHX adpaterserveris on realiseeritud kõik getSendStatus operatsiooni versioonid [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1), [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3).
-
+Kui asutuse DHS süsteem neid vana DVK korral kasutas, siis DHX protokollile üle kolimisel peaks ta need kusagilt mujalt küsima.
+Samuti ei ole neid mõtet `getSendingOptions.v3` päringu sisendis ette anda, sest neid ignoreeritakse. 
+Samuti ignoreeritakse sisendis välju `<vahetatud_dokumente_vahemalt>`, `<vahetatud_dokumente_kuni>` ja `<vastuvotmata_dokumente_ootel>`.
 
 ### 4.2. sendDocuments (sisemine liides)
 
