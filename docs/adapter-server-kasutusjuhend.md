@@ -81,13 +81,14 @@ See tagastab kõik asutused kellele võib üle DHX protokolli dokumente saata.
 
 Lisaks kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1),
 [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3)
+
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
 > DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagi allpool toodud näites.
 
 Märkused vana DVK X-tee liidese kasutajale:
 > DHX adpaterserveris on realiseeritud kõik getSendStatus operatsiooni versioonid [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1), [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3).
 
-Päringu näide:
+Päringu `getSendingOptions.v1` näide:
 ```xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
  xmlns:xro="http://x-road.eu/xsd/xroad.xsd" 
@@ -102,7 +103,7 @@ Päringu näide:
          <iden:memberCode>10560025</iden:memberCode>
          <iden:subsystemCode>DHX</iden:subsystemCode>
          <iden:serviceCode>getSendingOptions</iden:serviceCode>
-         <iden:serviceVersion>v2</iden:serviceVersion>
+         <iden:serviceVersion>v1</iden:serviceVersion>
       </xro:service>
       <xro:client>
          <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
@@ -131,7 +132,7 @@ Vastuse näide:
          <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">10560025</iden:memberCode>
          <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">DHX</iden:subsystemCode>
          <iden:serviceCode xmlns:iden="http://x-road.eu/xsd/identifiers">getSendingOptions</iden:serviceCode>
-         <iden:serviceVersion xmlns:iden="http://x-road.eu/xsd/identifiers">v2</iden:serviceVersion>
+         <iden:serviceVersion xmlns:iden="http://x-road.eu/xsd/identifiers">v1</iden:serviceVersion>
       </xro:service>
       <xro:client xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
          <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee-dev</iden:xRoadInstance>
@@ -141,46 +142,33 @@ Vastuse näide:
       </xro:client>
    </SOAP-ENV:Header>
    <SOAP-ENV:Body>
-      <ns4:getSendingOptionsResponse xmlns:ns10="http://x-road.eu/xsd/identifiers"
-       xmlns:ns11="http://x-road.eu/xsd/representation.xsd"
-       xmlns:ns12="http://x-road.eu/xsd/xroad.xsd"
-       xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
-       xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl"
-       xmlns:ns5="http://www.riik.ee/schemas/dhl"
-       xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#"
-       xmlns:ns7="http://www.w3.org/2000/09/xmldsig#"
-       xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic"
-       xmlns:ns9="http://dhx.x-road.eu/producer">
-         <keha href="4a095fa0-b922-4746-bda2-d3498f0c5f06@dhx_4703433375683078305"/>
+      <ns4:getSendingOptionsResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
+         <keha xmlns:ns10="http://x-road.eu/xsd/representation.xsd" xmlns:ns11="http://x-road.eu/xsd/xroad.xsd" xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns4="http://www.riik.ee/schemas/dhl" xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns6="http://www.w3.org/2000/09/xmldsig#" xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns8="http://dhx.x-road.eu/producer" xmlns:ns9="http://x-road.eu/xsd/identifiers">
+            <asutus>
+               <regnr>dvk.70006317</regnr>
+               <nimi>Riigi Infosüsteemi Amet(DHX.dvk)</nimi>
+               <saatmine>
+                  <saatmisviis>dhl</saatmisviis>
+               </saatmine>
+            </asutus>
+            <asutus>
+               <regnr>10560025</regnr>
+               <nimi>BPW Consulting</nimi>
+               <saatmine>
+                  <saatmisviis>dhl</saatmisviis>
+               </saatmine>
+            </asutus>
+            <asutus>
+               <regnr>30000001</regnr>
+               <nimi>Hõbekuuli OÜ</nimi>
+               <saatmine>
+                  <saatmisviis>dhl</saatmisviis>
+               </saatmine>
+            </asutus>
+         </keha>
       </ns4:getSendingOptionsResponse>
    </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
-```
-
-Päringu vastuse `<keha>` element viitab manusele `href="4a095fa0-b922-4746-bda2-d3498f0c5f06@dhx_4703433375683078305"`, mille väärtus on näiteks:
-```
-H4sIAAAAAAAAAMWUv27bMBDG9z6FoM4mKct/EoNRkDZDOwQtuqSdAkZkpINN0uCRtvIufY1u3fxipRVIioCmXRxEE3n3HX/f3QHil43eJDvlEKy5SDPC0sviHTeYr9aqFknMGlwZnF2ktffbFaX7/Z44gDVRimJZKy2QynqT9tKzXirrhjQTZ4UkKtCtszKUyg3KjPXSQdagpE5tnUJlvPDRFomhoSjva7oHkUQ+aZzsfXWZsbEsewHXtJcRZT7qF9tXr6GCa1vSXUZywt4P4sVIvM+JdRWdMsYoO6dRJBGqZ/Lpv2epytLGzsFE/8fF3E3vMjpUL/+3iYlWXkxE8FbH8ZVD5fkL7YOMk4YHiKy04AKDD1hwpyrjCrlbk2XsZJFnS06fYtyAhuIbxHEkn82DxcNv9EppSK4imtM2zVEIr2MT3Ql3AFhEf5w+D3S3o5B27LGHjM0XjE3nY/6Hr7fJR2swbDyY6vTUnLVfNqZ+Ovy6V+sQNpB8Ofw8PdUJEbcWtiDFUUfexsXsr9QbMHBctIOgk++np2K4x8cI0ORt+Msn6mxMvWo1yY/X7Pf1ybT7oxd/ABLnvIDyBQAA
-```
-
-Mis dekodeeritult (base64 -d | gunzip) on näiteks:
-```xml
-<?xml version="1.0"?>
-<ns6:keha xmlns:ns6="http://producers.dhl.xrd.riik.ee/producer/dhl" >
- <asutus>
-  <regnr>30000001</regnr>
-  <nimi>Hõbekuuli OÜ</nimi>
-  <saatmine>
-   <saatmisviis>dhl</saatmisviis>
-  </saatmine>
- </asutus>
- <asutus>
-  <regnr>dvk.70006317</regnr>
-  <nimi>Riigi Infosüsteemi Amet</nimi>
-  <saatmine>
-    <saatmisviis>dhl</saatmisviis>
-  </saatmine>
- </asutus>
-</ns6:keha> 
 ```
 
 See sisaldab asutuse kohta kolme välja:
