@@ -165,16 +165,12 @@ H4sIAAAAAAAAAMWUv27bMBDG9z6FoM4mKct/EoNRkDZDOwQtuqSdAkZkpINN0uCRtvIufY1u3fxipRVI
 Mis dekodeeritult (base64 -d | gunzip) on näiteks:
 ```xml
 <?xml version="1.0"?>
-<ns6:keha xmlns:ns2="http://www.riik.ee/schemas/dhl" xmlns:ns8="http://dhx.x-road.eu/producer" 
-   xmlns:ns10="http://x-road.eu/xsd/representation.xsd" xmlns:ns6="http://producers.dhl.xrd.riik.ee/producer/dhl" 
-   xmlns:ns11="http://x-road.eu/xsd/xroad.xsd" xmlns:ns4="http://www.sk.ee/DigiDoc/v1.3.0#" 
-   xmlns:ns5="http://www.w3.org/2000/09/xmldsig#" xmlns:ns3="http://www.riik.ee/schemas/deccontainer/vers_2_1/" 
-   xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://x-road.eu/xsd/identifiers">
+<ns6:keha xmlns:ns6="http://producers.dhl.xrd.riik.ee/producer/dhl" >
  <asutus>
   <regnr>30000001</regnr>
   <nimi>Hõbekuuli OÜ</nimi>
   <saatmine>
-    <saatmisviis>dhl</saatmisviis>
+   <saatmisviis>dhl</saatmisviis>
   </saatmine>
  </asutus>
  <asutus>
