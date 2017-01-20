@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.xml.serialize.XMLSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -53,6 +54,7 @@ import javax.xml.validation.Validator;
 /**
  * Version DhxMarshallerService for capsules with big data files. No limitation on data file size is
  * set, data files from capsule are written to filesystem.
+ * 
  * <p>
  * In order for big data logic to work, object parameter which might be BIG must be annotated with
  * {@link BigDataXmlElement} annotation and be of type {@link File}. {@link XMLSerializer} is used
@@ -172,6 +174,51 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
   }
 
   /**
+   * Parses(unmarshalls) object from file.
+   *
+   * @param <T> - type of the capsule being unmarshalled
+   * @param capsuleFile file to parse
+   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
+   *        expected
+   * @return parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  @SuppressWarnings("unchecked")
+  @Loggable
+  public <T> T unmarshall(File capsuleFile, Class<? extends Object> bigDataClass)
+      throws DhxException {
+    try {
+      log.debug("Unmarshalling file: {}", capsuleFile.getAbsolutePath());
+      return (T) unmarshall(new FileInputStream(capsuleFile), bigDataClass);
+    } catch (FileNotFoundException ex) {
+      log.error(ex.getMessage(), ex);
+      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
+          "Error occured while creating object from capsule. "
+              + ex.getMessage(),
+          ex);
+    }
+  }
+  
+  /**
+   * Parses(unmarshalls) object from Node.
+   * 
+   * @param <T> - type of the capsule being unmarshalled
+   * @param node - node to unmarshall
+   * @return - parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T unmarshall(Node node)
+      throws DhxException {
+    try {
+      return (T) getUnmarshaller().unmarshal(node);
+    } catch (JAXBException ex) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "Error occured while unmarshalling node.", ex);
+    }
+  }
+  
+  /**
    * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
    * present.
    * 
@@ -220,6 +267,35 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
           ex);
     }
   }
+  
+  /**
+   * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
+   * present.
+   * 
+   * @param <T> - type of the capsule being unmarshalled
+   * @param capsuleStream - stream of to parse
+   * @param schemaStream - stream on XSD schema against which to validate. No validation is done if
+   *        stream is NULL
+   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
+   *        expected
+   * @return - parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  @Loggable
+  public <T> T unmarshallAndValidate(final InputStream capsuleStream,
+      InputStream schemaStream, Class<? extends Object> bigDataClass) throws DhxException {
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("unmarshalling file");
+      }
+      Unmarshaller unmarshaller = getUnmarshaller();
+      setSchemaForUnmarshaller(schemaStream, unmarshaller);
+      return unmarshallNoValidation(capsuleStream, unmarshaller, bigDataClass);
+    } finally {
+      // wont set single schema for unmarshaller
+      // unmarshaller.setSchema(null);
+    }
+  }
 
   @Loggable
   protected <T> T unmarshallNoValidation(final InputStream capsuleStream,
@@ -252,34 +328,11 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     }
   }
 
-  /**
-   * Parses(unmarshalls) object from file.
-   * 
-   * @param capsuleFile file to parse
-   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
-   *        expected
-   * @return parsed(unmarshalled) object
-   * @throws DhxException - thrown if error occurs while parsing file
-   */
-  @SuppressWarnings("unchecked")
-  @Loggable
-  public <T> T unmarshall(File capsuleFile, Class<? extends Object> bigDataClass)
-      throws DhxException {
-    try {
-      log.debug("Unmarshalling file: {}", capsuleFile.getAbsolutePath());
-      return (T) unmarshall(new FileInputStream(capsuleFile), bigDataClass);
-    } catch (FileNotFoundException ex) {
-      log.error(ex.getMessage(), ex);
-      throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
-          "Error occured while creating object from capsule. "
-              + ex.getMessage(),
-          ex);
-    }
-  }
 
   /**
    * Parses(unmarshalls) object from file.
    * 
+   * @param <T> - type of the capsule being unmarshalled
    * @param capsuleStream - stream to parse
    * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
    *        expected
@@ -292,35 +345,6 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
 
     return unmarshallAndValidate(capsuleStream, null, bigDataClass);
   }
-
-  /**
-   * Parses(unmarshalls) object from file. And does validation against XSD schema if schemaStream is
-   * present.
-   * 
-   * @param capsuleStream - stream of to parse
-   * @param schemaStream - stream on XSD schema against which to validate. No validation is done if
-   *        stream is NULL
-   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
-   *        expected
-   * @return - parsed(unmarshalled) object
-   * @throws DhxException - thrown if error occurs while parsing file
-   */
-  @Loggable
-  public <T> T unmarshallAndValidate(final InputStream capsuleStream,
-      InputStream schemaStream, Class<? extends Object> bigDataClass) throws DhxException {
-    try {
-      if (log.isDebugEnabled()) {
-        log.debug("unmarshalling file");
-      }
-      Unmarshaller unmarshaller = getUnmarshaller();
-      setSchemaForUnmarshaller(schemaStream, unmarshaller);
-      return unmarshallNoValidation(capsuleStream, unmarshaller, bigDataClass);
-    } finally {
-      // wont set single schema for unmarshaller
-      // unmarshaller.setSchema(null);
-    }
-  }
-
 
 
   @Loggable

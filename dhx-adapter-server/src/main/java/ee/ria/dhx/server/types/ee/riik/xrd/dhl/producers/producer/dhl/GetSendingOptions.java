@@ -9,10 +9,15 @@
 
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
+import org.w3c.dom.Element;
+
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -39,12 +44,33 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "keha"
+    "any"
 })
 @XmlRootElement(name = "getSendingOptions")
 public class GetSendingOptions {
 
-  @XmlElement(required = true)
+  @XmlAnyElement
+  protected List<Element> any;
+
+  /**
+   * Returns the any.
+   *
+   * @return the any
+   */
+  public List<Element> getAny() {
+    return any;
+  }
+
+  /**
+   * Sets the any.
+   *
+   * @param any the any to set
+   */
+  public void setAny(List<Element> any) {
+    this.any = any;
+  }
+
+  @XmlTransient
   protected GetSendingOptionsV2RequestType keha;
 
   /**

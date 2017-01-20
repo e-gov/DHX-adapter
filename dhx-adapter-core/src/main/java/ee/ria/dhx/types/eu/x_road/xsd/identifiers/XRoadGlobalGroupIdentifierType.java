@@ -40,8 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XRoadGlobalGroupIdentifierType")
 public class XRoadGlobalGroupIdentifierType
-    extends XRoadIdentifierType
-{
+    extends XRoadIdentifierType {
 
 
 }

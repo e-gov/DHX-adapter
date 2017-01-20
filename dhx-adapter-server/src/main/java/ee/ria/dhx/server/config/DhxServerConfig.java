@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ee.ria.dhx.server.config;
 
 import com.jcabi.aspects.Loggable;
@@ -21,47 +18,60 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
+ * Server config.
  * @author Aleksei Kokarev
  *
  */
 @Configuration
 @Slf4j
 public class DhxServerConfig {
-  
+
   @Value("${documents.folder}")
   @Setter
   String documentsFolder;
-  
+
   @Value("${dhx.server-wsdl-file:dhl.wsdl}")
   private String wsdlFile;
 
-  
-  
+
+/**
+ * Creates document in configured folder.
+ * @return created file
+ * @throws DhxException thrown if error occurs
+ */
   @Loggable
-  public File createDocumentFile () throws DhxException{
+  public File createDocumentFile() throws DhxException {
     try {
-    SimpleDateFormat sdf = new SimpleDateFormat("YYYY_MM_dd_HHmmss");
-    Date date = new Date();
-    String fileName = documentsFolder + "dhx_" + sdf.format(date) + UUID.randomUUID();
-    log.debug("creating file: " + fileName);
-    File file = new File(fileName);
-    file.createNewFile();
-    return file;
-    } catch(IOException ex){
-      throw new DhxException(DhxExceptionEnum.FILE_ERROR, "Error occured while creating new file. " + ex.getMessage(), ex);
+      SimpleDateFormat sdf = new SimpleDateFormat("YYYY_MM_dd_HHmmss");
+      Date date = new Date();
+      String fileName = documentsFolder + "dhx_" + sdf.format(date) + UUID.randomUUID();
+      log.debug("creating file: " + fileName);
+      File file = new File(fileName);
+      file.createNewFile();
+      return file;
+    } catch (IOException ex) {
+      throw new DhxException(DhxExceptionEnum.FILE_ERROR,
+          "Error occured while creating new file. " + ex.getMessage(), ex);
     }
   }
-  
+
+  /**
+   * Returns document found in configured folder.
+   * @param fileName name of the file to find
+   * @return found file
+   * @throws DhxException thrown if error occurs
+   */
   @Loggable
-  public File getDocumentFile (String fileName) throws DhxException{
+  public File getDocumentFile(String fileName) throws DhxException {
     File file = new File(documentsFolder + fileName);
-    if(file.exists()) {
+    if (file.exists()) {
       return file;
     } else {
-      throw new DhxException(DhxExceptionEnum.FILE_ERROR, "File not found! file:" +documentsFolder + fileName);
+      throw new DhxException(DhxExceptionEnum.FILE_ERROR,
+          "File not found! file:" + documentsFolder + fileName);
     }
   }
-  
+
   /**
    * by default dhl.wsdl.
    * 

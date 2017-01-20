@@ -445,7 +445,8 @@ public class DecContainer {
    * 
    * 
    * <p>
-   * Objects of the following type(s) are allowed in the list {@link DecContainer.SignatureMetadata }
+   * Objects of the following type(s) are allowed in the list
+   * {@link DecContainer.SignatureMetadata }
    * 
    * @return list of {@link SignatureMetadata}
    */

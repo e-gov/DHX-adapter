@@ -20,6 +20,7 @@ public class DhxOrganisation {
 
   /**
    * DhxOrganisation consctructor.
+   * 
    * @param member the member to create DhxOrganisation from
    * @param dhxSubsystemPrefix DHX subsystem prefix to use when creating DhxOrganisation
    */
@@ -51,6 +52,7 @@ public class DhxOrganisation {
 
   /**
    * Returns code in upper case.
+   * 
    * @return code in upper case
    */
   public String getCodeUpper() {
@@ -59,6 +61,7 @@ public class DhxOrganisation {
 
   /**
    * Returns the code.
+   * 
    * @return the code
    */
   public String getCode() {
@@ -67,6 +70,7 @@ public class DhxOrganisation {
 
   /**
    * Returns the system.
+   * 
    * @return the system
    */
   public String getSystem() {
@@ -75,6 +79,7 @@ public class DhxOrganisation {
 
   /**
    * Returns the system, if system is null then empty string is returned.
+   * 
    * @return the system, if system is null then empty string is returned
    */
   private String getNotNullSystem() {
@@ -142,6 +147,7 @@ public class DhxOrganisation {
 
   /**
    * Returns the dhxSubsystemPrefix.
+   * 
    * @return the dhxSubsystemPrefix
    */
   public String getDhxSubsystemPrefix() {
@@ -150,6 +156,7 @@ public class DhxOrganisation {
 
   /**
    * Sets the dhxSubsystemPrefix.
+   * 
    * @param dhxSubsystemPrefix the dhxSubsystemPrefix to set
    */
   public void setDhxSubsystemPrefix(String dhxSubsystemPrefix) {
@@ -158,6 +165,7 @@ public class DhxOrganisation {
 
   /**
    * Returns the code.
+   * 
    * @param code the code to set
    */
   public void setCode(String code) {
@@ -166,6 +174,7 @@ public class DhxOrganisation {
 
   /**
    * Sets the system.
+   * 
    * @param system the system to set
    */
   public void setSystem(String system) {

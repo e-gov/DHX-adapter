@@ -12,9 +12,9 @@ package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 import javax.activation.DataHandler;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttachmentRef;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -41,12 +41,39 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "base64BinaryType")
 public class Base64BinaryType {
 
-  @XmlAttribute(name = "href")
-  @XmlAttachmentRef
-  @XmlSchemaType(name = "anyURI")
+  /*
+   * @XmlAttribute(name = "href")
+   * 
+   * @XmlAttachmentRef
+   * 
+   * @XmlSchemaType(name = "anyURI")
+   */
+  @XmlTransient
   protected DataHandler href;
 
+  @XmlAttribute(name = "href")
+  @XmlSchemaType(name = "anyURI")
+  protected String hrefString;
 
+
+
+  /**
+   * Returns the hrefString.
+   *
+   * @return the hrefString
+   */
+  public String getHrefString() {
+    return hrefString;
+  }
+
+  /**
+   * Sets the hrefString.
+   *
+   * @param hrefString the hrefString to set
+   */
+  public void setHrefString(String hrefString) {
+    this.hrefString = hrefString;
+  }
 
   /**
    * Gets the value of the href property.

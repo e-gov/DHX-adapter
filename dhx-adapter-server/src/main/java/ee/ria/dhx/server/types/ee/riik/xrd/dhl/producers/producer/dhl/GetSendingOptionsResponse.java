@@ -9,9 +9,13 @@
 
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
+import org.w3c.dom.Element;
+
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -39,32 +43,30 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "keha"
+    "any"
 })
 @XmlRootElement(name = "getSendingOptionsResponse")
 public class GetSendingOptionsResponse {
 
-  @XmlElement(required = true)
-  protected /* InstitutionArrayType */ Base64BinaryType keha;
+  @XmlAnyElement
+  protected List<Element> any;
 
   /**
-   * Gets the value of the keha property.
-   * 
-   * @return possible object is {@link Base64BinaryType }
-   * 
+   * Returns the any.
+   *
+   * @return the any
    */
-  public Base64BinaryType getKeha() {
-    return keha;
+  public List<Element> getAny() {
+    return any;
   }
 
   /**
-   * Sets the value of the keha property.
-   * 
-   * @param value allowed object is {@link Base64BinaryType }
-   * 
+   * Sets the any.
+   *
+   * @param any the any to set
    */
-  public void setKeha(Base64BinaryType value) {
-    this.keha = value;
+  public void setAny(List<Element> any) {
+    this.any = any;
   }
 
 }

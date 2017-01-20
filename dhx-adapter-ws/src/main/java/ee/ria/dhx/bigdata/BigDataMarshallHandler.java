@@ -39,6 +39,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
 
   /**
    * BigDataMarshallHandler constructor.
+   * 
    * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
    *        expected
    * @param objectToMarshall object to be marshalled

@@ -126,7 +126,7 @@ public class DhxPackageProviderServiceImpl implements DhxPackageProviderService 
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.WS_ERROR,
           "Error occured while reading or writing capsule file.", ex);
-    }finally {
+    } finally {
       FileUtil.safeCloseStream(fileStream);
     }
     return document;

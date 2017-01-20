@@ -64,7 +64,7 @@ public class ReflectionUtil {
    * @return - field found in class
    * @throws DhxException - thrown if error occurs
    */
-  @Loggable
+  @Loggable(Loggable.TRACE)
   public static Field getFieldForPath(Stack<String> path, Class<? extends Object> fieldClass)
       throws DhxException {
     Class<? extends Object> curClass = fieldClass;
@@ -115,7 +115,7 @@ public class ReflectionUtil {
    * @return - true if given field is big data field
    * @throws DhxException - thrown when error occurs
    */
-  @Loggable
+  @Loggable(Loggable.TRACE)
   public static Boolean isBigDataField(Field field)
       throws DhxException {
     if (field != null && field.isAnnotationPresent(BigDataXmlElement.class)) {
@@ -131,9 +131,9 @@ public class ReflectionUtil {
    * 
    * @param classToCheck class to find XmlRootElement in
    * @param rootElement root element's name
-   * @return
+   * @return whether rootElement found as {@link XmlRootElement} in classToCheck
    */
-  @Loggable
+  @Loggable(Loggable.TRACE)
   public static boolean isXmlRoot(Class<? extends Object> classToCheck, String rootElement) {
     XmlRootElement rootAnnotation =
         (XmlRootElement) classToCheck.getAnnotation(XmlRootElement.class);
@@ -152,7 +152,7 @@ public class ReflectionUtil {
    * @param obj - object to which big data elements are set
    * @throws DhxException - throws if error occurs
    */
-  @Loggable
+  @Loggable(Loggable.TRACE)
   public static void setBigDataFieldsToObject(List<BigDataElement> bigDataElements, Object obj)
       throws DhxException {
     for (BigDataElement element : bigDataElements) {
@@ -170,7 +170,7 @@ public class ReflectionUtil {
    * @return - object return by get method
    * @throws DhxException - thrown if error occurs
    */
-  @Loggable
+  @Loggable(Loggable.TRACE)
   public static Object getObjectByPath(Stack<String> path, Object obj) throws DhxException {
     return setOrGetObjectByPath(path, obj, null);
   }
@@ -185,7 +185,7 @@ public class ReflectionUtil {
    * @return - object which were set or returned by get method
    * @throws DhxException - thrown if error occurs
    */
-  @Loggable
+  @Loggable(Loggable.TRACE)
   protected static Object setOrGetObjectByPath(Stack<String> path, Object obj, Object objectToset)
       throws DhxException {
     try {
@@ -258,12 +258,12 @@ public class ReflectionUtil {
     }
   }
 
-  @Loggable
+  @Loggable(Loggable.TRACE)
   private static String getFieldGetter(String fieldName) {
     return "get" + StringUtil.capitalize(fieldName);
   }
 
-  @Loggable
+  @Loggable(Loggable.TRACE)
   private static String getFieldSetter(String fieldName) {
     return "set" + StringUtil.capitalize(fieldName);
   }

@@ -16,6 +16,7 @@ public class CapsuleAdressee {
 
   /**
    * CapsuleAdressee constructor.
+   * 
    * @param adresseeCode code of the capsule addressee
    * @param personalCode personal code of the capsule addressee
    * @param structuralUnit structural unit of the capsule addressee
@@ -33,6 +34,7 @@ public class CapsuleAdressee {
 
   /**
    * Returns the adresseeCode.
+   * 
    * @return the adresseeCode
    */
   public String getAdresseeCode() {
@@ -41,6 +43,7 @@ public class CapsuleAdressee {
 
   /**
    * Sets the adresseeCode.
+   * 
    * @param adresseeCode the adresseeCode to set
    */
   public void setAdresseeCode(String adresseeCode) {
@@ -49,6 +52,7 @@ public class CapsuleAdressee {
 
   /**
    * Returns the personalCode.
+   * 
    * @return the personalCode
    */
   public String getPersonalCode() {
@@ -57,6 +61,7 @@ public class CapsuleAdressee {
 
   /**
    * Sets the personalCode.
+   * 
    * @param personalCode the personalCode to set
    */
   public void setPersonalCode(String personalCode) {
@@ -65,6 +70,7 @@ public class CapsuleAdressee {
 
   /**
    * Returns the structuralUnit.
+   * 
    * @return the structuralUnit
    */
   public String getStructuralUnit() {
@@ -73,6 +79,7 @@ public class CapsuleAdressee {
 
   /**
    * Sets the structuralUnit.
+   * 
    * @param structuralUnit the structuralUnit to set
    */
   public void setStructuralUnit(String structuralUnit) {

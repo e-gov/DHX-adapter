@@ -14,6 +14,7 @@ public class AsyncDhxSendDocumentResult {
 
   /**
    * Returns the result.
+   * 
    * @return the result
    */
   public DhxSendDocumentResult getResult() {
@@ -22,6 +23,7 @@ public class AsyncDhxSendDocumentResult {
 
   /**
    * Sets the result.
+   * 
    * @param result the result to set
    */
   public void setResult(DhxSendDocumentResult result) {
@@ -30,6 +32,7 @@ public class AsyncDhxSendDocumentResult {
 
   /**
    * Return the tryDate.
+   * 
    * @return the tryDate
    */
   public Date getTryDate() {
@@ -38,11 +41,12 @@ public class AsyncDhxSendDocumentResult {
 
   /**
    * Sets the tryDate.
+   * 
    * @param tryDate the tryDate to set
    */
   public void setTryDate(Date tryDate) {
     this.tryDate = tryDate;
   }
 
-  
+
 }

@@ -26,7 +26,7 @@
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger>
-   <!--  <Logger name="org.springframework.ws.client.MessageTracing" level="trace" additivity="false">
+    <Logger name="org.springframework.ws.client.MessageTracing" level="trace" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger> 
@@ -34,7 +34,7 @@
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger>
-     --> 
+      
      <Logger name="org.hibernate.SQL" level="debug" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>

@@ -4,6 +4,8 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 
+import org.w3c.dom.Node;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -51,6 +53,17 @@ public interface DhxMarshallerService {
    * @throws DhxException - thrown if error occurs while parsing file
    */
   public <T> T unmarshall(final InputStream capsuleStream)
+      throws DhxException;
+
+  /**
+   * Parses(unmarshalls) object from Node.
+   * 
+   * @param <T> - type of the capsule being unmarshalled
+   * @param node - node to unmarshall
+   * @return - parsed(unmarshalled) object
+   * @throws DhxException - thrown if error occurs while parsing file
+   */
+  public <T> T unmarshall(Node node)
       throws DhxException;
 
   /**

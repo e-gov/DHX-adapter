@@ -120,12 +120,14 @@ public class InternalXroadMember {
         + "/"
         + subsystemCode
         + (representee == null ? "" : ", representee: "
-            + representee.getRepresenteeCode() + ", system:" + representee.getRepresenteeSystem());
+            + representee.getRepresenteeCode() + ", system:"
+            + representee.getRepresenteeSystem());
   }
 
 
   /**
    * Returns the xroadInstance.
+   * 
    * @return the xroadInstance
    */
   public String getXroadInstance() {
@@ -134,6 +136,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the xroadInstance.
+   * 
    * @param xroadInstance the xroadInstance to set
    */
   public void setXroadInstance(String xroadInstance) {
@@ -142,6 +145,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the memberClass.
+   * 
    * @return the memberClass
    */
   public String getMemberClass() {
@@ -150,6 +154,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the memberClass.
+   * 
    * @param memberClass the memberClass to set
    */
   public void setMemberClass(String memberClass) {
@@ -158,6 +163,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the memberCode.
+   * 
    * @return the memberCode
    */
   public String getMemberCode() {
@@ -166,6 +172,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the memberCode.
+   * 
    * @param memberCode the memberCode to set
    */
   public void setMemberCode(String memberCode) {
@@ -174,6 +181,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the subsystemCode.
+   * 
    * @return the subsystemCode
    */
   public String getSubsystemCode() {
@@ -182,6 +190,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the subsystemCode.
+   * 
    * @param subsystemCode the subsystemCode to set
    */
   public void setSubsystemCode(String subsystemCode) {
@@ -190,6 +199,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the name.
+   * 
    * @return the name
    */
   public String getName() {
@@ -198,6 +208,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the name.
+   * 
    * @param name the name to set
    */
   public void setName(String name) {
@@ -206,6 +217,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the serviceCode.
+   * 
    * @return the serviceCode
    */
   public String getServiceCode() {
@@ -214,6 +226,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the serviceCode.
+   * 
    * @param serviceCode the serviceCode to set
    */
   public void setServiceCode(String serviceCode) {
@@ -222,6 +235,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the serviceVersion.
+   * 
    * @return the serviceVersion
    */
   public String getServiceVersion() {
@@ -230,6 +244,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the serviceVersion.
+   * 
    * @param serviceVersion the serviceVersion to set
    */
   public void setServiceVersion(String serviceVersion) {
@@ -238,6 +253,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the representee.
+   * 
    * @return the representee
    */
   public DhxRepresentee getRepresentee() {
@@ -246,6 +262,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the representee.
+   * 
    * @param representee the representee to set
    */
   public void setRepresentee(DhxRepresentee representee) {
@@ -254,6 +271,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the representor.
+   * 
    * @return the representor
    */
   public Boolean getRepresentor() {
@@ -262,6 +280,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the representor.
+   * 
    * @param representor the representor to set
    */
   public void setRepresentor(Boolean representor) {
@@ -270,6 +289,7 @@ public class InternalXroadMember {
 
   /**
    * Returns the userId.
+   * 
    * @return the userId
    */
   public String getUserId() {
@@ -278,6 +298,7 @@ public class InternalXroadMember {
 
   /**
    * Sets the userId.
+   * 
    * @param userId the userId to set
    */
   public void setUserId(String userId) {

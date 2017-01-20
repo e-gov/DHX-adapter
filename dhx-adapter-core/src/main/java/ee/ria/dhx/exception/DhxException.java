@@ -17,6 +17,11 @@ public class DhxException extends Exception {
     this.setExceptionCode(exceptionCode);
   }
 
+  public DhxException(String message) {
+    super(message);
+    this.setExceptionCode(DhxExceptionEnum.TECHNICAL_ERROR);
+  }
+
   public DhxException(String message, Exception cause) {
     super(message, cause);
     this.setExceptionCode(DhxExceptionEnum.TECHNICAL_ERROR);
@@ -36,6 +41,7 @@ public class DhxException extends Exception {
 
   /**
    * Returns the exceptionCode.
+   * 
    * @return the exceptionCode
    */
   public DhxExceptionEnum getExceptionCode() {
@@ -44,6 +50,7 @@ public class DhxException extends Exception {
 
   /**
    * Sets the exceptionCode.
+   * 
    * @param exceptionCode the exceptionCode to set
    */
   public void setExceptionCode(DhxExceptionEnum exceptionCode) {
