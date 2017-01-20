@@ -62,6 +62,9 @@ public class Organisation extends BaseEntity implements Serializable {
 
   private Boolean ownRepresentee;
 
+  @Column(name = "reaalne_nimi")
+  private String realName;
+
   // bi-directional many-to-one association to Organisation
   @ManyToOne
   @JoinColumn(name = "vahendaja_asutus_id")
@@ -318,6 +321,26 @@ public class Organisation extends BaseEntity implements Serializable {
    */
   public void setOwnRepresentee(Boolean ownRepresentee) {
     this.ownRepresentee = ownRepresentee;
+  }
+
+  /**
+   * Returns the real name of the Organisation. By default it is empty, not empty if real
+   * organisation name differs from the one found in Xroad parameters.
+   *
+   * @return the realName
+   */
+  public String getRealName() {
+    return realName;
+  }
+
+  /**
+   * Sets the real name of the Organisation. By default it is empty, not empty if real
+   * organisation name differs from the one found in Xroad parameters.
+   *
+   * @param realName the realName to set
+   */
+  public void setRealName(String realName) {
+    this.realName = realName;
   }
 
   /**

@@ -25,6 +25,7 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64Bina
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusResponse;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptions;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsResponse;
@@ -440,8 +441,8 @@ public class SoapService {
               request.setDokumendid(new Dokumendid());
               request.getDokumendid().setTagasisided(taagsisideList);
               org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
-                WsUtil.base64DecodeIfNeededAndUnzip(
-                    attachmentHandler));
+                  WsUtil.base64DecodeIfNeededAndUnzip(
+                      attachmentHandler));
               NodeList list = xmlDoc.getElementsByTagName("dhl_id");
               for (int j = 0; j < list.getLength(); j++) {
                 Node node = list.item(j);
@@ -609,6 +610,52 @@ public class SoapService {
     return response;
   }
 
+  private void setGetSendStatusRequestBody(GetSendStatus requestWrapper,
+      InternalXroadMember recipientMember, MessageContext context) throws DhxException {
+    if (requestWrapper.getAny() != null && requestWrapper.getAny().size() > 0
+        && requestWrapper.getAny().get(0).getTagName().equals("keha")) {
+      Node keha = requestWrapper.getAny().get(0);
+      log.debug("Found keha element in request.");
+      DataHandler attachmentHandler = null;
+      Boolean history = false;
+      if (recipientMember.getServiceVersion().equals("v1")) {
+        for (int i = 0; i < keha.getAttributes().getLength(); i++) {
+          Node att = keha.getAttributes().item(i);
+          if (att.getLocalName().equals("href")) {
+            String content = att.getTextContent();
+            log.debug("Dealing with request in attachment defined in href(v3).");
+            attachmentHandler = WsUtil.extractAttachment(context, content);
+          }
+        }
+      } else if (recipientMember.getServiceVersion().equals("v2")) {
+        if (keha.getChildNodes() != null && keha.getChildNodes().getLength() > 0) {
+          for (int k = 0; k < keha.getChildNodes().getLength(); k++) {
+            Node node = keha.getChildNodes().item(k);
+            if (node != null && node.getLocalName() != null) {
+              if (node.getLocalName().equals("dokumendid")) {
+                for (int i = 0; i < node.getAttributes().getLength(); i++) {
+                  Node att = node.getAttributes().item(i);
+                  if (att.getLocalName().equals("href")) {
+                    String content = att.getTextContent();
+                    attachmentHandler = WsUtil.extractAttachment(context, content);
+                  }
+                }
+              } else if (node.getLocalName().equals("staatuse_ajalugu")) {
+                history = Boolean.valueOf(node.getTextContent());
+              }
+            }
+          }
+        }
+      }
+      requestWrapper.setKeha(new GetSendStatusV2RequestType());
+      requestWrapper.getKeha().setDokumendid(new Base64BinaryType());
+      requestWrapper.getKeha().getDokumendid().setHref(attachmentHandler);
+      requestWrapper.getKeha().setStaatuseAjalugu(history);
+    } else {
+      throw new DhxException("Request is empty or invalid!");
+    }
+  }
+
   /**
    * Method returns statuses of the documents. Documents are found by the parameters provided in
    * request.
@@ -622,7 +669,15 @@ public class SoapService {
   @Loggable
   public GetSendStatusResponse getSendStatus(GetSendStatus request,
       InternalXroadMember senderMember,
-      InternalXroadMember recipientMember) throws DhxException {
+      InternalXroadMember recipientMember, MessageContext context) throws DhxException {
+    if (request.getKeha() == null) {
+      setGetSendStatusRequestBody(request, recipientMember, context);
+    }
+    if (request.getKeha() == null || request.getKeha().getDokumendid() == null
+        || request.getKeha().getDokumendid().getHref() == null) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "Request is empty or invalid!");
+    }
     org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
         WsUtil.base64DecodeIfNeededAndUnzip(
             request.getKeha().getDokumendid().getHref()));
@@ -786,7 +841,7 @@ public class SoapService {
                     attachmentHandler));
             InstitutionRefsArrayType institutions = new InstitutionRefsArrayType();
             request.setAsutused(institutions);
-            NodeList list = keha.getOwnerDocument().getElementsByTagName("asutus");
+            NodeList list = xmlDoc.getElementsByTagName("asutus");
             if (list != null) {
               for (int j = 0; j < list.getLength(); j++) {
                 Node node = list.item(j);
@@ -798,8 +853,6 @@ public class SoapService {
           break;
         }
       }
-    } else {
-      throw new DhxException("Request is empty or invalid!");
     }
     requestWrapper.setKeha(request);
   }
@@ -825,50 +878,65 @@ public class SoapService {
     // new InstitutionArrayType();
     ObjectFactory fact = new ObjectFactory();
     InstitutionArrayType institutions = fact.createInstitutionArrayType();
-    for (InternalXroadMember org : addressService.getAdresseeList()) {
-      InstitutionType institution = new InstitutionType();
-      if (org.getRepresentee() == null) {
-        institution.setRegnr(
-            persistenceService.toDvkCapsuleAddressee(org.getMemberCode(),
-                org.getSubsystemCode()));
-        String subsystem = "";
-        if (!StringUtil.isNullOrEmpty(org.getSubsystemCode())
-            && !soapConfig.getDhxSubsystemPrefix().equals(org.getSubsystemCode())) {
-          subsystem = "(" + org.getSubsystemCode() + ")";
-        }
-        institution.setNimi(org.getName() + subsystem);
+    List<Organisation> orgs = persistenceService.getAdresseeList();
 
-      } else {
-        Date curDate = new Date();
-        // skip outdated
-        if (org.getRepresentee().getStartDate().getTime() > curDate.getTime()
-            || (org.getRepresentee().getEndDate() != null
-                && org.getRepresentee().getEndDate().getTime() < curDate.getTime())) {
-          continue;
+    if (orgs != null && orgs.size() > 0) {
+      for (Organisation org : orgs) {
+        InstitutionType institution = new InstitutionType();
+        if (org.getRepresentor() == null) {
+          institution.setRegnr(persistenceService.toDvkCapsuleAddressee(org.getRegistrationCode(),
+              org.getSubSystem()));
+
+          if (!StringUtil.isNullOrEmpty(org.getRealName())) {
+            institution.setNimi(org.getRealName());
+          } else {
+            String subsystem = "";
+            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) &&
+                !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
+              subsystem = "(" +
+                  org.getSubSystem() + ")";
+            }
+            institution.setNimi(org.getName() + subsystem);
+          }
+
+
+        } else {
+          Date curDate = new Date(); // skip outdated
+          if (org.getRepresenteeStart().getTime() > curDate.getTime()
+              || (org.getRepresenteeEnd() != null
+                  && org.getRepresenteeEnd().getTime() < curDate.getTime())) {
+            continue;
+          }
+          institution.setRegnr(
+              persistenceService.toDvkCapsuleAddressee(org.getRegistrationCode(),
+                  org.getSubSystem()));
+          if (!StringUtil.isNullOrEmpty(org.getRealName())) {
+            institution.setNimi(org.getRealName());
+          } else {
+            String subsystem = "";
+            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) &&
+                !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
+              subsystem = "(" +
+                  org.getSubSystem() + ")";
+            }
+            institution.setNimi(org.getName() + subsystem);
+          }
         }
-        institution.setRegnr(
-            persistenceService.toDvkCapsuleAddressee(org.getRepresentee().getRepresenteeCode(),
-                org.getRepresentee().getRepresenteeSystem()));
-        String subsystem = "";
-        if (!StringUtil.isNullOrEmpty(org.getRepresentee().getRepresenteeSystem()) && !soapConfig
-            .getDhxSubsystemPrefix().equals(org.getRepresentee().getRepresenteeSystem())) {
-          subsystem = "(" + org.getRepresentee().getRepresenteeSystem() + ")";
-        }
-        institution.setNimi(org.getRepresentee().getRepresenteeName());
-      }
-      SendingOptionArrayType sendingOptions = new SendingOptionArrayType();
-      sendingOptions.getSaatmisviis().add("dhl");
-      institution.setSaatmine(sendingOptions);
-      if (request.getKeha().getAsutused() != null
-          && request.getKeha().getAsutused().getAsutus() != null
-          && request.getKeha().getAsutused().getAsutus().size() > 0) {
-        if (request.getKeha().getAsutused().getAsutus().contains(institution.getRegnr())) {
+        SendingOptionArrayType sendingOptions = new SendingOptionArrayType();
+        sendingOptions.getSaatmisviis().add("dhl");
+        institution.setSaatmine(sendingOptions);
+        if (request.getKeha().getAsutused() != null
+            && request.getKeha().getAsutused().getAsutus() != null
+            && request.getKeha().getAsutused().getAsutus().size() > 0) {
+          if (request.getKeha().getAsutused().getAsutus().contains(institution.getRegnr())) {
+            institutions.getAsutus().add(institution);
+          }
+        } else {
           institutions.getAsutus().add(institution);
         }
-      } else {
-        institutions.getAsutus().add(institution);
       }
     }
+
     if (recipientMember.getServiceVersion().equals("v1")
         || recipientMember.getServiceVersion().equals("v2")) {
       try {

@@ -125,14 +125,14 @@ public class GetSendStatusV2ResponseTypeUnencoded {
       "staatuseAjalugu",
       "olek"
   })
-  @XmlRootElement(name = "item")
+  @XmlRootElement(name = "item", namespace="")
   public static class Item {
 
-    @XmlElement(name = "dhl_id", namespace = "http://www.riik.ee/schemas/dhl-meta-automatic", required = true)
+    @XmlElement(name = "dhl_id", namespace = "", required = true)
     protected String dhlId;
-    @XmlElement(namespace = "http://www.riik.ee/schemas/dhl")
+    @XmlElement(namespace = "")
     protected List<Edastus> edastus;
-    @XmlElement(name = "staatuse_ajalugu", required = true)
+    @XmlElement(name = "staatuse_ajalugu", namespace = "", required = true)
     protected StatusHistoryType staatuseAjalugu;
     @XmlElement(required = true)
     protected String olek;

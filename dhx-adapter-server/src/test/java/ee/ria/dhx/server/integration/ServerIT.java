@@ -1228,7 +1228,7 @@ public class ServerIT {
 
     // organisation with subsustem
     assertEquals("dvk.70006317", items.getAsutus().get(0).getRegnr());
-    assertEquals("Riigi Infosüsteemi Amet", items.getAsutus().get(0).getNimi());
+    assertEquals("Riigi Infosüsteemi Amet(DHX.dvk)", items.getAsutus().get(0).getNimi());
 
     // regular organisation
     assertEquals("30000001", items.getAsutus().get(1).getRegnr());
@@ -1236,7 +1236,7 @@ public class ServerIT {
 
     // organisation with subsystem
     assertEquals("raamatupidamine.30000001", items.getAsutus().get(2).getRegnr());
-    assertEquals("Hõbekuuli OÜ", items.getAsutus().get(2).getNimi());
+    assertEquals("Hõbekuuli OÜ(DHX.raamatupidamine)", items.getAsutus().get(2).getNimi());
 
     // regular organisation
     assertEquals("40000001", items.getAsutus().get(3).getRegnr());
@@ -1245,7 +1245,7 @@ public class ServerIT {
     // organisation with non standard subsystem(without dot(.) iafter
     // prefix)
     assertEquals("DHXsubsystem.40000001", items.getAsutus().get(4).getRegnr());
-    assertEquals("Ministeerium X", items.getAsutus().get(4).getNimi());
+    assertEquals("Ministeerium X(DHXsubsystem)", items.getAsutus().get(4).getNimi());
 
     // regular organisation
     assertEquals("70000004", items.getAsutus().get(5).getRegnr());
@@ -1253,15 +1253,15 @@ public class ServerIT {
 
     // organisation with special subsystem
     assertEquals("adit", items.getAsutus().get(6).getRegnr());
-    assertEquals("Asutus Y", items.getAsutus().get(6).getNimi());
+    assertEquals("Asutus Y(DHX.adit)", items.getAsutus().get(6).getNimi());
 
     // representee with subsystem
     assertEquals("system.500", items.getAsutus().get(7).getRegnr());
-    assertEquals("Representee 1", items.getAsutus().get(7).getNimi());
+    assertEquals("Representee 1(system)", items.getAsutus().get(7).getNimi());
 
     // representee with special subsystem
     assertEquals("rt", items.getAsutus().get(8).getRegnr());
-    assertEquals("Representee 2", items.getAsutus().get(8).getNimi());
+    assertEquals("Representee 2(rt)", items.getAsutus().get(8).getNimi());
 
     // regular representee
     assertEquals("500", items.getAsutus().get(9).getRegnr());
@@ -1330,7 +1330,7 @@ public class ServerIT {
 
     // organisation with subsustem
     assertEquals("dvk.70006317", items.getAsutus().get(0).getRegnr());
-    assertEquals("Riigi Infosüsteemi Amet", items.getAsutus().get(0).getNimi());
+    assertEquals("Riigi Infosüsteemi Amet(DHX.dvk)", items.getAsutus().get(0).getNimi());
 
     // regular organisation
     assertEquals("30000001", items.getAsutus().get(1).getRegnr());
@@ -1338,7 +1338,7 @@ public class ServerIT {
 
     // organisation with subsystem
     assertEquals("raamatupidamine.30000001", items.getAsutus().get(2).getRegnr());
-    assertEquals("Hõbekuuli OÜ", items.getAsutus().get(2).getNimi());
+    assertEquals("Hõbekuuli OÜ(DHX.raamatupidamine)", items.getAsutus().get(2).getNimi());
 
     // regular organisation
     assertEquals("40000001", items.getAsutus().get(3).getRegnr());
@@ -1347,11 +1347,11 @@ public class ServerIT {
     // organisation with non standard subsystem(without dot(.) iafter
     // prefix)
     assertEquals("DHXsubsystem.40000001", items.getAsutus().get(4).getRegnr());
-    assertEquals("Ministeerium X", items.getAsutus().get(4).getNimi());
+    assertEquals("Ministeerium X(DHXsubsystem)", items.getAsutus().get(4).getNimi());
 
     // regular representee
     assertEquals("system.500", items.getAsutus().get(5).getRegnr());
-    assertEquals("Representee 1", items.getAsutus().get(5).getNimi());
+    assertEquals("Representee 1(system)", items.getAsutus().get(5).getNimi());
 
     Iterable<Organisation> orgs = organisationRepository.findAll();
     Iterator<Organisation> iterator = orgs.iterator();

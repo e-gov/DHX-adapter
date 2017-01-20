@@ -121,10 +121,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
     if (members == null) {
       members = new ArrayList<InternalXroadMember>();
       List<Organisation> orgs =
-          organisationRepository.findByIsActiveAndDhxOrganisation(true, true);
-      List<Organisation> representeeOrgs =
-          organisationRepository.findByIsActiveAndOwnRepresentee(true, true);
-      orgs.addAll(representeeOrgs);
+          persistenceService.getAdresseeList();
       log.debug("found addressee organisations:" + orgs.size());
       for (Organisation org : orgs) {
         members.add(getInternalXroadMemberFromOrganisation(org));

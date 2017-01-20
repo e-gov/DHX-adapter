@@ -82,7 +82,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlRootElement(name = "edastus")
 public class Edastus {
 
-  @XmlElement(required = true)
+  @XmlElement(required = true, namespace = "")
   protected AadressType saaja;
   @XmlElement(namespace = "", required = true)
   @XmlSchemaType(name = "dateTime")

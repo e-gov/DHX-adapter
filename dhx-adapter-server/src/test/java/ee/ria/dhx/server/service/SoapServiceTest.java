@@ -604,7 +604,7 @@ public class SoapServiceTest {
     when(persistenceService.toDvkCapsuleAddressee(Mockito.anyString(), Mockito.anyString()))
         .thenReturn("regCode");
     GetSendStatusResponse resp =
-        soapService.getSendStatus(request, senderMember, recipientMember);
+        soapService.getSendStatus(request, senderMember, recipientMember, null);
     ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
     Mockito.verify(convertationService).createDatahandlerFromList(argument.capture());
     List<GetSendStatusV2ResponseTypeUnencoded.Item> items = argument.getValue();
@@ -689,7 +689,7 @@ public class SoapServiceTest {
     List<Document> docs = new ArrayList<Document>();
     docs.add(doc);
     when(documentRepository.findByDocumentIdIn(any(List.class))).thenReturn(docs);
-    soapService.getSendStatus(request, senderMember, recipientMember);
+    soapService.getSendStatus(request, senderMember, recipientMember, null);
     ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
     Mockito.verify(convertationService).createDatahandlerFromList(argument.capture());
     List<GetSendStatusV2ResponseTypeUnencoded.Item> items = argument.getValue();

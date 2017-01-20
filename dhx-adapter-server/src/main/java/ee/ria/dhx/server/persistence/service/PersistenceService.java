@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Class to perform actions on persistence objects, e.g. create persistence object from DHX specific
@@ -376,6 +378,28 @@ public class PersistenceService {
     history.setFaultCode(recipient.getFaultCode());
     history.setFaultActor(recipient.getFaultActor());
     recipient.addStatusHistory(history);
+  }
+
+  /**
+   * Method returns list of all addressees.
+   * 
+   * @return list of all addressees
+   */
+  @Loggable(Loggable.DEBUG)
+  public List<Organisation> getAdresseeList() {
+    List<Organisation> result = new ArrayList<Organisation>();
+    List<Organisation> orgs =
+        organisationRepository.findByIsActiveAndDhxOrganisation(true, true);
+    if (orgs != null && orgs.size() > 0) {
+      result.addAll(orgs);
+    }
+    List<Organisation> representeeOrgs =
+        organisationRepository.findByIsActiveAndOwnRepresentee(true, true);
+    if (representeeOrgs != null && representeeOrgs.size() > 0) {
+      result.addAll(representeeOrgs);
+    }
+
+    return result;
   }
 
 
