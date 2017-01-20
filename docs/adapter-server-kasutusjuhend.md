@@ -60,6 +60,14 @@ Sisemist liidest kasutab asutuse DHS tarkvara dokumentide saatmiseks ja vastuvõ
 
 Sisemise liidese kasutamisel käitub DHS tarkvara SOAP kliendina (DHS tarkvara ei pea ise ühtegi veebiteenust pakkuma).
 
+Sisemise liidse operatsioonid on järgmised: 
+* **getSendingOptions** - väljastab nimekirja asutustest, kellele üle DHX protokolli saab dokumente saata.
+* **sendDocuments** - teenus dokumendi välja saatmiseks
+* **getSendStatus** - teenus välja saadetud dokumendi staatuse kontrollimiseks
+* **receiveDocuments** - asutusele saabunud (sissetulevate) dokumentide küsimiseks
+* **markDocumentsReceived** - teenusega saab märkida asutusele saabunud dokumendi vastu võetuks 
+
+
 Märkused: 
 > Sisemist liidese operatsioonid on projekteeritud väga sarnaselt vanale [DVK liidesele](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md). 
 > Sisemise liidese SOAP teenuste XML nimeruumid ja implementeeritud operatsioonide struktuur on täpselt samad nagu vanas DVK liideses.
@@ -77,7 +85,7 @@ Päringus `<service>` päises ette antud alamelemente `<xRoadInstance>`, `<membe
 Seega need võivad olla samad vana DVK X-tee teenuse omad nagu saadeti (`GOV`, `70006317` - Riigi Infosüsteemi Amet ja `dhl`).
 ```xml 
       <xro:service>
-         <iden:xRoadInstance>EE</iden:xRoadInstance>
+         <iden:xRoadInstance>ee</iden:xRoadInstance>
          <iden:memberClass>GOV</iden:memberClass>
          <iden:memberCode>70006317</iden:memberCode>
          <iden:subsystemCode>dhl</iden:subsystemCode>
@@ -87,7 +95,7 @@ Seega need võivad olla samad vana DVK X-tee teenuse omad nagu saadeti (`GOV`, `
 ```
 
 Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<memberCode>` elementi, mis peab olema saatja asutuse registrikood. 
-Ülejäänuid `<client>` päise elemente ignoreeritakse. Seega need võivad ollasamad nagu vana DVK X-tee teenuse korral saadeti.
+Ülejäänuid `<client>` päise elemente ignoreeritakse. Seega need võivad olla samad nagu vana DVK X-tee teenuse korral saadeti.
 ```xml  
       <xro:client>
          <iden:xRoadInstance>ee</iden:xRoadInstance>
@@ -124,15 +132,15 @@ Päringu `getSendingOptions.v1` näide:
       <xro:protocolVersion>4.0</xro:protocolVersion>
       <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
       <xro:service>
-         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
-         <iden:memberClass>COM</iden:memberClass>
-         <iden:memberCode>10560025</iden:memberCode>
-         <iden:subsystemCode>DHX</iden:subsystemCode>
+         <iden:xRoadInstance>ee</iden:xRoadInstance>
+         <iden:memberClass>GOV</iden:memberClass>
+         <iden:memberCode>70006317</iden:memberCode>
+         <iden:subsystemCode>dhl</iden:subsystemCode>
          <iden:serviceCode>getSendingOptions</iden:serviceCode>
          <iden:serviceVersion>v1</iden:serviceVersion>
       </xro:service>
       <xro:client>
-         <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+         <iden:xRoadInstance>ee</iden:xRoadInstance>
          <iden:memberClass>COM</iden:memberClass>
          <iden:memberCode>10560025</iden:memberCode>
          <iden:subsystemCode>DHX</iden:subsystemCode>
@@ -153,15 +161,15 @@ Vastuse näide:
       <xro:protocolVersion xmlns:xro="http://x-road.eu/xsd/xroad.xsd">4.0</xro:protocolVersion>
       <xro:id xmlns:xro="http://x-road.eu/xsd/xroad.xsd">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
       <xro:service xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
-         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee-dev</iden:xRoadInstance>
-         <iden:memberClass xmlns:iden="http://x-road.eu/xsd/identifiers">COM</iden:memberClass>
-         <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">10560025</iden:memberCode>
-         <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">DHX</iden:subsystemCode>
+         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee</iden:xRoadInstance>
+         <iden:memberClass xmlns:iden="http://x-road.eu/xsd/identifiers">COV</iden:memberClass>
+         <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">70006317</iden:memberCode>
+         <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">dhl</iden:subsystemCode>
          <iden:serviceCode xmlns:iden="http://x-road.eu/xsd/identifiers">getSendingOptions</iden:serviceCode>
          <iden:serviceVersion xmlns:iden="http://x-road.eu/xsd/identifiers">v1</iden:serviceVersion>
       </xro:service>
       <xro:client xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
-         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee-dev</iden:xRoadInstance>
+         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee</iden:xRoadInstance>
          <iden:memberClass xmlns:iden="http://x-road.eu/xsd/identifiers">COM</iden:memberClass>
          <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">10560025</iden:memberCode>
          <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">DHX</iden:subsystemCode>
