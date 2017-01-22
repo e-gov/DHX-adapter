@@ -1032,7 +1032,7 @@ Vahendatav pöördub dokumendi välja saatmiseks DHX adapterserveri sisemise lii
 
 Samuti hilisemas `getSendStatus` päringus väärtustama `<client><memberCode>` enda registrikoodiga.
 
-### 5.3. Vahendatava poolt dokumendi vastuvõtmine (sisemien liides)
+### 5.3. Vahendatava poolt dokumendi vastuvõtmine (sisemine liides)
 
 Vahendatav pöördub talle saabunud dokumentide vastu võtmiseks DHX adapterserveri sisemise liidese `receiveDocuments` teenuse poole, andes ette:
 * Päise `<client><memberCode>` väärtuseks enda registrikoodi, näiteks:
@@ -1080,11 +1080,11 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 
 * DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud SWAREF manuse cid väärtus ei tohi olla URL kodeeritud. See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), sisi XML-is peaks selle esitama ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See oli samamoodi vanas DVK keskserveris.  
 
-* DHX adapterserveri `receiveDocuments` päringute sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (<allyksus>, <ametikoht>, <edastus_id>, <fragment_nr>, <fragmendi_suurus_baitides>).
+* DHX adapterserveri `receiveDocuments` päringute sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`).
 
 * Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
 
-* Väljastatavad veateated (SOAP:Fault) on teistsugused kui DVK korral.
+* Väljastatavad veateated (`SOAP:Fault`) on teistsugused kui DVK korral.
  
 
 
