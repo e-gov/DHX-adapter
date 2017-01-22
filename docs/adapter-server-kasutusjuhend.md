@@ -62,12 +62,12 @@ Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) pro
 
 **4)** Sisestada Request XML väljale SOAP päring, muutes endale sobivaks elementide `<xRoadInstance>`, `<memberClass>` ja `<memberCode>` (asutuse registrikood) väärtused (näiteks `ee-dev`, `GOV` ja `40000001`) 
 
-**5)** Lisada vajadusel manus (Attachment) failist. NB! SoapUI arvestab manuse faili lugemisel laiendit (kui see on näiteks .txt, siis SoapUI püüab seda ise kodeerida ja lisab content-type: text/plan). Selleks et SoapUI seda ise ei teeks, peaks mansue faili laiend olema näiteks `.base64`. 
+**5)** Lisada vajadusel manus (Attachment) failist. NB! SoapUI arvestab manuse faili lugemisel laiendit (kui see on näiteks .txt, siis SoapUI püüab seda ise kodeerida ja lisab content-type: text/plan). Selleks et SoapUI seda ise ei teeks, peaks manuse faili laiend olema näiteks `.base64`. 
 
 **6)** Käivitada SoapUI päring.
 
 Märkus:
-> Osade päringute ja vastuste manused on gzip pakitud ja seejärel BASE64 kodeeritud.
+> Osade päringute ja vastuste manused on [gzip](https://en.wikipedia.org/wiki/Gzip) pakitud ja seejärel [BASE64](https://en.wikipedia.org/wiki/Base64) kodeeritud.
 > 
 > Need saab Linux/unix all kokku pakkida salvestades manuse XML sisu faili "manus.xml" (fail peab olema salvestatud UTF-8 kodeeringus) ja käivitades seejärel:
 > ``` 
@@ -122,7 +122,7 @@ Seega need võivad olla samad vana DVK X-tee teenuse omad nagu saadeti (`GOV`, `
       </xro:service>
 ```
 
-Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<memberCode>` elementi, mis peab olema saatja asutuse registrikood. 
+Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<memberCode>` (saatja asutuse registrikood) elmenti. Erijuhul ka `<subsystemCode>` (üldjuhul konstant `DHX`) elementi. 
 Ülejäänuid `<client>` päise elemente ignoreeritakse. Seega need võivad olla samad nagu vana DVK X-tee teenuse korral saadeti.
 ```xml  
       <xro:client>
@@ -596,9 +596,9 @@ Märkused sisendi ja väljundi kohta:
 * Päringu `getSendStatus.v1` sisendis saab ette anda `<dhl_id>` väärtuse.
 * Päringu `getSendStatus.v2` sisendis saab ette anda `<dhl_id>` väärtuse `<item>` elemendi sees ja lisaks ka `<staatuse_ajalugu>` väärtuse true/false.
 * Päringu `getSendStatus.v2` sisendis ette antud `<dokument_guid>` väärtust ignoreeritakse, sest DHX adapterserveri sees "dokument_guid" väärtuseid ei kasutata (need on alati tühjad).
-* Vastuses on iga adressaadi ehk saaja kohta eraldi `<edastus>` element (mitu saajat sai määrata saamitsel Kapslis mitme `<DecRecipient>` elemendiga).
+* Vastuses on iga adressaadi ehk saaja kohta eraldi `<edastus>` element (mitu saajat sai määrata saatmisel Kapslis mitme `<DecRecipient>` elemendiga).
 * Vastuse kogu staatust näitab `<item><olek>` väli, siin näites on see `saatmisel`, sest DHX adapterserver teostab tulevikus veel uue [DHX saatmisürituse](https://e-gov.github.io/DHX/#77-uuesti-%C3%BCritamine).
-* Vastuses `<edastus><staatus>` väärtus näitab konkreetsele saatjale tehtud viimase saatmisürituse staatust. Antud näites "katkestatud" tähendab et saadi viga. Veateade on `<fault>` elemendi sees.
+* Vastuses `<edastus><staatus>` väärtus näitab konkreetsele saatjale tehtud viimase saatmisürituse staatust. Antud näites `katkestatud` tähendab et saadi viga. Veateade on `<fault>` elemendi sees.
 
 Vaata `getSendStatus.v2` saatmise näidet dokumendist Testilood - [2.11. DHX-i saadetud dokumendi staatuse pärimine](adapter-server-testilood.md#2.11). 
 
@@ -794,7 +794,7 @@ Märkused päringu sisendi ja väljundi kohta:
 * Päringu sisend `<arv>` määrab ära maksimaalse loetavate dokumentide arvu. Element võib puududa, sellisel juhul tagastatakse vaikimisi 10 dokumenti.
 * Päring sisend `<kaust>` määrab ära, millisest DVK kaustast dokumendid loetakse. Element võib ka puududa (või olla väärtustamata), sellisel juhul tagastatakse vaikimisi dokumendid kõigist kaustadest.
 * Päringute versioonide v2, v3 ja v4 sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`)
-* Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
+* Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli versiooni ei saa keegi saata.
 * Päringu manuse kapslis asuva välja `<ns2:DecId>65</ns2:DecId>` väärtuse järgi tuleb teha `markDocumentsReceived` väljakutse.
 * Vastuse manuses tagastatakse mitme dokumendi kapsli XML failid üksteise järel.
 ```xml 
@@ -891,7 +891,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 Asutus võib DHX adapterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine).
 Vahendada võib ka X-teega mitteliitunud asutuste dokumente.
 
-X-teega liitunud asutus, kes soovib dokumente vahendada peab registreerima end Vahendajaks (lisatakse X-tee globaalkonfiguratsionni DHX vahendajate gruppi).
+X-teega liitunud asutus, kes soovib dokumente vahendada peab registreerima end Vahendajaks (lisatakse X-tee globaalkonfiguratsiooni DHX vahendajate gruppi).
 
 Vahendamise korral peab vahendaja oma turvaserveris avama ja häälestama ka [representationList](https://github.com/e-gov/DHX/blob/master/files/representationList.md) DHX teenuse. 
 
@@ -1092,11 +1092,11 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 
 * DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab Kapsli 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
 
-* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
+* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
 
-* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
+* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
 
-* DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud SWAREF manuse cid väärtus ei tohi olla URL kodeeritud. See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is peaks selle esitama ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See oli samamoodi vanas DVK keskserveris.  
+* DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manuse cid väärtus ei tohi olla URL kodeeritud. See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is peaks selle esitama ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See oli samamoodi vanas DVK keskserveris.  
 
 * DHX adapterserveri `receiveDocuments` päringute sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`).
 
