@@ -5,6 +5,24 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
+  * [DHX adapterserveri kasutusjuhend](#dhx-adapterserveri-kasutusjuhend)
+    * [1\. Sissejuhatus](#1-sissejuhatus)
+    * [2\. WSDL asukohad](#2-wsdl-asukohad)
+      * [3\. SoapUI testimine](#3-soapui-testimine)
+    * [4\. Sisemine liides](#4-sisemine-liides)
+      * [4\.1\. getSendingOptions (sisemine liides)](#41-getsendingoptions-sisemine-liides)
+      * [4\.2\. sendDocuments (sisemine liides)](#42-senddocuments-sisemine-liides)
+      * [4\.3\. getSendStatus (sisemine liides)](#43-getsendstatus-sisemine-liides)
+      * [4\.4\. receiveDocuments (sisemine liides)](#44-receivedocuments-sisemine-liides)
+      * [4\.5\. markDocumentsReceived (sisemine liides)](#45-markdocumentsreceived-sisemine-liides)
+    * [5\. Vahendajana saatmine/vastuvõtmine](#5-vahendajana-saatminevastuv%C3%B5tmine)
+      * [5\.1\. Vahendatavate lisamine](#51-vahendatavate-lisamine)
+      * [5\.2\. Kontrollida kas vahendatav tagastatakse representationList väljundist\.](#52-kontrollida-kas-vahendatav-tagastatakse-representationlist-v%C3%A4ljundist)
+      * [5\.3\. Vahendatava poolt dokumendi välja saatmine (sisemine liides)](#53-vahendatava-poolt-dokumendi-v%C3%A4lja-saatmine-sisemine-liides)
+      * [5\.3\. Vahendatava poolt dokumendi vastuvõtmine (sisemine liides)](#53-vahendatava-poolt-dokumendi-vastuv%C3%B5tmine-sisemine-liides)
+    * [6\. Kokkuvõtte erinevustest (DVK liidesega võrreldes)](#6-kokkuv%C3%B5tte-erinevustest-dvk-liidesega-v%C3%B5rreldes)
+
+
 ## 1. Sissejuhatus
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
 
@@ -1078,7 +1096,7 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 
 * DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
 
-* DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud SWAREF manuse cid väärtus ei tohi olla URL kodeeritud. See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), sisi XML-is peaks selle esitama ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See oli samamoodi vanas DVK keskserveris.  
+* DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud SWAREF manuse cid väärtus ei tohi olla URL kodeeritud. See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is peaks selle esitama ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See oli samamoodi vanas DVK keskserveris.  
 
 * DHX adapterserveri `receiveDocuments` päringute sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`).
 
