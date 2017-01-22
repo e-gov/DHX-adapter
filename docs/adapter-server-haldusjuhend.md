@@ -127,7 +127,7 @@ Serveri teenuste kasutamine logitakse [Tomcat standardsete liidestega](https://t
 
 Logi kirjutatakse `apache-tomcat-7.x.x/logs` kataloogi failidesse:
 * `localhost_access_log.YYYY-MM-DD.txt` - iga pöördumise kohta "Access log", sisaldab välju: kliendi ip, juupäev ja kellaaeg, pöördumise URL vastuse staatus (200 tähendab OK, 400 või 500 tähendab viga).  
-* Tomcat serveri consoolile
+* Tomcat serveri konsoolile (standard output ja error)
 
 
 Lisaks on DHX adapterserveri häälestusfailis `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` määratud et logi kirjutatakse faili: 
