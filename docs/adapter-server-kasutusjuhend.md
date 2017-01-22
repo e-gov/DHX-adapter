@@ -87,7 +87,7 @@ Märkused:
 > 
 > Sisemises liideses on realiseeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
-> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](#5-erinevused-dvk-liidesega-võrreldes). 
+> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi erinevusi võrreldes DVK liidesega. Need on eraldi välja toodud dokumendi lõpus. 
 
 Sisemisele liidese päringutes tuleb kaasa anda X-tee v6 standardsed päised (`<service>` ja `<client>`), kuigi Sisemine liides X-tee turvaserverit kasuta.
 
@@ -237,7 +237,7 @@ Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStat
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [sendDocuments.v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.1).
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
 
 Päringu sisu näide:
 ```xml
@@ -441,7 +441,7 @@ Vastuse manus XML-ina lahti kodeeritud:
 </ns3:keha>
 ```
 Märkused vastuse sisu kohta:
-* DHX adapterserver võtab dokumendi vastu ja vastas SOAP päringule koheselt. Dokumendi DHX adresaadile edastamine toimub asünkroonselt.
+* DHX adapterserver võtab dokumendi vastu ja vastab SOAP päringule koheselt. Dokumendi DHX adresaadile edastamine toimub asünkroonselt.
 * Vastus sisaldab DHX adapterserveri poolt genereeritud unikaalset `<dhl_id>` väärtust. See väärtus algab 1-st (DHX adapterserveri esmasel kasutusel võtmisel). Kui DHS süsteem kolib DVK X-tee liideselt üle DHX adapterserverile, siis peab ta arvestama et see võib kattuda vanade DVKsse saadetud dokumentide `<dhl_id>` väärtusega (kui näiteks see salvestatakse DHS andmebaasis unikaaalsele väljale, siis võib olla vajalik teatud andmesiire).    
 * `<dhl_id>` väärtust tuleb hiljem kasutada `getSendStatus` päringu sisendis, saatmise staatuse küsimiseks.
  
@@ -465,7 +465,7 @@ Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov
 
 Lisaks vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [getSendStatus.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1). ja [getSendStatus.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.11).
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
 
 Päringu  `getSendStatus.v1` sisendi näide:
 ```xml
@@ -589,12 +589,12 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ### 4.4. receiveDocuments (sisemine liides)
 
-Teenusega `receiveDocuments` loetakse DHX adapterserist meie asutusele üle DHX protokolli saabunud dokumendid (sissetulnud dokumendid).
+Teenusega `receiveDocuments` loetakse DHX adapterserist asutusele (üle DHX protokolli) saabunud dokumendid (sissetulnud dokumendid).
 Pärast dokumendi lugemist tuleks välja kutsuda `markDocumentsReceived` teenus.
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [receiveDocuments](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocuments).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.1).
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
 
 Päringu keha näide:
 ```xml
@@ -794,11 +794,11 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 Teenusega `markDocumentsReceived` märkitakse DHX adapterseris dokument loetuks ehk vastu võetuks. 
 Senikaua kuni saabunud dokument on loetuks märkimata, tagastab `receiveDocuments` väljakutse seda alati uuesti. 
-Teenuse sisendis (`<dhl_id>` välja väärtuseks) tuleb ette anda `receiveDocuments` väljundi manuses olevast Kaplsist võetud `<ns2:DecId>65</ns2:DecId>` väärtus.
+Teenuse sisendis (`<dhl_id>` välja väärtuseks) tuleb ette anda `receiveDocuments` väljundi manuses olevast Kapslist võetud `<ns2:DecId>65</ns2:DecId>` väärtus.
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [markDocumentsReceived](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceived).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.1).
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
 
 Päringu `markDocumentsReceived.v3` sisendi näide:
 ```xml
@@ -868,22 +868,144 @@ Märkused vana DVK X-tee liidese kasutajale:
 > DHX adpaterserveris on realiseeritud kõik markDocumentsReceived operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv1),
 > [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv2) ja [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv3)
 
+## 5. Vahendajana saatmine/vastuvõtmine
 
-## 5. Kokkuvõtte erinevustest (DVK liidesega võrreldes)
+Asutus võib DHX adpaterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine).
+Vahendada võib ka X-teega mitteliitinud asutuste dokumente.
+
+X-teega liitunud asutus, kes soovib dokumente vahendada peab registreerima end Vahendajaks (lisatakse X-tee globaalkonfiguratsionni DHX vahendajate gruppi).
+
+Vahendamise korral peab vahendaja oma turvaserveris avama ja häälestama ka [representationList](https://github.com/e-gov/DHX/blob/master/files/representationList.md) DHX teenuse. 
+
+### 5.1. Vahendatavate lisamine
+
+Vahendajad tuleb käsitsi lisada DHX adapterserveri andmebaasi ASUTUS tabelisse.
+
+Kõigepealt tuleb ASUTUS tabelist otsida Vahendaja enda asutus. Oletame et vahendaja enda registrikood on 40000001:
+```sql
+select asutus_id, nimetus, subsystem from asutus where registrikood = '40000001'
+```
+
+Seejärel tuleb lisada vahendatava(te) kirje(d) käsitis SQL lausega. 
+Võtta eelnevalt leitud Vahendaja asutus_id väärtus ja anda see ette vahendatava lisamise SQL lauses vahendaja_asutus_id väärtuseks.
+* `ASUTUS.vahendaja_asutus_id` (ehk <VAHENDAJA_ASUTUS_ID>) väärtustada eelneva päringu vastuse asutus_id. 
+* `ASUTUS.dhx_asutus` väärtustada `false` või `0`.
+* `ASUTUS.id` väärtustada (<NEWID> asendada) väärtusega `SELECT max(asutus_id) + 1 FROM asutus`
+* `ASUTUS.nimetus` väärtustada vahendatava nimi, näiteks 'Tallinna Lasteaed Pallipõnn'
+* `ASUTUS.registrikood` väärtustada vahendatava registrikood, näiteks '75019046'
+
+PostgreSQL baasis INSERT lause:
+```sql
+INSERT INTO asutus(
+  asutus_id, datecreated, datemodified, version, kapsel_versioon, dhx_asutus, 
+  dhl_saatmine, member_class, nimetus, ownrepresentee, registrikood, 
+  representee_end, representee_start, subsystem, xroad_instance, vahendaja_asutus_id
+) VALUES (<NEWID>, now(), null, 0, 2.1, false,
+  true, null, 'Tallinna Lasteaed Pallipõnn', true, '75019046',
+  null, now(), null, null, <VAHENDAJA_ASUTUS_ID>);
+```
+
+Oracle korral SQL lause:
+```sql
+INSERT INTO asutus(
+  asutus_id, datecreated, datemodified, version, kapsel_versioon, dhx_asutus, 
+  dhl_saatmine, member_class, nimetus, ownrepresentee, registrikood, 
+  representee_end, representee_start, subsystem, xroad_instance, vahendaja_asutus_id
+) VALUES (<NEWID>, sysdate, null, 0, 2.1, 0,
+  1, null, 'Tallinna Lasteaed Pallipõnn', 1, '75019046',
+  null, sysdate, null, null, <VAHENDAJA_ASUTUS_ID>);
+```
+
+Täpsem andmebaasi skeem on toodud [DHX adapterserveri haldusjuhendis](adapter-server-haldusjuhend.md)
+
+### 5.2. kontrollida kas vahendatav tagastatkse representationList väljundist.
+
+Avada näiteks SoapUI programmis DHX teenus WSDL `http://localhost:8080/dhx-adapter-server/ws/dhx.wsdl`.
+
+Sisestada representationList päringu keha väärtustades `<service><memberCode>` vahendaja registrikoodiga (40000001):
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:prod="http://dhx.x-road.eu/producer">
+   <soapenv:Header>
+      <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+      <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
+      <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:memberClass>COM</ns3:memberClass>
+         <ns3:memberCode>30000001</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+      </ns4:client>
+      <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>GOV</ns3:memberClass>
+         <ns3:memberCode>40000001</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+         <ns3:serviceCode>representationList</ns3:serviceCode>
+         <ns3:serviceVersion>v1</ns3:serviceVersion>
+      </ns4:service>
+   </soapenv:Header>
+   <soapenv:Body>
+      <prod:representationList/>
+  </soapenv:Body>
+</soapenv:Envelope> 
+```
+
+Kontrollida kas vastuses on lisatud astutuse (75019046, Tallinna Lasteaed Pallipõnn) 
+```xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header>
+      <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+      <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
+      <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:memberClass>COM</ns3:memberClass>
+         <ns3:memberCode>30000001</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+      </ns4:client>
+      <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>GOV</ns3:memberClass>
+         <ns3:memberCode>40000001</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+         <ns3:serviceCode>representationList</ns3:serviceCode>
+         <ns3:serviceVersion>v1</ns3:serviceVersion>
+      </ns4:service>
+   </SOAP-ENV:Header>
+   <SOAP-ENV:Body>
+      <ns9:representationListResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
+         <ns9:representees>
+            <ns9:representee>
+               <ns9:memberCode>75019046</ns9:memberCode>
+               <ns9:representeeName>Tallinna Lasteaed Pallipõnn</ns9:representeeName>
+               <ns9:startDate>2017-01-22T16:13:43.000+02:00</ns9:startDate>
+            </ns9:representee>
+         </ns9:representees>
+      </ns9:representationListResponse>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+```
+
+### 5.3. Vahendatava poolt dokumendi välja saatmine (sisemine liides)
+
+Vahendatav 
+
+## 6. Kokkuvõtte erinevustest (DVK liidesega võrreldes)
 
 * DHX Adapterserveri `getSendingOptions` päring ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
 
-* DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab Kaplsi 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
+* DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab Kapsli 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
 
 * DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
 
-* SWAREF manuse cid väärtus peab olema URL kodeeritud (DVK korral see ei tohtinud olla URL kodeeritud)
+* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
+
+* DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud SWAREF manuse cid väärtus ei tohi olla URL kodeeritud. See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), sisi XML-is peaks selle esitama ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See oli samamoodi vanas DVK keskserveris.  
+
+* DHX adapterserveri `receiveDocuments` päringute sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (<allyksus>, <ametikoht>, <edastus_id>, <fragment_nr>, <fragmendi_suurus_baitides>).
+
+* Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
 
 * Väljastatavad veateated (SOAP:Fault) on teistsugused kui DVK korral.
-
-## 6. Vahendajana saatmine/vastuvõtmine
-
-Asutus võib DHX adpaterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine). 
+ 
 
 
 
