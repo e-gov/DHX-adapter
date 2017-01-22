@@ -380,7 +380,7 @@ Nõuded päringu sisendile:
 * Päringu sisendi X-tee päises ette antud saatja `<client><memberCode>30000001</ns3:memberCode>` peab ühtima Kapslis toodud saatjaga `<Transport><DecSender><OrganisationCode>30000001</OrganisationCode>`.
 * Kapsel peab olema [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manusena. Manuse algne xml fail peab olema UTF-8 kodeeringus, lisatud manusesse gzip pakitud ja seejärel base64 kodeeritult.
 * Päringu sisendis ei pea ette andma Kapsli XML schema järgi kohustuslikku `<DecMetadata>` elementi (ega selle alamelemente `<DecId>`, `<DecFolder>`, `<DecReceiptDate>`). Need genereerib DHX adapterserver ise. Sama loogika kehtis vanas DVK liideses.
-* Päringu sisendis Kapslis võib ette anda mitu adresaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adresaadile eraldi. Kusjuures mõnele adresaadile saatmine võib õnnetuda ja teisele mitte.
+* Päringu sisendis Kapslis võib ette anda mitu adresaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adressaadile eraldi. Kusjuures mõnele adresaadile saatmine võib õnnestuda aga teisele mitte.
 * Manusele määratud `Content-Type`,  `Content-Encoding` ja `Content-Transfer-Encoding` parameetrid DHX adapterserver ignoreerib. Eeldatakse et manus on alati gzip pakitud ja seejärel base64 kodeeritud.  
 Seega need võib korrektselt ette anda kujul:
 ```
@@ -441,8 +441,8 @@ Vastuse manus XML-ina lahti kodeeritud:
 </ns3:keha>
 ```
 Märkused vastuse sisu kohta:
-* DHX adapterserver võttis dokumendi vastu ja vastas SOAP päringule koheselt. Dokumendi DHX adresaadile edastamine toimub asünkroonselt.
-* Vastus sisaldab DHX adapterserveri poolt genereeritud unikaalset `<dhl_id>` väärtust. See väärtus algab 1-st (DHX adapterserveri kasutusel võtmisel). Kui DHS süsteem kolib DVK X-tee liideselt üle DHX adapterserverile, siis peab ta arvestama et see võib kattuda vanade DVKsse saadetud dokumentide `<dhl_id>` väärtusega (kui näiteks see salvestatakse DHS andmebaasis unikaaalsele väljale, siis võib olla vajalik teatud andmesiire).    
+* DHX adapterserver võtab dokumendi vastu ja vastas SOAP päringule koheselt. Dokumendi DHX adresaadile edastamine toimub asünkroonselt.
+* Vastus sisaldab DHX adapterserveri poolt genereeritud unikaalset `<dhl_id>` väärtust. See väärtus algab 1-st (DHX adapterserveri esmasel kasutusel võtmisel). Kui DHS süsteem kolib DVK X-tee liideselt üle DHX adapterserverile, siis peab ta arvestama et see võib kattuda vanade DVKsse saadetud dokumentide `<dhl_id>` väärtusega (kui näiteks see salvestatakse DHS andmebaasis unikaaalsele väljale, siis võib olla vajalik teatud andmesiire).    
 * `<dhl_id>` väärtust tuleb hiljem kasutada `getSendStatus` päringu sisendis, saatmise staatuse küsimiseks.
  
 Märkused vana DVK X-tee liidese kasutajale:
@@ -586,6 +586,287 @@ Vaata `getSendStatus.v2` saatmise näidet dokumendist Testilood - [2.11. DHX-i s
 
 Märkused vana DVK X-tee liidese kasutajale:
 > DHX adpaterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
+
+### 4.4. receiveDocuments (sisemine liides)
+
+Teenusega `receiveDocuments` loetakse DHX adapterserist meie asutusele üle DHX protokolli saabunud dokumendid (sissetulnud dokumendid).
+Pärast dokumendi lugemist tuleks välja kutsuda `markDocumentsReceived` teenus.
+
+Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [receiveDocuments](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocuments).
+> **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.1).
+
+Päringu keha näide:
+```xml
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
+   <soapenv:Header>
+      <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+      <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
+      <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>COM</ns3:memberClass>
+         <ns3:memberCode>10560025</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+      </ns4:client>
+      <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>GOV</ns3:memberClass>
+         <ns3:memberCode>70006317</ns3:memberCode>
+         <ns3:subsystemCode>dhl</ns3:subsystemCode>
+         <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
+         <ns3:serviceVersion>v4</ns3:serviceVersion>
+      </ns4:service>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:receiveDocuments soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <keha xsi:type="xsd:anyType">
+            <arv>50</arv>
+         </keha>
+      </dhl:receiveDocuments>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+Vastuse näide:
+```xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header>
+      <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+      <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
+      <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>COM</ns3:memberClass>
+         <ns3:memberCode>10560025</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+      </ns4:client>
+      <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>GOV</ns3:memberClass>
+         <ns3:memberCode>70006317</ns3:memberCode>
+         <ns3:subsystemCode>dhl</ns3:subsystemCode>
+         <ns3:serviceCode>receiveDocuments</ns3:serviceCode>
+         <ns3:serviceVersion>v4</ns3:serviceVersion>
+      </ns4:service>
+   </SOAP-ENV:Header>
+   <SOAP-ENV:Body>
+      <ns4:receiveDocumentsResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
+         <keha href=" cid:f22d9cdc-dbf7-4444-ae56-a9eb3b8571be"/>
+      </ns4:receiveDocumentsResponse>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+```
+
+Vastuse manus gzip ja base64 kodeeritult:
+```
+H4sIAAAAAAAAAO1XzXLbNhC+9yk07jEjEiAl6mccprLsxG7sWBPLzbSXDEJCMmKSYABQkvMsPfpN/GJdAiIJSnKa9tZpNB4PsfvtYrH77Q5w/GqTJp0VFZLx7OURdtDRq/Cn40x641MaTXmmCMuo6AAqk+NM9l4e3SmVj113vV47grF7h1JXRnc0JdKN75KjGjqsofHdxtl0BSexQws3FzwuIioaJEY1tIFtZOwKmgsqKQShIDwHRI2RX9tUDqUD+zsbEddxVZp2YBg/s91GL1q79FvnldrrKVuyUx65K+z4Dvq5AQct8Np3uFi6HkLIRSMXQLFkSwvufTuXNIqq9LtlgT56H7HbWA/+rhLdlCrSJYXiKaQvaixHzxyfxZBptmCw11GoKTAXJJM5FyqsGHFDs5gKs7wWS5IxqWsz5TENfaR/+Ng9qNZGM/DOM5JcxFp2duYPhyjAI+SNesZuB2GEO1vD8j2NWM4g4meCwagfIOT1nwvG3ffjHjgzqLmIp4ISxYV9BPP9jqQ0vCSFYJ05SVOaPj1S40drNOYNW9GsARp1I9SYm0Jk5WLHSSX+l6kzB5BlYaMHMDCoRmJbGbTu+EidEkWMYBIzFSpRbAPSSxPNHc+g5AMvCHzkDYKtLy3VgLOUsCRMyiM7Sh+L0F8EI0BTgzUAjf1AP83IkoYlle+4KpmcNLmqtBp6RaUkS5YtJ3EMw0GG8v4hp+NOeyNjuIc1kXOpSNISTXmRKQEpolJtN61Ejf4hPCfic9FJCbnnWWzBtqhLHpHkDYdmzdKSUHOSJCzLSKf8b+C7kG2OUwbkVALouaK3GaT4qoAYSx5oW8IlqfK/BzX8SWGvWUIiGs6eHp8eZXEPg7Pz9unPLZEavQmVZLGxdttLDVaCUjsGVZVsq9Goc15I+q5IP0FTer2hAdhCjTopWBJDBWZEqK088Az2gMqqj2li7OEt2pLagrqM7h593Wf614jMOJlzGAH/17ZekET+6Osfff3f7eu9Jv7GrcDq7JPZhw64lEWiIM7OdZXNpnH/8XXi+3qyHY97IGJzriu4usV1sxrZm4LFodcfjjyKB90hWgTdHu4vuqMo6HcH/qgf+N4CeX7PTpA2spzMoafCt6zqQEtoga4F3HD1vKkuhKGH/V7Qt40OgCwXUCn6ni6B0VRQCBthr4sx/M3xaIyHY+TbvnbQdrxMJTATlaI5yeh9K2qtsrBA9mVRzpMm+y2xLWwneBJF9cgw38AOmIhQJanLO1mRhG13PwiwVcbPa1ZFV359X/Hqu3NtYnMCngJTnuYwiLPW7D6krjfWlK7z58Q8anZo6H7FUqpZQPI8YZHmp5vKNfjdTtwKUDu+YV8p0AL3e37jUQs15A+WnxBJg17ZumVE5z15MZmukvwWTSZrmX+RX69ucMQffov4XOLL29vPv85f/D6dXJ6iKB/OJ/AzjvdcNfvtUvsmh25asKgqr1s/F9oFB8FFHFaENqtK8Zon5TvDrXVbgfXwoCwvZxEteT3oItz1vDnujf0+UNsJRt4L5I0Rsp8YtUUtbAKqJPVrO/wLIO+KdZYPAAA=
+```
+
+Vastuse lahti kodeeritud manus
+```xml
+<?xml version="1.0"?>
+<ns2:DecContainer xmlns:ns4="http://www.riik.ee/schemas/dhl"
+	xmlns:ns8="http://dhx.x-road.eu/producer" xmlns:ns10="http://x-road.eu/xsd/representation.xsd"
+	xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns11="http://x-road.eu/xsd/xroad.xsd"
+	xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns6="http://www.w3.org/2000/09/xmldsig#"
+	xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+	xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://x-road.eu/xsd/identifiers">
+	<ns2:Transport>
+		<ns2:DecSender>
+			<ns2:OrganisationCode>30000001</ns2:OrganisationCode>
+			<ns2:PersonalIdCode>EE38806190294</ns2:PersonalIdCode>
+		</ns2:DecSender>
+		<ns2:DecRecipient>
+			<ns2:OrganisationCode>10560025</ns2:OrganisationCode>
+		</ns2:DecRecipient>
+	</ns2:Transport>
+	<ns2:RecordCreator>
+		<ns2:Person>
+			<ns2:Name>Lauri Tammemäe</ns2:Name>
+			<ns2:GivenName>Lauri</ns2:GivenName>
+			<ns2:Surname>Tammemäe</ns2:Surname>
+			<ns2:PersonalIdCode>EE38806190294</ns2:PersonalIdCode>
+			<ns2:Residency>EE</ns2:Residency>
+		</ns2:Person>
+		<ns2:ContactData>
+			<ns2:Adit>true</ns2:Adit>
+			<ns2:Phone>3726630276</ns2:Phone>
+			<ns2:Email>lauri.tammemae@ria.ee</ns2:Email>
+			<ns2:WebPage>www.hot.ee/lauri</ns2:WebPage>
+			<ns2:MessagingAddress>skype: lauri.tammemae</ns2:MessagingAddress>
+			<ns2:PostalAddress>
+				<ns2:Country>Eesti</ns2:Country>
+				<ns2:County>Harju maakond</ns2:County>
+				<ns2:LocalGovernment>Tallinna linn</ns2:LocalGovernment>
+				<ns2:AdministrativeUnit>Mustamäe linnaosa</ns2:AdministrativeUnit>
+				<ns2:SmallPlace>Pääsukese KÜ</ns2:SmallPlace>
+				<ns2:LandUnit></ns2:LandUnit>
+				<ns2:Street>Mustamäe tee</ns2:Street>
+				<ns2:HouseNumber>248</ns2:HouseNumber>
+				<ns2:BuildingPartNumber>62</ns2:BuildingPartNumber>
+				<ns2:PostalCode>11212</ns2:PostalCode>
+			</ns2:PostalAddress>
+		</ns2:ContactData>
+	</ns2:RecordCreator>
+	<ns2:RecordSenderToDec>
+		<ns2:Person>
+			<ns2:Name>Lauri Tammemäe</ns2:Name>
+			<ns2:GivenName>Lauri</ns2:GivenName>
+			<ns2:Surname>Tammemäe</ns2:Surname>
+			<ns2:PersonalIdCode>EE38806190294</ns2:PersonalIdCode>
+			<ns2:Residency>EE</ns2:Residency>
+		</ns2:Person>
+		<ns2:ContactData>
+			<ns2:Adit>false</ns2:Adit>
+			<ns2:Phone>3726630276</ns2:Phone>
+			<ns2:Email>lauri.tammemae@ria.ee</ns2:Email>
+			<ns2:WebPage>www.hot.ee/lauri</ns2:WebPage>
+			<ns2:MessagingAddress>skype: lauri.tammemae</ns2:MessagingAddress>
+			<ns2:PostalAddress>
+				<ns2:Country>Eesti</ns2:Country>
+				<ns2:County>Harju maakond</ns2:County>
+				<ns2:LocalGovernment>Tallinna linn</ns2:LocalGovernment>
+				<ns2:AdministrativeUnit>Mustamäe linnaosa</ns2:AdministrativeUnit>
+				<ns2:SmallPlace>Pääsukese KÜ</ns2:SmallPlace>
+				<ns2:LandUnit></ns2:LandUnit>
+				<ns2:Street>Mustamäe tee</ns2:Street>
+				<ns2:HouseNumber>248</ns2:HouseNumber>
+				<ns2:BuildingPartNumber>62</ns2:BuildingPartNumber>
+				<ns2:PostalCode>11212</ns2:PostalCode>
+			</ns2:PostalAddress>
+		</ns2:ContactData>
+	</ns2:RecordSenderToDec>
+	<ns2:Recipient>
+		<ns2:Organisation>
+			<ns2:Name>BPW Consulting OÜ</ns2:Name>
+			<ns2:OrganisationCode>10560025</ns2:OrganisationCode>
+			<ns2:Residency>EE</ns2:Residency>
+		</ns2:Organisation>
+	</ns2:Recipient>
+	<ns2:RecordMetadata>
+		<ns2:RecordGuid>25892e17-80f6-415f-9c65-7395632f0234</ns2:RecordGuid>
+		<ns2:RecordType>Kiri</ns2:RecordType>
+		<ns2:RecordOriginalIdentifier>213465</ns2:RecordOriginalIdentifier>
+		<ns2:RecordDateRegistered>2012-11-11T19:18:03
+		</ns2:RecordDateRegistered>
+		<ns2:RecordTitle>Ettepanek</ns2:RecordTitle>
+		<ns2:RecordLanguage>EE</ns2:RecordLanguage>
+	</ns2:RecordMetadata>
+	<ns2:Access>
+		<ns2:AccessConditionsCode>Avalik</ns2:AccessConditionsCode>
+	</ns2:Access>
+	<ns2:File>
+		<ns2:FileGuid>25892e17-80f6-415f-9c65-7395632f0001</ns2:FileGuid>
+		<ns2:RecordMainComponent>false</ns2:RecordMainComponent>
+		<ns2:FileName>Ettepanek.doc</ns2:FileName>
+		<ns2:MimeType>application/msword</ns2:MimeType>
+		<ns2:FileSize>211543</ns2:FileSize>
+		<ns2:ZipBase64Content>H4sIACvlpU0AAwspqszMS1coyVcoTs1LUUjJT+YCALD0cp8TAAAA
+		</ns2:ZipBase64Content>
+	</ns2:File>
+	<ns2:RecordTypeSpecificMetadata />
+	<ns2:DecMetadata>
+		<ns2:DecId>65</ns2:DecId>
+		<ns2:DecFolder>/</ns2:DecFolder>
+		<ns2:DecReceiptDate>2017-01-22T14:35:18.692+02:00</ns2:DecReceiptDate>
+	</ns2:DecMetadata>
+</ns2:DecContainer>
+```
+
+Märkused päringu sisendi ja väljundi kohta:
+* Päringu sisend `<arv>` määrab ära maksimaalse loetavate dokumentide arvu. Element võib puududa, sellisel juhul tagastatakse vaikimisi 10 dokumenti.
+* Päring sisend `<kaust>` määrab ära, millisest DVK kaustast dokumendid loetakse. Element võib ka puududa (või olla väärtustamata), sellisel juhul tagastatakse vaikimisi dokumendid kõigist kaustadest.
+* Päringute versioonide v2, v3 ja v4 sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`)
+* Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
+* Päringu manuse kapslis asuva välja `<ns2:DecId>65</ns2:DecId>` väärtuse järgi tuleb teha `markDocumentsReceived` väljakutse.
+* Vastuse manuses tagastatakse mitme dokumendi kapsli XML failid üksteise järel.
+```xml 
+<?xml version="1.0"?>
+<ns2:DecContainer ... > ...</ns2:DecContainer>
+<?xml version="1.0"?>
+<ns2:DecContainer ... > ...</ns2:DecContainer>
+```
+
+Märkused vana DVK X-tee liidese kasutajale:
+> DHX adpaterserveris on realiseeritud kõik receiveDocuments operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv1),
+> [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv3) ja [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv4).
+
+### 4.5. markDocumentsReceived (sisemine liides)
+
+Teenusega `markDocumentsReceived` märkitakse DHX adapterseris dokument loetuks ehk vastu võetuks. 
+Senikaua kuni saabunud dokument on loetuks märkimata, tagastab `receiveDocuments` väljakutse seda alati uuesti. 
+Teenuse sisendis (`<dhl_id>` välja väärtuseks) tuleb ette anda `receiveDocuments` väljundi manuses olevast Kaplsist võetud `<ns2:DecId>65</ns2:DecId>` väärtus.
+
+Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [markDocumentsReceived](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceived).
+> **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.1).
+
+Päringu `markDocumentsReceived.v3` sisendi näide:
+```xml
+<soapenv:Envelope xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:xsi="xsi">
+   <soapenv:Header>
+      <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+      <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
+      <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>COM</ns3:memberClass>
+         <ns3:memberCode>10560025</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+      </ns4:client>
+      <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:memberClass>GOV</ns3:memberClass>
+         <ns3:memberCode>70006317</ns3:memberCode>
+         <ns3:subsystemCode>dhl</ns3:subsystemCode>
+         <ns3:serviceCode>markDocumentsReceived</ns3:serviceCode>
+         <ns3:serviceVersion>v3</ns3:serviceVersion>
+      </ns4:service>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:markDocumentsReceived>
+         <keha>
+            <dokumendid xsi:type="SOAP-ENC:Array" SOAP-ENC:arrayType="dhl:asutus[3]">
+               <item>
+                  <dhl_id>65</dhl_id>
+               </item>
+            </dokumendid>
+         </keha>
+      </dhl:markDocumentsReceived>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+Vastus:
+```xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header>
+      <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+      <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
+      <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>COM</ns3:memberClass>
+         <ns3:memberCode>10560025</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+      </ns4:client>
+      <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:memberClass>GOV</ns3:memberClass>
+         <ns3:memberCode>70006317</ns3:memberCode>
+         <ns3:subsystemCode>dhl</ns3:subsystemCode>
+         <ns3:serviceCode>markDocumentsReceived</ns3:serviceCode>
+         <ns3:serviceVersion>v3</ns3:serviceVersion>
+      </ns4:service>
+   </SOAP-ENV:Header>
+   <SOAP-ENV:Body>
+      <ns4:markDocumentsReceivedResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
+         <keha>OK</keha>
+      </ns4:markDocumentsReceivedResponse>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+```
+
+Märkused vana DVK X-tee liidese kasutajale:
+> DHX adpaterserveris on realiseeritud kõik markDocumentsReceived operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv1),
+> [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv2) ja [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv3)
 
 
 ## 5. Kokkuvõtte erinevustest (DVK liidesega võrreldes)
