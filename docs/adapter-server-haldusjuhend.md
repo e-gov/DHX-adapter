@@ -17,18 +17,16 @@ DHX adapterserver on iseseisvalt toimiv komponent, mis üldjuhul ei vaja pidevat
 
 DHX adapterserver võtab dokumendi edastamiseks vastu, salvestades selle metaandmed andmebaasi ja binaarfaile sisaldava Kapsli XML-i lokaalsese failisüsteemi.
 Pärast seda kui dokument on DHX kaudu edastatud või sisemise liidese kaudu alla laetud, võib selle DHX adapterserveri andmebaasist ja failisüsteemist kustutada. 
-Kustutamist teostab perioodilne taustatöö.   
+Kustutamist teostab perioodiline taustatöö.   
 
 Halduse tegevused võib jaotada kaheks:
 * Serveri ressursside (mälu ja kettamaht) kasutuse jälgimine. 
 * Dokumentide edastamise vigade põhjuste analüüsimine.    
 
-## Monitooring
+## 2. Monitooring
 
-### Monitooringu liidesed
-
-### DHX adapterserveri staatus (Health)
-DHX adapterserver pakub andmebaasi ühenduste staatuse ja JAva poolt kasutatava muutmälu jälgimiseks lihtsat liidest aadressil: 
+### 2.1. DHX adapterserveri staatus (Health)
+DHX adapterserver pakub andmebaasi ühenduste staatuse ja vaba kettaruumi jälgimiseks lihtsat liidest aadressil: 
 
 http://localhost:8080/dhx-adapter-server/health
 
@@ -50,7 +48,9 @@ See tagastab JSON formaadis vastus:
 }
 ```
 
-### DHX adapterserveri mõõdikud (Metrics)
+Vaata [Springframework juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html#_auto_configured_healthindicators).
+
+### 2.2. DHX adapterserveri mõõdikud (Metrics)
 
 Pisut parem ülevaate serveri tööst annab mõõdikute päring, mis tagastab kummulatiivsed serveri kasutuse näitajad (pärast viimast restarti).  
 
@@ -97,15 +97,22 @@ Vastuse näide:
 	"counter.status.200.wsServer.dhl.wsdl":2
 }
 ```
+Vaata [Springframework juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html).
 
-### Tomcat JMX liides
+### 2.3. Tomcat JMX liides
 
-https://tomcat.apache.org/tomcat-8.0-doc/monitoring.html
+Täpsemaks Java serveri jälgimiseks saab kasutada [Java Management Extensions](https://en.wikipedia.org/wiki/Java_Management_Extensions) (JMX) liidest. 
 
-### Logimine
+Selleks tuleb Tomcat serveris avada eraldi port, mille kaudu saab ühenduda mingi JMX jälgijaga.
 
-## Edastamise vigade uurimimine
+Vaata täpsemalt juhendist [Tomcat monitoring](https://tomcat.apache.org/tomcat-8.0-doc/monitoring.html).
 
+## 3. Logimine
+
+
+## 4. Dokumentide edastamise vigade põhjuste analüüsimine
+
+### 4.1. Andmebaas.
 Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
 
 ![](dhx-adapter-database.png)
@@ -113,3 +120,6 @@ Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
 Tabelite kirjeldused:
 * DOKUMENT - sisaldab dokumendi andmeid. Väljal SISU salvestatakse faili nimi (c:\dhs_docs\ kataloogis).
 * 
+
+### 4.2. Kapslid failisüsteemis.
+
