@@ -30,7 +30,7 @@ DHX adapterserver pakub andmebaasi ühenduste staatuse ja vaba kettaruumi jälgi
 
 http://localhost:8080/dhx-adapter-server/health
 
-See tagastab JSON formaadis vastus:
+See tagastab JSON formaadis vastuse:
 ```json
 {
  "status":"UP",
@@ -109,17 +109,73 @@ Vaata täpsemalt juhendist [Tomcat monitoring](https://tomcat.apache.org/tomcat-
 
 ## 3. Logimine
 
+Serveri teenuste kasutamine logitakse [Tomcat standardsete liidestega](https://tomcat.apache.org/tomcat-7.0-doc/logging.html). 
+
+Logi kirjutatakse `apache-tomcat-7.x.x/logs` kataloogi failidesse:
+* `localhost_access_log.YYYY-MM-DD.txt` - iga pöördumise kohta "Access log", sisaldab välju: kliendi ip, juupäev ja kellaaeg, pöördumise URL vastuse staatus (200 tähendab OK, 400 või 500 tähendab viga).  
+* Tomcat serveri consoolile
+
+
+Lisaks on DHX adapterserveri häälestusfailis `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` määratud et logi kirjutatakse faili: 
+```xml
+    <RollingFile name="RollingFile" fileName="c://logs/event.log"
+```
+
+Soovitav om muuta seal ka `custom level EVENT -> intLevel` väärtuseks INFO=400 või WARN=300 või ERROR=200. Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
+``` 
+<CustomLevel name="EVENT" intLevel="400" />
+```
 
 ## 4. Dokumentide edastamise vigade põhjuste analüüsimine
 
-### 4.1. Andmebaas.
+Kui dokumendi edastamisel või vastuvõtmisel esines viga, siis selle kohta kirjutatakse logi (`log4j2.xml` sees määratud) faili `c:/logs/event.log` 
+
+Kui dokumendi võeti edastamiseks vastu (SOAP Päring ja Kapsel olid korrektsed), siis salvestatakse metaandmed andmebaasi ja Kapsli XML failisüsteemi.
+
+Teatud juhtudel võivad dokumendid jääda edastamata, näiteks kui korduvedastuste maksimum on ületatud vms.
+Selliste dokumentide mitte edastamise vea põhjuseid saab uurida logifailist ja andmbaasist.  
+
+### 4.1. Andmebaasi skeem
+
 Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
 
 ![](dhx-adapter-database.png)
 
 Tabelite kirjeldused:
-* DOKUMENT - sisaldab dokumendi andmeid. Väljal SISU salvestatakse faili nimi (c:\dhs_docs\ kataloogis).
-* 
+* ASUTUS - Kõikide DHX-iga liitunud adresaatide ehk asutuste andmed. See tabel täidetakse automaatselt [DHX lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamise algoritmiga.
+* DOKUMENT - sisaldab dokumendi andmeid. Väljal SISU salvestatakse faili nimi (`c:\dhs_docs\` kataloogis).
+* TRANSPORT - tabelis salvestatakse dokumendi transportimise info (kasutatakse saatja ja vastuvõtja(te)ga seostamiseks. Siin on peamine väli STAATUS_ID, mille võimalikud väärtused on: 101 (saatmisel), 102 (saadetud),  103 (katkestatud ehk ebaõnnestunud). Kui dokumendil oli mitu adresaati siis TRANSPORT.STAATUS_ID sisaldab ühist staatust.
+* SAATJA - dokumendi saatja andmed. Saatjaid on dokumendil üks.
+* VASTUVOTJA - dokumendi adressaatide ehk vastuvõtja(te) andmed. Adressaate võib dokumendil olla mitu. Siin VASTUVOTJA.STAATUS_ID sisaldab ühele konkreetsele adresaadile saatmise (viimase saatmisürituse) staatust: 101 (saatmisel), 102 (saadetud), 103 (katkestatud ehk ebaõnnestunud). 
+* STATUSE_AJALUGU - sisaldab ühe adresaadi saatmisürituste ajalugu.
+* KAUST - sisaldab kasutade andmeid.
 
-### 4.2. Kapslid failisüsteemis.
+Saatmisel dokumentide leidmiseks võib kasutada SQL lauset:
+```sql
+SELECT d.*, t.*, v.* FROM DOKUMENT d, TRANSPORT t, VASTUVOTJA v
+  WHERE t.dokument_id = d.dokument_id AND v.transport_id = t.transport_id
+    AND (t.staatus_id = 101 OR v.staatus_id = 101)
+```
+
+Katkestatud (vea saanud) dokumentide leidmiseks võib kasutada SQL lauset:
+```sql
+SELECT d.*, t.*, v.* FROM DOKUMENT d, TRANSPORT t, VASTUVOTJA v
+  WHERE t.dokument_id = d.dokument_id AND v.transport_id = t.transport_id
+    AND (t.staatus_id = 103 OR v.staatus_id = 103)
+```
+
+### 4.2. Kapslid lokaalses failisüsteemis
+
+Edastamiseks salvestatakse Kapsli XML lokaalses failisüsteemis (kataloogis `c:/dhx_docs`).
+
+Faili nime formaat on `dhx_<YYYY>_<MM>_<DD>_<HHMMSS><GUID>` (näiteks `dhx_2017_01_20_1101256c7e2a4e-f467-4c32-8fa6-52bc140fe17e`). 
+Selles formaadis failid sorteeruvad nime järgi kuupäevalises järjekorras.
+
+Nende failide sisu on XML formaadis (UTF-8 kodeeringus).
+
+Vea uurimisel saab dokumendi faili seostada andmebaasis DOKUMENT.SISU välja järgi.
+```sql
+SELECT d.* FROM DOKUMENT d where d.sisu = 'dhx_2017_01_20_1101256c7e2a4e-f467-4c32-8fa6-52bc140fe17e'
+```
+
 
