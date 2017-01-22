@@ -5,6 +5,20 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
+Table of Contents
+=================
+
+  * [DHX adapterserveri haldusjuhend](#dhx-adapterserveri-haldusjuhend)
+    * [1\. Sissejuhatus](#1-sissejuhatus)
+    * [2\. Monitooring](#2-monitooring)
+      * [2\.1\. DHX adapterserveri staatus (Health)](#21-dhx-adapterserveri-staatus-health)
+      * [2\.2\. DHX adapterserveri mõõdikud (Metrics)](#22-dhx-adapterserveri-m%C3%B5%C3%B5dikud-metrics)
+      * [2\.3\. Tomcat JMX liides](#23-tomcat-jmx-liides)
+    * [3\. Logimine](#3-logimine)
+    * [4\. Dokumentide edastamise vigade põhjuste analüüsimine](#4-dokumentide-edastamise-vigade-p%C3%B5hjuste-anal%C3%BC%C3%BCsimine)
+      * [4\.1\. Andmebaasi mudel](#41-andmebaasi-mudel)
+      * [4\.2\. Kapslid lokaalses failisüsteemis](#42-kapslid-lokaalses-failis%C3%BCsteemis)
+
 ## 1. Sissejuhatus
 
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
@@ -133,9 +147,9 @@ Kui dokumendi edastamisel või vastuvõtmisel esines viga, siis selle kohta kirj
 Kui dokumendi võeti edastamiseks vastu (SOAP Päring ja Kapsel olid korrektsed), siis salvestatakse metaandmed andmebaasi ja Kapsli XML failisüsteemi.
 
 Teatud juhtudel võivad dokumendid jääda edastamata, näiteks kui korduvedastuste maksimum on ületatud vms.
-Selliste dokumentide mitte edastamise vea põhjuseid saab uurida logifailist ja andmbaasist.  
+Selliste dokumentide mitte edastamise vea põhjuseid saab uurida logifailist ja andmebaasist.  
 
-### 4.1. Andmebaasi skeem
+### 4.1. Andmebaasi mudel
 
 Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
 
