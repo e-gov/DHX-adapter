@@ -8,7 +8,7 @@
   * [DHX adapterserveri kasutusjuhend](#dhx-adapterserveri-kasutusjuhend)
     * [1\. Sissejuhatus](#1-sissejuhatus)
     * [2\. WSDL asukohad](#2-wsdl-asukohad)
-      * [3\. SoapUI testimine](#3-soapui-testimine)
+    * [3\. SoapUI testimine](#3-soapui-testimine)
     * [4\. Sisemine liides](#4-sisemine-liides)
       * [4\.1\. getSendingOptions (sisemine liides)](#41-getsendingoptions-sisemine-liides)
       * [4\.2\. sendDocuments (sisemine liides)](#42-senddocuments-sisemine-liides)
@@ -50,7 +50,7 @@ Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<POR
 Sisemisel liidese [WSDL](../dhx-adapter-server/src/main/resources/dhl.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhl.wsdl`. 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
   
-### 3. SoapUI testimine
+## 3. SoapUI testimine
 
 Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) programmiga.
 
