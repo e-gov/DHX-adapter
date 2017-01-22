@@ -918,7 +918,7 @@ INSERT INTO asutus(
 
 Täpsem andmebaasi skeem on toodud [DHX adapterserveri haldusjuhendis](adapter-server-haldusjuhend.md)
 
-### 5.2. kontrollida kas vahendatav tagastatkse representationList väljundist.
+### 5.2. Kontrollida kas vahendatav tagastatkse representationList väljundist.
 
 Avada näiteks SoapUI programmis DHX teenus WSDL `http://localhost:8080/dhx-adapter-server/ws/dhx.wsdl`.
 
@@ -986,7 +986,53 @@ Kontrollida kas vastuses on lisatud astutuse (75019046, Tallinna Lasteaed Pallip
 
 ### 5.3. Vahendatava poolt dokumendi välja saatmine (sisemine liides)
 
-Vahendatav 
+Vahendatav pöördub dokumendi välja saatmiseks DHX adapterserveri sisemise liidese `sendDocuments.v4` poole, andes ette:
+* Pärise `<client><memberCode>` väärtuseks enda registrikoodi, näiteks:
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl">
+    <soapenv:Header>
+       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+    <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+    </ns4:id>
+    <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>75019046</ns3:memberCode>
+      <ns3:subsystemCode>DHX</ns3:subsystemCode>
+    </ns4:client>
+    <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>dhl</ns3:subsystemCode>
+      <ns3:serviceCode>sendDocuments</ns3:serviceCode>
+      <ns3:serviceVersion>v4</ns3:serviceVersion>
+    </ns4:service>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:sendDocuments>
+         <keha>
+            <dokumendid href="cid:sendDoc.base64">
+            </dokumendid>
+            <kaust>/</kaust>
+         </keha>
+      </dhl:sendDocuments>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+* Väärtustades manuses Kapsli sees `<DecSender><OrganisationCode>` samuti enda registrikoodiga:
+```xml
+<DecContainer xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+  <Transport>
+    <DecSender>
+        <OrganisationCode>75019046</OrganisationCode>
+        <PersonalIdCode>EE38806190294</PersonalIdCode>
+    </DecSender>
+```
+
+Samuti hilisemas `getSendStatus` päringus väärtustama `<client><memberCode>` enda registrikoodiga.
+
+
 
 ## 6. Kokkuvõtte erinevustest (DVK liidesega võrreldes)
 
