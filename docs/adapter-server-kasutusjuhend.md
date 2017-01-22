@@ -871,7 +871,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 ## 5. Vahendajana saatmine/vastuvõtmine
 
 Asutus võib DHX adpaterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine).
-Vahendada võib ka X-teega mitteliitinud asutuste dokumente.
+Vahendada võib ka X-teega mitteliitunud asutuste dokumente.
 
 X-teega liitunud asutus, kes soovib dokumente vahendada peab registreerima end Vahendajaks (lisatakse X-tee globaalkonfiguratsionni DHX vahendajate gruppi).
 
@@ -886,11 +886,11 @@ Kõigepealt tuleb ASUTUS tabelist otsida Vahendaja enda asutus. Oletame et vahen
 select asutus_id, nimetus, subsystem from asutus where registrikood = '40000001'
 ```
 
-Seejärel tuleb lisada vahendatava(te) kirje(d) käsitis SQL lausega. 
+Seejärel tuleb lisada vahendatava(te) kirje(d) käsitsi SQL lausega. 
 Võtta eelnevalt leitud Vahendaja asutus_id väärtus ja anda see ette vahendatava lisamise SQL lauses vahendaja_asutus_id väärtuseks.
-* `ASUTUS.vahendaja_asutus_id` (ehk <VAHENDAJA_ASUTUS_ID>) väärtustada eelneva päringu vastuse asutus_id. 
+* `ASUTUS.vahendaja_asutus_id` (ehk `<VAHENDAJA_ASUTUS_ID>`) väärtustada eelneva päringu vastuse asutus_id. 
 * `ASUTUS.dhx_asutus` väärtustada `false` või `0`.
-* `ASUTUS.id` väärtustada (<NEWID> asendada) väärtusega `SELECT max(asutus_id) + 1 FROM asutus`
+* `ASUTUS.id` väärtustada (`<NEWID>` asendada) väärtusega `SELECT max(asutus_id) + 1 FROM asutus`
 * `ASUTUS.nimetus` väärtustada vahendatava nimi, näiteks 'Tallinna Lasteaed Pallipõnn'
 * `ASUTUS.registrikood` väärtustada vahendatava registrikood, näiteks '75019046'
 
