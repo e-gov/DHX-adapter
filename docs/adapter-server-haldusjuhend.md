@@ -135,8 +135,8 @@ Lisaks on DHX adapterserveri häälestusfailis `apache-tomcat-7.x.x/webapps/dhx-
     <RollingFile name="RollingFile" fileName="c://logs/event.log"
 ```
 
-Soovitav om muuta seal ka `custom level EVENT -> intLevel` väärtuseks INFO=400 või WARN=300 või ERROR=200. Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
-``` 
+Soovitav on muuta seal ka `custom level EVENT -> intLevel` väärtuseks INFO=400 või WARN=300 või ERROR=200. Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
+```
 <CustomLevel name="EVENT" intLevel="400" />
 ```
 
