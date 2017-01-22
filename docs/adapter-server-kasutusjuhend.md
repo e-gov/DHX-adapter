@@ -44,7 +44,7 @@ Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) pro
 
 **4)** Sisestada Request XML väljale SOAP päring, muutes endale sobivaks elementide `<xRoadInstance>`, `<memberClass>` ja `<memberCode>` (asutuse registrikood) väärtused (näiteks `ee-dev`, `GOV` ja `40000001`) 
 
-**5)** Lisada vajadusel manus (Attachment) failist. NB! SoapUI arvestab manuse faili lugemisel laiendit (kui see on näiteks .txt, siis SoapUI püüand seda ise kodeerida ja lisab content-type: text/plan). Selleks et SoapUI seda ise ei teeks peaks mansue faili laiend olema näiteks `.base64`. 
+**5)** Lisada vajadusel manus (Attachment) failist. NB! SoapUI arvestab manuse faili lugemisel laiendit (kui see on näiteks .txt, siis SoapUI püüab seda ise kodeerida ja lisab content-type: text/plan). Selleks et SoapUI seda ise ei teeks, peaks mansue faili laiend olema näiteks `.base64`. 
 
 **6)** Käivitada SoapUI päring.
 
@@ -55,11 +55,11 @@ Märkus:
 > ``` 
 >  cat manus.xml | gzip | base64 --wrap=0 > manus.base64 
 > ```
-> Manused peavad olema nö "basic" base64 kodeeritud ehk terviklikult ühe reana. Base64 MIME kodeeritud manustest (mitu rida, iga rida 76 märki) DHX adapterserver aru ei saa.
+> Manused peavad olema [basic](https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#basic) base64 kodeeritud ehk terviklikult ühe reana. Base64 [MIME](https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#mime) kodeeritud manustest (mitu rida, iga rida 76 märki) DHX adapterserver aru ei saa ja annab vea.
 >
 > Manused saab Linux/unix alla lahti kodeerida salvestades manuse faili "manus.base64" ja käivitades seejärel:
 > ``` 
->  cat manus.base64 | base64 -d | gunzip
+>  cat manus.base64 | base64 -d | gunzip > manus.xml
 > ```
 
 SoapUI-ga testimise kohta loe eraldi dokumentatsioonist [SoapUI testide käivitamise juhend](adapter-server-soapui-test-juhend.md) ja [Testlood](adapter-server-testilood.md). 
@@ -80,12 +80,12 @@ Sisemise liidse operatsioonid on järgmised:
 
 Märkused: 
 > Sisemist liidese operatsioonid on projekteeritud väga sarnaselt vanale [DVK liidesele](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md). 
-> Sisemise liidese SOAP teenuste XML nimeruumid ja implementeeritud operatsioonide struktuur on täpselt samad nagu vanas DVK liideses.
+> Sisemise liidese SOAP teenuste XML nimeruumid ja realiseeritud operatsioonide struktuur on täpselt samad nagu vanas DVK liideses.
 > 
 > Enamasti peaks saama vanalt DVK X-tee liideselt üle minna uuele DHX protokollile, hakates kasutama uut DHX adapterserver tarkvara, muutes DHS sees ümber DVK veebiteenuse võrguaadressi (endpoint URI aadressi).
 > Kui varem pakkus seda teenust X-tee turvaserver, siis selle asemel pakub seda adapterserveri sisemine liides.
 > 
-> Sisemises liideses on implementeeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
+> Sisemises liideses on realiseeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
 > Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi loogika erinevusi võrreldes DVK liidesega. Need on välja toodud [allpool](#5-erinevused-dvk-liidesega-võrreldes). 
 
@@ -378,9 +378,21 @@ H4sIACJmhFgAA+1X3W7bNhS+z1MIvR0SSrIt2wEnTHWyJGvcGrGzYbspWOnYYSORGknZS59ll3mM3uXF
 
 Nõuded päringu sisendile:
 * Päringu sisendi X-tee päises ette antud saatja `<client><memberCode>30000001</ns3:memberCode>` peab ühtima Kapslis toodud saatjaga `<Transport><DecSender><OrganisationCode>30000001</OrganisationCode>`.
-* Kapsel peab olema [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manusena. Manuse algne xml fail peab olema UTF-8 kodeeringus, lisatud manusesse gzip pakitud ja seejärel base64 kodeeritult. 
+* Kapsel peab olema [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manusena. Manuse algne xml fail peab olema UTF-8 kodeeringus, lisatud manusesse gzip pakitud ja seejärel base64 kodeeritult.
 * Päringu sisendis ei pea ette andma Kapsli XML schema järgi kohustuslikku `<DecMetadata>` elementi (ega selle alamelemente `<DecId>`, `<DecFolder>`, `<DecReceiptDate>`). Need genereerib DHX adapterserver ise. Sama loogika kehtis vanas DVK liideses.
-* 
+* Päringu sisendis Kapslis võib ette anda mitu adresaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adresaadile eraldi. Kusjuures mõnele adresaadile saatmine võib õnnetuda ja teisele mitte.
+* Manusele määratud `Content-Type`,  `Content-Encoding` ja `Content-Transfer-Encoding` parameetrid DHX adapterserver ignoreerib. Eeldatakse et manus on alati gzip pakitud ja seejärel base64 kodeeritud.  
+Seega need võib korrektselt ette anda kujul:
+```
+Content-Type: {http://www.w3.org/2001/XMLSchema}base64Binary
+Content-Encoding: gzip
+Content-Transfer-Encoding: base64
+```
+Aga võib ka ette anda kujul:
+```
+Content-Type: application/octet-stream; name=sendDoc.base64
+Content-Transfer-Encoding: binary
+```
 
 Vastuse sisu näide:
 ```xml
@@ -451,12 +463,126 @@ Võimalikud staatused on:
 
 Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#edastatud-dokumentide-staatuse-kontroll).
 
-Vaata `getSendStatus.v2` saatmise näidet dokumendist Testilood - [2.11. DHX-i saadetud dokumendi staatuse pärimine](adapter-server-testilood.md#2.11).
-
-Lisaks vaata kirjeldust vana DVK spetsifikatsioonis [getSendStatus.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1). ja [getSendStatus.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
- 
+Lisaks vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [getSendStatus.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1). ja [getSendStatus.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
 > DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on [Testlugude näidetes](adapter-server-testilood.md#2.11).
+
+Päringu  `getSendStatus.v1` sisendi näide:
+```xml
+<soapenv:Envelope xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dhl="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:xsi="xsi">
+    <soapenv:Header>
+       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+    <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
+    </ns4:id>
+    <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:memberClass>COM</ns3:memberClass>
+      <ns3:memberCode>30000001</ns3:memberCode>
+      <ns3:subsystemCode>DHX</ns3:subsystemCode>
+    </ns4:client>
+    <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+      <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+      <ns3:memberClass>GOV</ns3:memberClass>
+      <ns3:memberCode>70006317</ns3:memberCode>
+      <ns3:subsystemCode>dhl</ns3:subsystemCode>
+      <ns3:serviceCode>getSendStatus</ns3:serviceCode>
+      <ns3:serviceVersion>v1</ns3:serviceVersion>
+    </ns4:service>
+   </soapenv:Header>
+   <soapenv:Body>
+      <dhl:getSendStatus>
+        <keha>
+          <dokumendid href="cid:getSendOpt.base64"/>
+        </keha>
+      </dhl:getSendStatus>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+Päringu manus XML kujul:
+```xml
+ <dhl_id>59</dhl_id>
+```
+
+Päringu manus gzip ja base64 kodeeritult:
+```
+H4sIAGN/hFgAA1OwScnIic9MsTO1tNGHMrkAk/0VABUAAAA=
+```
+
+Vastuse näide:
+```xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header>
+      <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
+      <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
+      <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:memberClass>COM</ns3:memberClass>
+         <ns3:memberCode>30000001</ns3:memberCode>
+         <ns3:subsystemCode>DHX</ns3:subsystemCode>
+      </ns4:client>
+      <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:memberClass>GOV</ns3:memberClass>
+         <ns3:memberCode>70006317</ns3:memberCode>
+         <ns3:subsystemCode>dhl</ns3:subsystemCode>
+         <ns3:serviceCode>getSendStatus</ns3:serviceCode>
+         <ns3:serviceVersion>v1</ns3:serviceVersion>
+      </ns4:service>
+   </SOAP-ENV:Header>
+   <SOAP-ENV:Body>
+      <ns4:getSendStatusResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
+         <keha href=" cid:746954c4-1ba6-4ac9-a23f-7bef890a13e1"/>
+      </ns4:getSendStatusResponse>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+```
+
+Vastuse manus gzip ja base64 kodeeritult:
+```
+H4sIAAAAAAAAANVXbW/bNhD+vPwKwg2GDIOpFzsvVlUVWW1sLVa0SAys3wSOvNi0JdIgKVv+9zu9WLaxJE6xYkAMGDLvnue5O/IkneP3ZZ6RNRgrtXrXC6jfe5+cxcoOIukgJ+hVNlJ2+K43d24Ved5ms6FGyiUF8CyfQ86sJ+ZZr4PedFAxL2nZN5oJCoW3MloUHMweGfgddA8rrfAMrAxYUI45TIuiaU8adJydoKUYn5ZGdHntPMeJBcET4cp6cRTl8qheW6uO5UyONffWAR1Q/80efHUE3gyoNjMv9H3f80cegoSVswN4+PxeAucaK5cK868OJg3TwNuzr0+dRD8Hx/qscDrH7eN75uiJ8qXAnZYPEmP1Ejz66whVUimSy1HsHSzRNYxAMOsK2ywsYwvW/DQwUyYZ+vUnqHg7W+1mtkAWpErmMvkslbQOwMgiJ98a7BGgMbXqeBGFSEI/uO77QT8Mp4Ef+UEUBjS4ufzVDyPfj70WFecAToukRPnYaxdxnTRzp1X2wDjT8AjhCjnUHwx2hBZV1/jAiswlcX3hWkDy1306ubv7chd7e1vjts5INUvGf3yblBxWVZeTyh2RHYdMjNGGaM4LA4Js5jIDgreEQB4Rmhc5Hhr96H0hUAEj8kErBbxWcjJHii5chKK19S1RgDsuCHThpCULtmZUgaMtt8vlhFpbT1tEU5HAppPZa62ITLVjGTGAJYFFa6HQOSR3YKtCyQMmLjHTtRTFHheRM0Q4syWCOaz0vlDkE1MkDEnTXMOQTCZTUvUQmQKfK8mR3ZbXbEcO1rIZRK914+4d40tnGMeEAfB5xGj12O/E6XheHoi90jJ/flOKt2c/MXdY48ZSC2YtOVCZr7Kq0t+xDzZsS6u0x23KFwf2Kn4Ujq5/+bGCA//Fgl/xuLDf7hvzx8paabfmlBlsffGbFtvw4nF0HTEYXv2HiOe3C/4h0xbPeUBNoZ6NdBAHX6uU2RWex6KiVcdEDTxkaKCftFRf8etqKg4AHEBcHFvb1EcHklzndMHZ37IVtpQt6Gdwcy3+1LMZGLoxbHVxZGn23L/5Lhm24OdSZfhWv+Uc7/nGeY7EtCamLTFli/SQ+ALEExkG311mY3hM6mr4gxrs+aZ6YZRbu1X8ZKip2R618zOsJnzwwp5+WuhfjX0y5v/d3e2ru31bN3NWO7fg4MOqyW7J3BKaKQjHqtYYr6uxb63dgqWtrZ4QY+9xR6PcDYs6g2WCI5rLpYUs9up1hWn+ZiT/AOucJjiHDAAA
+```
+
+Vastuse manuse XML lahti kodeeritult 
+```xml
+<?xml version="1.0"?>
+<ns3:item xmlns:ns4="http://www.riik.ee/schemas/dhl" xmlns:ns8="http://dhx.x-road.eu/producer"
+    xmlns:ns10="http://x-road.eu/xsd/representation.xsd" xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl"
+    xmlns:ns11="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#"
+    xmlns:ns6="http://www.w3.org/2000/09/xmldsig#" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
+    xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://x-road.eu/xsd/identifiers">
+  <ns7:dhl_id>59</ns7:dhl_id>
+  <ns4:edastus>
+    <ns4:saaja>
+      <ns4:regnr>40000001</ns4:regnr>
+      <ns4:asutuse_nimi>Ministeerium X</ns4:asutuse_nimi>
+    </ns4:saaja>
+    <saadud>2017-01-22T10:01:21.185+02:00</saadud>
+    <meetod>xtee</meetod>
+    <edastatud>2017-01-22T10:01:21.185+02:00</edastatud>
+    <loetud>2017-01-22T10:06:01.033+02:00</loetud>
+    <ns4:fault>
+     <faultcode>WS_ERROR</faultcode>
+     <faultstring>DHXException code: WS_ERROR Error occured while sending document.I/O error: Connection timed out: connect; nested exception is java.net.ConnectException: Connection timed out: connect</faultstring>
+     <faultdetail>...</faultdetail>
+    </ns4:fault>
+    <staatus>katkestatud</staatus>
+    <vastuvotja_staatus_id>5</vastuvotja_staatus_id>
+  </ns4:edastus>
+  
+  <olek>saatmisel</olek>
+</ns3:item>
+```
+
+Märkused sisendi ja väljundi kohta:
+* Päringu `getSendStatus.v1` sisendis saab ette anda `<dhl_id>` väärtuse.
+* Päringu `getSendStatus.v2` sisendis saab ette anda `<dhl_id>` väärtuse `<item>` elemendi sees ja lisaks ka `<staatuse_ajalugu>` väärtuse true/false.
+* Päringu `getSendStatus.v2` sisendis ette antud `<dokument_guid>` väärtust ignoreeritakse, sest DHX adapterserveri sees "dokument_guid" väärtuseid ei kasutata (need on alati tühjad).
+* Vastuses on iga adressaadi ehk saaja kohta eraldi `<edastus>` element (mitu saajat sai määrata saamitsel Kapslis mitme `<DecRecipient>` elemendiga).
+* Vastuse kogu staatust näitab `<item><olek>` väli, siin näites on see `saatmisel`, sest DHX adapterserver teostab tulevikus veel uue [DHX saatmisürituse](https://e-gov.github.io/DHX/#77-uuesti-%C3%BCritamine).
+* Vastuses `<edastus><staatus>` väärtus näitab konkreetsele saatjale tehtud viimase saatmisürituse staatust. Antud näites "katkestatud" tähendab et saadi viga. Veateade on `<fault>` elemendi sees.
+
+Vaata `getSendStatus.v2` saatmise näidet dokumendist Testilood - [2.11. DHX-i saadetud dokumendi staatuse pärimine](adapter-server-testilood.md#2.11). 
 
 Märkused vana DVK X-tee liidese kasutajale:
 > DHX adpaterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
