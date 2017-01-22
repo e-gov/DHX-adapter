@@ -213,7 +213,7 @@ Märkus:
 > Selle määrab `dhx-application.properties` failis parameeter `spring.jpa.hibernate.ddl-auto=update` .
 > Vaata [Spring boot juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html#howto-initialize-a-database-using-hibernate).
 
-4) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+5) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
 #### 4.1.6. Paigaldada Tomcat Windows Servicena või Linux deemonina. 
 
@@ -275,13 +275,23 @@ Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale k
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.
 
-3) Teha Tomcati restart.
+3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta soovi korral ümber logimise kataloog (c//logs/event.log):
+```
+    <RollingFile name="RollingFile" fileName="c://logs/event.log"
+                 filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
+```
+Muuta  `custom level EVENT -> intLevel` väärtuseks INFO=400 või WARN=300 või ERROR=200. Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
+``` 
+<CustomLevel name="EVENT" intLevel="400" />
+```
+
+4) Teha Tomcati restart.
 
 Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/bin/shutdown.sh` (Linux/Unix).
 
 Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
-4) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+5) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
 #### 4.2.6. Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
