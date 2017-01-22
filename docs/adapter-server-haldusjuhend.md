@@ -158,10 +158,10 @@ Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
 Tabelite kirjeldused:
 * ASUTUS - Kõikide DHX-iga liitunud adresaatide ehk asutuste andmed. See tabel täidetakse automaatselt [DHX lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamise algoritmiga.
 * DOKUMENT - sisaldab dokumendi andmeid. Väljal SISU salvestatakse faili nimi (`c:\dhs_docs\` kataloogis).
-* TRANSPORT - tabelis salvestatakse dokumendi transportimise info (kasutatakse saatja ja vastuvõtja(te)ga seostamiseks. Siin on peamine väli STAATUS_ID, mille võimalikud väärtused on: 101 (saatmisel), 102 (saadetud),  103 (katkestatud ehk ebaõnnestunud). Kui dokumendil oli mitu adresaati siis TRANSPORT.STAATUS_ID sisaldab ühist staatust.
+* TRANSPORT - tabelis salvestatakse dokumendi transportimise info (kasutatakse saatja ja vastuvõtja(te)ga seostamiseks). Siin on peamine väli STAATUS_ID, mille võimalikud väärtused on: 101 (saatmisel), 102 (saadetud),  103 (katkestatud ehk ebaõnnestunud). Kui dokumendil oli mitu adresaati siis TRANSPORT.STAATUS_ID sisaldab ühist staatust.
 * SAATJA - dokumendi saatja andmed. Saatjaid on dokumendil üks.
-* VASTUVOTJA - dokumendi adressaatide ehk vastuvõtja(te) andmed. Adressaate võib dokumendil olla mitu. Siin VASTUVOTJA.STAATUS_ID sisaldab ühele konkreetsele adresaadile saatmise (viimase saatmisürituse) staatust: 101 (saatmisel), 102 (saadetud), 103 (katkestatud ehk ebaõnnestunud). 
-* STATUSE_AJALUGU - sisaldab ühe adresaadi saatmisürituste ajalugu.
+* VASTUVOTJA - dokumendi adressaatide ehk vastuvõtja(te) andmed. Adressaate võib dokumendil olla mitu. Siin STAATUS_ID sisaldab ühele konkreetsele adressaadile saatmise (viimase saatmisürituse) staatust: 101 (saatmisel), 102 (saadetud), 103 (katkestatud ehk ebaõnnestunud). 
+* STATUSE_AJALUGU - sisaldab ühe adressaadi saatmisürituste ajalugu.
 * KAUST - sisaldab kasutade andmeid.
 
 Saatmisel dokumentide leidmiseks võib kasutada SQL lauset:
