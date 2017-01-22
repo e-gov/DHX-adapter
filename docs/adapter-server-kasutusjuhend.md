@@ -148,7 +148,7 @@ Lisaks kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://git
 > DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagi allpool toodud näites.
 
 Märkused vana DVK X-tee liidese kasutajale:
-> DHX adpaterserveris on realiseeritud kõik getSendStatus operatsiooni versioonid [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1), [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3).
+> DHX adapterserveris on realiseeritud kõik getSendStatus operatsiooni versioonid [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1), [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3).
 
 Päringu `getSendingOptions.v1` näide:
 ```xml
@@ -603,7 +603,7 @@ Märkused sisendi ja väljundi kohta:
 Vaata `getSendStatus.v2` saatmise näidet dokumendist Testilood - [2.11. DHX-i saadetud dokumendi staatuse pärimine](adapter-server-testilood.md#2.11). 
 
 Märkused vana DVK X-tee liidese kasutajale:
-> DHX adpaterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
+> DHX adapterserveris on realiseeritud mõlemad getSendStatus operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1) ja [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
 
 ### 4.4. receiveDocuments (sisemine liides)
 
@@ -805,7 +805,7 @@ Märkused päringu sisendi ja väljundi kohta:
 ```
 
 Märkused vana DVK X-tee liidese kasutajale:
-> DHX adpaterserveris on realiseeritud kõik receiveDocuments operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv1),
+> DHX adapterserveris on realiseeritud kõik receiveDocuments operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv1),
 > [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv3) ja [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocumentsv4).
 
 ### 4.5. markDocumentsReceived (sisemine liides)
@@ -883,12 +883,12 @@ Vastus:
 ```
 
 Märkused vana DVK X-tee liidese kasutajale:
-> DHX adpaterserveris on realiseeritud kõik markDocumentsReceived operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv1),
+> DHX adapterserveris on realiseeritud kõik markDocumentsReceived operatsiooni versioonid [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv1),
 > [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv2) ja [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceivedv3)
 
 ## 5. Vahendajana saatmine/vastuvõtmine
 
-Asutus võib DHX adpaterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine).
+Asutus võib DHX adapterserverit kasutada [DHX vahendamiseks](https://e-gov.github.io/DHX/#6-vahendamine).
 Vahendada võib ka X-teega mitteliitunud asutuste dokumente.
 
 X-teega liitunud asutus, kes soovib dokumente vahendada peab registreerima end Vahendajaks (lisatakse X-tee globaalkonfiguratsionni DHX vahendajate gruppi).
