@@ -313,7 +313,7 @@ public class CapsuleService {
       CapsuleVersionEnum version)
       throws DhxException {
     log.debug("creating container for outgoing document");
-    if (folderName == null) {
+    if (StringUtil.isNullOrEmpty(folderName)) {
       folderName = getFolderNameFromCapsule(container);
     }
     Document document = new Document();

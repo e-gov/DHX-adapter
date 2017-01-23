@@ -13,9 +13,6 @@
         <TimeBasedTriggeringPolicy interval="24" modulate="false"/>
         <SizeBasedTriggeringPolicy size="1 MB"/>
       </Policies>
-      <filters>
-            <LevelRangeFilter minLevel="EVENT" maxLevel="EVENT" onMatch="ACCEPT" onMismatch="DENY" />
-	</filters>
     </RollingFile>
   </Appenders>
   <Loggers>
@@ -23,24 +20,19 @@
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger>
-    <Logger name="org.springframework.ws.client.MessageTracing" level="trace" additivity="false">
+    <!-- <Logger name="org.springframework.ws.client.MessageTracing" level="trace" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger> 
     <Logger name="org.springframework.ws.server.MessageTracing" level="trace" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
-    </Logger>
+    </Logger> 
       
      <Logger name="org.hibernate.SQL" level="debug" additivity="false">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
-    </Logger>
-    
-     <Logger name="org.springframework.web.servlet.resource" level="info" additivity="false">
-      <AppenderRef ref="Console"/>
-    </Logger>
-    
+    </Logger>   --> 
     
     
     <Root level="info" additivity="false">
