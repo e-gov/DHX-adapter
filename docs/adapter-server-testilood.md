@@ -43,11 +43,8 @@
   - [3. DHX makettrakenduse testid](#dhx-makett-tests)
 
     - [3.1. Õige kapsli saatmine](#3.1)
-
-      - [3.2. Vale kapsli saatmine](#3.2)
-      - [3.3. Faili saatmine (fail ei ole kapsel)](#3.3)
-      - [3.4. Duplikaadi kontroll](#3.4)
-      - [3.5. DVK süsteemist tulnud dokumendi vastuvõtmine](#3.5)
+    - [3.2. Duplikaadi kontroll](#3.2)
+    - [3.3. DVK süsteemist tulnud dokumendi vastuvõtmine](#3.3)
 
 - [Testplaan](#testplaan)
 
@@ -58,6 +55,9 @@ Käesolev dokument määratleb seoses DHX protokolli kasutuselevõtmisega DHX ad
 
 Iga punkti 1 ja punkti 2 testloo juures on olemas näidis-XML, mida võib kasutada testimiseks. Enne XML-i saatmist tuleb veenduda ja vajadusel muuta XML-i header-i _service_ ja _client_ elemendid, täites neid vajalikute andmetega (saatva süsteemi ja adressaadi andmetega). Juhul kui XML-i keha enne saatmist vajab muutmist, siis vastav info on kajastatud testiloos. SOAP päringu saatmisel tuleb veenduda et päring saadetakse õigele X-tee turvaserverile (saatva süsteemi turvaserverile). Lisaks juhul kui testiloo käigus saadedakse kapsli, siis tuleb veenduda et kapsli adresssaat ja kapsli saatja on õiged(vastavad testiloos kirjeldatud saatja süsteemile ja kapsli adressadile).
 
+DHX adapterserveri testikontseptsioon on esitatud joonisel:
+![](adapter-server-testikontseptsioon.png)
+
 <a name="tests"></a>
 # Testilood
 
@@ -66,6 +66,8 @@ Iga punkti 1 ja punkti 2 testloo juures on olemas näidis-XML, mida võib kasuta
 - Korrektselt kapseldatud fail - Elektroonilise andmevahetuse metaandmete loendile 2.1 vastavalt korrektselt kapseldatud fail.
 
 DHX adapter serveri testimiseks on vajalikud järgmised X-tee liikmed:
+
+DHS 1 – X-tee liige, kellel on olemas DHX alamsüsteem, aga ta ei paku DHX protokollile vastavaid teenusi või teenuste pakutav rakendus on maas.
 
 DHS 2 – X-tee liige, kellel on olemas DHX alamsüsteem, kes on registreeritud DHX vahendajana ja pakub X-tee teenuseid representationList ja sendDocument vastavalt DHX protokollile. RepresentationList teenus peab tagastama vähemalt ühe vahendatava andmeid. Asutusel on registreeritud vähemalt üks DHX. prefiksiga(ntks DHX.subsystem) alamsüsteem kuhu võib DHX protkolli järgi dokumente saata.
 
@@ -2512,7 +2514,7 @@ Saadetis :
 
 ```
 Saatev süsteem : DHS 3
-Kapsli adressaat : DHS 2
+Kapsli adressaat : DHS 1
 Saadetis : korrektselt kapseldatud fail
 ```
 
@@ -3091,52 +3093,9 @@ Saatev süsteem : DHS makett
 - saatvale süsteemile on saadetud õige vastuskood
 - kajastatud nii saatva süsteemi sündmuste logis
 
+
 <a name="3.2"></a>
-### 3.2. Vale kapsli saatmine
-
-```
-Saatev süsteem : DHS makett
-   Kapsli adressaat : DHS 3
-   Saadetis : kapsli fail, mis ei vasta Elektroonilise andmevahetuse metaandmete loendile 2.1 (nt puudu kohustuslik väli), aga on XML fail õige XML vorminguga
-```
-
-#### **Verifitseerija toimimine (samm-sammuline):**
-
-- Inimene valib Dokumendi saatmine tab-i Tegevused regioonis
-- Valib rippmenüüst Vali dokument väärtus valesti kapseldatud
-- Valib rippmenüüst Vali adressaat väärtust mis vastab DHS 3 süsteemile(vastava registrikoodiga asutus).
-- Vajutab nupule Saada dokument.
-
-#### **Oodatav tulemus** :
-
-- dokumendi saatmine ebaõnnestus.
-- vastuses on DHX.Validation koodiga fault
-- kajastatud sündmuste logis
-
-<a name="3.3"></a>
-### 3.3. Faili saatmine (fail ei ole kapsel)
-
-```
-Saatev süsteem : DHS makett
-   Kapsli adressaat : DHS 3
-   Saadetis : fail mis ei ole XML või XML vale vorminguga.
-```
-
-#### **Verifitseerija toimimine (samm-sammuline):**
-
-- Inimene valib Dokumendi saatmine tab-i Tegevused regioonis
-- Valib rippmenüüst Vali dokument väärtus vale XML või mitte XML fail
-- Valib rippmenüüst Vali adressaat väärtust mis vastab DHS 3 süsteemile(vastava registrikoodiga asutus).
-- Vajutab nupule Saada dokument
-
-#### **Oodatav tulemus** :
-
-- dokumendi saatmine ebaõnnestus
-- vastuses on DHX.Validation koodiga fault
-- kajastatud sündmuste logis
-
-<a name="3.4"></a>
-### 3.4. Duplikaadi kontroll
+### 3.2. Duplikaadi kontroll
 
 ```
 Saatev süsteem : DHS makett
@@ -3159,8 +3118,8 @@ Saatev süsteem : DHS makett
 - vastuses on DHX.Duplicate koodiga fault
 - kajastatud sündmuste logis
 
-<a name="3.5"></a>
-### 3.5. DVK süsteemist tulnud dokumendi vastuvõtmine
+<a name="3.3"></a>
+### 3.3. DVK süsteemist tulnud dokumendi vastuvõtmine
 
 ```
 Saatev süsteem : DHS makett
