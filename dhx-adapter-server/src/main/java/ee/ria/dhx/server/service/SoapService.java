@@ -633,6 +633,7 @@ public class SoapService {
    * @param request - SOAP request object
    * @param senderMember - sender of the request(from SOAP header)
    * @param recipientMember - recipient of the request(from SOAP header)
+   * @param context Soap message context
    * @return - SOAP response object
    * @throws DhxException thrown if error occurs
    */

@@ -54,7 +54,7 @@ public class DhxServerWebServiceConfig {
 
   /**
    * Creates messageFactory and returns.
-   * @return
+   * @return messagefactory
    */
   @Bean(name = "messageFactory")
   public SaajSoapMessageFactory messageFactory() {
