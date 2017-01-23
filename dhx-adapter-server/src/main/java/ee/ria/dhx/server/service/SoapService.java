@@ -21,6 +21,7 @@ import ee.ria.dhx.server.persistence.service.PersistenceService;
 import ee.ria.dhx.server.service.util.WsUtil;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.AadressType;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.Edastus;
+import ee.ria.dhx.server.types.ee.riik.schemas.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
@@ -28,7 +29,6 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendSta
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptions;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionRefsArrayType;
@@ -232,18 +232,11 @@ public class SoapService {
       log.debug("found total recipients to send to DHX: " + recipients.size());
     }
     Recipient lockedRecipient = null;
-    /*
-     * List<Long> recipientIds = new ArrayList<Long>(); for(Recipient recipientUnlocked :
-     * recipients) { recipientIds.add(recipientUnlocked.getRecipientId()); }
-     * 
-     * List<Recipient> lockedRecipients = recipientRepository.findByRecipientIdIn(recipientIds);
-     */
     for (Recipient recipientUnlocked : recipients) {
       try {
         // doing query for every recipient to lock it for writing, in order for another thread not
         // to update it
         lockedRecipient = recipientUnlocked;
-        // recipientRepository.findByRecipientId(recipientUnlocked.getRecipientId());
         // if recipient were updated by another transaction, then skip
         if (lockedRecipient.getVersion() != null && recipientUnlocked.getVersion() != null
             && lockedRecipient.getVersion() != recipientUnlocked.getVersion()) {
@@ -292,7 +285,6 @@ public class SoapService {
         lockedRecipient.setDhxInternalConsignmentId(lockedRecipient.getRecipientId().toString());
         lockedRecipient.setSendingStart(new Timestamp((new Date()).getTime()));
         saveRecipient(lockedRecipient);
-        // recipientRepository.save(lockedRecipient);
         asyncDhxPackageService.sendPackage(dhxPackage);
       } catch (DhxException ex) {
         log.error("Error occured while sending document! " + ex.getMessage(), ex);
@@ -343,12 +335,12 @@ public class SoapService {
             sender.getSubsystemCode());
     log.debug("receiving document for organisation: {}", senderOrg);
     Folder folder = null;
-    if (request.getKeha().getKaust() != null) {
+    if (!StringUtil.isNullOrEmpty(request.getKeha().getKaust())) {
       folder = folderRepository.findByName(request.getKeha().getKaust());
     }
     Integer inprocessStatusId = StatusEnum.IN_PROCESS.getClassificatorId();
     List<Document> docs = null;
-    if (folder == null && request.getKeha().getKaust() == null) {
+    if (folder == null && StringUtil.isNullOrEmpty(request.getKeha().getKaust())) {
       if (senderOrg != null) {
         log.debug(
             "searching by recipients organisation and status " + senderOrg.getOrganisationId());
@@ -392,85 +384,65 @@ public class SoapService {
     MarkDocumentsReceivedV3RequestType request = null;
     if (!StringUtil.isNullOrEmpty(requestWrapper.getKeha().getDokumendid().getHrefString())
         || requestWrapper.getKeha() != null) {
-      /*
-       * (requestWrapper.getAny() != null && requestWrapper.getAny().size() > 0 &&
-       * requestWrapper.getAny().get(0).getTagName().equals("keha") &&
-       * requestWrapper.getAny().get(0).getFirstChild() != null &&
-       * requestWrapper.getAny().get(0).getFirstChild().getLocalName().equals("dokumendid")) {
-       */
-      // Node keha = requestWrapper.getAny().get(0);
-      // Node dokumendid = requestWrapper.getAny().get(0).getFirstChild();
       log.debug("Found keha and dokumendid elements in request.");
       if (!recipientMember.getServiceVersion().equals("v3")) {
-        /*
-         * log.debug("Dealing with request in body(v3)."); request =
-         * dhxMarshallerService.unmarshall(keha); } else
-         */ {
-          /*
-           * for (int i = 0; i < dokumendid.getAttributes().getLength(); i++) { Node att =
-           * dokumendid.getAttributes().item(i); if (att.getLocalName().equals("href")) { String
-           * content = att.getTextContent();
-           */
-          log.debug("Dealing with request in attachment defined in href(v2, v1).");
-          InputStream attachmentStream = null;
-          FileOutputStream fos = null;
-          File tempFile = null;
-          try {
-            tempFile = FileUtil.createPipelineFile();
-            fos = new FileOutputStream(tempFile);
-            DataHandler attachmentHandler = WsUtil.extractAttachment(context,
-                requestWrapper.getKeha().getDokumendid().getHrefString());
-            // first try extract
-            if (recipientMember.getServiceVersion().equals("v2")) {
-              attachmentStream = WsUtil.base64DecodeIfNeededAndUnzip(attachmentHandler);
-              FileUtil.writeToFile(
-                  "<dokumendid>", fos);
-              FileUtil.writeToFile(attachmentStream, fos);
-              FileUtil.writeToFile("</dokumendid>", fos);
-              fos.flush();
-              FileUtil.safeCloseStream(fos);
-              FileUtil.safeCloseStream(attachmentStream);
-              fos = null;
-              attachmentStream = null;
-              Dokumendid docs = dhxMarshallerService.unmarshall(tempFile);
-              request = new MarkDocumentsReceivedV3RequestType();
-              request.setDokumendid(docs);
-            } else if (recipientMember.getServiceVersion().equals("v1")) {
-              request = new MarkDocumentsReceivedV3RequestType();
-              List<TagasisideType> taagsisideList = new ArrayList<TagasisideType>();
-              request.setDokumendid(new Dokumendid());
-              request.getDokumendid().setTagasisided(taagsisideList);
-              org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
-                  WsUtil.base64DecodeIfNeededAndUnzip(
-                      attachmentHandler));
-              NodeList list = xmlDoc.getElementsByTagName("dhl_id");
-              for (int j = 0; j < list.getLength(); j++) {
-                Node node = list.item(j);
-                log.debug("dhl id " + node.getTextContent());
-                TagasisideType tagasiside = new TagasisideType();
-                tagasiside.setDhlId(BigInteger.valueOf(Long.valueOf(node.getTextContent())));
-                taagsisideList.add(tagasiside);
-              }
-              if (taagsisideList.size() == 0) {
-                throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-                    "No dhl ids are provided to get status for.");
-              }
-            }
-          } catch (IOException ex) {
-            throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-                "Error occured while parsing attachment." + ex.getMessage(), ex);
-          } finally {
-            FileUtil.safeCloseStream(attachmentStream);
+        log.debug("Dealing with request in attachment defined in href(v2, v1).");
+        InputStream attachmentStream = null;
+        FileOutputStream fos = null;
+        File tempFile = null;
+        try {
+          tempFile = FileUtil.createPipelineFile();
+          fos = new FileOutputStream(tempFile);
+          DataHandler attachmentHandler = WsUtil.extractAttachment(context,
+              requestWrapper.getKeha().getDokumendid().getHrefString());
+          // first try extract
+          if (recipientMember.getServiceVersion().equals("v2")) {
+            attachmentStream = WsUtil.base64DecodeIfNeededAndUnzip(attachmentHandler);
+            FileUtil.writeToFile(
+                "<dokumendid>", fos);
+            FileUtil.writeToFile(attachmentStream, fos);
+            FileUtil.writeToFile("</dokumendid>", fos);
+            fos.flush();
             FileUtil.safeCloseStream(fos);
-            if (tempFile != null) {
-              tempFile.delete();
+            FileUtil.safeCloseStream(attachmentStream);
+            fos = null;
+            attachmentStream = null;
+            Dokumendid docs = dhxMarshallerService.unmarshall(tempFile);
+            request = new MarkDocumentsReceivedV3RequestType();
+            request.setDokumendid(docs);
+          } else if (recipientMember.getServiceVersion().equals("v1")) {
+            request = new MarkDocumentsReceivedV3RequestType();
+            List<TagasisideType> taagsisideList = new ArrayList<TagasisideType>();
+            request.setDokumendid(new Dokumendid());
+            request.getDokumendid().setTagasisided(taagsisideList);
+            org.w3c.dom.Document xmlDoc = WsUtil.xmlDocumentFromStream(
+                WsUtil.base64DecodeIfNeededAndUnzip(
+                    attachmentHandler));
+            NodeList list = xmlDoc.getElementsByTagName("dhl_id");
+            for (int j = 0; j < list.getLength(); j++) {
+              Node node = list.item(j);
+              log.debug("dhl id " + node.getTextContent());
+              TagasisideType tagasiside = new TagasisideType();
+              tagasiside.setDhlId(BigInteger.valueOf(Long.valueOf(node.getTextContent())));
+              taagsisideList.add(tagasiside);
+            }
+            if (taagsisideList.size() == 0) {
+              throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+                  "No dhl ids are provided to get status for.");
             }
           }
-          // break;
+        } catch (IOException ex) {
+          throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+              "Error occured while parsing attachment." + ex.getMessage(), ex);
+        } finally {
+          FileUtil.safeCloseStream(attachmentStream);
+          FileUtil.safeCloseStream(fos);
+          if (tempFile != null) {
+            tempFile.delete();
+          }
         }
         requestWrapper.setKeha(request);
       }
-      // }
     } else {
       throw new DhxException("Request is empty or invalid!");
     }
@@ -492,9 +464,7 @@ public class SoapService {
       MarkDocumentsReceived requestWrapper,
       InternalXroadMember senderMember, InternalXroadMember recipientMember,
       MessageContext context) throws DhxException {
-    // if (requestWrapper.getKeha() == null) {
     setMarkDocumentsReceivedRequestBody(requestWrapper, context, recipientMember);
-    // }
     MarkDocumentsReceivedV3RequestType request = requestWrapper.getKeha();
 
     if (request == null || request.getDokumendid() == null
@@ -730,12 +700,10 @@ public class SoapService {
                 recipient.getOrganisation().getRegistrationCode(),
                 recipient.getOrganisation().getSubSystem()));
         adr.setIsikukood(recipient.getPersonalcode());
-        // adr.setAllyksuseKood(recipient.getStructuralUnit());
         adr.setAsutuseNimi(recipient.getOrganisation().getName());
         edastus.setSaaja(adr);
         edastus.setSaadud(ConversionUtil.toGregorianCalendar(recipient.getSendingStart()));
 
-        // edastus.setMetaxml(recipient.getMetaxml());
         edastus.setMeetod("xtee");
         if (recipient.getSendingEnd() != null) {
           edastus.setLoetud(ConversionUtil.toGregorianCalendar(recipient.getSendingEnd()));
@@ -795,7 +763,6 @@ public class SoapService {
             saaja.setIsikukood(recipient.getPersonalcode());
             saaja.setAllyksuseLyhinimetus(recipient.getStructuralUnit());
             status.setSaaja(saaja);
-            // status.setMetaxml(value);
             history.getStatus().add(status);
           }
         }
@@ -803,7 +770,7 @@ public class SoapService {
       }
       responseAtt.getItem().add(item);
     }
-    DataHandler handler = convertationService.createDatahandlerFromList(responseAtt.getItem());
+    DataHandler handler = convertationService.createDatahandlerFromObject(responseAtt);//convertationService.createDatahandlerFromList(responseAtt.getItem());
     response.getKeha().setHref(handler);
     return response;
   }
@@ -875,7 +842,6 @@ public class SoapService {
       setGetSendingOptionsRequestBody(request, context, recipientMember);
     }
     GetSendingOptionsResponse response = new GetSendingOptionsResponse();
-    // new InstitutionArrayType();
     ObjectFactory fact = new ObjectFactory();
     InstitutionArrayType institutions = fact.createInstitutionArrayType();
     List<Organisation> orgs = persistenceService.getAdresseeList();

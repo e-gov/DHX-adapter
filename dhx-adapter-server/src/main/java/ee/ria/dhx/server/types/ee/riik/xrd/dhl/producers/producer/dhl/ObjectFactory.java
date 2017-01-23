@@ -9,6 +9,8 @@
 
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
+import ee.ria.dhx.server.types.ee.riik.schemas.dhl.GetSendingOptionsResponse;
+
 import javax.xml.bind.annotation.XmlRegistry;
 
 

@@ -6,10 +6,10 @@ import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.service.SoapService;
 import ee.ria.dhx.server.service.util.WsUtil;
+import ee.ria.dhx.server.types.ee.riik.schemas.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptions;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocuments;
@@ -167,11 +167,6 @@ public class ServerEndpoint {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Only v1,v2 versions of getSendStatus are supported");
     }
-    /*if (request.getKeha().getDokumendid().getHref() == null) {
-      DataHandler attachment = WsUtil.extractAttachment(messageContext,
-          request.getKeha().getDokumendid().getHrefString());
-      request.getKeha().getDokumendid().setHref(attachment);
-    }*/
     GetSendStatusResponse response = dhxDocumentService.getSendStatus(request, client, service, messageContext);
     String contentId = WsUtil.addAttachment(messageContext, response.getKeha().getHref());
     response.getKeha().setHrefString(contentId);

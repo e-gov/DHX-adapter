@@ -43,7 +43,7 @@ public abstract class BigDataHandler implements ContentHandler {
   @Getter
   @Setter
   private Class<? extends Object> bigDataClass = null;
-  private boolean rooIgnored = false;
+  protected boolean rooIgnored = false;
   private boolean isDesiredClass = true;
 
 
@@ -83,6 +83,16 @@ public abstract class BigDataHandler implements ContentHandler {
    * @param bigDataClass class which is planned to parse BIG DATA in or null
    */
   public BigDataHandler(Class<? extends Object> bigDataClass) {
+    this.bigDataClass = bigDataClass;
+  }
+  
+  /**
+   * BigDataHandler  contructor.
+   * 
+   * @param bigDataClass class which is planned to parse BIG DATA in or null
+   * @param nonamespaces is marshaller should remove namespaces
+   */
+  public BigDataHandler(Class<? extends Object> bigDataClass, Boolean nonamespaces) {
     this.bigDataClass = bigDataClass;
   }
 

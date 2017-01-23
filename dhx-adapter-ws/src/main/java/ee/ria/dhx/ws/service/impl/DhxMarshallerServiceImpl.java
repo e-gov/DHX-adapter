@@ -481,11 +481,13 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       throws DhxException {
     try {
       if (log.isDebugEnabled()) {
-        log.debug("marshalling container");
+        log.debug("marshalling container no namespaces");
       }
-      getMarshaller().marshal(container,
+      Marshaller marshaller = getMarshaller();
+    //  marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+      marshaller.marshal(container,
           new BigDataMarshallHandler(capsuleConfig.getCurrentCapsuleVersion().getContainerClass(),
-              container, stream));
+              container, stream, true));
     } catch (IOException | JAXBException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,

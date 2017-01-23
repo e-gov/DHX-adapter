@@ -23,6 +23,7 @@ import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.persistence.service.CapsuleService;
 import ee.ria.dhx.server.persistence.service.PersistenceService;
+import ee.ria.dhx.server.types.ee.riik.schemas.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Fault;
@@ -31,7 +32,6 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendSta
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptions;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsResponse;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
@@ -600,14 +600,15 @@ public class SoapServiceTest {
     docs.add(doc);
     DataHandler handlerMock = Mockito.mock(DataHandler.class);
     when(documentRepository.findByDocumentIdIn(any(List.class))).thenReturn(docs);
-    when(convertationService.createDatahandlerFromList(any(List.class))).thenReturn(handlerMock);
+    when(convertationService.createDatahandlerFromObject(any(GetSendStatusV2ResponseTypeUnencoded.class))).thenReturn(handlerMock);
     when(persistenceService.toDvkCapsuleAddressee(Mockito.anyString(), Mockito.anyString()))
         .thenReturn("regCode");
     GetSendStatusResponse resp =
         soapService.getSendStatus(request, senderMember, recipientMember, null);
-    ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
-    Mockito.verify(convertationService).createDatahandlerFromList(argument.capture());
-    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = argument.getValue();
+    ArgumentCaptor<GetSendStatusV2ResponseTypeUnencoded> argument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
+    Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
+    GetSendStatusV2ResponseTypeUnencoded body = argument.getValue();
+    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = body.getItem();
     assertEquals(handlerMock, resp.getKeha().getHref());
     assertEquals(1, items.size());
     assertEquals("10", items.get(0).getDhlId());
@@ -690,9 +691,10 @@ public class SoapServiceTest {
     docs.add(doc);
     when(documentRepository.findByDocumentIdIn(any(List.class))).thenReturn(docs);
     soapService.getSendStatus(request, senderMember, recipientMember, null);
-    ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
-    Mockito.verify(convertationService).createDatahandlerFromList(argument.capture());
-    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = argument.getValue();
+    ArgumentCaptor<GetSendStatusV2ResponseTypeUnencoded> argument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
+    Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
+    GetSendStatusV2ResponseTypeUnencoded body = argument.getValue();
+    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = body.getItem();
     assertNull(items.get(0).getStaatuseAjalugu());
   }
 

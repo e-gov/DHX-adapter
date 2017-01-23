@@ -149,7 +149,7 @@ public class PersistenceService {
    */
   @Loggable
   public Folder getFolderByNameOrDefaultFolder(String folderName) {
-    if (folderName == null) {
+    if (StringUtil.isNullOrEmpty(folderName)) {
       folderName = DEFAULT_FOLDERNAME;
     }
     Folder folder = folderRepository.findByName(folderName);
@@ -396,7 +396,11 @@ public class PersistenceService {
     List<Organisation> representeeOrgs =
         organisationRepository.findByIsActiveAndOwnRepresentee(true, true);
     if (representeeOrgs != null && representeeOrgs.size() > 0) {
-      result.addAll(representeeOrgs);
+      for(Organisation representee : representeeOrgs) {
+        if(!result.contains(representee)) {
+          result.add(representee);
+        }
+      }
     }
 
     return result;

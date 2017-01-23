@@ -212,6 +212,7 @@ public class ServerIT {
   private Map<String, String> getDhlNamespaceMap() {
     Map<String, String> namespaces = new HashMap<String, String>();
     namespaces.put("ns4", "http://producers.dhl.xrd.riik.ee/producer/dhl");
+    namespaces.put("ns5", "http://www.riik.ee/schemas/dhl");
     return namespaces;
   }
 
@@ -353,6 +354,7 @@ public class ServerIT {
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
+    Mockito.reset(convertationService);
     Mockito.doReturn(status).when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     service.setServiceVersion("v2");
@@ -362,11 +364,11 @@ public class ServerIT {
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(getSendStatusEnvelope))
         .andExpect(ResponseMatchers.xpath("//ns4:getSendStatusResponse[1]", getDhlNamespaceMap())
             .exists());
-    ArgumentCaptor<List> getSendStatusArgument = ArgumentCaptor.forClass(List.class);
+    ArgumentCaptor<GetSendStatusV2ResponseTypeUnencoded> getSendStatusArgument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
     Mockito.verify(convertationService)
-        .createDatahandlerFromList(getSendStatusArgument.capture());
-    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = getSendStatusArgument.getValue();
-
+        .createDatahandlerFromObject(getSendStatusArgument.capture());
+    GetSendStatusV2ResponseTypeUnencoded body = getSendStatusArgument.getValue();
+    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = body.getItem();
     assertEquals(1, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
     assertEquals(StatusEnum.IN_PROCESS.getClassificatorName(), items.get(0).getOlek());
@@ -419,6 +421,7 @@ public class ServerIT {
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
+    Mockito.reset(convertationService);
     Mockito.doReturn(status).when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     service.setServiceVersion("v2");
@@ -428,10 +431,11 @@ public class ServerIT {
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(getSendStatusEnvelope))
         .andExpect(ResponseMatchers.xpath("//ns4:getSendStatusResponse[1]", getDhlNamespaceMap())
             .exists());
-    getSendStatusArgument = ArgumentCaptor.forClass(List.class);
+    getSendStatusArgument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
     Mockito.verify(convertationService)
-        .createDatahandlerFromList(getSendStatusArgument.capture());
-    items = getSendStatusArgument.getValue();
+        .createDatahandlerFromObject(getSendStatusArgument.capture());
+    body = getSendStatusArgument.getValue();
+    items = body.getItem();
 
     assertEquals(1, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
@@ -585,6 +589,7 @@ public class ServerIT {
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
+    Mockito.reset(convertationService);
     Mockito.doReturn(status).when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     service.setServiceVersion("v2");
@@ -594,10 +599,11 @@ public class ServerIT {
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(getSendStatusEnvelope))
         .andExpect(ResponseMatchers.xpath("//ns4:getSendStatusResponse[1]", getDhlNamespaceMap())
             .exists());
-    ArgumentCaptor<List> getSendStatusArgument = ArgumentCaptor.forClass(List.class);
+    ArgumentCaptor<GetSendStatusV2ResponseTypeUnencoded> getSendStatusArgument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
     Mockito.verify(convertationService)
-        .createDatahandlerFromList(getSendStatusArgument.capture());
-    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = getSendStatusArgument.getValue();
+        .createDatahandlerFromObject(getSendStatusArgument.capture());
+    GetSendStatusV2ResponseTypeUnencoded body = getSendStatusArgument.getValue();
+    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = body.getItem();
 
     assertEquals(1, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
@@ -679,6 +685,7 @@ public class ServerIT {
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
+    Mockito.reset(convertationService);
     Mockito.doReturn(status).when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     service.setServiceVersion("v2");
@@ -688,10 +695,11 @@ public class ServerIT {
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(getSendStatusEnvelope))
         .andExpect(ResponseMatchers.xpath("//ns4:getSendStatusResponse[1]", getDhlNamespaceMap())
             .exists());
-    getSendStatusArgument = ArgumentCaptor.forClass(List.class);
+    getSendStatusArgument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
     Mockito.verify(convertationService)
-        .createDatahandlerFromList(getSendStatusArgument.capture());
-    items = getSendStatusArgument.getValue();
+        .createDatahandlerFromObject(getSendStatusArgument.capture());
+    body = getSendStatusArgument.getValue();
+    items = body.getItem();
 
     assertEquals(2, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
@@ -799,6 +807,7 @@ public class ServerIT {
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
+    Mockito.reset(convertationService);
     Mockito.doReturn(status).when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     service.setServiceVersion("v2");
@@ -808,10 +817,11 @@ public class ServerIT {
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(getSendStatusEnvelope))
         .andExpect(ResponseMatchers.xpath("//ns4:getSendStatusResponse[1]", getDhlNamespaceMap())
             .exists());
-    ArgumentCaptor<List> getSendStatusArgument = ArgumentCaptor.forClass(List.class);
+    ArgumentCaptor<GetSendStatusV2ResponseTypeUnencoded> getSendStatusArgument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
     Mockito.verify(convertationService)
-        .createDatahandlerFromList(getSendStatusArgument.capture());
-    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = getSendStatusArgument.getValue();
+        .createDatahandlerFromObject(getSendStatusArgument.capture());
+    GetSendStatusV2ResponseTypeUnencoded body = getSendStatusArgument.getValue();
+    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = body.getItem();
 
     assertEquals(1, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
@@ -953,6 +963,7 @@ public class ServerIT {
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
+    Mockito.reset(convertationService);
     Mockito.doReturn(status).when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
     service.setServiceVersion("v2");
@@ -962,10 +973,11 @@ public class ServerIT {
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(getSendStatusEnvelope))
         .andExpect(ResponseMatchers.xpath("//ns4:getSendStatusResponse[1]", getDhlNamespaceMap())
             .exists());
-    getSendStatusArgument = ArgumentCaptor.forClass(List.class);
+    getSendStatusArgument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
     Mockito.verify(convertationService)
-        .createDatahandlerFromList(getSendStatusArgument.capture());
-    items = getSendStatusArgument.getValue();
+        .createDatahandlerFromObject(getSendStatusArgument.capture());
+    body = getSendStatusArgument.getValue();
+    items = body.getItem();
 
     assertEquals(1, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
@@ -1135,6 +1147,7 @@ public class ServerIT {
     status.getKeha().setDokumendid(new Base64BinaryType());
     status.getKeha().getDokumendid()
         .setHref(convertationService.createDatahandlerFromObject(docIds));
+    Mockito.reset(convertationService);
     status.getKeha().setStaatuseAjalugu(true);
     Mockito.doReturn(status).when(marshaller).unmarshal(any(Source.class),
         any(MimeContainer.class));
@@ -1145,10 +1158,11 @@ public class ServerIT {
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(getSendStatusEnvelope))
         .andExpect(ResponseMatchers.xpath("//ns4:getSendStatusResponse[1]", getDhlNamespaceMap())
             .exists());
-    ArgumentCaptor<List> getSendStatusArgument = ArgumentCaptor.forClass(List.class);
+    ArgumentCaptor<GetSendStatusV2ResponseTypeUnencoded> getSendStatusArgument = ArgumentCaptor.forClass(GetSendStatusV2ResponseTypeUnencoded.class);
     Mockito.verify(convertationService)
-        .createDatahandlerFromList(getSendStatusArgument.capture());
-    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = getSendStatusArgument.getValue();
+        .createDatahandlerFromObject(getSendStatusArgument.capture());
+    GetSendStatusV2ResponseTypeUnencoded body = getSendStatusArgument.getValue();
+    List<GetSendStatusV2ResponseTypeUnencoded.Item> items = body.getItem();
 
     assertEquals(1, items.size());
     assertEquals(docId.toString(), items.get(0).getDhlId());
@@ -1216,7 +1230,7 @@ public class ServerIT {
         new ClassPathResource(resourceFolder + "getSendingOptions.xml").getFile());
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
         .andExpect(ResponseMatchers
-            .xpath("//ns4:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
+            .xpath("//ns5:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
 
     ArgumentCaptor<InstitutionArrayType> argument =
         ArgumentCaptor.forClass(InstitutionArrayType.class);
@@ -1317,7 +1331,7 @@ public class ServerIT {
 
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
         .andExpect(ResponseMatchers
-            .xpath("//ns4:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
+            .xpath("//ns5:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
 
     ArgumentCaptor<InstitutionArrayType> argument =
         ArgumentCaptor.forClass(InstitutionArrayType.class);

@@ -59,6 +59,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "getSendStatusV2ResponseTypeUnencoded", propOrder = {
     "item"
 })
+@XmlRootElement(name = "keha")
 public class GetSendStatusV2ResponseTypeUnencoded {
 
   @XmlElement(required = true)

@@ -7,7 +7,7 @@
 //
 
 
-package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
+package ee.ria.dhx.server.types.ee.riik.schemas.dhl;
 
 import org.w3c.dom.Element;
 
