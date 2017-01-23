@@ -299,7 +299,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
           .equals(StatusEnum.RECEIVED.getClassificatorId())) {
         log.debug(
             "all of the documents recipients are in received status, "
-            + "setting same status to the document.");
+                + "setting same status to the document.");
         recipient.getTransport().setStatusId(successStatusId);
         // documentRepository.save(recipient.getTransport().getDokument());
       }

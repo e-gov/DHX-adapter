@@ -29,8 +29,6 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import javax.activation.DataHandler;
-
 @Slf4j
 @Endpoint
 /**
@@ -167,7 +165,8 @@ public class ServerEndpoint {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Only v1,v2 versions of getSendStatus are supported");
     }
-    GetSendStatusResponse response = dhxDocumentService.getSendStatus(request, client, service, messageContext);
+    GetSendStatusResponse response =
+        dhxDocumentService.getSendStatus(request, client, service, messageContext);
     String contentId = WsUtil.addAttachment(messageContext, response.getKeha().getHref());
     response.getKeha().setHrefString(contentId);
     return response;

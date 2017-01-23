@@ -52,6 +52,10 @@ public class DhxServerWebServiceConfig {
     return servletBean;
   }
 
+  /**
+   * Creates messageFactory and returns.
+   * @return
+   */
   @Bean(name = "messageFactory")
   public SaajSoapMessageFactory messageFactory() {
     SaajSoapMessageFactory smf = new SaajSoapMessageFactory();

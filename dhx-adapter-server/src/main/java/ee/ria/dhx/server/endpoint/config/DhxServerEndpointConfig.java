@@ -87,7 +87,7 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
 
 
   /**
-   * Defines WSDL.
+   * Defines WSDL v1.
    * 
    * @return SimpleWsdl11Definition
    */
@@ -97,21 +97,33 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
     SimpleWsdl11Definition wsdlDef = new SimpleWsdl11Definition(wsdlResource);
     return wsdlDef;
   }
-  
+
+  /**
+   * Defines WSDL v2.
+   * @return SimpleWsdl11Definition
+   */
   @Bean(name = "dhlv2")
   public SimpleWsdl11Definition wsdl11Definitionv2() {
     Resource wsdlResource = new ClassPathResource(config.getWsdlFilev2());
     SimpleWsdl11Definition wsdlDef = new SimpleWsdl11Definition(wsdlResource);
     return wsdlDef;
   }
-  
+
+  /**
+   * Defines WSDL v3.
+   * @return SimpleWsdl11Definition
+   */
   @Bean(name = "dhlv3")
   public SimpleWsdl11Definition wsdl11Definitionv3() {
     Resource wsdlResource = new ClassPathResource(config.getWsdlFilev3());
     SimpleWsdl11Definition wsdlDef = new SimpleWsdl11Definition(wsdlResource);
     return wsdlDef;
   }
-  
+
+  /**
+   * Defines WSDL v4.
+   * @return SimpleWsdl11Definition
+   */
   @Bean(name = "dhlv4")
   public SimpleWsdl11Definition wsdl11Definitionv4() {
     Resource wsdlResource = new ClassPathResource(config.getWsdlFilev4());
@@ -119,5 +131,5 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
     return wsdlDef;
   }
 
-  
+
 }

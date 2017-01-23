@@ -396,8 +396,8 @@ public class PersistenceService {
     List<Organisation> representeeOrgs =
         organisationRepository.findByIsActiveAndOwnRepresentee(true, true);
     if (representeeOrgs != null && representeeOrgs.size() > 0) {
-      for(Organisation representee : representeeOrgs) {
-        if(!result.contains(representee)) {
+      for (Organisation representee : representeeOrgs) {
+        if (!result.contains(representee)) {
           result.add(representee);
         }
       }

@@ -334,8 +334,8 @@ public class Organisation extends BaseEntity implements Serializable {
   }
 
   /**
-   * Sets the real name of the Organisation. By default it is empty, not empty if real
-   * organisation name differs from the one found in Xroad parameters.
+   * Sets the real name of the Organisation. By default it is empty, not empty if real organisation
+   * name differs from the one found in Xroad parameters.
    *
    * @param realName the realName to set
    */

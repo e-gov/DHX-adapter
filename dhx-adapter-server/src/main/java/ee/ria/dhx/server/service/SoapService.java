@@ -770,7 +770,7 @@ public class SoapService {
       }
       responseAtt.getItem().add(item);
     }
-    DataHandler handler = convertationService.createDatahandlerFromObject(responseAtt);//convertationService.createDatahandlerFromList(responseAtt.getItem());
+    DataHandler handler = convertationService.createDatahandlerFromObject(responseAtt);// convertationService.createDatahandlerFromList(responseAtt.getItem());
     response.getKeha().setHref(handler);
     return response;
   }
@@ -857,10 +857,10 @@ public class SoapService {
             institution.setNimi(org.getRealName());
           } else {
             String subsystem = "";
-            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) &&
-                !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
-              subsystem = "(" +
-                  org.getSubSystem() + ")";
+            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) 
+                && !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
+              subsystem = "(" 
+                + org.getSubSystem() + ")";
             }
             institution.setNimi(org.getName() + subsystem);
           }
@@ -880,10 +880,10 @@ public class SoapService {
             institution.setNimi(org.getRealName());
           } else {
             String subsystem = "";
-            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) &&
-                !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
-              subsystem = "(" +
-                  org.getSubSystem() + ")";
+            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) 
+                && !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
+              subsystem = "(" 
+                + org.getSubSystem() + ")";
             }
             institution.setNimi(org.getName() + subsystem);
           }

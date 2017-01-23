@@ -539,6 +539,7 @@ public class CapsuleService {
   /**
    * When all actions with contianer are complete, delete file which might be related to the
    * container.
+   * 
    * @param containers list of container to cleanup
    * @throws DhxException thrown if error occurs
    */

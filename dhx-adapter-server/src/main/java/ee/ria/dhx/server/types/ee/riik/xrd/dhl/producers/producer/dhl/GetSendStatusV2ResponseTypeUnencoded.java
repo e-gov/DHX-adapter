@@ -126,7 +126,7 @@ public class GetSendStatusV2ResponseTypeUnencoded {
       "staatuseAjalugu",
       "olek"
   })
-  @XmlRootElement(name = "item", namespace="")
+  @XmlRootElement(name = "item", namespace = "")
   public static class Item {
 
     @XmlElement(name = "dhl_id", namespace = "", required = true)

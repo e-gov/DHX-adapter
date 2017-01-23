@@ -19,6 +19,7 @@ import java.util.UUID;
 
 /**
  * Server config.
+ * 
  * @author Aleksei Kokarev
  *
  */
@@ -32,22 +33,23 @@ public class DhxServerConfig {
 
   @Value("${dhx.server-wsdl-file-v1:dhl_new.wsdl}")
   private String wsdlFilev1;
-  
+
   @Value("${dhx.server-wsdl-file-v2:dhl_new_v2.wsdl}")
   private String wsdlFilev2;
-  
+
   @Value("${dhx.server-wsdl-file-v3:dhl_new_v3.wsdl}")
   private String wsdlFilev3;
-  
+
   @Value("${dhx.server-wsdl-file-v4:dhl_new_v4.wsdl}")
   private String wsdlFilev4;
 
 
-/**
- * Creates document in configured folder.
- * @return created file
- * @throws DhxException thrown if error occurs
- */
+  /**
+   * Creates document in configured folder.
+   * 
+   * @return created file
+   * @throws DhxException thrown if error occurs
+   */
   @Loggable
   public File createDocumentFile() throws DhxException {
     try {
@@ -66,6 +68,7 @@ public class DhxServerConfig {
 
   /**
    * Returns document found in configured folder.
+   * 
    * @param fileName name of the file to find
    * @return found file
    * @throws DhxException thrown if error occurs
