@@ -43,6 +43,9 @@ public class DhxServerConfig {
   @Value("${dhx.server-wsdl-file-v4:dhl_new_v4.wsdl}")
   private String wsdlFilev4;
 
+  @Value("${dhx.server-include-xmlns-to-attachments:false}")
+  private Boolean includeXmlnsToAttachments;
+
 
   /**
    * Creates document in configured folder.
@@ -154,6 +157,26 @@ public class DhxServerConfig {
    */
   public void setWsdlFilev4(String wsdlFilev4) {
     this.wsdlFilev4 = wsdlFilev4;
+  }
+
+  /**
+   * Returns the includeXmlnsToAttachments. includeXmlnsToAttachments defines whether to include
+   * xmlns attribute to attachments in response.
+   *
+   * @return the includeXmlnsToAttachments
+   */
+  public Boolean getIncludeXmlnsToAttachments() {
+    return includeXmlnsToAttachments;
+  }
+
+  /**
+   * Sets the includeXmlnsToAttachments. includeXmlnsToAttachments defines whether to include xmlns
+   * attribute to attachments in response.
+   *
+   * @param includeXmlnsToAttachments the includeXmlnsToAttachments to set
+   */
+  public void setIncludeXmlnsToAttachments(Boolean includeXmlnsToAttachments) {
+    this.includeXmlnsToAttachments = includeXmlnsToAttachments;
   }
 
 

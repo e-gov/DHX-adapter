@@ -125,13 +125,14 @@ public interface DhxMarshallerService {
 
 
   /**
-   * Marshalls object to outputStream. Written XML is without namespace prefixes.
+   * Marshalls object to outputStream, removes all namespace prefixes from XML.
    * 
    * @param container - object to marshall
    * @param stream - containing marshalled object
+   * @param includeXmlns if true, then xmlns will be added
    * @throws DhxException - thrown if error occurs while marshalling object
    */
-  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream)
+  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream, Boolean includeXmlns)
       throws DhxException;
 
   /**

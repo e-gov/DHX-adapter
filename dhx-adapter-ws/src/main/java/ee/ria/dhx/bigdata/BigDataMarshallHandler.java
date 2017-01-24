@@ -39,6 +39,8 @@ public class BigDataMarshallHandler extends BigDataHandler {
   private OutputStream stream;
 
   private Boolean nonamespaces = false;
+  
+  private Boolean includeXmlns = false;
 
 
 
@@ -70,10 +72,11 @@ public class BigDataMarshallHandler extends BigDataHandler {
    * @param objectToMarshall object to be marshalled
    * @param stream stream to write marshalled object to
    * @param nonamespaces is marshaller should remove namespaces
+   * @param includeXmlns if true, then xmlns will be added
    * @throws IOException thrown if error occurs
    */
   public BigDataMarshallHandler(Class<? extends Object> bigDataClass, Object objectToMarshall,
-      OutputStream stream, Boolean nonamespaces) throws IOException {
+      OutputStream stream, Boolean nonamespaces, Boolean includeXmlns) throws IOException {
     super(bigDataClass);
 
     XMLSerializer serializer = null;
@@ -89,6 +92,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
     this.objectToMarshall = objectToMarshall;
     this.stream = stream;
     this.nonamespaces = nonamespaces;
+    this.includeXmlns = includeXmlns;
   }
 
 
@@ -112,7 +116,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
       throws SAXException {
     if (nonamespaces) {
       // set xmlns fot root element
-      if (!super.rooIgnored) {
+      if (!super.rooIgnored && includeXmlns) {
         AttributesImpl imp = new AttributesImpl(attributes);
         if (!StringUtil.isNullOrEmpty(uri)) {
           imp.addAttribute("", "xmlns", "", "", uri);
