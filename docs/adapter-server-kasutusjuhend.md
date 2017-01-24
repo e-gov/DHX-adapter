@@ -483,7 +483,7 @@ Vastuse manus XML-ina lahti kodeeritud:
 ```
 Märkused vastuse sisu kohta:
 * DHX adapterserver võtab dokumendi vastu ja vastab SOAP päringule koheselt. Dokumendi DHX adressaadile edastamine toimub asünkroonselt.
-* Vastus sisaldab DHX adapterserveri poolt genereeritud unikaalset `<dhl_id>` väärtust. DHX adapterserveri esmasel kasutusel võtmisel algab see väärtust 1-st. Kui DHS süsteem kolib vanalt DVK X-tee liideselt üle uuele DHX adapterserverile, siis peab ta arvestama et see võib kattuda vanade DVKsse saadetud dokumentide `<dhl_id>` väärtusega (kui näiteks see salvestatakse DHS andmebaasis unikaaalsele väljale, siis võib olla vajalik teatud andmesiire).    
+* Vastus sisaldab DHX adapterserveri poolt genereeritud unikaalset `<dhl_id>` väärtust. DHX adapterserveri esmasel kasutusel võtmisel algab see väärtust 1-st. Kui DHS süsteem kolib vanalt DVK X-tee liideselt üle uuele DHX adapterserverile, siis peab ta arvestama et see võib kattuda vanade DVKsse saadetud dokumentide `<dhl_id>` väärtusega (kui näiteks see salvestatakse DHS andmebaasis unikaaalsele väljale, siis võib olla vajalik teatud andmesiire). Alternatiivne variant on DHX adapterserveris Sequence väärtust edasi kerida piisavalt suureks, et konflikte ei tekiks.     
 * `<dhl_id>` väärtust tuleb hiljem kasutada `getSendStatus` päringu sisendis, saatmise staatuse küsimiseks.
  
 Märkused vana DVK X-tee liidese kasutajale:
