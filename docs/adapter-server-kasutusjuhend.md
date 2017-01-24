@@ -411,13 +411,20 @@ H4sIACJmhFgAA+1X3W7bNhS+z1MIvR0SSrIt2wEnTHWyJGvcGrGzYbspWOnYYSORGknZS59ll3mM3uXF
 
 Nõuded päringu sisendile:
 * Päringu sisendi X-tee päises ette antud saatja `<client><memberCode>30000001</ns3:memberCode>` peab ühtima Kapslis toodud saatjaga `<Transport><DecSender><OrganisationCode>30000001</OrganisationCode>`.
-* Kui soovitakse saata asutuse alamsüsteemile (`getSendOptions` tagastas `<asutus><regnr>subsystem1.40000001</regnr>`), siis tuleb Kaplsis ette anda adresaat kujul `<Transport><DecRecipient><OrganisationCode>subsystem1.40000001</OrganisationCode>`.
-* Samamoodi tuleb saata neile spetsiifilistele asutustele, mille korral getSendingOptions tagastas mnemoonilise koodi (`<asutus><regnr>adit</regnr>`) ilma registrikoodita. Nile tuleb saata Kaplsi sees näiteks `<Transport><DecRecipient><OrganisationCode>adit</OrganisationCode>`. Need asutused on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
+* Kui soovitakse saata asutuse alamsüsteemile (`getSendOptions` tagastas `<asutus><regnr>subsystem1.40000001</regnr>`), siis tuleb Kapslis ette anda adressaat kujul `<Transport><DecRecipient><OrganisationCode>subsystem1.40000001</OrganisationCode>`.
+* Samamoodi tuleb saata neile spetsiifilistele asutustele, mille korral getSendingOptions tagastas mnemoonilise koodi (`<asutus><regnr>adit</regnr>`) ilma registrikoodita. Neile tuleb saata Kapsli sees näiteks `<Transport><DecRecipient><OrganisationCode>adit</OrganisationCode>`. Need asutused on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
 * Kapsel peab olema [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manusena. Manuse algne xml fail peab olema UTF-8 kodeeringus, lisatud manusesse gzip pakitud ja seejärel base64 kodeeritult.
 * Päringu sisendis ei pea ette andma Kapsli XML schema järgi kohustuslikku `<DecMetadata>` elementi (ega selle alamelemente `<DecId>`, `<DecFolder>`, `<DecReceiptDate>`). Need genereerib DHX adapterserver ise. Sama loogika kehtis vanas DVK liideses.
-* Päringu sisendis Kapslis võib ette anda mitu adresaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adressaadile eraldi. Kusjuures mõnele adresaadile saatmine võib õnnestuda aga teisele mitte.
+* Päringu sisendis Kapslis võib ette anda mitu adressaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adressaadile eraldi. Kusjuures mõnele adressaadile saatmine võib õnnestuda aga teisele mitte.
+* Päringu sisendis võib ette anda <kaust> elemendi väärtuse. Vaata täpsemalt [DVK kasutade kasutamine](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#kaustade-kasutamine) ja [DHX E-arved ja kaust](https://github.com/e-gov/DHX/blob/master/docs/E-arved.md).
 * Manusele määratud `Content-Type`,  `Content-Encoding` ja `Content-Transfer-Encoding` parameetrid DHX adapterserver ignoreerib. Eeldatakse et manus on alati gzip pakitud ja seejärel base64 kodeeritud.  
 Seega need võib korrektselt ette anda kujul:
+```
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Content-Transfer-Encoding: base64
+```
+Võib ette anda nii nagu DVK korral:
 ```
 Content-Type: {http://www.w3.org/2001/XMLSchema}base64Binary
 Content-Encoding: gzip
@@ -476,8 +483,8 @@ Vastuse manus XML-ina lahti kodeeritud:
 </ns3:keha>
 ```
 Märkused vastuse sisu kohta:
-* DHX adapterserver võtab dokumendi vastu ja vastab SOAP päringule koheselt. Dokumendi DHX adresaadile edastamine toimub asünkroonselt.
-* Vastus sisaldab DHX adapterserveri poolt genereeritud unikaalset `<dhl_id>` väärtust. See väärtus algab 1-st (DHX adapterserveri esmasel kasutusel võtmisel). Kui DHS süsteem kolib DVK X-tee liideselt üle DHX adapterserverile, siis peab ta arvestama et see võib kattuda vanade DVKsse saadetud dokumentide `<dhl_id>` väärtusega (kui näiteks see salvestatakse DHS andmebaasis unikaaalsele väljale, siis võib olla vajalik teatud andmesiire).    
+* DHX adapterserver võtab dokumendi vastu ja vastab SOAP päringule koheselt. Dokumendi DHX adressaadile edastamine toimub asünkroonselt.
+* Vastus sisaldab DHX adapterserveri poolt genereeritud unikaalset `<dhl_id>` väärtust. DHX adapterserveri esmasel kasutusel võtmisel algab see väärtust 1-st. Kui DHS süsteem kolib vanalt DVK X-tee liideselt üle uuele DHX adapterserverile, siis peab ta arvestama et see võib kattuda vanade DVKsse saadetud dokumentide `<dhl_id>` väärtusega (kui näiteks see salvestatakse DHS andmebaasis unikaaalsele väljale, siis võib olla vajalik teatud andmesiire).    
 * `<dhl_id>` väärtust tuleb hiljem kasutada `getSendStatus` päringu sisendis, saatmise staatuse küsimiseks.
  
 Märkused vana DVK X-tee liidese kasutajale:
@@ -613,7 +620,7 @@ Märkused sisendi ja väljundi kohta:
 * Päringu `getSendStatus.v1` sisendis saab ette anda `<dhl_id>` väärtuse.
 * Päringu `getSendStatus.v2` sisendis saab ette anda `<dhl_id>` väärtuse `<item>` elemendi sees ja lisaks ka `<staatuse_ajalugu>` väärtuse true/false.
 * Päringu `getSendStatus.v2` sisendis ette antud `<dokument_guid>` väärtust ignoreeritakse, sest DHX adapterserveri sees "dokument_guid" väärtuseid ei kasutata (need on alati tühjad).
-* Vastuses on iga adressaadi ehk saaja kohta eraldi `<edastus>` element (mitu saajat sai määrata saatmisel Kapslis mitme `<DecRecipient>` elemendiga).
+* Vastuses on iga adressaadi ehk saaja kohta eraldi `<edastus>` element. Mitu saajat sai saatmisel (`sendDocuments.v4` operatsiooniga) määrata Kapslis lisades mitu `<DecRecipient>` elemendiga.
 * Vastuse kogu staatust näitab `<item><olek>` väli, siin näites on see `saatmisel`, sest DHX adapterserver teostab tulevikus veel uue [DHX saatmisürituse](https://e-gov.github.io/DHX/#77-uuesti-%C3%BCritamine).
 * Vastuses `<edastus><staatus>` väärtus näitab konkreetsele saatjale tehtud viimase saatmisürituse staatust. Antud näites `katkestatud` tähendab et saadi viga. Veateade on `<fault>` elemendi sees.
 
@@ -809,7 +816,7 @@ Vastuse lahti kodeeritud manus
 
 Märkused päringu sisendi ja väljundi kohta:
 * Päringu sisend `<arv>` määrab ära maksimaalse loetavate dokumentide arvu. Element võib puududa, sellisel juhul tagastatakse vaikimisi 10 dokumenti.
-* Päring sisend `<kaust>` määrab ära, millisest DVK kaustast dokumendid loetakse. Element võib ka puududa (või olla väärtustamata), sellisel juhul tagastatakse vaikimisi dokumendid kõigist kaustadest.
+* Päring sisend `<kaust>` määrab ära, millisest DVK kaustast dokumendid loetakse. Element võib ka puududa (või olla väärtustamata), sellisel juhul tagastatakse vaikimisi dokumendid kõigist kaustadest. Vaata täpsemalt [DVK kasutade kasutamine](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#kaustade-kasutamine) ja [DHX E-arved ja kaust](https://github.com/e-gov/DHX/blob/master/docs/E-arved.md).
 * Päringute versioonide v2, v3 ja v4 sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`)
 * Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli versiooni ei saa keegi saata.
 * Päringu manuse kapslis asuva välja `<ns2:DecId>65</ns2:DecId>` väärtuse järgi tuleb teha `markDocumentsReceived` väljakutse.
