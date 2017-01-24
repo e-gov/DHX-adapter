@@ -4,6 +4,7 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
+import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.server.service.util.WsUtil;
 import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
@@ -35,6 +36,9 @@ public class ConvertationService {
 
   @Autowired
   DhxMarshallerService dhxMarshallerService;
+  
+  @Autowired
+  DhxServerConfig config;
 
   private static final String DEFAULT_CONTENT_TYPE =
       " {http://www.w3.org/2001/XMLSchema}base64Binary";
@@ -57,7 +61,8 @@ public class ConvertationService {
       fos = new FileOutputStream(file);
       base64Stream = WsUtil.getBase64EncodeStream(fos);
       zippedStream = WsUtil.getGZipCompressStream(base64Stream);
-      dhxMarshallerService.marshallToOutputStreamNoNamespacePrefixes(obj, zippedStream);
+      Boolean includeXmlns = config.getIncludeXmlnsToAttachments();
+      dhxMarshallerService.marshallToOutputStreamNoNamespacePrefixes(obj, zippedStream, includeXmlns);
       zippedStream.finish();
       zippedStream.flush();
       zippedStream.close();
@@ -99,7 +104,7 @@ public class ConvertationService {
       base64Stream = WsUtil.getBase64EncodeStream(fos);
       zippedStream = WsUtil.getGZipCompressStream(base64Stream);
       for (Object obj : objList) {
-        dhxMarshallerService.marshallToOutputStreamNoNamespacePrefixes(obj, zippedStream);
+        dhxMarshallerService.marshallToOutputStreamNoNamespacePrefixes(obj, zippedStream, true);
       }
       zippedStream.finish();
       zippedStream.flush();

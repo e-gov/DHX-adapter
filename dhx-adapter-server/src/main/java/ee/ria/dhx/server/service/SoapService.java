@@ -771,7 +771,7 @@ public class SoapService {
       }
       responseAtt.getItem().add(item);
     }
-    DataHandler handler = convertationService.createDatahandlerFromObject(responseAtt);// convertationService.createDatahandlerFromList(responseAtt.getItem());
+    DataHandler handler = convertationService.createDatahandlerFromObject(responseAtt);
     response.getKeha().setHref(handler);
     return response;
   }

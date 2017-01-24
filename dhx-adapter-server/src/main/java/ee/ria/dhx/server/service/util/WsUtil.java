@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -243,6 +245,15 @@ public class WsUtil {
     Attachment att = soapRequest.getAttachment(attachmentContentId);
     if (att == null) {
       att = soapRequest.getAttachment("<" + attachmentContentId + ">");
+    }
+    try {
+    String decoded = URLDecoder.decode(attachmentContentId, "UTF-8");
+    att = soapRequest.getAttachment(decoded);
+    if (att == null) {
+      att = soapRequest.getAttachment("<" + decoded + ">");
+    }
+    } catch (UnsupportedEncodingException ex) {
+      log.info("Error occured while URL decoding. " + ex.getMessage());
     }
     if (att == null) {
       return null;

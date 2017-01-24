@@ -473,11 +473,12 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
    * 
    * @param container - object to marshall
    * @param stream - containing marshalled object
+   * @param includeXmlns if true, then xmlns will be added
    * @throws DhxException - thrown if error occurs while marshalling object
    */
   @Loggable
   @Override
-  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream)
+  public void marshallToOutputStreamNoNamespacePrefixes(Object container, OutputStream stream, Boolean includeXmlns)
       throws DhxException {
     try {
       if (log.isDebugEnabled()) {
@@ -487,7 +488,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
     //  marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
       marshaller.marshal(container,
           new BigDataMarshallHandler(capsuleConfig.getCurrentCapsuleVersion().getContainerClass(),
-              container, stream, true));
+              container, stream, true, includeXmlns));
     } catch (IOException | JAXBException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
