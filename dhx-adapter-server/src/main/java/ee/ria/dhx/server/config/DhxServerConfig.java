@@ -45,6 +45,15 @@ public class DhxServerConfig {
 
   @Value("${dhx.server-include-xmlns-to-attachments:false}")
   private Boolean includeXmlnsToAttachments;
+  
+  @Value("${dhx.server.attachment-content-type:{http://www.w3.org/2001/XMLSchema}base64Binary}")
+  private String attachmentContentType;
+  
+  @Value("${dhx.server.attachment-content-encoding:gzip}")
+  private String attachmentContentEncoding;
+  
+  @Value("${dhx.server.attachment-content-transfer-encoding:binary}")
+  private String attachmentContentTransferEncoding;
 
 
   /**
@@ -177,6 +186,60 @@ public class DhxServerConfig {
    */
   public void setIncludeXmlnsToAttachments(Boolean includeXmlnsToAttachments) {
     this.includeXmlnsToAttachments = includeXmlnsToAttachments;
+  }
+
+  /**
+   * Returns the attachmentContentType. Content-Type header of response attachments.
+   *
+   * @return the attachmentContentType
+   */
+  public String getAttachmentContentType() {
+    return attachmentContentType;
+  }
+
+  /**
+   * Sets the attachmentContentType. Content-Type header of response attachments.
+   *
+   * @param attachmentContentType the attachmentContentType to set
+   */
+  public void setAttachmentContentType(String attachmentContentType) {
+    this.attachmentContentType = attachmentContentType;
+  }
+
+  /**
+   * Returns the attachmentContentEncoding. Content-Encoding header of response attachments.
+   *
+   * @return the attachmentContentEncoding
+   */
+  public String getAttachmentContentEncoding() {
+    return attachmentContentEncoding;
+  }
+
+  /**
+   * Sets the attachmentContentEncoding. Content-Encoding header of response attachments.
+   *
+   * @param attachmentContentEncoding the attachmentContentEncoding to set
+   */
+  public void setAttachmentContentEncoding(String attachmentContentEncoding) {
+    this.attachmentContentEncoding = attachmentContentEncoding;
+  }
+
+  /**
+   * Returns the attachmentContentTransferEncoding. Content-Transfer-Encoding header of response attachments.
+   *
+   * @return the attachmentContentTransferEncoding
+   */
+  public String getAttachmentContentTransferEncoding() {
+    return attachmentContentTransferEncoding;
+  }
+
+  /**
+   * Sets the attachmentContentTransferEncoding. Content-Transfer-Encoding header of response attachments.
+   *
+   * @param attachmentContentTransferEncoding the attachmentContentTransferEncoding to set
+   */
+  public void setAttachmentContentTransferEncoding(String attachmentContentTransferEncoding) {
+    this.attachmentContentTransferEncoding = attachmentContentTransferEncoding;
   }
 
 

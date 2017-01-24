@@ -4,7 +4,10 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
+import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.util.FileUtil;
+import ee.ria.dhx.ws.config.SoapConfig;
+import ee.ria.dhx.ws.context.AppContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,11 +48,10 @@ import javax.xml.soap.AttachmentPart;
 @Slf4j
 public class WsUtil {
 
-  private static final String ATTACHMENT_CONTENT_ENCODING = "gzip";
-  private static final String ATTACHMENT_CONTENT_TYPE =
-      "{http://www.w3.org/2001/XMLSchema}base64Binary";
-  private static final String ATTACHMENT_CONTENT_TRANSFER_ENCDING = "binary";
-  private static final String ATTACHMENT_CONTENT_ID_PREFIX = " cid:";
+  private static String attachmentContentEncoding;
+  private static String attachmentContentType;
+  private static String attachmentContentTransferEncoding;
+  private static final String ATTACHMENT_CONTENT_ID_PREFIX = "cid:";
 
   /**
    * Creates InputStream that will GZIP decompress the stream from input.
@@ -246,14 +248,16 @@ public class WsUtil {
     if (att == null) {
       att = soapRequest.getAttachment("<" + attachmentContentId + ">");
     }
-    try {
-    String decoded = URLDecoder.decode(attachmentContentId, "UTF-8");
-    att = soapRequest.getAttachment(decoded);
     if (att == null) {
-      att = soapRequest.getAttachment("<" + decoded + ">");
-    }
-    } catch (UnsupportedEncodingException ex) {
-      log.info("Error occured while URL decoding. " + ex.getMessage());
+      try {
+        String decoded = URLDecoder.decode(attachmentContentId, "UTF-8");
+        att = soapRequest.getAttachment(decoded);
+        if (att == null) {
+          att = soapRequest.getAttachment("<" + decoded + ">");
+        }
+      } catch (UnsupportedEncodingException ex) {
+        log.info("Error occured while URL decoding. " + ex.getMessage());
+      }
     }
     if (att == null) {
       return null;
@@ -276,11 +280,23 @@ public class WsUtil {
     SaajSoapMessage soapResponse = (SaajSoapMessage) messageContext
         .getResponse();
     AttachmentPart part = soapResponse.getSaajMessage().createAttachmentPart(attachmentHandler);
-    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TYPE, ATTACHMENT_CONTENT_TYPE);
+    if (attachmentContentType == null) {
+      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
+      attachmentContentType = config.getAttachmentContentType();
+    }
+    if (attachmentContentEncoding == null) {
+      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
+      attachmentContentEncoding = config.getAttachmentContentEncoding();
+    }
+    if (attachmentContentTransferEncoding == null) {
+      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
+      attachmentContentTransferEncoding = config.getAttachmentContentTransferEncoding();
+    }
+    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TYPE, attachmentContentType);
     part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_ENCODING,
-        ATTACHMENT_CONTENT_ENCODING);
+        attachmentContentEncoding);
     part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TRANSFER_ENCODING,
-        ATTACHMENT_CONTENT_TRANSFER_ENCDING);
+        attachmentContentTransferEncoding);
     String contentId = UUID.randomUUID().toString();
     part.setContentId(contentId);
     soapResponse.getSaajMessage().addAttachmentPart(part);

@@ -13,9 +13,6 @@
         <TimeBasedTriggeringPolicy interval="24" modulate="false"/>
         <SizeBasedTriggeringPolicy size="1 MB"/>
       </Policies>
-      <filters>
-            <LevelRangeFilter minLevel="EVENT" maxLevel="EVENT" onMatch="ACCEPT" onMismatch="DENY" />
-	</filters>
     </RollingFile>
   </Appenders>
   <Loggers>
