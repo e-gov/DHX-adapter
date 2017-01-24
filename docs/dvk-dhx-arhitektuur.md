@@ -218,8 +218,7 @@ Vaata ka [DHX Ettepanek 07](https://github.com/e-gov/DHX/blob/master/files/Ettep
 
 * Tavalised DHX adressaadid (`EE/GOV/<registrikood>/DHX/sendDocument`), lisatakse ASUTUS tabelisse kujul `registrikood=<registrikood>`, `registrikood2=NULL`, `dhx_asutus=1`
 
-* DHX-i alamsüsteemidega (kelle `subSystemCode` ei ole `DHX` vaid `DHX.alamsüsteem`) adressaadid registreeritakse DVK asutus tabelis  kujul `registrikood=alamsüsteem.registrikood`, `registrikood2=registrikood`
-
+* DHX-i alamsüsteemidega (kelle `subSystemCode` ei ole `DHX` vaid `DHX.alamsüsteem`) adressaadid registreeritakse DVK asutus tabelis  kujul `registrikood=alamsüsteem.registrikood`, `registrikood2=registrikood`.
 Registrikood | registrikood2 | DHX aadress tulevikus
 ------------ | ------------- | ------------- 
 louna.70000906 | 70000906 | EE/GOV/70000906/DHX.louna/
@@ -242,18 +241,25 @@ rt | 70000898 | EE/GOV/70000898/DHX.rt/
 
 Näide: ADIT
 > DVK asutused tabeli registrikood = adit
+>
 > DVK asutused tabeli  registrikood2 = 70006317
 >
-> ADIT-sse saatmine DVK-st: 
+> **ADIT-sse saatmine DVK-st:**
+> 
 > kapsli adressaat: adit
 > 
-> ADIT-sse saatmine DHX-st: 
+> **ADIT-sse saatmine DHX-st:**
+> 
 > kapsli adressaat: 70006317
+>
 > recipient: 70006317
+>
 > recipientSystem: adit
 >
-> Xtee v6 DHX liige:
+> **Xtee v6 DHX liige:**
+>
 > memberCode: 70006317
+>
 > subsystemCode: dhx.adit
 
 * Need asutused mis on DVKs juba hetkel registreeritud registrikoodiga kujul `registrikood=alamsüsteem.registrikood` jäävad nii nagu on ja DHX-le üle minnes neid registreeritakse tavalises korras (`registrikood=alamsüsteem.registrikood`). Xtee v6 mõttes peab nendel asutustel olemas olema alamsüsteem nimega `DHX.alamsüsteem_ilma_registrikoodita`.
@@ -261,18 +267,25 @@ Näide: ADIT
 Näide: sfos.70000272
 
 > DVK asutused tabeli registrikood = sfos.70000272
+>
 > DVK asutused tabeli  registrikood2 = 70000272
 > 
-> Saatmine DVK-st: 
+> **Saatmine DVK-st:**
+>  
 > kapsli adressaat: sfos.70000272
 > 
-> Saatmine DHX-st:
+> **Saatmine DHX-st:**
 >  
 > kapsli adressaat: 70000272
+>
 > recipient: 70000272
+>
 > recipientSystem: sfos
+>
 > Xtee v6 DHX liige:
+>
 > memberCode: 70006317
+>
 > subsystemCode: sfos
 
 * Kuna DVK-sse saatmisel ja DVK-st vastuvõtmisel pannakse kapsli adressaadina asutused tabeli registrikood välja väärtust (ehk alamsüsteemide puhul see ei ole asutuse registrikood), aga DHX nõuab et kapslis olevad adressaadid oleksid asutuste registrikoodid, tuleb DHX-st DVK-sse kapsli jõudmisel asendada kapsli adressaadi (asutuse reaalse registrikoodi) DVK asutuse tabeli registrikoodiga ning DVK-st DHX-i saatmisel tuleb asendada kapslis oleva adressaadi (asutus tabeli registrikoodi) asutuse reaalse registrikoodiga.
