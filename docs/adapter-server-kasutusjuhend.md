@@ -416,7 +416,7 @@ Nõuded päringu sisendile:
 * Kapsel peab olema [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manusena. Manuse algne xml fail peab olema UTF-8 kodeeringus, lisatud manusesse gzip pakitud ja seejärel base64 kodeeritult.
 * Päringu sisendis ei pea ette andma Kapsli XML schema järgi kohustuslikku `<DecMetadata>` elementi (ega selle alamelemente `<DecId>`, `<DecFolder>`, `<DecReceiptDate>`). Need genereerib DHX adapterserver ise. Sama loogika kehtis vanas DVK liideses.
 * Päringu sisendis Kapslis võib ette anda mitu adressaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adressaadile eraldi. Kusjuures mõnele adressaadile saatmine võib õnnestuda aga teisele mitte.
-* Päringu sisendis võib ette anda <kaust> elemendi väärtuse. Vaata täpsemalt [DVK kasutade kasutamine](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#kaustade-kasutamine) ja [DHX E-arved ja kaust](https://github.com/e-gov/DHX/blob/master/docs/E-arved.md).
+* Päringu sisendis võib ette anda `<kaust>` elemendi väärtuse. Vaata täpsemalt [DVK kasutade kasutamine](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#kaustade-kasutamine) ja [DHX E-arved ja kaust](https://github.com/e-gov/DHX/blob/master/docs/E-arved.md).
 * Manusele määratud `Content-Type`,  `Content-Encoding` ja `Content-Transfer-Encoding` parameetrid DHX adapterserver ignoreerib. Eeldatakse et manus on alati gzip pakitud ja seejärel base64 kodeeritud.  
 Seega need võib korrektselt ette anda kujul:
 ```
