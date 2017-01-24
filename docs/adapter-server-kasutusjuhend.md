@@ -819,7 +819,7 @@ Märkused päringu sisendi ja väljundi kohta:
 * Päring sisend `<kaust>` määrab ära, millisest DVK kaustast dokumendid loetakse. Element võib ka puududa (või olla väärtustamata), sellisel juhul tagastatakse vaikimisi dokumendid kõigist kaustadest. Vaata täpsemalt [DVK kasutade kasutamine](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#kaustade-kasutamine) ja [DHX E-arved ja kaust](https://github.com/e-gov/DHX/blob/master/docs/E-arved.md).
 * Päringute versioonide v2, v3 ja v4 sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`)
 * Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli versiooni ei saa keegi saata.
-* Päringu manuse kapslis asuva välja `<ns2:DecId>65</ns2:DecId>` väärtuse järgi tuleb teha `markDocumentsReceived` väljakutse.
+* Päringu manuse kapslis asuva välja `<DecId>65</DecId>` väärtuse järgi tuleb teha järgnev [markDocumentsReceived](#45-markdocumentsreceived-sisemine-liides) väljakutse.
 * Vastuse manuses tagastatakse mitme dokumendi kapsli XML failid üksteise järel.
 ```xml 
 <?xml version="1.0"?>
@@ -834,9 +834,9 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ### 4.5. markDocumentsReceived (sisemine liides)
 
-Teenusega `markDocumentsReceived` märkitakse DHX adapterseris dokument loetuks ehk vastu võetuks. 
+Teenusega `markDocumentsReceived` märgitakse DHX adapterseris dokument loetuks ehk vastu võetuks. 
 Senikaua kuni saabunud dokument on loetuks märkimata, tagastab `receiveDocuments` väljakutse seda alati uuesti. 
-Teenuse sisendis (`<dhl_id>` välja väärtuseks) tuleb ette anda `receiveDocuments` väljundi manuses olevast Kapslist võetud `<ns2:DecId>65</ns2:DecId>` väärtus.
+Teenuse sisendis tuleb `<dhl_id>` välja väärtuseks ette anda `receiveDocuments` väljundi manuses olevast Kapslist võetud `<DecId>65</DecId>` väärtus.
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [markDocumentsReceived](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceived).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
@@ -931,7 +931,7 @@ select asutus_id, nimetus, subsystem from asutus where registrikood = '40000001'
 Seejärel tuleb lisada vahendatava(te) kirje(d) käsitsi SQL lausega. 
 Võtta eelnevalt leitud Vahendaja asutus_id väärtus ja anda see ette vahendatava lisamise SQL lauses vahendaja_asutus_id väärtuseks.
 * `ASUTUS.vahendaja_asutus_id` (ehk `<VAHENDAJA_ASUTUS_ID>`) väärtustada eelneva päringu vastuse asutus_id. 
-* `ASUTUS.dhx_asutus` väärtustada `false` või `0`.
+* `ASUTUS.dhx_asutus` väärtustada `false` (PostgreSQL) või `0` (Oracle).
 * `ASUTUS.id` väärtustada (`<NEWID>` asendada) väärtusega `SELECT max(asutus_id) + 1 FROM asutus`
 * `ASUTUS.nimetus` väärtustada vahendatava nimi, näiteks 'Tallinna Lasteaed Pallipõnn'
 * `ASUTUS.registrikood` väärtustada vahendatava registrikood, näiteks '75019046'
@@ -958,13 +958,13 @@ INSERT INTO asutus(
   null, sysdate, null, null, <VAHENDAJA_ASUTUS_ID>);
 ```
 
-Täpsem andmebaasi skeem on toodud [DHX adapterserveri haldusjuhendis](adapter-server-haldusjuhend.md)
+Täpsem andmebaasi mudel on toodud [DHX adapterserveri haldusjuhendis](adapter-server-haldusjuhend.md#41-andmebaasi-mudel)
 
 ### 5.2. Kontrollida kas vahendatav tagastatakse representationList väljundist.
 
 Avada näiteks SoapUI programmis DHX teenus WSDL `http://localhost:8080/dhx-adapter-server/ws/dhx.wsdl`.
 
-Sisestada representationList päringu keha väärtustades `<service><memberCode>` vahendaja registrikoodiga (40000001):
+Sisestada representationList päringu keha, väärtustades `<service><memberCode>` vahendaja registrikoodiga (40000001):
 ```xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:prod="http://dhx.x-road.eu/producer">
    <soapenv:Header>
