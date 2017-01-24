@@ -1127,7 +1127,7 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
  
 Mõned asjad mis DHX adapterserveris realiseeritud samamoodi nagu oli DVK keskserveris:
 
-* DHX adapterserveri `getSendingOptions` vastuse elmendi `<ns2:getSendingOptionsResponse  xmlns:ns2="http://www.riik.ee/schemas/dhl"` nimeruum on teine (vana X-tee versiooni nimeruum `http://www.riik.ee/schemas/dhl`) kui päringu sisendi nimeruum (X-tee v6 versiooni `http://producers.dhl.xrd.riik.ee/producer/dhl`).  See on samamoodi ka DVK keskserveris.
+* DHX adapterserveri `getSendingOptions` vastuse elemendi `<ns2:getSendingOptionsResponse  xmlns:ns2="http://www.riik.ee/schemas/dhl"` nimeruum on teine (vana X-tee versiooni nimeruum `http://www.riik.ee/schemas/dhl`) kui päringu sisendi nimeruum (X-tee v6 versiooni `http://producers.dhl.xrd.riik.ee/producer/dhl`).  See toimis samamoodi ka DVK keskserveris.
 
 * DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manuse `cid` väärtus ei pea olema URL kodeeritud (nagu [rfc2392](https://www.ietf.org/rfc/rfc2392.txt) standard seda nõuab). See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is võib selle esitada ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See toimis samamoodi vanas DVK keskserveris.  
 
