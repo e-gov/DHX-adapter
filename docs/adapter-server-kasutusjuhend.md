@@ -1111,6 +1111,8 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 
 ## 6. Kokkuvõtte erinevustest (DVK liidesega võrreldes)
 
+* DHX adapterserveri sisemise liidese SOAP päringutesse tuleb nimeruumina ette anda `http://producers.dhl.xrd.riik.ee/producer/dhl`. DVK keskserveri teenuste kasutamisel või ette anda ka vana nimerummi `http://www.riik.ee/schemas/dhl` ja DVK viga ei andnud (kuigi DVK keskserveri WSDL-id viitavad ka uuele  `http://producers.dhl.xrd.riik.ee/producer/dhl` nimeruumile).    
+
 * DHX Adapterserveri `getSendingOptions` päring ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
 
 * DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab Kapsli 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
