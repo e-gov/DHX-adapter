@@ -17,6 +17,7 @@ Table of Contents
     * [3\. Logimine](#3-logimine)
     * [4\. Dokumentide edastamise vigade põhjuste analüüsimine](#4-dokumentide-edastamise-vigade-p%C3%B5hjuste-anal%C3%BC%C3%BCsimine)
       * [4\.1\. Andmebaasi mudel](#41-andmebaasi-mudel)
+        * [4\.1\.1\. Asutuse nime muutmine (sisemise liidese getSendingOptions väljundis)](#411-asutuse-nime-muutmine-sisemise-liidese-getsendingoptions-väljundis)
       * [4\.2\. Kapslid lokaalses failisüsteemis](#42-kapslid-lokaalses-failis%C3%BCsteemis)
 
 ## 1. Sissejuhatus
