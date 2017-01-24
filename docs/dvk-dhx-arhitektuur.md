@@ -25,6 +25,7 @@ Sisukord
         * [7\.3\.3\. Erandid olemasolevatele ilma registrikoodida süsteemidele (adit,kovtp,rt,eelnoud)](#733-erandid-olemasolevatele-ilma-registrikoodida-s%C3%BCsteemidele-aditkovtprteelnoud)
         * [7\.3\.4\. Erandid olemasolevatele registrikoodi ja alamsüsteemiga süsteemidele (sfos\.70000272)](#734-erandid-olemasolevatele-registrikoodi-ja-alams%C3%BCsteemiga-s%C3%BCsteemidele-sfos70000272)
         * [7\.3\.5\. Adressaadi registrikoodi asendamine Kapsli sees](#735-adressaadi-registrikoodi-asendamine-kapsli-sees)
+    * [8\. DVK Andmebaasi muudatused](#8-dvk-andmebaasi-muudatused)
 
 ## 1. Sissejuhatus
 
