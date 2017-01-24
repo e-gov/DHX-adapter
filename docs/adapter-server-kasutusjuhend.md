@@ -458,7 +458,7 @@ Vastuse sisu näide:
    </SOAP-ENV:Header>
    <SOAP-ENV:Body>
       <ns4:sendDocumentsResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
-         <keha href=" cid:8eadbe72-47ee-4eba-a68e-4dac1aca6e85"/>
+         <keha href="cid:8eadbe72-47ee-4eba-a68e-4dac1aca6e85"/>
       </ns4:sendDocumentsResponse>
    </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
@@ -470,16 +470,10 @@ H4sIAAAAAAAAAIWSwXKDIBCG732KjD3LgjZtdIy55D0cBraRSQQHMPL4pZkq9ZD2Buz37/67S3MKw213
 
 Vastuse manus XML-ina lahti kodeeritud:
 ```xml
-<ns3:keha xmlns:ns4="http://www.riik.ee/schemas/dhl" xmlns:ns8="http://dhx.x-road.eu/producer" 
-  xmlns:ns10="http://x-road.eu/xsd/representation.xsd" 
-  xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl" 
-  xmlns:ns11="http://x-road.eu/xsd/xroad.xsd" 
-  xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns6="http://www.w3.org/2000/09/xmldsig#" 
-  xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" 
-  xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" 
-  xmlns:ns9="http://x-road.eu/xsd/identifiers">
+<keha  
+  xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" >
  <dhl_id>59</dhl_id>
-</ns3:keha>
+</keha>
 ```
 Märkused vastuse sisu kohta:
 * DHX adapterserver võtab dokumendi vastu ja vastab SOAP päringule koheselt. Dokumendi DHX adressaadile edastamine toimub asünkroonselt.
@@ -573,7 +567,7 @@ Vastuse näide:
    </SOAP-ENV:Header>
    <SOAP-ENV:Body>
       <ns4:getSendStatusResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
-         <keha href=" cid:746954c4-1ba6-4ac9-a23f-7bef890a13e1"/>
+         <keha href="cid:746954c4-1ba6-4ac9-a23f-7bef890a13e1"/>
       </ns4:getSendStatusResponse>
    </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
@@ -691,7 +685,7 @@ Vastuse näide:
    </SOAP-ENV:Header>
    <SOAP-ENV:Body>
       <ns4:receiveDocumentsResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
-         <keha href=" cid:f22d9cdc-dbf7-4444-ae56-a9eb3b8571be"/>
+         <keha href="cid:f22d9cdc-dbf7-4444-ae56-a9eb3b8571be"/>
       </ns4:receiveDocumentsResponse>
    </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

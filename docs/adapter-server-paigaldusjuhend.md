@@ -453,8 +453,10 @@ dhx.server.delete-old-documents-freq | | */20 * * * * ? | Vanade dokumentide kus
 dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, õnnelikult vastu võetud ja edastatud dokument. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest.
 dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, probleemselt (veaga) edastatud dokument. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest. 
 dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti saatmisel staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
+dhx.server-include-xmlns-to-attachments| false | false | Määrab et SOAP vastuse manusete sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
 documents.folder | | `C:\\dhx_docs\\` | Kataloog kuhu salvestatakse vastu võetud (edastamist ootavate) dokumentide Kapslid. Linux korral kasutada formaati `/kataloog`. Selle kataloogi failisüsteemis peab olema piisavalt vaba ruumi (10-50Gb). Dokumendid kustutatakse teatud perioodi (30 päeva) järel (parameetrid `dhx.server.received-document-lifetime` ja `dhx.server.failed-document-lifetime`)
 spring.jpa.hibernate.ddl-auto | | update| Määrab et esimesel serveri käivitamisel (kui andmebaasi ühenduse parameetrid on õigeks muudetud) luuakse andmebaasi tabelid automaatselt.
+
 
 PostgreSQL korral tuleb muuta järgmiste parameetrite väärtused.
 
