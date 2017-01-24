@@ -216,11 +216,14 @@ Vaata ka [DHX Ettepanek 07](https://github.com/e-gov/DHX/blob/master/files/Ettep
 
 ### 7.3. Probleemi tehniline lahendus
 
-* Tavalised DHX adressaadid (`EE/GOV/<registrikood>/DHX/sendDocument`), lisatakse ASUTUS tabelisse kujul `registrikood=<registrikood>`, `registrikood2=NULL`, `dhx_asutus=1`
+#### 7.3.1. Tavalised DHX adressaadid
+
+Tavalised DHX adressaadid (`EE/GOV/<registrikood>/DHX/sendDocument`), lisatakse ASUTUS tabelisse kujul `registrikood=<registrikood>`, `registrikood2=NULL`, `dhx_asutus=1`.
 
 
-* DHX-i alamsüsteemidega (kelle `subSystemCode` ei ole `DHX` vaid `DHX.alamsüsteem`) adressaadid registreeritakse DVK asutus tabelis  kujul `registrikood=alamsüsteem.registrikood`, `registrikood2=registrikood`.
-
+#### 7.3.2. DHX-i alamsüsteemidega adressaadid
+ 
+ DHX-i alamsüsteemidega (kelle `subSystemCode` ei ole `DHX` vaid `DHX.alamsüsteem`) adressaadid registreeritakse DVK asutus tabelis kujul `registrikood=alamsüsteem.registrikood`, `registrikood2=registrikood`, `dhx_asutus=1`.
 
 Registrikood | registrikood2 | DHX aadress tulevikus
 ------------ | ------------- | ------------- 
@@ -233,7 +236,13 @@ newsystem.300000001 | 30000001 | EE/GOV/30000001/DHX. newsystem/
 30000002 | - | EE/GOV/30000002/DHX/
 
  
-* Teha erandid DVKs olemasolevate alamsüsteemide jaoks (adit,kovtp,rt,eelnoud). Juhul kui üks nendest süsteemidest läheb üle DHX peale, siis neid ei registreeri DVKs kujul `registrikood=alamsüsteem.registrikood`, `registrikood2=registrikood`,  vaid kujul `registirkood=alamsüsteem`, `registrikood2=registrikood`. Xtee v6 mõttes peab nendel asutustel olemas olema alamsüsteem nimega `DHX.alamsüsteem`.  Lõpptulemusena need alamsüsteemid jäävad DVK saatjate jaoks samaks ka siis kui alamsüsteemid lähevad üle DHX peale. 
+#### 7.3.3. Erandid olemasolevatele ilma registrikoodida süsteemidele (adit,kovtp,rt,eelnoud)
+
+Teha erandid DVKs olemasolevate alamsüsteemide jaoks (adit,kovtp,rt,eelnoud). Juhul kui üks nendest süsteemidest läheb üle DHX peale, siis neid ei registreeri DVKs kujul `registrikood=alamsüsteem.registrikood`, `registrikood2=registrikood`,  vaid kujul `registirkood=alamsüsteem`, `registrikood2=registrikood`. 
+
+Xtee v6 mõttes peab nendel asutustel olemas olema alamsüsteem nimega `DHX.alamsüsteem`. 
+
+Lõpptulemusena need alamsüsteemid jäävad DVK saatjate jaoks samaks ka siis kui alamsüsteemid lähevad üle DHX peale. 
 
 
 Registrikood | registrikood2 | DHX aadress tulevikus
@@ -244,7 +253,7 @@ kovtp | 10264823 | EE/GOV/10264823/DHX. kovtp/
 rt | 70000898 | EE/GOV/70000898/DHX.rt/
 
 
-Näide: ADIT:
+Näide: ADIT
 > DVK asutused tabeli registrikood = adit
 >
 > DVK asutused tabeli  registrikood2 = 70006317
@@ -268,7 +277,18 @@ Näide: ADIT:
 > subsystemCode: dhx.adit
 
 
-* Need asutused mis on DVKs juba hetkel registreeritud registrikoodiga kujul `registrikood=alamsüsteem.registrikood` jäävad nii nagu on ja DHX-le üle minnes neid registreeritakse tavalises korras (`registrikood=alamsüsteem.registrikood`). Xtee v6 mõttes peab nendel asutustel olemas olema alamsüsteem nimega `DHX.alamsüsteem_ilma_registrikoodita`.
+#### 7.3.4. Erandid olemasolevatele registrikoodi ja alamsüsteemiga süsteemidele (sfos.70000272) 
+
+Sellised süsteemid on DVK sees:
+* louna.70000906 - Lõuna Ringkonnaprokuratuur
+* laane.70000906 - Lääne Ringkonnaprokuratuur
+* pohja.70000906 - Põhja Ringkonnaprokuratuur
+* viru.70000906 - Viru Ringkonnaprokuratuur
+* rt - Riigi Teataja
+* sfos.70000272 – Struktuurfondid
+ 
+
+Need asutused mis on DVKs juba hetkel registreeritud registrikoodiga kujul `registrikood=alamsüsteem.registrikood` jäävad nii nagu on ja DHX-le üle minnes neid registreeritakse tavalises korras (`registrikood=alamsüsteem.registrikood`). Xtee v6 mõttes peab nendel asutustel olemas olema alamsüsteem nimega `DHX.alamsüsteem_ilma_registrikoodita`.
 
 
 Näide: sfos.70000272:
@@ -294,6 +314,11 @@ Näide: sfos.70000272:
 >
 > subsystemCode: sfos
 
+#### 7.3.5. Adressaadi registrikoodi asendamine Kapsli sees
+ 
+DVK-sse saatmisel ja DVK-st vastuvõtmisel pannakse kapsli adressaadina asutused tabeli registrikood välja väärtust (ehk alamsüsteemide puhul see ei ole asutuse registrikood).
+DHX aga nõuab et kapslis olevad adressaadid oleksid asutuste registrikoodid.
+Selle lahendamiseks tuleb DHX-st DVK-sse kapsli jõudmisel asendada kapsli adressaadi (asutuse reaalse registrikoodi) DVK asutuse tabeli registrikoodiga.
+DVK-st DHX-i saatmisel tuleb asendada kapslis oleva adressaadi (asutus tabeli registrikoodi) asutuse reaalse registrikoodiga.
 
-* Kuna DVK-sse saatmisel ja DVK-st vastuvõtmisel pannakse kapsli adressaadina asutused tabeli registrikood välja väärtust (ehk alamsüsteemide puhul see ei ole asutuse registrikood), aga DHX nõuab et kapslis olevad adressaadid oleksid asutuste registrikoodid, tuleb DHX-st DVK-sse kapsli jõudmisel asendada kapsli adressaadi (asutuse reaalse registrikoodi) DVK asutuse tabeli registrikoodiga ning DVK-st DHX-i saatmisel tuleb asendada kapslis oleva adressaadi (asutus tabeli registrikoodi) asutuse reaalse registrikoodiga.
 
