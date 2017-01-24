@@ -5,6 +5,27 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
+Sisukord
+=================
+
+  * [DVK arhitektuur (DHX üleminekuperioodil)](#dvk-arhitektuur-dhx-%C3%BCleminekuperioodil)
+    * [1\. Sissejuhatus](#1-sissejuhatus)
+    * [2\. Süsteemi tehnilise arhitektuuri üldvaade](#2-s%C3%BCsteemi-tehnilise-arhitektuuri-%C3%BCldvaade)
+    * [3\. DVK adressaatide leidmine DHX jaoks](#3-dvk-adressaatide-leidmine-dhx-jaoks)
+    * [4\. Dokumendi liikumine DHX asutuselt DVK asutusele  (DHX\-&gt;DVK)](#4-dokumendi-liikumine-dhx-asutuselt-dvk-asutusele--dhx-dvk)
+    * [5\. Dokumendi liikumine DVK asutuselt DHX asutusele (DVK\-&gt;DHX)](#5-dokumendi-liikumine-dvk-asutuselt-dhx-asutusele-dvk-dhx)
+    * [6\. DVK aadressiraamatu uuendamine](#6-dvk-aadressiraamatu-uuendamine)
+    * [7\. Adressaatide vahendamine DVK - DHX liidestuses](#7-adressaatide-vahendamine-dvk--dhx-liidestuses)
+      * [7\.1\. Probleemi kirjeldus DVK sees](#71-probleemi-kirjeldus-dvk-sees)
+      * [7\.2\. Probleemi kirjeldus DHX sees](#72-probleemi-kirjeldus-dhx-sees)
+      * [7\.3\. Soovitud lahendus](#73-soovitud-lahendus)
+      * [7\.3\. Probleemi tehniline lahendus](#73-probleemi-tehniline-lahendus)
+        * [7\.3\.1\. Tavalised DHX adressaadid](#731-tavalised-dhx-adressaadid)
+        * [7\.3\.2\. DHX\-i alamsüsteemidega adressaadid](#732-dhx-i-alams%C3%BCsteemidega-adressaadid)
+        * [7\.3\.3\. Erandid olemasolevatele ilma registrikoodida süsteemidele (adit,kovtp,rt,eelnoud)](#733-erandid-olemasolevatele-ilma-registrikoodida-s%C3%BCsteemidele-aditkovtprteelnoud)
+        * [7\.3\.4\. Erandid olemasolevatele registrikoodi ja alamsüsteemiga süsteemidele (sfos\.70000272)](#734-erandid-olemasolevatele-registrikoodi-ja-alams%C3%BCsteemiga-s%C3%BCsteemidele-sfos70000272)
+        * [7\.3\.5\. Adressaadi registrikoodi asendamine Kapsli sees](#735-adressaadi-registrikoodi-asendamine-kapsli-sees)
+
 ## 1. Sissejuhatus
 
 Antud dokument kirjeldab Dokumendivahetuskeskuse (DVK) uue arhitektuuri.

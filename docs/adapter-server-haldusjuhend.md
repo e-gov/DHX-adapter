@@ -5,7 +5,7 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
-Table of Contents
+Sisukord
 =================
 
   * [DHX adapterserveri haldusjuhend](#dhx-adapterserveri-haldusjuhend)
