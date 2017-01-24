@@ -55,9 +55,9 @@ Sisemisel liidese WSDL failid on esitatud versioonide kaupa.
 
 [v2](../dhx-adapter-server/src/main/resources/dhl_new_v2.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv2.wsdl`.
 
-[v1](../dhx-adapter-server/src/main/resources/dhl_new_v3.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv3.wsdl`.
+[v3](../dhx-adapter-server/src/main/resources/dhl_new_v3.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv3.wsdl`.
 
-[v1](../dhx-adapter-server/src/main/resources/dhl_new_v4.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv4.wsdl`. 
+[v4](../dhx-adapter-server/src/main/resources/dhl_new_v4.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv4.wsdl`. 
 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
   
@@ -65,7 +65,7 @@ Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/
 
 Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) programmiga.
 
-**1)** Avada SoapUI ja lisada uus projekt, sisestades WSDL aadressiks `http://localhost:8080/dhx-adapter-server/wsServer/dhl.wsdl` (muuta vajadusel host ja port).
+**1)** Avada SoapUI ja lisada uus projekt, sisestades WSDL aadressiks `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv1.wsdl`, `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv2.wsdl`,`http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv3.wsdl` või `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv4.wsdl` (muuta vajadusel host ja port).
 
 **2)** Genereeritud projekti all avada näiteks `dhlSoapBinding`->`getSendingOptions`->`Request 1`.  
 
@@ -73,20 +73,20 @@ Sisemist liidest saab soovi korral testida [SoapUI](https://www.soapui.org/) pro
 
 **4)** Sisestada Request XML väljale SOAP päring, muutes endale sobivaks elementide `<xRoadInstance>`, `<memberClass>` ja `<memberCode>` (asutuse registrikood) väärtused (näiteks `ee-dev`, `GOV` ja `40000001`) 
 
-**5)** Lisada vajadusel manus (Attachment) failist. NB! SoapUI arvestab manuse faili lugemisel laiendit (kui see on näiteks .txt, siis SoapUI püüab seda ise kodeerida ja lisab content-type: text/plan). Selleks et SoapUI seda ise ei teeks, peaks manuse faili laiend olema näiteks `.base64`. 
+**5)** Lisada vajadusel manus (Attachment) failist. NB! SoapUI arvestab manuse faili lugemisel laiendit, Kui laiend on näiteks .txt, siis SoapUI püüab seda ise kodeerida ja lisab content-type: text/plain. Selleks et SoapUI seda ise ei teeks, peaks manuse faili laiend olema näiteks `.base64`. 
 
 **6)** Käivitada SoapUI päring.
 
 Märkus:
 > Osade päringute ja vastuste manused on [gzip](https://en.wikipedia.org/wiki/Gzip) pakitud ja seejärel [BASE64](https://en.wikipedia.org/wiki/Base64) kodeeritud.
 > 
-> Need saab Linux/unix all kokku pakkida salvestades manuse XML sisu faili "manus.xml" (fail peab olema salvestatud UTF-8 kodeeringus) ja käivitades seejärel:
+> Need saab Linux/unix all kokku pakkida salvestades manuse XML sisu faili `manus.xml` (fail peab olema salvestatud UTF-8 kodeeringus) ja käivitades seejärel:
 > ``` 
 >  cat manus.xml | gzip | base64 --wrap=0 > manus.base64 
 > ```
 > Manused peavad olema [basic](https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#basic) base64 kodeeritud ehk terviklikult ühe reana. Base64 [MIME](https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#mime) kodeeritud manustest (mitu rida, iga rida 76 märki) DHX adapterserver aru ei saa ja annab vea.
 >
-> Manused saab Linux/unix alla lahti kodeerida salvestades manuse faili "manus.base64" ja käivitades seejärel:
+> Manused saab Linux/unix alla lahti kodeerida salvestades manuse faili `manus.base64` ja käivitades seejärel:
 > ``` 
 >  cat manus.base64 | base64 -d | gunzip > manus.xml
 > ```
@@ -116,12 +116,12 @@ Märkused:
 > 
 > Sisemises liideses on realiseeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
-> Lisaks tuleb silmas pidada, et esineb mõningaid sisulisi erinevusi võrreldes DVK liidesega. Need on eraldi välja toodud dokumendi lõpus. 
+> Lisaks tuleb silmas pidada, et esineb mõningaid erinevusi võrreldes DVK liidesega. Need on eraldi välja toodud dokumendi lõpus. 
 
 Sisemisele liidese päringutes tuleb kaasa anda X-tee v6 standardsed päised (`<service>` ja `<client>`), kuigi Sisemine liides X-tee turvaserverit kasuta.
 
 Päringus `<service>` päises ette antud alamelemente `<xRoadInstance>`, `<memberClass>`, `memberCode` ja `<subsystemCode>` ignoreeritakse. 
-Seega need võivad olla samad vana DVK X-tee teenuse omad nagu saadeti (`GOV`, `70006317` - Riigi Infosüsteemi Amet ja `dhl`).
+Seega need võivad olla samad nagu saadeti vana DVK X-tee teenuse korral (`GOV`, `70006317` - Riigi Infosüsteemi Amet ja `dhl`).
 ```xml 
       <xro:service>
          <iden:xRoadInstance>ee</iden:xRoadInstance>
@@ -133,7 +133,7 @@ Seega need võivad olla samad vana DVK X-tee teenuse omad nagu saadeti (`GOV`, `
       </xro:service>
 ```
 
-Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<memberCode>` (saatja asutuse registrikood) elmenti. Erijuhul ka `<subsystemCode>` (üldjuhul konstant `DHX`) elementi. 
+Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<memberCode>` (saatja asutuse registrikood) elmenti.  
 Ülejäänuid `<client>` päise elemente ignoreeritakse. Seega need võivad olla samad nagu vana DVK X-tee teenuse korral saadeti.
 ```xml  
       <xro:client>
@@ -144,13 +144,13 @@ Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<mem
       </xro:client>
 ```
 
-Järgnevalt kirjeldatakse lühidalt kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
+Järgnevalt kirjeldatakse kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
 
 ### 4.1. getSendingOptions (sisemine liides)
 
 Seda operatsiooni kasutatakse [DHX aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) küsimiseks.
 
-See tagastab kõik asutused kellele võib üle DHX protokolli dokumente saata. 
+See tagastab kõik asutused (adressaadid) kellele võib üle DHX protokolli dokumente saata. 
 
 Lisaks kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1),
 [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3)
@@ -245,10 +245,14 @@ Vastuse näide:
 ```
 
 See sisaldab asutuse kohta kolme välja:
-* `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Aga kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
-* `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni ja vahendajate [representationList]((https://github.com/e-gov/DHX/blob/master/files/representationList.md)) teenuse väljundite põhjal.
+* `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Juhul kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
+* `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni ja vahendajate [representationList]((https://github.com/e-gov/DHX/blob/master/files/representationList.md)) teenuse väljundite põhjal. 
 * `<saatmisviis>` - alati konstant `dhl`.
 
+Märkus:
+> Asutusel kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`.
+> 
+> DHS kasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adpaterserveri andmebaasis (vaata [andmebaasi mudelit](adapter-server-haldusjuhend.md#41-andmebaasi-mudel)) välja ASUTUS.reaalne_nimi väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`.
 
 Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
 Kui asutuse DHS süsteem neid vana DVK korral kasutas, siis DHX protokollile üle kolimisel peaks ta need kusagilt mujalt küsima.
@@ -407,6 +411,8 @@ H4sIACJmhFgAA+1X3W7bNhS+z1MIvR0SSrIt2wEnTHWyJGvcGrGzYbspWOnYYSORGknZS59ll3mM3uXF
 
 Nõuded päringu sisendile:
 * Päringu sisendi X-tee päises ette antud saatja `<client><memberCode>30000001</ns3:memberCode>` peab ühtima Kapslis toodud saatjaga `<Transport><DecSender><OrganisationCode>30000001</OrganisationCode>`.
+* Kui soovitakse saata asutuse alamsüsteemile (`getSendOptions` tagastas `<asutus><regnr>subsystem1.40000001</regnr>`), siis tuleb Kaplsis ette anda adresaat kujul `<Transport><DecRecipient><OrganisationCode>subsystem1.40000001</OrganisationCode>`.
+* Samamoodi tuleb saata neile spetsiifilistele asutustele, mille korral getSendingOptions tagastas mnemoonilise koodi (`<asutus><regnr>adit</regnr>`) ilma registrikoodita. Nile tuleb saata Kaplsi sees näiteks `<Transport><DecRecipient><OrganisationCode>adit</OrganisationCode>`. Need asutused on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapeterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
 * Kapsel peab olema [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manusena. Manuse algne xml fail peab olema UTF-8 kodeeringus, lisatud manusesse gzip pakitud ja seejärel base64 kodeeritult.
 * Päringu sisendis ei pea ette andma Kapsli XML schema järgi kohustuslikku `<DecMetadata>` elementi (ega selle alamelemente `<DecId>`, `<DecFolder>`, `<DecReceiptDate>`). Need genereerib DHX adapterserver ise. Sama loogika kehtis vanas DVK liideses.
 * Päringu sisendis Kapslis võib ette anda mitu adresaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adressaadile eraldi. Kusjuures mõnele adresaadile saatmine võib õnnestuda aga teisele mitte.
