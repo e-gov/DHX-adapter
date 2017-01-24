@@ -252,7 +252,7 @@ See sisaldab asutuse kohta kolme välja:
 Märkus:
 > Asutusel kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`.
 > 
-> DHS kasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adpaterserveri andmebaasis (vaata [andmebaasi mudelit](adapter-server-haldusjuhend.md#41-andmebaasi-mudel)) välja ASUTUS.reaalne_nimi väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`.
+> DHS kasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adpaterserveri andmebaasis (vaata [andmebaasi mudelit](adapter-server-haldusjuhend.md#41-andmebaasi-mudel)) välja `ASUTUS.reaalne_nimi` väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`.
 
 Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
 Kui asutuse DHS süsteem neid vana DVK korral kasutas, siis DHX protokollile üle kolimisel peaks ta need kusagilt mujalt küsima.
