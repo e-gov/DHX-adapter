@@ -1117,7 +1117,7 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 
 * DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab Kapsli 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
 
-* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
+* DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>`. `<dokument_guid>` välja väärtus on alati tühi ka väljundites.
 
 * DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
 
