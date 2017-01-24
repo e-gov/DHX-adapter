@@ -804,8 +804,8 @@ Märkused päringu sisendi ja väljundi kohta:
 * Päringu manuse kapslis asuva välja `<DecId>65</DecId>` väärtuse järgi tuleb teha järgnev [markDocumentsReceived](#45-markdocumentsreceived-sisemine-liides) väljakutse.
 * Vastuse manuses tagastatakse mitme dokumendi kapsli XML failid üksteise järel.
 ```xml 
-<DecContainer ... > ...</DecContainer>
-<DecContainer ... > ...</DecContainer>
+<DecContainer xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/"> ...</DecContainer>
+<DecContainer xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/"> ...</DecContainer>
 ```
 
 Märkused vana DVK X-tee liidese kasutajale:
