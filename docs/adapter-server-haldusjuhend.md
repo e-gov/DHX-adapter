@@ -178,6 +178,14 @@ SELECT d.*, t.*, v.* FROM DOKUMENT d, TRANSPORT t, VASTUVOTJA v
     AND (t.staatus_id = 103 OR v.staatus_id = 103)
 ```
 
+### 4.1.1. Asutuse nime muutmine (sisemise liidese getSendingOptions väljundis)
+
+DHS süsteem kasutab üldjuhul `getSendingOptions` väljundina tagastatud asutuste nimekirja ka enda sees. See nimekiri kuvatakse näiteks dokumendi saatmise ekraanil ripploendina, millest lõppkasutaja saab valida adressaadi.
+
+Asutusel kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`. See nimi ei pruugi olla lõppkasutajale arusaadav.
+ 
+DHS lõppkasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adpaterserveri andmebaasis välja `ASUTUS.reaalne_nimi` väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`. 
+
 ### 4.2. Kapslid lokaalses failisüsteemis
 
 Edastamiseks salvestatakse Kapsli XML lokaalses failisüsteemis (kataloogis `c:/dhx_docs`).
