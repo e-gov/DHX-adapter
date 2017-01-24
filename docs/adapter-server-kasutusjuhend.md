@@ -215,8 +215,8 @@ Vastuse näide:
       </xro:client>
    </SOAP-ENV:Header>
    <SOAP-ENV:Body>
-      <ns4:getSendingOptionsResponse xmlns:ns10="http://x-road.eu/xsd/identifiers" xmlns:ns11="http://x-road.eu/xsd/representation.xsd" xmlns:ns12="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:ns4="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns5="http://www.riik.ee/schemas/dhl" xmlns:ns6="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns7="http://www.w3.org/2000/09/xmldsig#" xmlns:ns8="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://dhx.x-road.eu/producer">
-         <keha xmlns:ns10="http://x-road.eu/xsd/representation.xsd" xmlns:ns11="http://x-road.eu/xsd/xroad.xsd" xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns4="http://www.riik.ee/schemas/dhl" xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns6="http://www.w3.org/2000/09/xmldsig#" xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns8="http://dhx.x-road.eu/producer" xmlns:ns9="http://x-road.eu/xsd/identifiers">
+      <ns2:getSendingOptionsResponse  xmlns:ns2="http://www.riik.ee/schemas/dhl"  xmlns:ns4="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns5="http://www.w3.org/2000/09/xmldsig#">
+         <keha xmlns:ns10="http://x-road.eu/xsd/xroad.xsd" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"  xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns4="http://www.riik.ee/schemas/dhl"  xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns6="http://www.w3.org/2000/09/xmldsig#"  xmlns:ns7="http://dhx.x-road.eu/producer" xmlns:ns8="http://x-road.eu/xsd/identifiers" xmlns:ns9="http://x-road.eu/xsd/representation.xsd">
             <asutus>
                <regnr>dvk.70006317</regnr>
                <nimi>Riigi Infosüsteemi Amet(DHX.dvk)</nimi>
@@ -238,8 +238,7 @@ Vastuse näide:
                   <saatmisviis>dhl</saatmisviis>
                </saatmine>
             </asutus>
-         </keha>
-      </ns4:getSendingOptionsResponse>
+      </ns2:getSendingOptionsResponse>
    </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ```
@@ -1120,15 +1119,18 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 
 * DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>`. `<dokument_guid>` välja võõrtus on alati tühi ka väljundites.
 
-* DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manuse `cid` väärtus ei pea olema URL kodeeritud (nagu [rfc2392](https://www.ietf.org/rfc/rfc2392.txt) standard seda nõuab). See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is võib selle esitada ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See toimis samamoodi vanas DVK keskserveris.  
-
 * DHX adapterserveri `receiveDocuments` päringute sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`).
 
 * Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
 
 * Väljastatavad veateated (`SOAP:Fault`) on teistsugused kui DVK korral.
  
+Mõned asjad mis DHX adapterserveris realiseeritud samamoodi nagu oli DVK keskserveris:
 
+* DHX adapterserveri `getSendingOptions` vastuse elmendi `<ns2:getSendingOptionsResponse  xmlns:ns2="http://www.riik.ee/schemas/dhl"` nimeruum on teine (vana X-tee versiooni nimeruum `http://www.riik.ee/schemas/dhl`) kui päringu sisendi nimeruum (X-tee v6 versiooni `http://producers.dhl.xrd.riik.ee/producer/dhl`).  See on samamoodi ka DVK keskserveris.
 
+* DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manuse `cid` väärtus ei pea olema URL kodeeritud (nagu [rfc2392](https://www.ietf.org/rfc/rfc2392.txt) standard seda nõuab). See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is võib selle esitada ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See toimis samamoodi vanas DVK keskserveris.  
+
+ 
 
  
