@@ -190,14 +190,14 @@ Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale k
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.   
 
-3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta soovi korral ümber logimise kataloog (c//logs/event.log):
+3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c//logs/dhx-adapter-server.log):
 ```
-    <RollingFile name="RollingFile" fileName="c://logs/event.log"
+    <RollingFile name="RollingFile" fileName="c://logs/dhx-adapter-server.log"
                  filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
 ```
-Muuta  `custom level EVENT -> intLevel` väärtuseks INFO=400 või WARN=300 või ERROR=200. Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
-``` 
-<CustomLevel name="EVENT" intLevel="400" />
+Seal võib ka muuta log taseme väiksemaks (`info` või `error`). Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
+```
+<Logger name="ee.ria" level="debug" additivity="false">
 ```
 
 4) Teha Tomcati restart.
@@ -275,14 +275,14 @@ Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale k
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.
 
-3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta soovi korral ümber logimise kataloog (c//logs/event.log):
+3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c//logs/dhx-adapter-server.log):
 ```
-    <RollingFile name="RollingFile" fileName="c://logs/event.log"
+    <RollingFile name="RollingFile" fileName="c://logs/dhx-adapter-server.log"
                  filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
 ```
-Muuta  `custom level EVENT -> intLevel` väärtuseks INFO=400 või WARN=300 või ERROR=200. Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
-``` 
-<CustomLevel name="EVENT" intLevel="400" />
+Seal võib ka muuta log taseme väiksemaks (`info` või `error`). Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
+```
+<Logger name="ee.ria" level="debug" additivity="false">
 ```
 
 4) Teha Tomcati restart.

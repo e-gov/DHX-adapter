@@ -133,17 +133,17 @@ Logi kirjutatakse `apache-tomcat-7.x.x/logs` kataloogi failidesse:
 
 Lisaks on DHX adapterserveri häälestusfailis `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` määratud et logi kirjutatakse faili: 
 ```xml
-    <RollingFile name="RollingFile" fileName="c://logs/event.log"
+    <RollingFile name="RollingFile" fileName="c://logs/dhx-adapter-server.log"
 ```
 
-Soovitav on muuta seal ka `custom level EVENT -> intLevel` väärtuseks INFO=400 või WARN=300 või ERROR=200. Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
+Seal võib ka muuta log taseme väiksemaks (`info` või `error`). Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
 ```
-<CustomLevel name="EVENT" intLevel="400" />
+<Logger name="ee.ria" level="debug" additivity="false">
 ```
 
 ## 4. Dokumentide edastamise vigade põhjuste analüüsimine
 
-Kui dokumendi edastamisel või vastuvõtmisel esines viga, siis selle kohta kirjutatakse logi (`log4j2.xml` sees määratud) faili `c:/logs/event.log` 
+Kui dokumendi edastamisel või vastuvõtmisel esines viga, siis selle kohta kirjutatakse logi (`log4j2.xml` sees määratud) faili `c:/logs/dhx-adapter-server.log`. 
 
 Kui dokumendi võeti edastamiseks vastu (SOAP Päring ja Kapsel olid korrektsed), siis salvestatakse metaandmed andmebaasi ja Kapsli XML failisüsteemi.
 
