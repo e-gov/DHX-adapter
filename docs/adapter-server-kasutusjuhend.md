@@ -470,8 +470,7 @@ H4sIAAAAAAAAAIWSwXKDIBCG732KjD3LgjZtdIy55D0cBraRSQQHMPL4pZkq9ZD2Buz37/67S3MKw213
 
 Vastuse manus XML-ina lahti kodeeritud:
 ```xml
-<keha  
-  xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" >
+<keha>
  <dhl_id>59</dhl_id>
 </keha>
 ```
@@ -581,32 +580,28 @@ H4sIAAAAAAAAANVXbW/bNhD+vPwKwg2GDIOpFzsvVlUVWW1sLVa0SAys3wSOvNi0JdIgKVv+9zu9WLax
 Vastuse manuse XML lahti kodeeritult 
 ```xml
 <?xml version="1.0"?>
-<ns3:item xmlns:ns4="http://www.riik.ee/schemas/dhl" xmlns:ns8="http://dhx.x-road.eu/producer"
-    xmlns:ns10="http://x-road.eu/xsd/representation.xsd" xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl"
-    xmlns:ns11="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#"
-    xmlns:ns6="http://www.w3.org/2000/09/xmldsig#" xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
-    xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://x-road.eu/xsd/identifiers">
-  <ns7:dhl_id>59</ns7:dhl_id>
-  <ns4:edastus>
-    <ns4:saaja>
-      <ns4:regnr>40000001</ns4:regnr>
-      <ns4:asutuse_nimi>Ministeerium X</ns4:asutuse_nimi>
-    </ns4:saaja>
+<item>
+  <dhl_id>59</dhl_id>
+  <edastus>
+    <saaja>
+      <regnr>40000001</regnr>
+      <asutuse_nimi>Ministeerium X</asutuse_nimi>
+    </saaja>
     <saadud>2017-01-22T10:01:21.185+02:00</saadud>
     <meetod>xtee</meetod>
     <edastatud>2017-01-22T10:01:21.185+02:00</edastatud>
     <loetud>2017-01-22T10:06:01.033+02:00</loetud>
-    <ns4:fault>
+    <fault>
      <faultcode>WS_ERROR</faultcode>
      <faultstring>DHXException code: WS_ERROR Error occured while sending document.I/O error: Connection timed out: connect; nested exception is java.net.ConnectException: Connection timed out: connect</faultstring>
      <faultdetail>...</faultdetail>
-    </ns4:fault>
+    </fault>
     <staatus>katkestatud</staatus>
     <vastuvotja_staatus_id>5</vastuvotja_staatus_id>
-  </ns4:edastus>
+  </edastus>
   
   <olek>saatmisel</olek>
-</ns3:item>
+</item>
 ```
 
 Märkused sisendi ja väljundi kohta:
@@ -698,113 +693,107 @@ H4sIAAAAAAAAAO1XzXLbNhC+9yk07jEjEiAl6mccprLsxG7sWBPLzbSXDEJCMmKSYABQkvMsPfpN/GJd
 
 Vastuse lahti kodeeritud manus
 ```xml
-<?xml version="1.0"?>
-<ns2:DecContainer xmlns:ns4="http://www.riik.ee/schemas/dhl"
-	xmlns:ns8="http://dhx.x-road.eu/producer" xmlns:ns10="http://x-road.eu/xsd/representation.xsd"
-	xmlns:ns3="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns:ns11="http://x-road.eu/xsd/xroad.xsd"
-	xmlns:ns5="http://www.sk.ee/DigiDoc/v1.3.0#" xmlns:ns6="http://www.w3.org/2000/09/xmldsig#"
-	xmlns:ns2="http://www.riik.ee/schemas/deccontainer/vers_2_1/"
-	xmlns:ns7="http://www.riik.ee/schemas/dhl-meta-automatic" xmlns:ns9="http://x-road.eu/xsd/identifiers">
-	<ns2:Transport>
-		<ns2:DecSender>
-			<ns2:OrganisationCode>30000001</ns2:OrganisationCode>
-			<ns2:PersonalIdCode>EE38806190294</ns2:PersonalIdCode>
-		</ns2:DecSender>
-		<ns2:DecRecipient>
-			<ns2:OrganisationCode>10560025</ns2:OrganisationCode>
-		</ns2:DecRecipient>
-	</ns2:Transport>
-	<ns2:RecordCreator>
-		<ns2:Person>
-			<ns2:Name>Lauri Tammemäe</ns2:Name>
-			<ns2:GivenName>Lauri</ns2:GivenName>
-			<ns2:Surname>Tammemäe</ns2:Surname>
-			<ns2:PersonalIdCode>EE38806190294</ns2:PersonalIdCode>
-			<ns2:Residency>EE</ns2:Residency>
-		</ns2:Person>
-		<ns2:ContactData>
-			<ns2:Adit>true</ns2:Adit>
-			<ns2:Phone>3726630276</ns2:Phone>
-			<ns2:Email>lauri.tammemae@ria.ee</ns2:Email>
-			<ns2:WebPage>www.hot.ee/lauri</ns2:WebPage>
-			<ns2:MessagingAddress>skype: lauri.tammemae</ns2:MessagingAddress>
-			<ns2:PostalAddress>
-				<ns2:Country>Eesti</ns2:Country>
-				<ns2:County>Harju maakond</ns2:County>
-				<ns2:LocalGovernment>Tallinna linn</ns2:LocalGovernment>
-				<ns2:AdministrativeUnit>Mustamäe linnaosa</ns2:AdministrativeUnit>
-				<ns2:SmallPlace>Pääsukese KÜ</ns2:SmallPlace>
-				<ns2:LandUnit></ns2:LandUnit>
-				<ns2:Street>Mustamäe tee</ns2:Street>
-				<ns2:HouseNumber>248</ns2:HouseNumber>
-				<ns2:BuildingPartNumber>62</ns2:BuildingPartNumber>
-				<ns2:PostalCode>11212</ns2:PostalCode>
-			</ns2:PostalAddress>
-		</ns2:ContactData>
-	</ns2:RecordCreator>
-	<ns2:RecordSenderToDec>
-		<ns2:Person>
-			<ns2:Name>Lauri Tammemäe</ns2:Name>
-			<ns2:GivenName>Lauri</ns2:GivenName>
-			<ns2:Surname>Tammemäe</ns2:Surname>
-			<ns2:PersonalIdCode>EE38806190294</ns2:PersonalIdCode>
-			<ns2:Residency>EE</ns2:Residency>
-		</ns2:Person>
-		<ns2:ContactData>
-			<ns2:Adit>false</ns2:Adit>
-			<ns2:Phone>3726630276</ns2:Phone>
-			<ns2:Email>lauri.tammemae@ria.ee</ns2:Email>
-			<ns2:WebPage>www.hot.ee/lauri</ns2:WebPage>
-			<ns2:MessagingAddress>skype: lauri.tammemae</ns2:MessagingAddress>
-			<ns2:PostalAddress>
-				<ns2:Country>Eesti</ns2:Country>
-				<ns2:County>Harju maakond</ns2:County>
-				<ns2:LocalGovernment>Tallinna linn</ns2:LocalGovernment>
-				<ns2:AdministrativeUnit>Mustamäe linnaosa</ns2:AdministrativeUnit>
-				<ns2:SmallPlace>Pääsukese KÜ</ns2:SmallPlace>
-				<ns2:LandUnit></ns2:LandUnit>
-				<ns2:Street>Mustamäe tee</ns2:Street>
-				<ns2:HouseNumber>248</ns2:HouseNumber>
-				<ns2:BuildingPartNumber>62</ns2:BuildingPartNumber>
-				<ns2:PostalCode>11212</ns2:PostalCode>
-			</ns2:PostalAddress>
-		</ns2:ContactData>
-	</ns2:RecordSenderToDec>
-	<ns2:Recipient>
-		<ns2:Organisation>
-			<ns2:Name>BPW Consulting OÜ</ns2:Name>
-			<ns2:OrganisationCode>10560025</ns2:OrganisationCode>
-			<ns2:Residency>EE</ns2:Residency>
-		</ns2:Organisation>
-	</ns2:Recipient>
-	<ns2:RecordMetadata>
-		<ns2:RecordGuid>25892e17-80f6-415f-9c65-7395632f0234</ns2:RecordGuid>
-		<ns2:RecordType>Kiri</ns2:RecordType>
-		<ns2:RecordOriginalIdentifier>213465</ns2:RecordOriginalIdentifier>
-		<ns2:RecordDateRegistered>2012-11-11T19:18:03
-		</ns2:RecordDateRegistered>
-		<ns2:RecordTitle>Ettepanek</ns2:RecordTitle>
-		<ns2:RecordLanguage>EE</ns2:RecordLanguage>
-	</ns2:RecordMetadata>
-	<ns2:Access>
-		<ns2:AccessConditionsCode>Avalik</ns2:AccessConditionsCode>
-	</ns2:Access>
-	<ns2:File>
-		<ns2:FileGuid>25892e17-80f6-415f-9c65-7395632f0001</ns2:FileGuid>
-		<ns2:RecordMainComponent>false</ns2:RecordMainComponent>
-		<ns2:FileName>Ettepanek.doc</ns2:FileName>
-		<ns2:MimeType>application/msword</ns2:MimeType>
-		<ns2:FileSize>211543</ns2:FileSize>
-		<ns2:ZipBase64Content>H4sIACvlpU0AAwspqszMS1coyVcoTs1LUUjJT+YCALD0cp8TAAAA
-		</ns2:ZipBase64Content>
-	</ns2:File>
-	<ns2:RecordTypeSpecificMetadata />
-	<ns2:DecMetadata>
-		<ns2:DecId>65</ns2:DecId>
-		<ns2:DecFolder>/</ns2:DecFolder>
-		<ns2:DecReceiptDate>2017-01-22T14:35:18.692+02:00</ns2:DecReceiptDate>
-	</ns2:DecMetadata>
-</ns2:DecContainer>
+<DecContainer xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+	<Transport>
+		<DecSender>
+			<OrganisationCode>30000001</OrganisationCode>
+			<PersonalIdCode>EE38806190294</PersonalIdCode>
+		</DecSender>
+		<DecRecipient>
+			<OrganisationCode>10560025</OrganisationCode>
+		</DecRecipient>
+	</Transport>
+	<RecordCreator>
+		<Person>
+			<Name>Lauri Tammemäe</Name>
+			<GivenName>Lauri</GivenName>
+			<Surname>Tammemäe</Surname>
+			<PersonalIdCode>EE38806190294</PersonalIdCode>
+			<Residency>EE</Residency>
+		</Person>
+		<ContactData>
+			<Adit>true</Adit>
+			<Phone>3726630276</Phone>
+			<Email>lauri.tammemae@ria.ee</Email>
+			<WebPage>www.hot.ee/lauri</WebPage>
+			<MessagingAddress>skype: lauri.tammemae</MessagingAddress>
+			<PostalAddress>
+				<Country>Eesti</Country>
+				<County>Harju maakond</County>
+				<LocalGovernment>Tallinna linn</LocalGovernment>
+				<AdministrativeUnit>Mustamäe linnaosa</AdministrativeUnit>
+				<SmallPlace>Pääsukese KÜ</SmallPlace>
+				<LandUnit></LandUnit>
+				<Street>Mustamäe tee</Street>
+				<HouseNumber>248</HouseNumber>
+				<BuildingPartNumber>62</BuildingPartNumber>
+				<PostalCode>11212</PostalCode>
+			</PostalAddress>
+		</ContactData>
+	</RecordCreator>
+	<RecordSenderToDec>
+		<Person>
+			<Name>Lauri Tammemäe</Name>
+			<GivenName>Lauri</GivenName>
+			<Surname>Tammemäe</Surname>
+			<PersonalIdCode>EE38806190294</PersonalIdCode>
+			<Residency>EE</Residency>
+		</Person>
+		<ContactData>
+			<Adit>false</Adit>
+			<Phone>3726630276</Phone>
+			<Email>lauri.tammemae@ria.ee</Email>
+			<WebPage>www.hot.ee/lauri</WebPage>
+			<MessagingAddress>skype: lauri.tammemae</MessagingAddress>
+			<PostalAddress>
+				<Country>Eesti</Country>
+				<County>Harju maakond</County>
+				<LocalGovernment>Tallinna linn</LocalGovernment>
+				<AdministrativeUnit>Mustamäe linnaosa</AdministrativeUnit>
+				<SmallPlace>Pääsukese KÜ</SmallPlace>
+				<LandUnit></LandUnit>
+				<Street>Mustamäe tee</Street>
+				<HouseNumber>248</HouseNumber>
+				<BuildingPartNumber>62</BuildingPartNumber>
+				<PostalCode>11212</PostalCode>
+			</PostalAddress>
+		</ContactData>
+	</RecordSenderToDec>
+	<Recipient>
+		<Organisation>
+			<Name>BPW Consulting OÜ</Name>
+			<OrganisationCode>10560025</OrganisationCode>
+			<Residency>EE</Residency>
+		</Organisation>
+	</Recipient>
+	<RecordMetadata>
+		<RecordGuid>25892e17-80f6-415f-9c65-7395632f0234</RecordGuid>
+		<RecordType>Kiri</RecordType>
+		<RecordOriginalIdentifier>213465</RecordOriginalIdentifier>
+		<RecordDateRegistered>2012-11-11T19:18:03
+		</RecordDateRegistered>
+		<RecordTitle>Ettepanek</RecordTitle>
+		<RecordLanguage>EE</RecordLanguage>
+	</RecordMetadata>
+	<Access>
+		<AccessConditionsCode>Avalik</AccessConditionsCode>
+	</Access>
+	<File>
+		<FileGuid>25892e17-80f6-415f-9c65-7395632f0001</FileGuid>
+		<RecordMainComponent>false</RecordMainComponent>
+		<FileName>Ettepanek.doc</FileName>
+		<MimeType>application/msword</MimeType>
+		<FileSize>211543</FileSize>
+		<ZipBase64Content>H4sIACvlpU0AAwspqszMS1coyVcoTs1LUUjJT+YCALD0cp8TAAAA
+		</ZipBase64Content>
+	</File>
+	<RecordTypeSpecificMetadata />
+	<DecMetadata>
+		<DecId>65</DecId>
+		<DecFolder>/</DecFolder>
+		<DecReceiptDate>2017-01-22T14:35:18.692+02:00</DecReceiptDate>
+	</DecMetadata>
+</DecContainer>
 ```
 
 Märkused päringu sisendi ja väljundi kohta:
@@ -815,10 +804,8 @@ Märkused päringu sisendi ja väljundi kohta:
 * Päringu manuse kapslis asuva välja `<DecId>65</DecId>` väärtuse järgi tuleb teha järgnev [markDocumentsReceived](#45-markdocumentsreceived-sisemine-liides) väljakutse.
 * Vastuse manuses tagastatakse mitme dokumendi kapsli XML failid üksteise järel.
 ```xml 
-<?xml version="1.0"?>
-<ns2:DecContainer ... > ...</ns2:DecContainer>
-<?xml version="1.0"?>
-<ns2:DecContainer ... > ...</ns2:DecContainer>
+<DecContainer ... > ...</DecContainer>
+<DecContainer ... > ...</DecContainer>
 ```
 
 Märkused vana DVK X-tee liidese kasutajale:
