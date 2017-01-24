@@ -85,9 +85,7 @@ Uued DHX adressaadid paistavad DVK kasutajatele välja kui tavalised DVK adressa
 Aadressiraamatu korrastamine DVK peal toimub perioodilise taustaprotsessiga, mis realiseerib DHX aadressiraamatu koostamise algoritmi (X-tee globaalkonfiguratsiooni ja vahendajate `representationList` teenuste põhjal). 
 
 Vaata arhitektuuri skeemil komponent „DVK aadressiraamatu uuendaja“.
-
-DVK andmebaasi lisatakse iga asutuse juurde uus „Boolean“ tüüpi väli „dhx_asutus“.  
-
+  
 ## 7. Adressaatide vahendamine DVK – DHX liidestuses
 
 ### 7.1. Probleemi kirjeldus DVK sees
@@ -342,4 +340,14 @@ DHX aga nõuab et kapslis olevad adressaadid oleksid asutuste registrikoodid.
 Selle lahendamiseks tuleb DHX-st DVK-sse kapsli jõudmisel asendada kapsli adressaadi (asutuse reaalse registrikoodi) DVK asutuse tabeli registrikoodiga.
 DVK-st DHX-i saatmisel tuleb asendada kapslis oleva adressaadi (asutus tabeli registrikoodi) asutuse reaalse registrikoodiga.
 
+
+## 8. DVK Andmebaasi muudatused
+
+DVK andmebaasi tabelite muudatused on järgmised:
+
+* ASUTUS tabelisse lisatud väli DHX_ASUTUS (`smallint`) võimalikud väärtused: 1 - DHXiga liitunud asutus, 0 - vana DVK-d kasutav asutus
+* ASUTUS tabelisse lisatud väli DHX_INTERNAL_CONSIGNMENT_ID (`character varying(200)`), mis sisaldab DVK poolt DHX-i saatmisel genereeritud saadetise id väärtust (DHX `sendDocument` teenuse sisendis). 
+* ASUTUS tabelisse lisatud väli DHX_EXTERNAL_CONSIGNMENT_ID (`character varying(200)`), mis sisaldab DHX-ist DVK-sse saabunud dokumendi saatetise id väärtust.
+* ASUTUS tabelisse lisatud väli DHX_EXTERNAL_RECEIPT_ID (`character varying(200)`), mis sisaldab DHX-ist DVK-sse saabunud `sendDocument` pärgingu vastuseks genereeritud `recepient id` väärtust. 
+* VASTUVOTJA tabelisse lisatud väli LAST_SEND_DATE (`timestamp`). See sisaldab kuupäeva ja kellaaeg, millel tehti viimane DHX edasi saatmise üritus.
 
