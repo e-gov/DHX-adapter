@@ -9,6 +9,7 @@ ee.ria.dhx.server.persistence.service
 ee.ria.dhx.server.scheduler
 ee.ria.dhx.server.service
 ee.ria.dhx.server.service.util
+ee.ria.dhx.server.types
 ee.ria.dhx.server.types.ee.riik.schemas.dhl
 ee.ria.dhx.server.types.ee.riik.schemas.dhl.rkel_letter
 ee.ria.dhx.server.types.ee.riik.schemas.dhl_meta_automatic
