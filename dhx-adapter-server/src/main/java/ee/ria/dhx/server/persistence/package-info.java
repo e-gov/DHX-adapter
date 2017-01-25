@@ -1,5 +1,5 @@
 /**
- * Package contains classes that are related to communication with database
+ * Package contains classes that are related to communication with database.
  * 
  * @author Aleksei Kokarev
  */
