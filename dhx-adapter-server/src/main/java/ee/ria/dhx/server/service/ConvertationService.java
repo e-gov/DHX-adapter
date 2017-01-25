@@ -45,7 +45,7 @@ public class ConvertationService {
 
   /**
    * Creates dataHandler from object. Object will be marshalled, GZipped, base64 encoded and written
-   * to file. Datahandler will be created from that file.
+   * to file. Datahandler will be created from that file. Written XMLs will have no namespace prefixes.
    * 
    * @param obj - object to create dataHandler for
    * @return created {@link DataHandler}
@@ -87,7 +87,7 @@ public class ConvertationService {
   /**
    * Creates dataHandler from list of objects. Objects will be marshalled, GZipped, base64 encoded
    * and written to file. Datahandler will be created from that file. All objects are written to
-   * same file one after another.
+   * same file one after another. Written XMLs will have no namespace prefixes, xmlns attribute will be added to the root element.
    * 
    * @param objList - list of objects to create dataHandler for
    * @return created {@link DataHandler}
