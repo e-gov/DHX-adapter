@@ -13,6 +13,7 @@ SoapUi testid on tehtud ja nimetatud vastavalt [testilugudele](adapter-server-te
 ## SoapUI testide konfigureerimine
 
 * Importida SoapUI project.(SoapUI projekti importimise kohta rohkem infot võib leida [siin](https://www.soapui.org/articles/import-project.html))
+SoapUi projekt asub [siin](../dhx-adapter-server-tests), fail DHX_server-soapui.xml
 
 * Muuta DVK_DHX SoapUi projekti parameetrid(SoapUI parameetrite kohta rohkem infot võib leida [siin](https://www.soapui.org/functional-testing/properties/working-with-properties.html)):
 
