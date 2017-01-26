@@ -32,7 +32,7 @@ Sisukord
         * [4\.3\.2\. Laadida alla Oracle JDBC draiver (ojdbc6\.jar)](#432-laadida-alla-oracle-jdbc-draiver-ojdbc6jar)
         * [4\.3\.3\. Paigaldada ojdbc6\.jar lokaalsesse Maven reposse](#433-paigaldada-ojdbc6jar-lokaalsesse-maven-reposse)
         * [4\.3\.4\. Laadida alla DHX\-adapter lähtekood](#434-laadida-alla-dhx-adapter-l%C3%A4htekood)
-        * [4\.3\.5\. Kompilleerida lähtekood Maven\-iga](#435-kompilleerida-l%C3%A4htekood-maven-iga)
+        * [4\.3\.5\. Kompileerida lähtekood Maven\-iga](#435-kompileerida-l%C3%A4htekood-maven-iga)
         * [4\.3\.6\. Paigaldada WAR fail](#436-paigaldada-war-fail)
     * [5\. DHX teenuste registreerimine ja avamine X-tee turvaserveris](#5-dhx-teenuste-registreerimine-ja-avamine-x-tee-turvaserveris)
     * [6\. Häälestus fail (dhx\-application\.properties)](#6-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
@@ -301,7 +301,7 @@ Vaata [eespoolt](#416-paigaldada-tomcat-windows-servicena-või-linux-deemonina)
 
 Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat) või kasutada muud andmebaasi serverit (mitte PostgreSQL ega Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
 
-Kui soovitakse paigaldada Java Servlet spetsifikatsiooni [3.0](http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/) või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisesest [pom.xml](../dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
+Kui soovitakse paigaldada Java Servlet spetsifikatsiooni [3.0](http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/) või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisest [pom.xml](../dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
 
 Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html).
 
@@ -363,7 +363,7 @@ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojd
 Laadida alla ("download" või "git clone") DHX-adapter [lähtekood](https://github.com/e-gov/DHX-adapter).
 
 
-#### 4.3.5. Kompilleerida lähtekood Maven-iga
+#### 4.3.5. Kompileerida lähtekood Maven-iga
 
 1) Käsurealt minna lähtekoodi kataloogi. Näiteks:
 ```cmd
@@ -452,8 +452,8 @@ dhx.server.delete-old-documents |  | delete-all | `delete-all` määrab et nii d
 dhx.server.delete-old-documents-freq | | */20 * * * * ? | Vanade dokumentide kustutamise taustatöö käivitamise periood. Kustutatakse ainult dokumendid, mis on vanemad kui alljärgnevate parameetritega määratud päevade arv (30 päeva). [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `*/20 * * * * ?` tähendab iga 20 sekundi järel.
 dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, õnnelikult vastu võetud ja edastatud dokument. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest.
 dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, probleemselt (veaga) edastatud dokument. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest. 
-dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti saatmisel staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
-dhx.server-include-xmlns-to-attachments| false | false | Määrab et SOAP vastuse manusete sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
+dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti saatmisel staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
+dhx.server-include-xmlns-to-attachments| false | false | Määrab et SOAP vastuse manuste sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
 documents.folder | | `C:\\dhx_docs\\` | Kataloog kuhu salvestatakse vastu võetud (edastamist ootavate) dokumentide Kapslid. Linux korral kasutada formaati `/kataloog`. Selle kataloogi failisüsteemis peab olema piisavalt vaba ruumi (10-50Gb). Dokumendid kustutatakse teatud perioodi (30 päeva) järel (parameetrid `dhx.server.received-document-lifetime` ja `dhx.server.failed-document-lifetime`)
 spring.jpa.hibernate.ddl-auto | | update| Määrab et esimesel serveri käivitamisel (kui andmebaasi ühenduse parameetrid on õigeks muudetud) luuakse andmebaasi tabelid automaatselt.
 
@@ -501,7 +501,7 @@ Märkus:
 DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 
 Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
-* Andmebaas, kuhe salvestatakse metaandmed
+* Andmebaas, kuhu salvestatakse metaandmed
 * Failisüsteemi kataloog, kus salvestatakse dokumendi (Kapsli) failid (parameeter `documents.folder`)
 
 Näiteks üks võimalik paigalduse variant oleks järgmine
@@ -515,7 +515,7 @@ Legend:
 * dhx-adapter-server (Node B) - klastri teine server, mis pakub SOAP teenuseid.
 * Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (Kapsli) failid. 
 * Database Server (shared database) - jagatud andmebaas, millesse ajutiselt salvestatakse edastatavate dokumentide metaandmed
-* Document management System (DHS) - Asutuse dokumendihaldusssüsteem (näiteks Delta, Amphora vms).
+* Document management System (DHS) - Asutuse dokumendihaldussüsteem (näiteks Delta, Amphora vms).
  
 Klastrisse paigaldamisel tuleb arvestada et: 
 * Jagatud failisüsteem määratakse parameetriga `documents.folder`.
