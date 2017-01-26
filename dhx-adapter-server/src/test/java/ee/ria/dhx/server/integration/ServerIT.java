@@ -306,7 +306,6 @@ public class ServerIT {
    * 
    * @throws DhxException thrown if error occurs
    */
-  @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void sendDocumentsNormal() throws DhxException {
     DecContainer cont = getContainer("30000001", "70000004");
@@ -455,7 +454,6 @@ public class ServerIT {
 
 
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void sendDocumentsNormalNoBase64() throws DhxException {
     DecContainer cont = getContainer("30000001", "70000004");
@@ -538,7 +536,6 @@ public class ServerIT {
    * 
    * @throws DhxException thrown if error occurs
    */
-  @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void sendDocumentsMultipleContainers() throws DhxException {
     DecContainer cont = getContainer("30000001", "70000004");
@@ -734,7 +731,6 @@ public class ServerIT {
    * 
    * @throws DhxException thrown if error occurs
    */
-  @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void sendDocumentsMultipleRecipients() throws DhxException {
     DecContainer cont =
@@ -1029,7 +1025,6 @@ public class ServerIT {
    * 
    * @throws DhxException thrown if error occurs
    */
-  @SuppressWarnings({"rawtypes", "unchecked"})
   @Test
   public void sendDocumentsFailed() throws DhxException {
     DecContainer cont = getContainer("30000001", "70000004", "raamatupidamine.30000001");
@@ -1284,7 +1279,6 @@ public class ServerIT {
     Iterable<Organisation> orgs = organisationRepository.findAll();
     Iterator<Organisation> iterator = orgs.iterator();
     Organisation org = iterator.next();
-    // TODO: immitate add and remove of the organisations/representees
     assertEquals("70006317", org.getRegistrationCode());
     assertEquals("DHX.dvk", org.getSubSystem());
 

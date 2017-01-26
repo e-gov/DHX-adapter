@@ -57,8 +57,8 @@ public class ServerEndpoint {
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
-   * @return - service response. contains information about document being received or not
-   * @throws DhxException - thrown if error occured while sending document
+   * @return - service response. contains ID of the saved document
+   * @throws DhxException - thrown if error occurred while sending document
    */
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "sendDocuments")
   @ResponsePayload
@@ -92,8 +92,8 @@ public class ServerEndpoint {
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
-   * @return - service response. contains information about document being received or not
-   * @throws DhxException - thrown if error occured while sending document
+   * @return - service response. contains documents to receive
+   * @throws DhxException - thrown if error occurred while receiving the documents
    */
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "receiveDocuments")
   @ResponsePayload
@@ -122,8 +122,8 @@ public class ServerEndpoint {
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
-   * @return - service response. contains information about document being received or not
-   * @throws DhxException - thrown if error occured while sending document
+   * @return - service response. contains confirmation of marking the documents as received
+   * @throws DhxException - thrown if error occurred while marking documents received
    */
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "markDocumentsReceived")
   @ResponsePayload
@@ -150,8 +150,8 @@ public class ServerEndpoint {
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
-   * @return - service response. contains information about document being received or not
-   * @throws DhxException - thrown if error occured while sending document
+   * @return - service response. contains statuses of the documents
+   * @throws DhxException - thrown if error occurred while getting send statuses
    */
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getSendStatus")
   @ResponsePayload
@@ -173,12 +173,12 @@ public class ServerEndpoint {
   }
 
   /**
-   * X-road SOAP service sendDocuments.
+   * X-road SOAP service getSendingOptions.
    * 
    * @param request - service request
    * @param messageContext - SOAP message context
-   * @return - service response. contains information about document being received or not
-   * @throws DhxException - thrown if error occured while sending document
+   * @return - service response. contains sending options(list of organisations)
+   * @throws DhxException - thrown if error occurred while getting sending options
    */
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getSendingOptions")
   @ResponsePayload
