@@ -250,7 +250,7 @@ public class DhxServerConfig {
    */
   public void setDocumentsFolder(String documentsFolder) {
     if(!documentsFolder.endsWith(FOLDER_SEPARATOR)) {
-      documentsFolder = FOLDER_SEPARATOR + FOLDER_SEPARATOR;
+      documentsFolder = documentsFolder + FOLDER_SEPARATOR;
     }
     this.documentsFolder = documentsFolder;
   }
