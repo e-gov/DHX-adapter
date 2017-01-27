@@ -26,8 +26,6 @@ import java.util.UUID;
 @Configuration
 @Slf4j
 public class DhxServerConfig {
-  
-  public static final String FOLDER_SEPARATOR = "/";
 
   @Value("${documents.folder}")
   String documentsFolder;
@@ -249,8 +247,10 @@ public class DhxServerConfig {
    * @param documentsFolder the documentsFolder to set
    */
   public void setDocumentsFolder(String documentsFolder) {
-    if(!documentsFolder.endsWith(FOLDER_SEPARATOR)) {
-      documentsFolder = documentsFolder + FOLDER_SEPARATOR;
+    final String folderSeparator = "/";
+    final String folderSeparatorWin = "\\";
+    if(!documentsFolder.endsWith(folderSeparator) && !documentsFolder.endsWith(folderSeparatorWin)) {
+      documentsFolder = documentsFolder + folderSeparator;
     }
     this.documentsFolder = documentsFolder;
   }
