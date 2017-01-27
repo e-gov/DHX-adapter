@@ -450,9 +450,9 @@ dhx.server.send-to-dhx | | */20 * * * * ? | Mitme sekundi järel käivitub Sisem
 dhx.server.special-orgnisations |  | adit,kovtp,rt,eelnoud | DVK alamsüsteemide erandid, millele korral võib DVK teenusest kasutada ainult nime (ei ole vaja organistatsiooni koodi)
 dhx.server.delete-old-documents |  | delete-all | `delete-all` määrab et nii dokumendi metaandmed kui ka sisu (fail) kustutatakse perioodilise puhastus protsessi poolt. `delete-content` määrab et ainult fail kustutatakse (baasi jäävad metaandmete kirjed alles). Muu väärtus jätab kõik alles.
 dhx.server.delete-old-documents-freq | | */20 * * * * ? | Vanade dokumentide kustutamise taustatöö käivitamise periood. Kustutatakse ainult dokumendid, mis on vanemad kui alljärgnevate parameetritega määratud päevade arv (30 päeva). [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `*/20 * * * * ?` tähendab iga 20 sekundi järel.
-dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, õnnelikult vastu võetud ja edastatud dokument. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest.
-dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse andmebaasi alles, probleemselt (veaga) edastatud dokument. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest. 
-dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti saatmisel staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
+dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse õnnelikult vastu võetud ja edastatud dokument andmebaasi alles. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest.
+dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse probleemselt (veaga) edastatud dokument andmebaasi alles. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest. 
+dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti "saatmisel" staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
 dhx.server-include-xmlns-to-attachments| false | false | Määrab et SOAP vastuse manuste sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
 documents.folder | | `C:\\dhx_docs\\` | Kataloog kuhu salvestatakse vastu võetud (edastamist ootavate) dokumentide Kapslid. Linux korral kasutada formaati `/kataloog`. Selle kataloogi failisüsteemis peab olema piisavalt vaba ruumi (10-50Gb). Dokumendid kustutatakse teatud perioodi (30 päeva) järel (parameetrid `dhx.server.received-document-lifetime` ja `dhx.server.failed-document-lifetime`)
 spring.jpa.hibernate.ddl-auto | | update| Määrab et esimesel serveri käivitamisel (kui andmebaasi ühenduse parameetrid on õigeks muudetud) luuakse andmebaasi tabelid automaatselt.
@@ -466,7 +466,7 @@ spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx_adapter| Postgres
 spring.datasource.username | | dhxuser | Postgres andmebaasi kasutajanimi
 spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
 spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab et kasutame Postgres JDBC draiverit
-spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| Määrab et kasutame Posgres 9.4, 9.5 või 9.6 versiooni.
+spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| Kasutada väärtust "PostgreSQL94Dialect" nii PosgreSQL 9.4 kui ka 9.5 ja  9.6 versioonide korral (väärtusi `PostgreSQL95Dialect` ja `PostgreSQL96Dialect` ei eksisteeri). 
 
 Oracle 11G kasutamise korral tuleb muuta järgmiste parameetrite väärtused.
 
@@ -545,7 +545,7 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 * DHX adapterserveri ja andmebaasi vaheline ühendus
 * DHX adapterserveri ja X-tee turvaserveri vaheline ühendus
 
-1) Avada SoapUI ja lisada uus projekt, sisestades WSDL aadressiks `http://localhost:8080/dhx-adapter-server/wsServer/dhl.wsdl` (muuta vajadusel host ja port).
+1) Avada SoapUI ja lisada uus projekt, sisestades WSDL aadressiks `http://localhost:8080/dhx-adapter-server/wsServer/dhlv1.wsdl` (muuta vajadusel host ja port).
 
 2) Genereeritud projekti all avada `dhlSoapBinding`->`getSendingOptions`->`Request 1`.
 
@@ -561,10 +561,10 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
       <xro:service>
          <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
          <iden:memberClass>GOV</iden:memberClass>
-         <iden:memberCode>40000001</iden:memberCode>
-         <iden:subsystemCode>DHX</iden:subsystemCode>
+         <iden:memberCode>70006317</iden:memberCode>
+         <iden:subsystemCode>dhl</iden:subsystemCode>
          <iden:serviceCode>getSendingOptions</iden:serviceCode>
-         <iden:serviceVersion>v2</iden:serviceVersion>
+         <iden:serviceVersion>v1</iden:serviceVersion>
       </xro:service>
       <xro:client>
          <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
@@ -583,10 +583,4 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 
 5) Käivitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
 
-Märkus:
-> Vastuseks saadud manus on gzip pakitud ja seejärel BASE64 kodeeritud.
-> 
-> Selle võib Linux/unix alla lahti kodeerida salvestades manuse faili "result.txt" ja käivitades seejärel:
-> ``` 
->  cat result.txt | base64 -d | gunzip
-> ```
+Vaata täpsemalt DHX adpaterserveri kasutusjuhendist [WSDL asukohad](adapter-server-kasutusjuhend.md#2-wsdl-asukohad) ja [SoapUI testimine](adapter-server-kasutusjuhend.md#3-soapui-testimine). 
