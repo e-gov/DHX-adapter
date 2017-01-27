@@ -60,11 +60,11 @@ Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 * Operatsioonisüsteem - Java poolt [toetatud süsteem](https://www.java.com/en/download/help/sysreq.xml).
 
 Märkus (muud andmebaasid):
-> Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [serveritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/).
+> Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [serveritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/). Samuti PostgreSQL ja Oracle vanemate ja uuemate versioonidega.
 >
 > **NB!** DHX adapterserveri töötamine on testitud ainult [PostgreSQL 9.6](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.
 >
-> Seega muude andmebaasi serverite kasutamine toimub omal riisikol ja ei pruugi töötada.
+> Seega muude andmebaasi serverite ja versioonide kasutamine toimub omal riisikol ja ei pruugi töötada.
 >
 > Paigalduspaketina alla laetav WAR fail sisaldab ainult PostgreSQL ja Oracle andmebaasiga suhtlemise [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity) draivereid. Kui soovitakse kasutatakse muud andmebaasi, siis tuleb dhx-adapter-serveri WAR fail [ise uuesti ehitada](#43-paigalduspaketi-ise-ehitamine), muutes [pom.xml](../dhx-adapter-server/pom.xml) failis sõltuvusi. 
 
