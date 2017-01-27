@@ -373,8 +373,16 @@ cd C:\Users\kasutaja\git\DHX-adapter
 2) Käivitada Maven ehitamine
 
 ```cmd
-mvn clean install
+mvn clean install -Denv=production
 ```
+
+Märkus:
+> Võtmega `-Denv=production` määratakse ära millisest kataloogist võetakse WAR sisse lisatavad häälestus failid (`dhx-application.properties` ja `log4j2.xml`).
+>
+> Väärtus `-Denv=production` määrab et kataloogi `DHX-adapter/src/main/resources/conf/production` alamkataloogidest.
+>
+> Väärtus `-Denv=development` määrab et kataloogi `DHX-adapter/src/main/resources/conf/development` alamkataloogidest.
+
 
 Selle väljundiks peaks olema SUCCESS:
 ```
