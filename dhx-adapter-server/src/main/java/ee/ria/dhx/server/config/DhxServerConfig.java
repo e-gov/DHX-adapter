@@ -26,9 +26,10 @@ import java.util.UUID;
 @Configuration
 @Slf4j
 public class DhxServerConfig {
+  
+  public static final String FOLDER_SEPARATOR = "/";
 
   @Value("${documents.folder}")
-  @Setter
   String documentsFolder;
 
   @Value("${dhx.server-wsdl-file-v1:dhl_new.wsdl}")
@@ -240,6 +241,18 @@ public class DhxServerConfig {
    */
   public void setAttachmentContentTransferEncoding(String attachmentContentTransferEncoding) {
     this.attachmentContentTransferEncoding = attachmentContentTransferEncoding;
+  }
+
+  /**
+   * Sets the documentsFolder.
+   *
+   * @param documentsFolder the documentsFolder to set
+   */
+  public void setDocumentsFolder(String documentsFolder) {
+    if(!documentsFolder.endsWith(FOLDER_SEPARATOR)) {
+      documentsFolder = FOLDER_SEPARATOR + FOLDER_SEPARATOR;
+    }
+    this.documentsFolder = documentsFolder;
   }
 
 
