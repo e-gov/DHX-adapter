@@ -148,7 +148,7 @@ Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<mem
       </xro:client>
 ```
 
-Järgnevalt kirjeldatakse kuidas toimub dhx-adpater-serveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
+Järgnevalt kirjeldatakse kuidas toimub DHX adapterserveri sisemise liidese kasutamine dokumentide saatmiseks ja vastuvõtmiseks. 
 
 ### 4.1. getSendingOptions (sisemine liides)
 
@@ -255,7 +255,7 @@ See sisaldab asutuse kohta kolme välja:
 Märkus:
 > Asutusel kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`.
 > 
-> DHS kasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adpaterserveri andmebaasis (vaata [andmebaasi mudelit](adapter-server-haldusjuhend.md#41-andmebaasi-mudel)) välja `ASUTUS.reaalne_nimi` väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`.
+> DHS kasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adapterserveri andmebaasis (vaata [andmebaasi mudelit](adapter-server-haldusjuhend.md#41-andmebaasi-mudel)) välja `ASUTUS.reaalne_nimi` väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`.
 
 Ülejäänud DVK poolt tagastatavaid välju (`<ks_asutuse_regnr/>`, `<allyksused>`, `<ametikohad>`) DHX adapterserver kunagi ei tagasta.
 Kui asutuse DHS süsteem neid vana DVK korral kasutas, siis DHX protokollile üle kolimisel peaks ta need kusagilt mujalt küsima.
@@ -484,9 +484,9 @@ Märkused vastuse sisu kohta:
 * `<dhl_id>` väärtust tuleb hiljem kasutada `getSendStatus` päringu sisendis, saatmise staatuse küsimiseks.
  
 Märkused vana DVK X-tee liidese kasutajale:
-> Võrreldes DVK sendDocuments liidestega on dhx-adpater-serveris realiseeritud on ainult sendDocuments operatsioonide [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4) versioon, mis eeldab et dokumendi Kapsel on 2.1 formaadis.
+> Võrreldes DVK sendDocuments liidestega on DHX adapterserveris realiseeritud on ainult sendDocuments operatsioonide [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4) versioon, mis eeldab et dokumendi Kapsel on 2.1 formaadis.
 >
-> Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) dhx-adpater-server ei paku.
+> Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) DHX adapterserver ei paku.
 
 Vaata ka `sendDocuments.v4` saatmise näidet dokumendist Testilood - [2.1. Õige kapsli saatmine](adapter-server-testilood.md#2.1).
 
