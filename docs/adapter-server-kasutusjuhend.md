@@ -1124,7 +1124,7 @@ Mõned asjad mis DHX adapterserveris realiseeritud samamoodi nagu oli DVK keskse
 Järgneval diagrammil on toodud DHX adapterserveri sisemine detailne arhitektuur. 
 
  
-![](dhx-adapter-server-detailed.png)  ![](dhx-adapter-server-detailed.png)
+![](dhx-adapter-server-detailed.png)
 
 Legend:
 * Implementor organization - DHX rakendaja ehk DHX adapterserveri kasutaja enda asutus
