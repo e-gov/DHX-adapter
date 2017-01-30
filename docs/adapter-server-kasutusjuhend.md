@@ -24,7 +24,7 @@ Sisukord
       * [5\.3\. Vahendatava poolt dokumendi välja saatmine (sisemine liides)](#53-vahendatava-poolt-dokumendi-v%C3%A4lja-saatmine-sisemine-liides)
       * [5\.3\. Vahendatava poolt dokumendi vastuvõtmine (sisemine liides)](#53-vahendatava-poolt-dokumendi-vastuv%C3%B5tmine-sisemine-liides)
     * [6\. Kokkuvõtte erinevustest (DVK liidesega võrreldes)](#6-kokkuv%C3%B5tte-erinevustest-dvk-liidesega-v%C3%B5rreldes)
-    * [7\.DHX adapterserveri detailne sisemine arhitektuur](#7-dhx-adapterserveri-detailne-sisemine-arhitektuur)
+    * [7\. DHX adapterserveri detailne sisemine arhitektuur](#7-dhx-adapterserveri-detailne-sisemine-arhitektuur)
 
 
 ## 1. Sissejuhatus
