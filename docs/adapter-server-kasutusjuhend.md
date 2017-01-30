@@ -1118,5 +1118,25 @@ Mõned asjad mis DHX adapterserveris realiseeritud samamoodi nagu oli DVK keskse
 * DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manuse `cid` väärtus ei pea olema URL kodeeritud (nagu [rfc2392](https://www.ietf.org/rfc/rfc2392.txt) standard seda nõuab). See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is võib selle esitada ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See toimis samamoodi vanas DVK keskserveris.  
 
  
+## 7. DHX adapterserveri detailne sisemine arhitektuur
+
+Järgneval diagrammil on toodud DHX adapterserveri sisemine detailne arhitektuur. 
 
  
+![](dhx-adapter-server-detailed.png)  ![](dhx-adapter-server-detailed.png)
+
+Legend:
+* Implementor organization - DHX rakendaja ehk DHX adapterserveri kasutaja enda asutus
+* External organization - väline asutus, kellele/kellelt soovitakse üle DHX protokolli dokumente saata või vastu võtta
+* X-road infrastructure - X-tee infrastruktuur, üle mille toimub turvaline andmevahetus 
+* Document Management System - Asutuse enda dokumendihaldussüsteem (Delta, Amphora, vms)
+* Tomcat Web server - Tomcat veebiserver, mis töötab Java (JRE) keskkonnas
+* X-road security server - Kasutaja asutuse enda X-tee turvaserver. Turvaserverist laetakse alla X-tee globaalne konfiguratsion, selleks et leida DHX vahendajate grupi liikmed.
+* DHX services (SOAP) - DHX adapterserveri poolt pakutavad välised DHX veebiteenused. Dokumentide vastuvõtmine toimub läbi `sendDocument` DHX teenuse. Teenus `representationList` ei ole kohustuslik (seda peavad pakkuma ainult DHX vahendajad).
+* Internal Services (SOAP) - DHX adapterserveri sisemised teenused (DVK protokolli teenused). 
+* DHX Sender - perioodiline taustaprotsess, mis teostab sisemise liidese kaudu DHX adapterserverile saadetud dokumentide edastamist välisele asutusele (üle DHX protokolli).
+* DHX address book renewal - perioodiline taustaprotsess, mis uuendab lokaalset aadressiraamatut. Aadressiraamat sisaldab kõiki asutusi ja alamsüsteeme, kellel võib üle DHX protokolli dokumente saata. Asutus võib olla otse DHX võimekusega või läbi vahendaja DHX võimekusega. 
+* Document cleaner (deleter) - perioodiline taustaprotsess, mis kustutab lokaalsest andmebaasist ja failisüsteemist vanu dokumente. Vaikimisi on määratud, et kustutatakse üle 30 päeva vanad dokumendid.
+* Filesystem folder dhx_docs - Lokaalse failisüsteemi kataloog, kuhu salvestatakse maha puhverdatavad dokumendi Kapsli failid.
+* PostgreSQL database server - lokaalne andmebaasi server, kuhu salvestatakse (puhverdatakse) saabunud ja välja saadetavad dokumentide metaandmed.
+* dhx adapter database - DHX adapterserveri andmebaasi skeem
