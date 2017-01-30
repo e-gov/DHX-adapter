@@ -417,7 +417,7 @@ Selle kohta vaata täpsemalt [X-tee rakendusjuhendist](https://moodle.ria.ee/mod
 
 Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punkt "4.2. ADDING A SECURITY SERVER CLIENT".
 
-**2)** Lisada DHX adapaterserveri välise DHX liidese WSDL ja teenuse URL uue turvaserveri kliendi juurde.
+**2)** Lisada DHX adapterserveri välise DHX liidese WSDL ja teenuse URL uue turvaserveri kliendi juurde.
 
 Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punktid "6.1. ADDING A WSDL" ja "6.6. CHANGING THE PARAMETERS OF A SERVICE".
 
@@ -427,9 +427,9 @@ Välise DHX liidese teenuse URL (Service URL) asub DHX adapterserveris üldjuhul
 
 **2.1)** Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures klikata "Services". 
 
-**2.2)** Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega).
+**2.2)** Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades `<HOST>` ja `<PORT>` enda DHX adapterserveri väärtustega).
 
-**2.3)** Seejärel valida tekkinud teenuse "sendDocument" peal "Edit" ja sisestada "Service URL" väärtuseks välise DHX liidese teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapaterserveri väärtustega)
+**2.3)** Seejärel valida tekkinud teenuse "sendDocument" peal "Edit" ja sisestada "Service URL" väärtuseks välise DHX liidese teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapterserveri väärtustega)
  
 **3)** Määrata juurdepääsuõiguseid uuele teenusele.
 
@@ -541,7 +541,7 @@ Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb
 
 ## 8. Teadaolevad probleemid (sõltuvuste konfliktid)
 
-Kui dhx-adpater-server soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
+Kui DHX adapterserver soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
 
 Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
@@ -591,4 +591,4 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 
 5) Käivitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
 
-Vaata täpsemalt DHX adpaterserveri kasutusjuhendist [WSDL asukohad](adapter-server-kasutusjuhend.md#2-wsdl-asukohad) ja [SoapUI testimine](adapter-server-kasutusjuhend.md#3-soapui-testimine). 
+Vaata täpsemalt DHX adapterserveri kasutusjuhendist [WSDL asukohad](adapter-server-kasutusjuhend.md#2-wsdl-asukohad) ja [SoapUI testimine](adapter-server-kasutusjuhend.md#3-soapui-testimine). 

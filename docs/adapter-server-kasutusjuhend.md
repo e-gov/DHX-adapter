@@ -55,13 +55,13 @@ Välise DHX liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<POR
 
 Sisemisel liidese WSDL failid on esitatud versioonide kaupa.
  
-[v1](../dhx-adapter-server/src/main/resources/dhl_new.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv1.wsdl`.
+[v1](../dhx-adapter-server/src/main/resources/dhl_new.wsdl) asub DHX adapterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv1.wsdl`.
 
-[v2](../dhx-adapter-server/src/main/resources/dhl_new_v2.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv2.wsdl`.
+[v2](../dhx-adapter-server/src/main/resources/dhl_new_v2.wsdl) asub DHX adapterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv2.wsdl`.
 
-[v3](../dhx-adapter-server/src/main/resources/dhl_new_v3.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv3.wsdl`.
+[v3](../dhx-adapter-server/src/main/resources/dhl_new_v3.wsdl) asub DHX adapterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv3.wsdl`.
 
-[v4](../dhx-adapter-server/src/main/resources/dhl_new_v4.wsdl) asub DHX adapaterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv4.wsdl`. 
+[v4](../dhx-adapter-server/src/main/resources/dhl_new_v4.wsdl) asub DHX adapterserveris aadressil `http://<HOST>:<PORT>/dhx-adapter-server/wsServer/dhlv4.wsdl`. 
 
 Sisemise liidese SOAP päringud tuleb teha vastu aadressi `http://<HOST>:<PORT>/dhx-adapter-server/wsServer`.
   
