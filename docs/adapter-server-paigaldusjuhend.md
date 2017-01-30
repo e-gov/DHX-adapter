@@ -190,7 +190,7 @@ Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale k
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.   
 
-3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c//logs/dhx-adapter-server.log):
+3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c://logs/dhx-adapter-server.log):
 ```
     <RollingFile name="RollingFile" fileName="c://logs/dhx-adapter-server.log"
                  filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
@@ -275,7 +275,7 @@ Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale k
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.
 
-3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c//logs/dhx-adapter-server.log):
+3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c://logs/dhx-adapter-server.log):
 ```
     <RollingFile name="RollingFile" fileName="c://logs/dhx-adapter-server.log"
                  filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
