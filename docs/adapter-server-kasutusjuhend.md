@@ -1132,7 +1132,7 @@ Legend:
 * X-road infrastructure - X-tee infrastruktuur, üle mille toimub turvaline andmevahetus 
 * Document Management System - Asutuse enda dokumendihaldussüsteem (Delta, Amphora, vms)
 * Tomcat Web server - Tomcat veebiserver, mis töötab Java (JRE) keskkonnas
-* X-road security server - Kasutaja asutuse enda X-tee turvaserver. Turvaserverist laetakse alla X-tee globaalne konfiguratsion, selleks et leida DHX vahendajate grupi liikmed.
+* X-road security server - Kasutaja asutuse enda X-tee turvaserver. Turvaserverist laetakse alla X-tee globaalne konfiguratsion, selleks et leida asutused kellel on `DHX` prefiksiga alamsüsteem (otsevõimekusega) ning DHX vahendajate grupi liikmed (et teha kindlaks vahendatavad aasutused, kelle pole DHX otsevõimekust).
 * DHX services (SOAP) - DHX adapterserveri poolt pakutavad välised DHX veebiteenused. Dokumentide vastuvõtmine toimub läbi `sendDocument` DHX teenuse. Teenus `representationList` ei ole kohustuslik (seda peavad pakkuma ainult DHX vahendajad).
 * Internal Services (SOAP) - DHX adapterserveri sisemised teenused (DVK protokolli teenused). 
 * DHX Sender - perioodiline taustaprotsess, mis teostab sisemise liidese kaudu DHX adapterserverile saadetud dokumentide edastamist välisele asutusele (üle DHX protokolli).
