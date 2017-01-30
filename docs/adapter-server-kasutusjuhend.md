@@ -623,7 +623,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ### 4.4. receiveDocuments (sisemine liides)
 
-Teenusega `receiveDocuments` loetakse DHX adapterserist asutusele (üle DHX protokolli) saabunud dokumendid (sissetulnud dokumendid).
+Teenusega `receiveDocuments` loetakse DHX adapterserverist asutusele (üle DHX protokolli) saabunud dokumendid (sissetulnud dokumendid).
 Pärast dokumendi lugemist tuleks välja kutsuda `markDocumentsReceived` teenus.
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [receiveDocuments](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocuments).
@@ -818,7 +818,7 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ### 4.5. markDocumentsReceived (sisemine liides)
 
-Teenusega `markDocumentsReceived` märgitakse DHX adapterseris dokument loetuks ehk vastu võetuks. 
+Teenusega `markDocumentsReceived` märgitakse DHX adapterserveis dokument loetuks ehk vastu võetuks. 
 Senikaua kuni saabunud dokument on loetuks märkimata, tagastab `receiveDocuments` väljakutse seda alati uuesti. 
 Teenuse sisendis tuleb `<dhl_id>` välja väärtuseks ette anda `receiveDocuments` väljundi manuses olevast Kapslist võetud `<DecId>65</DecId>` väärtus.
 
