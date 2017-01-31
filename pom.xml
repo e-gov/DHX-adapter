@@ -138,9 +138,18 @@
 	</build>
 	<profiles>
 		<profile>
-			<id>development</id>
+			<id>production</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<conf>production</conf>
+			</properties>
+		</profile>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
 				<conf>development</conf>
@@ -157,36 +166,6 @@
 			<properties>
 				<conf>arendus-tomcat</conf>
 				<tomcat.manager>http://localhost:8084/manager/text</tomcat.manager>
-				<tomcat.manager.username>admin</tomcat.manager.username>
-				<tomcat.manager.password>admin</tomcat.manager.password>
-			</properties>
-		</profile>
-		<profile>
-			<id>etalon1</id>
-			<activation>
-				<property>
-					<name>env</name>
-					<value>etalon1</value>
-				</property>
-			</activation>
-			<properties>
-				<conf>etalon1</conf>
-				<tomcat.manager>http://10.0.13.51:8080/manager/text</tomcat.manager>
-				<tomcat.manager.username>admin</tomcat.manager.username>
-				<tomcat.manager.password>admin</tomcat.manager.password>
-			</properties>
-		</profile>
-		<profile>
-			<id>etalon2</id>
-			<activation>
-				<property>
-					<name>env</name>
-					<value>etalon2</value>
-				</property>
-			</activation>
-			<properties>
-				<conf>etalon2</conf>
-				<tomcat.manager>http://10.0.13.52:8080/manager/text</tomcat.manager>
 				<tomcat.manager.username>admin</tomcat.manager.username>
 				<tomcat.manager.password>admin</tomcat.manager.password>
 			</properties>
