@@ -17,11 +17,11 @@ DHX Java teekide lähtekood asub aadressil https://github.com/e-gov/DHX-adapter
 Selles asuvad kolm alamteeki
 - [dhx-adapter-core](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/) – selles asuvad klassid XML (Kapsli) ja SOAP objektide koostamiseks ja töötlemiseks,  vigade klassid ning mõned üldkasutatavad utiliit klassid
 - [dhx-adapter-ws](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/) – selles asuvad klassid dokumendi saatmiseks (SOAP client), aadressiraamatu koostamiseks (SOAP client) ja dokumendi vastuvõtmiseks (SOAP Service Endpoint)
-- [dhx-adapter-server](https://e-gov.github.io/DHX-adapter/dhx-adapter-server/doc/) – eraldiseisev DHX adapterserver (Variant C), mis puhverdab saabunud dokumendid vahe andmebaasis ja pakub vana [DVK liidese](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md) sarnaseid SOAP teenuseid
+- [dhx-adapter-server](https://e-gov.github.io/DHX-adapter/dhx-adapter-server/doc/) – eraldiseisev DHX adapterserver, mis puhverdab saabunud dokumendid vahe andmebaasis ja pakub vana [DVK liidese](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md) sarnaseid SOAP teenuseid
 
 DHS-iga otse liidestamiseks tuleb kasutada 2 esimest teeki **dhx-adapter-core** ja **dhx-adapter-ws**.
 
-**dhx-adapter-server** on vajalik ainult neile, kes ei soovi kasutada otse liidestust, vaid plaanivad paigaldada vahepealse puhverserveri, selleks et kasutada edasi vana DVK SOAP liidesele sarnast liidest.
+**dhx-adapter-server** on vajalik ainult neile, kes ei soovi kasutada otse liidestust, vaid plaanivad paigaldada vahepealse puhverserveri, selleks et kasutada edasi vana DVK SOAP liidesele sarnast liidest. Selle kohta vaata täpsemalt [DHX adapterserveri kasutusjuhend](adapter-server-kasutusjuhend.md).
 
 ##Välised sõltuvused ja baasplatvorm
 
@@ -56,7 +56,6 @@ org.springframework.boot | spring-boot-starter-log4j2 | 1.3.5.RELEASE | Spring B
 commons-logging | commons-logging | 1.1.3, 1.2 | Apache commons login pakett logimiseks
 commons-codec | commons-codec | 1.9 | Apache Commons Codec
 aopalliance | aopalliance | 1.0 | AOP alliance
-org.hamcrest | hamcrest-core | 1.3 | Hamcrest Core
 org.apache.httpcomponents | httpclient | 4.5.2 | Apache HttpClient
 org.apache.httpcomponents | httpcore | 4.4.4 | Apache HttpCore
 org.slf4j | jcl-over-slf4j | 1.7.21 | JCL 1.1.1 implemented over SLF4J
@@ -68,18 +67,17 @@ org.projectlombok | lombok | 1.16.6 | Project Lombok
 org.slf4j | slf4j-api | 1.7.12 | SLF4J API Module
 wsdl4j | wsdl4j | 1.6.3 | WSDL4J
 javax.activation | activation | 1.1 | JavaBeans Activation Framework (JAF)
-javax.mail | mail | 1.4 | JavaMail API
 javax.servlet | javax.servlet-api | 3.0.1 | Java Servlet API
 javax.validation | validation-api | 1.1.0.Final | Bean Validation API
 org.aspectj | aspectjrt | 1.8.2 | AspectJ runtime
-com.jcabi | jcabi-aspects | 0.19 | jcabi-aspects
+com.jcabi | jcabi-aspects | 0.22.5 | jcabi-aspects
+xerces | xercesImpl | 2.8.1 | xerces XML api
 com.jcabi | jcabi-log | 0.15 | jcabi-log
-org.mockito | mockito-all | 1.10.19 | Mockito
 junit | junit | 4.12 | JUnit
 
 ##Ehitamine
 
-Alljärgnevalt on toodud näide, kuidas kaasata DHX JAvateegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
+Alljärgnevalt on toodud näide, kuidas kaasata DHX Java teegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
 
 Ülaltoodud välised sõltuvused laetakse Maveni kasutamise korral automaatselt alla.
 
@@ -123,9 +121,62 @@ Maven-ga, juhul kui mingi muu kasutatav teek (näiteks axis2-codegen) sõltub ne
 	</dependency>
 ```
 
-##Teegi laadimise häälestamine (web.xml ja applicationContext.xml)
+##Teegi laadimise häälestamine uuematel serveritel (annotatsioonid)
 
-Kõige lihtsam on DHX Java teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees, kasutades laadimiseks SpringFramework klasse [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) ja [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
+Kõige lihtsam on DHX Java teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees.
+
+Uuemates serverites, mis toetavad Java Servlet 3.0 või uuemat spetsifikatsiooni saab Spring Framework häälestuse määrata anontatsiooniga järgmiselt.
+
+```java
+import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
+
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
+import org.springframework.ws.transport.http.MessageDispatcherServlet;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.soap.SOAPMessage;
+
+@Configuration
+public class MyServerWebServiceConfig {
+
+  @Bean(name = "dhxServlet")
+  public ServletRegistrationBean dhxMessageDispatcherServlet(
+      ApplicationContext applicationContext) {
+    MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+    AnnotationConfigWebApplicationContext applicationAnnotationContext = new AnnotationConfigWebApplicationContext();
+    applicationAnnotationContext.setParent(applicationContext);
+    applicationAnnotationContext.register(DhxEndpointConfig.class);
+    servlet.setApplicationContext(applicationAnnotationContext);
+    servlet.setTransformWsdlLocations(true);
+    servlet.setMessageFactoryBeanName("messageFactory");
+    ServletRegistrationBean servletBean = new ServletRegistrationBean(servlet, "/" + "ws" + "/*");
+    servletBean.setName("myServlet");
+    return servletBean;
+  }
+
+  @Bean(name = "messageFactory")
+  public SaajSoapMessageFactory messageFactory() {
+    SaajSoapMessageFactory smf = new SaajSoapMessageFactory();
+    Map<String, String> props = new HashMap<String, String>();
+    props.put(SOAPMessage.WRITE_XML_DECLARATION, Boolean.toString(true));
+    smf.setMessageProperties(props);
+    return smf;
+  }
+}
+```
+
+Vaata täpsemalt [SpringFramework ServletRegistrationBean](http://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/web/servlet/ServletRegistrationBean.html) ja [javax.servlet.ServletContext](https://docs.oracle.com/javaee/7/api/javax/servlet/ServletContext.html?is-external=true).
+
+ 
+
+##Teegi laadimise häälestamine vanamatel serveritel (web.xml ja applicationContext.xml)
+
+Vanemate serverite versioonide sees tuleb laadimiseks kasutada SpringFramework klasse [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) ja [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
 Selleks tuleb [web.xml](https://cloud.google.com/appengine/docs/java/config/webxml) häälestusfaili lisada sektsioonid:
 ```xml
