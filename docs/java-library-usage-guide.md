@@ -551,7 +551,7 @@ If sender wants to send the same document capsule to multiple recipients, then h
 
 ## 12. Document receiving interface
 
-By using the `web.xml` described above the web service endpoint is registered and created automatically (in web servlet container).  
+By using the `DhxServerWebServiceConfig` or the `web.xml` described above, the web service endpoint is registered and created automatically (in web servlet container).  
 It's URL is `http://<hostname>:<port>/ws/dhx.wsdl`
 
 Services provided on that URL should be registered in X-road security server. 
