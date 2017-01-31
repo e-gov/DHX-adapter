@@ -22,7 +22,7 @@ Sisukord
 
 ## 1. Sissejuhatus
 
-DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
+DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutuselevõtmist.
 
 DHX adapterserveri toimimise loogika on kirjeldatud [DHX adapterserveri kasutusjuhendis](adapter-server-kasutusjuhend.md).
 
@@ -30,11 +30,11 @@ DHX adapterserveri paigaldamine on kirjeldatud [DHX adapterserveri paigaldusjuhe
 
 DHX adapterserver on iseseisvalt toimiv komponent, mis üldjuhul ei vaja pidevat jälgmist. 
 
-DHX adapterserver võtab dokumendi edastamiseks vastu, salvestades selle metaandmed andmebaasi ja binaarfaile sisaldava Kapsli XML-i lokaalsesse failisüsteemi.
+DHX adapterserver võtab dokumendi edastamiseks vastu, salvestades selle metaandmed andmebaasi ja binaarfaile sisaldava kapsli XML-i lokaalsesse failisüsteemi.
 Pärast seda kui dokument on DHX kaudu edastatud või sisemise liidese kaudu alla laetud, võib selle DHX adapterserveri andmebaasist ja failisüsteemist kustutada. 
 Kustutamist teostab perioodiline taustatöö.   
 
-Halduse tegevused võib jaotada kaheks:
+Haldustegevused võib jaotada kaheks:
 * Serveri ressursside (mälu ja kettamaht) kasutuse jälgimine. 
 * Dokumentide edastamise vigade põhjuste analüüsimine.    
 
@@ -67,7 +67,7 @@ Vaata [Springframework juhendist](http://docs.spring.io/spring-boot/docs/current
 
 ### 2.2. DHX adapterserveri mõõdikud (Metrics)
 
-Pisut parem ülevaate serveri tööst annab mõõdikute päring, mis tagastab kumulatiivsed serveri kasutuse näitajad (pärast viimast restarti).  
+Pisut parema ülevaate serveri tööst annab mõõdikute päring, mis tagastab kumulatiivsed serveri kasutuse näitajad (pärast viimast restarti).  
 
 http://localhost:8080/dhx-adapter-server/metrics
 
@@ -136,7 +136,7 @@ Lisaks on DHX adapterserveri häälestusfailis `apache-tomcat-7.x.x/webapps/dhx-
     <RollingFile name="RollingFile" fileName="c://logs/dhx-adapter-server.log"
 ```
 
-Seal võib ka muuta log taseme väiksemaks (`info` või `error`). Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
+Seal võib ka muuta logimise taseme väiksemaks (`info` või `error`). Vaata [Log4j juhend](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)
 ```
 <Logger name="ee.ria" level="debug" additivity="false">
 ```
@@ -145,10 +145,10 @@ Seal võib ka muuta log taseme väiksemaks (`info` või `error`). Vaata [Log4j j
 
 Kui dokumendi edastamisel või vastuvõtmisel esines viga, siis selle kohta kirjutatakse logi (`log4j2.xml` sees määratud) faili `c:/logs/dhx-adapter-server.log`. 
 
-Kui dokumendi võeti edastamiseks vastu (SOAP Päring ja Kapsel olid korrektsed), siis salvestatakse metaandmed andmebaasi ja Kapsli XML failisüsteemi.
+Kui dokument võeti edastamiseks vastu (SOAP päring ja kapsel olid korrektsed), siis salvestatakse metaandmed andmebaasi ja kapsel XML failisüsteemi.
 
 Teatud juhtudel võivad dokumendid jääda edastamata, näiteks kui korduvedastuste maksimum on ületatud vms.
-Selliste dokumentide mitte edastamise vea põhjuseid saab uurida logifailist ja andmebaasist.  
+Selliste dokumentide mitteedastamise vea põhjuseid saab uurida logifailist ja andmebaasist.  
 
 ### 4.1. Andmebaasi mudel
 
@@ -159,7 +159,7 @@ Kõige lihtsam on alustada uurimist andmebaasist. Andmebaasi mudel on järgmine:
 Tabelite kirjeldused:
 * ASUTUS - Kõikide DHX-iga liitunud adressaatide ehk asutuste andmed. See tabel täidetakse automaatselt [DHX lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamise algoritmiga.
 * DOKUMENT - sisaldab dokumendi andmeid. Väljal SISU salvestatakse faili nimi (`c:\dhs_docs\` kataloogis).
-* TRANSPORT - tabelis salvestatakse dokumendi transportimise info (kasutatakse saatja ja vastuvõtja(te)ga seostamiseks). Siin on peamine väli STAATUS_ID, mille võimalikud väärtused on: 101 (saatmisel), 102 (saadetud),  103 (katkestatud ehk ebaõnnestunud). Kui dokumendil oli mitu adressaati siis TRANSPORT.STAATUS_ID sisaldab ühist staatust.
+* TRANSPORT - tabelis salvestatakse dokumendi transportimise info (kasutatakse saatja ja vastuvõtja(te)ga seostamiseks). Siin on peamine väli STAATUS_ID, mille võimalikud väärtused on: 101 (saatmisel), 102 (saadetud),  103 (katkestatud ehk ebaõnnestunud). Kui dokumendil oli mitu adressaati, siis TRANSPORT.STAATUS_ID sisaldab ühist staatust.
 * SAATJA - dokumendi saatja andmed. Saatjaid on dokumendil üks.
 * VASTUVOTJA - dokumendi adressaatide ehk vastuvõtja(te) andmed. Adressaate võib dokumendil olla mitu. Siin STAATUS_ID sisaldab ühele konkreetsele adressaadile saatmise (viimase saatmisürituse) staatust: 101 (saatmisel), 102 (saadetud), 103 (katkestatud ehk ebaõnnestunud). 
 * STATUSE_AJALUGU - sisaldab ühe adressaadi saatmisürituste ajalugu.
@@ -183,13 +183,13 @@ SELECT d.*, t.*, v.* FROM DOKUMENT d, TRANSPORT t, VASTUVOTJA v
 
 DHS süsteem kasutab üldjuhul `getSendingOptions` väljundina tagastatud asutuste nimekirja ka enda sees. See nimekiri kuvatakse näiteks dokumendi saatmise ekraanil ripploendina, millest lõppkasutaja saab valida adressaadi.
 
-Asutusel kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`. See nimi ei pruugi olla lõppkasutajale arusaadav.
+Asutuse puhul, kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`. See nimi ei pruugi olla lõppkasutajale arusaadav.
  
 DHS lõppkasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adapterserveri andmebaasis välja `ASUTUS.reaalne_nimi` väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`. 
 
 ### 4.2. Kapslid lokaalses failisüsteemis
 
-Edastamiseks salvestatakse Kapsli XML lokaalses failisüsteemis (kataloogis `c:/dhx_docs`).
+Edastamiseks salvestatakse kapsli XML lokaalses failisüsteemis (kataloogis `c:/dhx_docs`).
 
 Faili nime formaat on `dhx_<YYYY>_<MM>_<DD>_<HHMMSS><GUID>` (näiteks `dhx_2017_01_20_1101256c7e2a4e-f467-4c32-8fa6-52bc140fe17e`). 
 Selles formaadis failid sorteeritakse nime järgi kuupäevalises järjekorras.
