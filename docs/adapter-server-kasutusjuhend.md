@@ -28,9 +28,9 @@ Sisukord
 
 
 ## 1. Sissejuhatus
-DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
+DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutuselevõtmist.
 
-DHX adapterserveri kasutusjuhend on vajalik eelkõige tarkvara arendajale, kes teostab Dokumendihaldus süsteemi (DHS) ja DHX adapterserveri liidestamist. 
+DHX adapterserveri kasutusjuhend on vajalik eelkõige tarkvaraarendajale, kes teostab dokumendihaldussüsteemi (DHS) ja DHX adapterserveri liidestamist. 
 
 DHX adapterserveri paigaldamine on kirjeldatud [DHX adapterserveri paigaldusjuhendis](adapter-server-paigaldusjuhend.md).
 
@@ -42,7 +42,7 @@ DHX adapterserver pakub kahte erinevat [SOAP](https://www.w3.org/TR/2000/NOTE-SO
 * Väline DHX liides (pildil kollane). DHX liides on suunatud väljapoole (teiste asutustega suhtlemiseks). DHX liides implementeerib DHX operatsiooni [sendDocument](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md). Vahendaja korral ka operatsiooni [representationList](https://github.com/e-gov/DHX/blob/master/files/representationList.md) (ei ole lihtsustamise eesmärgil pildil näidatud).
 * Sisemine liides (pildil roheline). See liides on suunatud sissepoole (asutuse lokaalvõrku). Seda liidest kasutab asutuse dokumendihaldussüsteem (DHS) dokumentide saatmiseks ja vastuvõtmiseks. See liides implementeerib operatsioonid sendDocuments, receiveDocuments, markDocumentsReceived, getSendStatus ja getSendingOptions. Sisemise liidese sünonüümina kasutatakse muudes dokumentides mõistet "DVK protokolli" liides.
 
-DHX adapterserver käitub puhver serverina, võttes mõlema liidese kaudu vastu dokumente, salvestades kõigepealt need enda lokaalses andmebaasis ja failisüsteemis, selleks et need hiljem adressaadile edastada.
+DHX adapterserver käitub puhverserverina, võttes mõlema liidese kaudu vastu dokumente, salvestades kõigepealt need enda lokaalses andmebaasis ja failisüsteemis, selleks et need hiljem adressaadile edastada.
 
 Välise DHX liidese toimimise loogikast arusaamine ei ole DHX adapterserveri kasutajale hädavajalik.
 
@@ -120,9 +120,9 @@ Märkused:
 > 
 > Sisemises liideses on realiseeritud ainult hädavajalikud DVK liidese operatsioonide versioonid.
 >
-> Lisaks tuleb silmas pidada, et esineb mõningaid erinevusi võrreldes DVK liidesega. Need on eraldi välja toodud dokumendi lõpus. 
+> Lisaks tuleb silmas pidada, et esineb mõningaid erinevusi võrreldes DVK liidesega. Need on eraldi välja toodud käesoleva dokumendi lõpus. 
 
-Sisemisele liidese päringutes tuleb kaasa anda X-tee v6 standardsed päised (`<service>` ja `<client>`), kuigi Sisemine liides X-tee turvaserverit kasuta.
+Sisemisele liidese päringutes tuleb kaasa anda X-tee v6 standardsed päised (`<service>` ja `<client>`), kuigi sisemine liides X-tee turvaserverit ei kasuta.
 
 Päringus `<service>` päises ette antud alamelemente `<xRoadInstance>`, `<memberClass>`, `memberCode` ja `<subsystemCode>` ignoreeritakse. 
 Seega need võivad olla samad nagu saadeti vana DVK X-tee teenuse korral (`GOV`, `70006317` - Riigi Infosüsteemi Amet ja `dhl`).
@@ -154,13 +154,13 @@ Järgnevalt kirjeldatakse kuidas toimub DHX adapterserveri sisemise liidese kasu
 
 Seda operatsiooni kasutatakse [DHX aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) küsimiseks.
 
-See tagastab kõik asutused (adressaadid) kellele võib üle DHX protokolli dokumente saata. 
+See tagastab kõik asutused (adressaadid), kellele võib üle DHX protokolli dokumente saata. 
 
 Lisaks kirjeldust vana DVK spetsifikatsioonis [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1),
 [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3)
 
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagi allpool toodud näites.
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid nagu allpool toodud näites.
 
 Märkused vana DVK X-tee liidese kasutajale:
 > DHX adapterserveris on realiseeritud kõik getSendStatus operatsiooni versioonid [getSendingOptions.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv1), [getSendingOptions.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv2) ja [getSendingOptions.v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendingoptionsv3).
@@ -248,12 +248,12 @@ Vastuse näide:
 ```
 
 See sisaldab asutuse kohta kolme välja:
-* `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Juhul kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
+* `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Juhul, kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
 * `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni ja vahendajate [representationList]((https://github.com/e-gov/DHX/blob/master/files/representationList.md)) teenuse väljundite põhjal. 
 * `<saatmisviis>` - alati konstant `dhl`.
 
 Märkus:
-> Asutusel kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`.
+> Asutusel, kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`.
 > 
 > DHS kasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adapterserveri andmebaasis (vaata [andmebaasi mudelit](adapter-server-haldusjuhend.md#41-andmebaasi-mudel)) välja `ASUTUS.reaalne_nimi` väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`.
 
@@ -264,8 +264,8 @@ Samuti ignoreeritakse sisendis välju `<vahetatud_dokumente_vahemalt>`, `<vaheta
 
 ### 4.2. sendDocuments (sisemine liides)
 
-SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisel asutusele.
-Dokumendid peavad olema [Kapsli 2.1 versioonis](https://riha.eesti.ee/riha/main/xml/elektroonilise_andmevahetuse_metaandmete_loend/1). Vanemad Kapsli versioonid ei ole toetatud.
+SOAP operatsiooni `sendDocuments.v4` kasutatakse dokumentide saatmiseks teisele asutusele.
+Dokumendid peavad olema [Kapsli 2.1 versioonis](https://riha.eesti.ee/riha/main/xml/elektroonilise_andmevahetuse_metaandmete_loend/1). Vanemad kapsli versioonid ei ole toetatud.
 
 DHX adapterserver võtab dokumendi vastu, salvestab enda andmebaasi ja vastab SOAP päringule koheselt. 
 Dokumendi edasine DHX addresaadile saatmine teostatakse asünkroonselt (taustatöö poolt).
@@ -273,7 +273,7 @@ Dokumendi saatmise staatuse küsimiseks tuleb kasutada operatsiooni [getSendStat
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [sendDocuments.v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid nagu need on allpool toodud näites.
 
 Päringu sisu näide:
 ```xml
@@ -413,12 +413,12 @@ H4sIACJmhFgAA+1X3W7bNhS+z1MIvR0SSrIt2wEnTHWyJGvcGrGzYbspWOnYYSORGknZS59ll3mM3uXF
 ```
 
 Nõuded päringu sisendile:
-* Päringu sisendi X-tee päises ette antud saatja `<client><memberCode>30000001</ns3:memberCode>` peab ühtima Kapslis toodud saatjaga `<Transport><DecSender><OrganisationCode>30000001</OrganisationCode>`.
-* Kui soovitakse saata asutuse alamsüsteemile (`getSendOptions` tagastas `<asutus><regnr>subsystem1.40000001</regnr>`), siis tuleb Kapslis ette anda adressaat kujul `<Transport><DecRecipient><OrganisationCode>subsystem1.40000001</OrganisationCode>`.
-* Samamoodi tuleb saata neile spetsiifilistele asutustele, mille korral getSendingOptions tagastas mnemoonilise koodi (`<asutus><regnr>adit</regnr>`) ilma registrikoodita. Neile tuleb saata Kapsli sees näiteks `<Transport><DecRecipient><OrganisationCode>adit</OrganisationCode>`. Need asutused on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
+* Päringu sisendi X-tee päises ette antud saatja `<client><memberCode>30000001</ns3:memberCode>` peab ühtima kapslis toodud saatjaga `<Transport><DecSender><OrganisationCode>30000001</OrganisationCode>`.
+* Kui soovitakse saata asutuse alamsüsteemile (`getSendOptions` tagastas `<asutus><regnr>subsystem1.40000001</regnr>`), siis tuleb kapslis ette anda adressaat kujul `<Transport><DecRecipient><OrganisationCode>subsystem1.40000001</OrganisationCode>`.
+* Samamoodi tuleb saata neile spetsiifilistele asutustele, mille korral getSendingOptions tagastas mnemoonilise koodi (`<asutus><regnr>adit</regnr>`) ilma registrikoodita. Neile tuleb saata kapsli sees näiteks `<Transport><DecRecipient><OrganisationCode>adit</OrganisationCode>`. Need asutused on määratud `dhx.server.special-orgnisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
 * Kapsel peab olema [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manusena. Manuse algne xml fail peab olema UTF-8 kodeeringus, lisatud manusesse gzip pakitud ja seejärel base64 kodeeritult.
-* Päringu sisendis ei pea ette andma Kapsli XML schema järgi kohustuslikku `<DecMetadata>` elementi (ega selle alamelemente `<DecId>`, `<DecFolder>`, `<DecReceiptDate>`). Need genereerib DHX adapterserver ise. Sama loogika kehtis vanas DVK liideses.
-* Päringu sisendis Kapslis võib ette anda mitu adressaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adressaadile eraldi. Kusjuures mõnele adressaadile saatmine võib õnnestuda aga teisele mitte.
+* Päringu sisendis ei pea ette andma kapsli XML schema järgi kohustuslikku `<DecMetadata>` elementi (ega selle alamelemente `<DecId>`, `<DecFolder>`, `<DecReceiptDate>`). Need genereerib DHX adapterserver ise. Sama loogika kehtis vanas DVK liideses.
+* Päringu sisendis kapslis võib ette anda mitu adressaati (mitu `<DecRecipient>` elementi). Sel juhul teostab DHX adapterserver saatmise igale DHX adressaadile eraldi, kusjuures mõnele adressaadile saatmine võib õnnestuda aga teisele mitte.
 * Päringu sisendis võib ette anda `<kaust>` elemendi väärtuse. Vaata täpsemalt [DVK kasutade kasutamine](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#kaustade-kasutamine) ja [DHX E-arved ja kaust](https://github.com/e-gov/DHX/blob/master/docs/E-arved.md).
 * Manusele määratud `Content-Type`,  `Content-Encoding` ja `Content-Transfer-Encoding` parameetrid DHX adapterserver ignoreerib. Eeldatakse et manus on alati gzip pakitud ja seejärel base64 kodeeritud.  
 Seega need võib korrektselt ette anda kujul:
@@ -484,7 +484,7 @@ Märkused vastuse sisu kohta:
 * `<dhl_id>` väärtust tuleb hiljem kasutada `getSendStatus` päringu sisendis, saatmise staatuse küsimiseks.
  
 Märkused vana DVK X-tee liidese kasutajale:
-> Võrreldes DVK sendDocuments liidestega on DHX adapterserveris realiseeritud on ainult sendDocuments operatsioonide [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4) versioon, mis eeldab et dokumendi Kapsel on 2.1 formaadis.
+> Võrreldes DVK sendDocuments liidestega on DHX adapterserveris realiseeritud on ainult sendDocuments operatsioonide [v4](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv4) versioon, mis eeldab, et dokumendi kapsel on 2.1 formaadis.
 >
 > Vanemaid DVK sendDocuments versioone [v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv1), [v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv2), [v3](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#senddocumentsv3) DHX adapterserver ei paku.
 
@@ -503,7 +503,7 @@ Staatuste kohta vaata täpselt [DVK dokumentatsioonist](https://github.com/e-gov
 
 Lisaks vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [getSendStatus.v1](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv1). ja [getSendStatus.v2](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#getsendstatusv2).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid, nagu need on allpool toodud näites.
 
 Päringu  `getSendStatus.v1` sisendi näide:
 ```xml
@@ -612,7 +612,7 @@ Märkused sisendi ja väljundi kohta:
 * Päringu `getSendStatus.v1` sisendis saab ette anda `<dhl_id>` väärtuse.
 * Päringu `getSendStatus.v2` sisendis saab ette anda `<dhl_id>` väärtuse `<item>` elemendi sees ja lisaks ka `<staatuse_ajalugu>` väärtuse true/false.
 * Päringu `getSendStatus.v2` sisendis ette antud `<dokument_guid>` väärtust ignoreeritakse, sest DHX adapterserveri sees "dokument_guid" väärtuseid ei kasutata (need on alati tühjad).
-* Vastuses on iga adressaadi ehk saaja kohta eraldi `<edastus>` element. Mitu saajat sai saatmisel (`sendDocuments.v4` operatsiooniga) määrata Kapslis lisades mitu `<DecRecipient>` elemendiga.
+* Vastuses on iga adressaadi ehk saaja kohta eraldi `<edastus>` element. Mitu saajat sai saatmisel (`sendDocuments.v4` operatsiooniga) määrata kapslis lisades mitu `<DecRecipient>` elemendiga.
 * Vastuse kogu staatust näitab `<item><olek>` väli, siin näites on see `saatmisel`, sest DHX adapterserver teostab tulevikus veel uue [DHX saatmisürituse](https://e-gov.github.io/DHX/#77-uuesti-%C3%BCritamine).
 * Vastuses `<edastus><staatus>` väärtus näitab konkreetsele saatjale tehtud viimase saatmisürituse staatust. Antud näites `katkestatud` tähendab et saadi viga. Veateade on `<fault>` elemendi sees.
 
@@ -628,7 +628,7 @@ Pärast dokumendi lugemist tuleks välja kutsuda `markDocumentsReceived` teenus.
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [receiveDocuments](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#receivedocuments).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid nii nagu need on allpool toodud näites.
 
 Päringu keha näide:
 ```xml
@@ -804,7 +804,7 @@ Märkused päringu sisendi ja väljundi kohta:
 * Päringu sisend `<arv>` määrab ära maksimaalse loetavate dokumentide arvu. Element võib puududa, sellisel juhul tagastatakse vaikimisi 10 dokumenti.
 * Päring sisend `<kaust>` määrab ära, millisest DVK kaustast dokumendid loetakse. Element võib ka puududa (või olla väärtustamata), sellisel juhul tagastatakse vaikimisi dokumendid kõigist kaustadest. Vaata täpsemalt [DVK kasutade kasutamine](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#kaustade-kasutamine) ja [DHX E-arved ja kaust](https://github.com/e-gov/DHX/blob/master/docs/E-arved.md).
 * Päringute versioonide v2, v3 ja v4 sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`)
-* Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli versiooni ei saa keegi saata.
+* Kuna DHX sees on toetatud ainult kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli versiooni ei saa keegi saata.
 * Päringu manuse kapslis asuva välja `<DecId>65</DecId>` väärtuse järgi tuleb teha järgnev [markDocumentsReceived](#45-markdocumentsreceived-sisemine-liides) väljakutse.
 * Vastuse manuses tagastatakse mitme dokumendi kapsli XML failid üksteise järel.
 ```xml 
@@ -818,13 +818,13 @@ Märkused vana DVK X-tee liidese kasutajale:
 
 ### 4.5. markDocumentsReceived (sisemine liides)
 
-Teenusega `markDocumentsReceived` märgitakse DHX adapterserveis dokument loetuks ehk vastu võetuks. 
-Senikaua kuni saabunud dokument on loetuks märkimata, tagastab `receiveDocuments` väljakutse seda alati uuesti. 
-Teenuse sisendis tuleb `<dhl_id>` välja väärtuseks ette anda `receiveDocuments` väljundi manuses olevast Kapslist võetud `<DecId>65</DecId>` väärtus.
+Teenusega `markDocumentsReceived` märgitakse DHX adapterserveis dokument loetuks ehk vastuvõetuks. 
+Senikaua, kuni saabunud dokument on loetuks märkimata, tagastab `receiveDocuments` väljakutse seda alati uuesti. 
+Teenuse sisendis tuleb `<dhl_id>` välja väärtuseks ette anda `receiveDocuments` väljundi manuses olevast kapslist võetud `<DecId>65</DecId>` väärtus.
 
 Vaata täpsemat kirjeldust vana DVK spetsifikatsioonis [markDocumentsReceived](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md#markdocumentsreceived).
 > **NB!** DVK spetsifikatsiooni näidetes kasutatakse vanu X-tee versioon 4.0 päiseid (`<xtee:asutus>`, `<xtee:andmekogu>` jt). 
-> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid. Nagu need on allpool näites.
+> DHX adapterserveri sisemise liidesega suhtlemisel tuleb kasutada  X-tee versioon 6.0 päiseid, nii nagu need on allpool toodud näites.
 
 Päringu `markDocumentsReceived.v3` sisendi näide:
 ```xml
@@ -975,7 +975,7 @@ Sisestada representationList päringu keha, väärtustades `<service><memberCode
 </soapenv:Envelope> 
 ```
 
-Kontrollida kas vastuses on lisatud astutuse (75019046, Tallinna Lasteaed Pallipõnn) 
+Kontrollida, kas vastuses on lisatud asutus (75019046, Tallinna Lasteaed Pallipõnn) 
 ```xml
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
    <SOAP-ENV:Header>
@@ -1046,7 +1046,7 @@ Vahendatav pöördub dokumendi välja saatmiseks DHX adapterserveri sisemise lii
    </soapenv:Body>
 </soapenv:Envelope>
 ```
-* Väärtustades manuses Kapsli sees `<DecSender><OrganisationCode>` samuti enda registrikoodiga:
+* Väärtustades manuses kapsli sees `<DecSender><OrganisationCode>` samuti enda registrikoodiga:
 ```xml
 <DecContainer xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
   <Transport>
@@ -1100,13 +1100,13 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 
 * DHX Adapterserveri `getSendingOptions` päring ei väljasta allüksuseid ega ametikohti, sest DHX protokollis neid ei eksisteeri.
 
-* DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab Kapsli 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
+* DHX Adapterserveris on realiseeritud ainult `sendDocuments.v4` päring, mis kasutab kapsli 2.1 versiooni. Vanemad versioonid ei ole toetatud.  
 
 * DHX Adapterserveri  `getSendStatus.v2` päringu sisendis ei tööta `<dokument_guid>` välja kasutamine. Tohib kasutada ainult välja `<dhl_id>`. `<dokument_guid>` välja väärtus on alati tühi ka väljundites.
 
 * DHX adapterserveri `receiveDocuments` päringute sisendis ignoreeritakse edastuse/fragmendi, allüksuse ja ametikoha välju (`<allyksus>`, `<ametikoht>`, `<edastus_id>`, `<fragment_nr>`, `<fragmendi_suurus_baitides>`).
 
-* Kuna DHX sees on toetatud ainult Kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
+* Kuna DHX sees on toetatud ainult kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
 
 * Väljastatavad veateated (`SOAP:Fault`) on teistsugused kui DVK korral.
  
@@ -1136,6 +1136,6 @@ Legend:
 * DHX Sender - perioodiline taustaprotsess, mis teostab sisemise liidese kaudu DHX adapterserverile saadetud dokumentide edastamist välisele asutusele (üle DHX protokolli).
 * DHX address book renewal - perioodiline taustaprotsess, mis uuendab lokaalset aadressiraamatut. Aadressiraamat sisaldab kõiki asutusi ja alamsüsteeme, kellel võib üle DHX protokolli dokumente saata. Asutus võib olla otse DHX võimekusega või läbi vahendaja DHX võimekusega. 
 * Document cleaner (deleter) - perioodiline taustaprotsess, mis kustutab lokaalsest andmebaasist ja failisüsteemist vanu dokumente. Vaikimisi on määratud, et kustutatakse üle 30 päeva vanad dokumendid.
-* Filesystem folder dhx_docs - Lokaalse failisüsteemi kataloog, kuhu salvestatakse maha puhverdatavad dokumendi Kapsli failid.
+* Filesystem folder dhx_docs - Lokaalse failisüsteemi kataloog, kuhu salvestatakse maha puhverdatavad dokumendi kapsli failid.
 * PostgreSQL database server - lokaalne andmebaasi server, kuhu salvestatakse (puhverdatakse) saabunud ja välja saadetavad dokumentide metaandmed.
 * dhx adapter database - DHX adapterserveri andmebaasi skeem
