@@ -6,7 +6,24 @@ ET | [EN](java-library-usage-guide.md)
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
-## Sissejuhatus
+Sisukord
+=================
+
+  * [DHX Java teegi kasutusjuhend](#dhx-java-teegi-kasutusjuhend)
+    * [1\. Sissejuhatus](#1-sissejuhatus)
+    * [2\. Välised sõltuvused ja baasplatvorm](#2-v%C3%A4lised-s%C3%B5ltuvused-ja-baasplatvorm)
+    * [3\. Ehitamine](#3-ehitamine)
+    * [4\. Teadaolevad probleemid (sõltuvuste konfliktid)](#4-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
+    * [5\. Teegi laadimise häälestamine uuematel serveritel (annotatsioonid)](#5-teegi-laadimise-h%C3%A4%C3%A4lestamine-uuematel-serveritel-annotatsioonid)
+    * [6\. Teegi laadimise häälestamine vanematel serveritel (web\.xml)](#6-teegi-laadimise-h%C3%A4%C3%A4lestamine-vanematel-serveritel-webxml)
+    * [7\. Häälestus fail (dhx\-application\.properties)](#7-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties)
+    * [8\. Funktsionaalsuse üldpõhimõtted](#8-funktsionaalsuse-%C3%BCldp%C3%B5him%C3%B5tted)
+    * [9\. Aadressiraamatu koostamise ja kasutamise liides](#9-aadressiraamatu-koostamise-ja-kasutamise-liides)
+    * [10\. Dokumendi saatmine (sünkroonselt)](#10-dokumendi-saatmine-s%C3%BCnkroonselt)
+    * [11\. Dokumendi saatmine (asünkroonselt)](#11-dokumendi-saatmine-as%C3%BCnkroonselt)
+    * [12\. Dokumendi vastuvõtmise liides](#12-dokumendi-vastuv%C3%B5tmise-liides)
+
+## 1. Sissejuhatus
 
 DHX Java teekides on realiseeritud [dokumendi saatmise](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmise](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [aadressiraamatu koostamise](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) funktsionaalsus vastavalt [DHX protokolli](https://e-gov.github.io/DHX/) nõuetele.
 
@@ -23,7 +40,7 @@ DHS-iga otse liidestamiseks tuleb kasutada 2 esimest teeki **dhx-adapter-core** 
 
 **dhx-adapter-server** on vajalik ainult neile, kes ei soovi kasutada otse liidestust, vaid plaanivad paigaldada vahepealse puhverserveri, selleks et kasutada edasi vana DVK SOAP liidesele sarnast liidest. Selle kohta vaata täpsemalt [DHX adapterserveri kasutusjuhend](adapter-server-kasutusjuhend.md).
 
-##Välised sõltuvused ja baasplatvorm
+## 2. Välised sõltuvused ja baasplatvorm
 
 DHX Java teekide kasutamisel tuleb arvestada et need sõltuvad allpool toodud komponentidest.
 
@@ -75,7 +92,7 @@ xerces | xercesImpl | 2.8.1 | xerces XML api
 com.jcabi | jcabi-log | 0.15 | jcabi-log
 junit | junit | 4.12 | JUnit
 
-##Ehitamine
+## 3. Ehitamine
 
 Alljärgnevalt on toodud näide, kuidas kaasata DHX Java teegid olemasoleva tarkvara sisse, kasutades ehitamiseks [Apache Maven](https://maven.apache.org/) ehitus-tarkvara.
 
@@ -96,7 +113,7 @@ Lisada oma DHS tarkvara ehitamise Maven pom.xml sisse järgmised sõltuvused:
 			<scope>compile</scope>
 		</dependency>
 ```
-##Teadaolevad probleemid (sõltuvuste konfliktid)
+## 4. Teadaolevad probleemid (sõltuvuste konfliktid)
 
 **axiom-dom** ja **axis2-saaj** teekide kasutamisel Java classpathis ei tööta korrektselt XML objektide marshallimine/unmrashallimine (JAXB probleem). Nimelt manused jäävad tühjaks.
 
@@ -121,11 +138,11 @@ Maven-ga, juhul kui mingi muu kasutatav teek (näiteks axis2-codegen) sõltub ne
 	</dependency>
 ```
 
-##Teegi laadimise häälestamine uuematel serveritel (annotatsioonid)
+## 5. Teegi laadimise häälestamine uuematel serveritel (annotatsioonid)
 
 Kõige lihtsam on DHX Java teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees.
 
-Uuemates serverites, mis toetavad Java Servlet 3.0 või uuemat spetsifikatsiooni saab Spring Framework häälestuse määrata anontatsiooniga järgmiselt.
+Uuemates serverites, mis toetavad Java Servlet 3.0 või uuemat spetsifikatsiooni saab Spring Framework häälestuse määrata anontatsioonidega järgmiselt.
 
 ```java
 import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
@@ -142,20 +159,21 @@ import java.util.Map;
 import javax.xml.soap.SOAPMessage;
 
 @Configuration
-public class MyServerWebServiceConfig {
+public class DhxServerWebServiceConfig {
 
   @Bean(name = "dhxServlet")
   public ServletRegistrationBean dhxMessageDispatcherServlet(
       ApplicationContext applicationContext) {
     MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-    AnnotationConfigWebApplicationContext applicationAnnotationContext = new AnnotationConfigWebApplicationContext();
+    AnnotationConfigWebApplicationContext applicationAnnotationContext 
+    	= new AnnotationConfigWebApplicationContext();
     applicationAnnotationContext.setParent(applicationContext);
     applicationAnnotationContext.register(DhxEndpointConfig.class);
     servlet.setApplicationContext(applicationAnnotationContext);
     servlet.setTransformWsdlLocations(true);
     servlet.setMessageFactoryBeanName("messageFactory");
     ServletRegistrationBean servletBean = new ServletRegistrationBean(servlet, "/" + "ws" + "/*");
-    servletBean.setName("myServlet");
+    servletBean.setName("dhx");
     return servletBean;
   }
 
@@ -172,9 +190,7 @@ public class MyServerWebServiceConfig {
 
 Vaata täpsemalt [SpringFramework ServletRegistrationBean](http://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/web/servlet/ServletRegistrationBean.html) ja [javax.servlet.ServletContext](https://docs.oracle.com/javaee/7/api/javax/servlet/ServletContext.html?is-external=true).
 
- 
-
-##Teegi laadimise häälestamine vanamatel serveritel (web.xml ja applicationContext.xml)
+## 6. Teegi laadimise häälestamine vanematel serveritel (web.xml)
 
 Vanemate serverite versioonide sees tuleb laadimiseks kasutada SpringFramework klasse [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) ja [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
@@ -237,7 +253,7 @@ Selle sisu peaks olema järgmine:
 </beans>
 ```
 
-##Häälestus fail (dhx-application.properties)
+## 7. Häälestus fail (dhx-application.properties)
 
 Servleti laadimisel otsitakse Servleti classpathist faili nimega `dhx-application.properties`.
 
@@ -295,7 +311,7 @@ dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Määra
 **dhx.renew-address-list-on-startup** | true |  | Määrab kas Java serveri startimise järel käivitatakse adressaatide nimekirja uuendamine. Adressaatide nimekirja uuendamine võib erijuhtudel võtta kaua aega (näiteks kui mõne vahendaja server on maas). Seepärast on DHX Java teegi kasutamisel mõistlik see puhverdada andmebaasis ja implementeerida `DhxImplementationSpecificService` [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). Sel juhul tuleks väärtustada `dhx.renew-address-list-on-startup=false`
 **address-renew-timeout** |  | 0 */20 * * * ? | Määrab [adressaatide nimekirja](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) uuendamise sageduse. [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `0 */20 * * * ?` tähendab iga 20 minuti järel. Võib soovi korral muuta, näiteks iga päeva kell 7:00 on `0 0 7 * * *`
 
-##Funktsionaalsuse üldpõhimõtted
+## 8. Funktsionaalsuse üldpõhimõtted
 
 DHX Java teegi põhifunktsionaalsus on [dokumendi saatmine](https://e-gov.github.io/DHX/#7-saatmine), [dokumendi vastuvõtmine](https://e-gov.github.io/DHX/#8-vastuv%C3%B5tmine) ja [lokaalse aadressiraamatu](https://e-gov.github.io/DHX/#74-lokaalne-aadressiraamat) koostamine.
  
@@ -332,7 +348,7 @@ public class CustomDhxImplementationSpecificService
 Siin `@Service` tag määrab, et DHX Java teegi seest kasutav teenus `dhxImplementationSpecificService` on nüüd ülekirjutatud omatehtud klassiga. 
 Seega dokumendi vastuvõtmise ja saatmise automaatloogika kasutab nüüd „callback“ liidesena arendaja endaloodud klassi `CustomDhxImplementationSpecificService`.
 
-##Aadressiraamatu koostamise ja kasutamise liides
+## 9. Aadressiraamatu koostamise ja kasutamise liides
 
 DHX adresseerimisel tuleb silmas pidada, et ainuüksi asutuse registrikoodi kasutamine ei taga korrektset adresseerimist. 
 Üheseks adresseerimiseks tuleb kasutada kombinatsiooni `registrikood + alamsüsteem`. Näiteks kui dokument adresseeritakse Lääne Ringkonnaprokuratuurile, siis adresseerimiseks piisab kombinatsioonist `code=70000906 + subsystem=DHX.laane`.
@@ -400,7 +416,7 @@ Kui adressaat omab `representeeCode` väärtust, siis see tuleb kindlasti määr
 Vajaliku **eelväärtustatud `InternalXroadMember` objekti leidmiseks** saab kasutada `AddressService` meetodit  [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-), mis leiab lokaalsest aadressiraamatust korrektse kirje, kasutades sisendparameetriteks kombinatsiooni `registrikood` + `subsystem`.
 
 
-##Dokumendi saatmine (sünkroonselt)
+## 10. Dokumendi saatmine (sünkroonselt)
 
 Dokumendi sünkroonseks saatmiseks tuleb välja kutsuda teenuse `ee.ria.dhx.ws.service.DhxPackageService` meetodit [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-). 
 
@@ -455,7 +471,7 @@ public class Sender {
 
 Kui soovitakse sama kapslit saata korraga mitme DHX adressaadile, siis tuleb see igale adressaadile saata eraldi. Selle lihtsustamiseks on loodud `ee.ria.dhx.ws.service.DhxPackageService` meetod [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendMultiplePackages-java.util.List-). 
 
-##Dokumendi saatmine (asünkroonselt)
+## 11. Dokumendi saatmine (asünkroonselt)
 
 Dokumendi asünkroonselt saatmise liides on sarnane sünkroonselt saatmise liidesele.
  
@@ -532,9 +548,9 @@ public class Sender {
 Kui soovitakse sama kapslit saata korraga mitme DHX adressaadile, siis tuleb see igale adressaadile saata eraldi. Selle lihtsustamiseks on loodud `ee.ria.dhx.ws.service.AsyncDhxPackageService` meetod [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendMultiplePackages-java.util.List-).
 
 
-##Dokumendi vastuvõtmise liides
+## 12. Dokumendi vastuvõtmise liides
 
-Ülaltoodud `web.xml` häälestuse kasutamisel registreeritakse serverisse automaatselt web service endpoint.  
+Ülaltoodud `DhxServerWebServiceConfig` või `web.xml` häälestuse kasutamisel registreeritakse serverisse automaatselt web service endpoint.  
 Selle aadress on `http://<hostname>:<port>/ws/dhx.wsdl`
 
 Sellelt aadressilt pakutavad DHX sendDocument jt teenused tuleb registreerida X-tee turvaserveris.
