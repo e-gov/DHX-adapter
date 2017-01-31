@@ -6,7 +6,24 @@
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
-## Introduction
+Table of Contents
+=================
+
+  * [DHX Java library usage guide](#dhx-java-library-usage-guide)
+    * [1\. Introduction](#1-introduction)
+    * [2\. Base platform and external dependencies](#2-base-platform-and-external-dependencies)
+    * [3\. Building](#3-building)
+    * [4\. Known issues (dependency conflicts)](#4-known-issues-dependency-conflicts)
+    * [5\. Loading setup on modern web containers (with annotations)](#5-loading-setup-on-modern-web-containers-with-annotations)
+    * [6\. Loading setup on old Web containers (with web\.xml)](#6-loading-setup-on-old-web-containers-with-webxml)
+    * [7\. Configuration properties (dhx\-application\.properties)](#7-configuration-properties-dhx-applicationproperties)
+    * [8\. General principles](#8-general-principles)
+    * [9\. Address book creation and renewal interface](#9-address-book-creation-and-renewal-interface)
+    * [10\. Document sending (synchronous)](#10-document-sending-synchronous)
+    * [11\. Document sending (asynchronous)](#11-document-sending-asynchronous)
+    * [12\. Document receiving interface](#12-document-receiving-interface)
+
+## 1. Introduction
 
 DHX Java library implements [DHX protocol](https://e-gov.github.io/DHX/EN.html) functionality for [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat). 
 
@@ -17,13 +34,13 @@ Source code of DHX Java library is located at https://github.com/e-gov/DHX-adapt
 It contains three sub-packages
 - [dhx-adapter-core](https://e-gov.github.io/DHX-adapter/dhx-adapter-core/doc/) – contains classes for creating and parsing XML objects (Capsule and SOAP), exception classes and some general utility classes
 - [dhx-adapter-ws](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/) – contains classes for sending document (SOAP client), for generating address book (SOAP client) and for receiving documents (SOAP Service endpoint)
-- [dhx-adapter-server](https://e-gov.github.io/DHX-adapter/dhx-adapter-server/doc/) – a separately used adapter server (Variant C), that caches received documents in local database and offers SOAP interface similar to old [DVK interface](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md)
+- [dhx-adapter-server](https://e-gov.github.io/DHX-adapter/dhx-adapter-server/doc/) – a separately used adapter server, that caches received documents in local database and offers SOAP interface similar to old [DVK interface](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md)
 
 The two first packages **dhx-adapter-core** and **dhx-adapter-ws** are for direct (java) interfacing.
 
-**dhx-adapter-server** is intended for them, who cannot use direct (java) interfacing, but plan to deploy separate mediator server, in order to continue to use old style [DVK SOAP interface](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md).
+**dhx-adapter-server** is intended for them, who cannot use direct (java) interfacing, but plan to deploy separate mediator server, in order to continue to use old style [DVK SOAP interface](https://github.com/e-gov/DVK/blob/master/doc/DVKspek.md). View more in [DHX adapterserver usage guide (estonian)](adapter-server-kasutusjuhend.md).
 
-##Base platform and external dependencies
+## 2. Base platform and external dependencies
 
 DHX Java library depends on the components shown below.
 
@@ -56,7 +73,6 @@ org.springframework.boot | spring-boot-starter-log4j2 | 1.3.5.RELEASE | Spring B
 commons-logging | commons-logging | 1.1.3, 1.2 | Apache commons login pakett logimiseks
 commons-codec | commons-codec | 1.9 | Apache Commons Codec
 aopalliance | aopalliance | 1.0 | AOP alliance
-org.hamcrest | hamcrest-core | 1.3 | Hamcrest Core
 org.apache.httpcomponents | httpclient | 4.5.2 | Apache HttpClient
 org.apache.httpcomponents | httpcore | 4.4.4 | Apache HttpCore
 org.slf4j | jcl-over-slf4j | 1.7.21 | JCL 1.1.1 implemented over SLF4J
@@ -68,16 +84,15 @@ org.projectlombok | lombok | 1.16.6 | Project Lombok
 org.slf4j | slf4j-api | 1.7.12 | SLF4J API Module
 wsdl4j | wsdl4j | 1.6.3 | WSDL4J
 javax.activation | activation | 1.1 | JavaBeans Activation Framework (JAF)
-javax.mail | mail | 1.4 | JavaMail API
 javax.servlet | javax.servlet-api | 3.0.1 | Java Servlet API
 javax.validation | validation-api | 1.1.0.Final | Bean Validation API
 org.aspectj | aspectjrt | 1.8.2 | AspectJ runtime
-com.jcabi | jcabi-aspects | 0.19 | jcabi-aspects
+com.jcabi | jcabi-aspects | 0.22.5 | jcabi-aspects
+xerces | xercesImpl | 2.8.1 | xerces XML api
 com.jcabi | jcabi-log | 0.15 | jcabi-log
-org.mockito | mockito-all | 1.10.19 | Mockito
 junit | junit | 4.12 | JUnit
 
-##Building
+## 3. Building
 
 The following example is given on how to involve the DHX Java library in existing (or new) software project, by using [Apache Maven](https://maven.apache.org/).
 
@@ -99,7 +114,7 @@ The following dependencies should be appended into Maven pom.xml
 		</dependency>
 ```
 
-##Known issues (dependency conflicts)
+## 4. Known issues (dependency conflicts)
 
 In case **axiom-dom** or **axis2-saaj** are in Java classpath, the XML marshalling/unmarshalling will not work properly (attachments remain empty). It is known JAXB issue.
 
@@ -125,9 +140,61 @@ With Maven, if third party library (for axample axis2-codegen) depends on these,
 	</dependency>
 ```
 
-##Loading setup (web.xml and applicationContext.xml)
+## 5. Loading setup on modern web containers (with annotations)
 
-The simplest way is to use DHX Java library inside Web (Servlet) Container (Tomcat, Jetty, etc), by using Spring Framework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
+The simplest way is to use DHX Java library inside Web (Servlet) Container (Tomcat, Jetty, etc).
+
+Inside Servers, that support Java Servlet 3.0 or newer specification, the Spring Framework configuration could be specified with annotations as follows.
+
+```java
+import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
+
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
+import org.springframework.ws.transport.http.MessageDispatcherServlet;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.soap.SOAPMessage;
+
+@Configuration
+public class DhxServerWebServiceConfig {
+
+  @Bean(name = "dhxServlet")
+  public ServletRegistrationBean dhxMessageDispatcherServlet(
+      ApplicationContext applicationContext) {
+    MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+    AnnotationConfigWebApplicationContext applicationAnnotationContext 
+    	= new AnnotationConfigWebApplicationContext();
+    applicationAnnotationContext.setParent(applicationContext);
+    applicationAnnotationContext.register(DhxEndpointConfig.class);
+    servlet.setApplicationContext(applicationAnnotationContext);
+    servlet.setTransformWsdlLocations(true);
+    servlet.setMessageFactoryBeanName("messageFactory");
+    ServletRegistrationBean servletBean = new ServletRegistrationBean(servlet, "/" + "ws" + "/*");
+    servletBean.setName("dhx");
+    return servletBean;
+  }
+
+  @Bean(name = "messageFactory")
+  public SaajSoapMessageFactory messageFactory() {
+    SaajSoapMessageFactory smf = new SaajSoapMessageFactory();
+    Map<String, String> props = new HashMap<String, String>();
+    props.put(SOAPMessage.WRITE_XML_DECLARATION, Boolean.toString(true));
+    smf.setMessageProperties(props);
+    return smf;
+  }
+}
+```
+
+View more in [SpringFramework ServletRegistrationBean](http://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/web/servlet/ServletRegistrationBean.html) and [javax.servlet.ServletContext](https://docs.oracle.com/javaee/7/api/javax/servlet/ServletContext.html?is-external=true).
+
+## 6. Loading setup on old Web containers (with web.xml)
+ 
+On older Web (Servlet) Containers the loading is done by using Spring Framework classes [ContextLoaderListener](http://docs.spring.io/spring/docs/4.2.7.RELEASE/spring-framework-reference/html/beans.html#beans-java-instantiating-container-web) and [MessageDispatcherServlet](http://docs.spring.io/spring-ws/site/reference/html/server.html#message-dispatcher-servlet).
 
 The [web.xml](https://cloud.google.com/appengine/docs/java/config/webxml) must be supplemented with sections:
 ```xml
@@ -188,7 +255,7 @@ It should look like the following:
 </beans>
 ```
 
-##Configuration properties (dhx-application.properties)
+## 7. Configuration properties (dhx-application.properties)
 
 On servlet initialization, the file named `dhx-application.properties` is searched from Servlet classpath. 
 
@@ -246,7 +313,7 @@ dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Specifi
 **dhx.renew-address-list-on-startup** | true |  | Specifies whether to start address book renewal job on server restart. Address book renewal could take long time in special case (if a DHX mediator has its servers down). Therefore it is reasonable to cache address list in local database and implement `DhxImplementationSpecificService` method [getAdresseeList](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#getAdresseeList--). In this case use `dhx.renew-address-list-on-startup=false`
 **address-renew-timeout** |  | 0 */20 * * * ? | Specifies [local adress boook](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat) renewal frequency. [Crontab](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) format: `<second> <minute> <hour> <day> <month> <weekday>`. Value `*/20` means at every 20-th unit. Therefore `0 */20 * * * ?` means after every 20 minutes. Every day at 7:00 a clock is `0 0 7 * * *`
 
-##General principles
+## 8. General principles
 
 Main functions of DHX Java library are [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat).
  
@@ -283,7 +350,7 @@ public class CustomDhxImplementationSpecificService
 Above, the `@Service` tag specifies that DHX Java library uses now `dhxImplementationSpecificService` custom implementation. 
 Therefore the document receiving and sending internal functionality uses `CustomDhxImplementationSpecificService` as callback interface now.
 
-##Address book creation and renewal interface
+## 9. Address book creation and renewal interface
 
 In DHX addressing, the developer needs to bear in mind that, it is not sufficient to use only the registration code of an organization. 
 For unique addressing, the combination `registrationCode + subsystem` should be used. 
@@ -352,7 +419,7 @@ If recipient (addressee) has `representeeCode` value, then it must be specified 
 
 The required **pre-valued `InternalXroadMember` object** can be obtained by `AddressService` method  [getClientForMemberCode](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AddressService.html#getClientForMemberCode-java.lang.String-java.lang.String-), that finds correct instance from local address book, by using combiantion `registration-code` + `sub-system` as input.
 
-##Document sending (synchronous)
+## 10. Document sending (synchronous)
 
 For synchronous sending use service `ee.ria.dhx.ws.service.DhxPackageService` method [sendPackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendPackage-ee.ria.dhx.types.OutgoingDhxPackage-). 
 
@@ -406,7 +473,7 @@ public class Sender {
 
 If sender wants to send the same document capsule to multiple recipients, then he must send it to every recipient separately. For that use `ee.ria.dhx.ws.service.DhxPackageService` method [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxPackageService.html#sendMultiplePackages-java.util.List-).
 
-##Document sending (asynchronous)
+## 11. Document sending (asynchronous)
 
 Asynchronous sending interface is similar to synchronous interface.
  
@@ -482,7 +549,7 @@ public class Sender {
 
 If sender wants to send the same document capsule to multiple recipients, then he must send it to every recipient separately. For that use `ee.ria.dhx.ws.service.AsyncDhxPackageService` method [sendMultiplePackages](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/AsyncDhxPackageService.html#sendMultiplePackages-java.util.List-).
 
-##Document receiving interface
+## 12. Document receiving interface
 
 By using the `web.xml` described above the web service endpoint is registered and created automatically (in web servlet container).  
 It's URL is `http://<hostname>:<port>/ws/dhx.wsdl`
