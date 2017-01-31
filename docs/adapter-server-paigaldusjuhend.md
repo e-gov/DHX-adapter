@@ -42,7 +42,7 @@ Sisukord
 
 ## 1. Sissejuhatus
 
-DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutusele võtmist.
+DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutuselevõtmist.
 
 DHX adapterserveri toimimise loogika on kirjeldatud [DHX adapterserveri kasutusjuhendis](adapter-server-kasutusjuhend.md).
 
@@ -60,7 +60,7 @@ Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 * Operatsioonisüsteem - Java poolt [toetatud süsteem](https://www.java.com/en/download/help/sysreq.xml).
 
 Märkus (muud andmebaasid):
-> Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [serveritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/). Samuti PostgreSQL ja Oracle vanemate ja uuemate versioonidega.
+> Tõenäoliselt toimib tarkvara ka muude [Hibernate ORM](http://hibernate.org/orm/documentation/5.0/) poolt toetatud SQL andmebaasi [serveritel](https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html#configuration-optional-dialects), nagu [MySQL](https://www.mysql.com/) ja [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/), samuti PostgreSQL ja Oracle vanemate ja uuemate versioonidega.
 >
 > **NB!** DHX adapterserveri töötamine on testitud ainult [PostgreSQL 9.6](https://www.postgresql.org/) ja [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) andmebaasi serveri versioonidega.
 >
@@ -93,17 +93,17 @@ Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi
 
 Laadida alla ja installeerida PostgreSQL andmebaasi versioon [9.6.x](https://www.postgresql.org/download/).
 
-Loo uus andmebaasi kasutaja (Role). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createrole.html)
+Luuua uus andmebaasi kasutaja (Role). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createrole.html)
 ```sql
 CREATE USER dhxuser WITH PASSWORD '123';
 ``` 
 
-Loo uus andmebaas (näiteks nimega `dhx_adapter`). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createdatabase.html).
+Luua uus andmebaas (näiteks nimega `dhx_adapter`). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createdatabase.html).
 ```sql
 CREATE DATABASE dhx_adapter;
 ```
 
-Anna loodud kasutajale kõik selle andmebaasi õigused.
+Anda loodud kasutajale kõik selle andmebaasi õigused.
 ```sql
 GRANT ALL PRIVILEGES ON DATABASE dhx_adapter to dhxuser;
 ```
@@ -213,7 +213,7 @@ Märkus:
 > Selle määrab `dhx-application.properties` failis parameeter `spring.jpa.hibernate.ddl-auto=update` .
 > Vaata [Spring boot juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html#howto-initialize-a-database-using-hibernate).
 
-5) Vaadata kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
+5) Vaadata, kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
 #### 4.1.6. Paigaldada Tomcat Windows Servicena või Linux deemonina. 
 
@@ -315,7 +315,7 @@ Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutus
 Märkus:
 > Ainult Java Runtime Environment (JRE) ei ole piisav Maveni kasutamiseks.  
 
-Pärast installeerimist veenduda et keskkonna muutuja JAVA_HOME viitab õigesse JDK kataloogi (näiteks `C:\Program Files\Java\jdk1.8.0_121`).
+Pärast installeerimist veenduda, et keskkonna muutuja JAVA_HOME viitab õigesse JDK kataloogi (näiteks `C:\Program Files\Java\jdk1.8.0_121`).
 
 Käsurealt saab seda kontrollida käsuga `echo %JAVA_HOME%` (Windows) või `echo $JAVA_HOME` (Linux/Unix). 
 
@@ -379,9 +379,9 @@ mvn clean install -Denv=production
 Märkus:
 > Võtmega `-Denv=production` määratakse ära millisest kataloogist võetakse WAR sisse lisatavad häälestus failid (`dhx-application.properties` ja `log4j2.xml`).
 >
-> Väärtus `-Denv=production` määrab et kataloogi `DHX-adapter/src/main/resources/conf/production` alamkataloogidest.
+> Väärtus `-Denv=production` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/production` alamkataloogidest.
 >
-> Väärtus `-Denv=development` määrab et kataloogi `DHX-adapter/src/main/resources/conf/development` alamkataloogidest.
+> Väärtus `-Denv=development` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/development` alamkataloogidest.
 
 
 Selle väljundiks peaks olema SUCCESS:
@@ -456,14 +456,14 @@ Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 ------------ | ------------- | ------------- | -------------
 dhx.server.send-to-dhx | | */20 * * * * ? | Mitme sekundi järel käivitub Sisemise liidese kaudu vastu võetud dokumentide DHX-i edasi saatmise taustatöö. [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `*/20 * * * * ?` tähendab iga 20 sekundi järel.
 dhx.server.special-orgnisations |  | adit,kovtp,rt,eelnoud | DVK alamsüsteemide erandid, millele korral võib DHX adapterserveri sisemist (DVK) teenust kasutada ainult nime järgi (ei ole vaja organistatsiooni koodi)
-dhx.server.delete-old-documents |  | delete-all | `delete-all` määrab et nii dokumendi metaandmed kui ka sisu (fail) kustutatakse perioodilise puhastus protsessi poolt. `delete-content` määrab et ainult fail kustutatakse (baasi jäävad metaandmete kirjed alles). Muu väärtus jätab kõik alles.
+dhx.server.delete-old-documents |  | delete-all | `delete-all` määrab, et nii dokumendi metaandmed kui ka sisu (fail) kustutatakse perioodilise puhastus protsessi poolt. `delete-content` määrab, et ainult fail kustutatakse (baasi jäävad metaandmete kirjed alles). Muu väärtus jätab kõik alles.
 dhx.server.delete-old-documents-freq | | */20 * * * * ? | Vanade dokumentide kustutamise taustatöö käivitamise periood. Kustutatakse ainult dokumendid, mis on vanemad kui alljärgnevate parameetritega määratud päevade arv (30 päeva). [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `*/20 * * * * ?` tähendab iga 20 sekundi järel.
 dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse õnnelikult vastu võetud ja edastatud dokument andmebaasi alles. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest.
 dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse probleemselt (veaga) edastatud dokument andmebaasi alles. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest. 
 dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti "saatmisel" staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
-dhx.server-include-xmlns-to-attachments| false | false | Määrab et SOAP vastuse manuste sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
-documents.folder | | `C:\\dhx_docs\\` | Kataloog kuhu salvestatakse vastu võetud (edastamist ootavate) dokumentide Kapslid. Linux korral kasutada formaati `/kataloog`. Selle kataloogi failisüsteemis peab olema piisavalt vaba ruumi (10-50Gb). Dokumendid kustutatakse teatud perioodi (30 päeva) järel (parameetrid `dhx.server.received-document-lifetime` ja `dhx.server.failed-document-lifetime`)
-spring.jpa.hibernate.ddl-auto | | update| Määrab et esimesel serveri käivitamisel (kui andmebaasi ühenduse parameetrid on õigeks muudetud) luuakse andmebaasi tabelid automaatselt.
+dhx.server-include-xmlns-to-attachments| false | false | Määrab, et SOAP vastuse manuste sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
+documents.folder | | `C:\\dhx_docs\\` | Kataloog kuhu salvestatakse vastu võetud (edastamist ootavate) dokumentide kapslid. Linux korral kasutada formaati `/kataloog`. Selle kataloogi failisüsteemis peab olema piisavalt vaba ruumi (10-50Gb). Dokumendid kustutatakse teatud perioodi (30 päeva) järel (parameetrid `dhx.server.received-document-lifetime` ja `dhx.server.failed-document-lifetime`)
+spring.jpa.hibernate.ddl-auto | | update| Määrab, et esimesel serveri käivitamisel (kui andmebaasi ühenduse parameetrid on õigeks muudetud) luuakse andmebaasi tabelid automaatselt.
 
 
 PostgreSQL korral tuleb muuta järgmiste parameetrite väärtused.
@@ -473,7 +473,7 @@ Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx_adapter| Postgres andmebaasi host (localhost), port (5432) ja andmebaasi nimi (dhx_adapter)
 spring.datasource.username | | dhxuser | Postgres andmebaasi kasutajanimi
 spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
-spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab et kasutame Postgres JDBC draiverit
+spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab, et kasutame Postgres JDBC draiverit
 spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| Kasutada väärtust "PostgreSQL94Dialect" nii PosgreSQL 9.4 kui ka 9.5 ja  9.6 versioonide korral (väärtusi `PostgreSQL95Dialect` ja `PostgreSQL96Dialect` ei eksisteeri). 
 
 Oracle 11G kasutamise korral tuleb muuta järgmiste parameetrite väärtused.
@@ -481,9 +481,9 @@ Oracle 11G kasutamise korral tuleb muuta järgmiste parameetrite väärtused.
 Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 ------------ | ------------- | ------------- | -------------
 spring.datasource.url | | jdbc:oracle:thin:dhxadapter/dhxadapter123@localhost:1521:xe | Oracle andmebaasi host (localhost), port (1521), SID (xe), kasutajanimi (dhxadapter) ja parool (dhxadapter123).
-spring.jpa.database-platform | | org.hibernate.dialect.Oracle10gDialect | Määrab et kasutame Oracle andmebaasi.
-spring.datasource.driver-class-name | | oracle.jdbc.OracleDriver | Määrab et kasutame Oracle JDBC draiverit.
-spring.datasource.type | | oracle.jdbc.pool.OracleDataSource | Määrab et ksutame Oracle data source
+spring.jpa.database-platform | | org.hibernate.dialect.Oracle10gDialect | Määrab, et kasutame Oracle andmebaasi.
+spring.datasource.driver-class-name | | oracle.jdbc.OracleDriver | Määrab, et kasutame Oracle JDBC draiverit.
+spring.datasource.type | | oracle.jdbc.pool.OracleDataSource | Määrab, et kasutame Oracle data source
 
 Märkus:
 > Enamikel juhtudel piisab kui muuta ainult järgmiste parameetrite väärtused
@@ -508,9 +508,9 @@ Märkus:
 
 DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
 
-Sellisel paigaldamisel tuleb arvestada et ühised (jagatud) ressursid on 
+Sellisel paigaldamisel tuleb arvestada, et ühised (jagatud) ressursid on 
 * Andmebaas, kuhu salvestatakse metaandmed
-* Failisüsteemi kataloog, kus salvestatakse dokumendi (Kapsli) failid (parameeter `documents.folder`)
+* Failisüsteemi kataloog, kus salvestatakse dokumendi (kapsli) failid (parameeter `documents.folder`)
 
 Näiteks üks võimalik paigalduse variant oleks järgmine
 
@@ -521,7 +521,7 @@ Legend:
 * Failover/Loadbalancer - tarkvaraline (näiteks [Apache HTTPD](https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html)) või riistvaraline (näiteks [F5 big-ip](https://f5.com/), [loadbalancer.org](http://loadbalancer.org/) või [Citrix NetScaler](https://www.citrix.com/products/netscaler-adc/)) failover ja/või load-balancer komponent.  
 * dhx-adapter-server (Node A) - klastri esimene server, mis pakub SOAP teenuseid.
 * dhx-adapter-server (Node B) - klastri teine server, mis pakub SOAP teenuseid.
-* Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (Kapsli) failid. 
+* Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (kapsli) failid. 
 * Database Server (shared database) - jagatud andmebaas, millesse ajutiselt salvestatakse edastatavate dokumentide metaandmed
 * Document management System (DHS) - Asutuse dokumendihaldussüsteem (näiteks Delta, Amphora vms).
  
@@ -530,7 +530,7 @@ Klastrisse paigaldamisel tuleb arvestada et:
 Selleks tuleb see määrata klastri sõlme külge näiteks eraldi võrgukettana (määrates Windows keskkonnas näiteks `documents.folder=D:\\dhx_docs\\`, või linux keskkonnas näiteks `documents.folder=/mnt/dhxshare`).
 * Dokumentide DHX-i edastamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess.
 See tausta protsess loeb edastamata dokumente jagatud andmebaasist. Selleks, et sõlmed A ja B ei edastaks sama dokumenti samaaegselt (ehk topelt), kasutatakse pessimistlikku lukustamist (sisuliselt päringus määratakse `SELECT ... FOR UPDATE`, vaata täpsemalt [LockModeType.PESSIMISTIC_WRITE](http://docs.oracle.com/javaee/7/api/javax/persistence/LockModeType.html#PESSIMISTIC_WRITE) ja [PostgreSQL row level locks](https://www.postgresql.org/docs/9.6/static/explicit-locking.html#LOCKING-ROWS)). 
-Juhul kui soovitakse, et dokumentide DHX-i edastamist teeks ainult üks klastri sõlm (näiteks A), siis võib teisel sõlmel B muuta parameetri `dhx.server.send-to-dhx` väärtuseks väga pikk periood (näiteks `0 0 0 31 12 ?` määrab et ainult 31.detsembri keskööl).
+Juhul kui soovitakse, et dokumentide DHX-i edastamist teeks ainult üks klastri sõlm (näiteks A), siis võib teisel sõlmel B muuta parameetri `dhx.server.send-to-dhx` väärtuseks väga pikk periood (näiteks `0 0 0 31 12 ?` määrab, et ainult 31.detsembri keskööl).
 * Vanade dokumentide ja failide kustutamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess. 
 Selles taustaprotsessis kirjete ega failide lukustamist ei kasutata. Seega need tausta protsessid võivad proovida sama dokumenti ja faili samaaegselt kustutada (Viga kirjutatakse logisse ja seda võib ignoreerida). 
 Kindluse mõttes on mõistlik ühes klastri sõlmes dokumentide kustutamine keelata (määrata `dhx.server.delete-old-documents=none`).
@@ -541,7 +541,7 @@ Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb
 
 ## 8. Teadaolevad probleemid (sõltuvuste konfliktid)
 
-Kui DHX adapterserver soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama et võivad esineda sõltuvuste konfliktid.   
+Kui DHX adapterserver soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama, et võivad esineda sõltuvuste konfliktid.   
 
 Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
@@ -549,7 +549,7 @@ Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-pr
 
 Paigaldust saab soovi korral testida [SoapUI](https://www.soapui.org/) programmiga.
 
-Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võib olla kindel et toimivad:
+Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võib olla kindel, et toimivad:
 * DHX adapterserveri ja andmebaasi vaheline ühendus
 * DHX adapterserveri ja X-tee turvaserveri vaheline ühendus
 
@@ -589,6 +589,6 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 </soapenv:Envelope>
 ```
 
-5) Käivitada päring ja kontrollida et vastus ei oleks HTTP viga, ega `SOAP-ENV:Fault` viga.
+5) Käivitada päring ja kontrollida, et vastus ei oleks HTTP viga ega `SOAP-ENV:Fault` viga.
 
 Vaata täpsemalt DHX adapterserveri kasutusjuhendist [WSDL asukohad](adapter-server-kasutusjuhend.md#2-wsdl-asukohad) ja [SoapUI testimine](adapter-server-kasutusjuhend.md#3-soapui-testimine). 
