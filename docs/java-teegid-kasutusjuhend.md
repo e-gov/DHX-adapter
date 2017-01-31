@@ -2,14 +2,14 @@
 
 ET | [EN](java-library-usage-guide.md)
 
-# DHX Java teegi kasutusjuhend
+# DHX Java teekide kasutusjuhend
 
 ![](DHX.PNG)  ![](X-ROAD.PNG)
 
 Sisukord
 =================
 
-  * [DHX Java teegi kasutusjuhend](#dhx-java-teegi-kasutusjuhend)
+  * [DHX Java teekide kasutusjuhend](#dhx-java-teegi-kasutusjuhend)
     * [1\. Sissejuhatus](#1-sissejuhatus)
     * [2\. Välised sõltuvused ja baasplatvorm](#2-v%C3%A4lised-s%C3%B5ltuvused-ja-baasplatvorm)
     * [3\. Ehitamine](#3-ehitamine)

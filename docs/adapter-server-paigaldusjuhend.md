@@ -306,7 +306,7 @@ Kui soovitakse paigaldada Java Servlet spetsifikatsiooni [3.0](http://download.o
 Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html).
 
 Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
-Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teegi-laadimise-h%C3%A4%C3%A4lestamine-webxml-ja-applicationcontextxml).
+Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#6-teegi-laadimise-h%C3%A4%C3%A4lestamine-vanematel-serveritel-webxml).
 
 #### 4.3.1. Installeerida Apache Maven ehitustarkvara
 
@@ -448,7 +448,7 @@ Märkus:
 
 ## 6. Häälestus fail (dhx-application.properties)
 
-Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](java-teegid-kasutusjuhend.md#h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
+Põhilised häälestus failis esinevad parameetrid on toodud  [DHX Java teegi kasutusjuhendis](java-teegid-kasutusjuhend.md#7-h%C3%A4%C3%A4lestus-fail-dhx-applicationproperties).
 
 Lisaks neile tuleb täiendavalt lisada parameetrid
 
@@ -543,7 +543,7 @@ Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb
 
 Kui DHX adapterserver soovitakse paigalda samasse Java/Tomcat serverisse, kus töötab mõni muu Java serveri tarkvara moodul (WAR), siis peab arvestama, et võivad esineda sõltuvuste konfliktid.   
 
-Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
+Vaata [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#4-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid).
 
 ## 9. Paigalduse testimine (SoapUI)
 
