@@ -196,7 +196,7 @@ Kui uurimise käigus selgub näiteks, et välise adressaadi DHX süsteem oli pik
 
 Selleks tuleb andmebaasis väärtustada `VASTUVOTJA.dhx_internal_consignment_id=NULL` ja `VASTUVOTJA.staatus_id=101` (saatmisel).
 
-Teades `DOKUMENT.ID` väärtust võib seda teha SQL lausega:
+Teades `DOKUMENT.ID` väärtust, võib seda teha SQL lausega:
 ```sql
 UPDATE vastuvotja v SET
 	v.dhx_internal_consignment_id = NULL,
