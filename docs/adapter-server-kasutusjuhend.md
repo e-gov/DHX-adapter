@@ -1109,6 +1109,8 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 * Kuna DHX sees on toetatud ainult kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
 
 * Väljastatavad veateated (`SOAP:Fault`) on teistsugused kui DVK korral.
+
+* Operatsiooni `getSendStatus` väljundi `<edastus><staatus>` väärtus `katkestatud` ei tähenda et dokument jääb saatamata. Nimelt DHX adapterserver teostab mitu saatmisüritust. Sel väljal tagastatakse viimase saatmisürituse tulemus. Täpsemaks kontrolliks, et dokument jäi lõplikult saatmata (ja enam ei üritata), tuleks vaadata mõlemate väljade `<item><olek>` ja `<edastus><staatus>` väärtuseid. Kui mõlemad on `katkestatud`, siis jäi dokument lõplikult saatmata. Kui  `<item><olek>` on alles `saatmisel`, siis proovitakse veel järgnevat saatmisüritust. Saatmisürituste arv ja ooteajad on määratud parameetriga `document-resend-template=30,120,1200`. Vaata [Häälestus fail (dhx-application.properties)](java-teegid-kasutusjuhend.md#7-häälestus-fail-dhx-applicationproperties).   
  
 Mõned asjad mis DHX adapterserveris realiseeritud samamoodi nagu oli DVK keskserveris:
 
