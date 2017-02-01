@@ -18,7 +18,7 @@ Sisukord
     * [4\. Dokumentide edastamise vigade põhjuste analüüsimine](#4-dokumentide-edastamise-vigade-p%C3%B5hjuste-anal%C3%BC%C3%BCsimine)
       * [4\.1\. Andmebaasi mudel](#41-andmebaasi-mudel)
         * [4\.1\.1\. Asutuse nime muutmine (sisemise liidese getSendingOptions väljundis)](#411-asutuse-nime-muutmine-sisemise-liidese-getsendingoptions-väljundis)
-        * [4\.1\.2\. Dokumendi määramine uuesti saatmisele]()
+        * [4\.1\.2\. Dokumendi määramine uuesti saatmisele](#412-dokumendi-määramine-uuesti-saatmisele)
       * [4\.2\. Kapslid lokaalses failisüsteemis](#42-kapslid-lokaalses-failis%C3%BCsteemis)
 
 ## 1. Sissejuhatus
@@ -190,9 +190,9 @@ DHS lõppkasutajale arusaadavama alamsüsteemi nime võib määrata, määrates 
 
 ### 4.1.2. Dokumendi määramine uuesti saatmisele
 
-Juhul, kui dokumendi saatmine adressaadile lõplikult ebaõnnestub, siis märgitakse andmebaassis `VASTUVOTJA.staatus_id` väärtuseks `103` (katkestatud ehk ebaõnnestunud).
+Juhul, kui dokumendi saatmine adressaadile lõplikult ebaõnnestub, siis märgitakse andmebaasis `VASTUVOTJA.staatus_id` väärtuseks `103` (katkestatud ehk ebaõnnestunud).
 
-Kui uurimise käigus selgub näiteks, et välise adressaadi DHX süsteem oli pikalt maas (kogu saatmisürituste vältel), aga nüüd on see taas üleval, siis võib anda DHX adpaterserverile märku, et peaks algatama uuest selle dokumendi välja saatmise.
+Kui uurimise käigus selgub näiteks, et välise adressaadi DHX süsteem oli pikalt maas (kogu saatmisürituste vältel), aga nüüd on see taas üleval, siis võib anda DHX adapterserverile märku, et võib uuesti algatada selle dokumendi välja saatmise.
 
 Selleks tuleb andmebaasis väärtustada `VASTUVOTJA.dhx_internal_consignment_id=NULL` ja `VASTUVOTJA.staatus_id=101` (saatmisel).
 
