@@ -306,7 +306,7 @@ Kui soovitakse paigaldada Java Servlet spetsifikatsiooni [3.0](http://download.o
 Vaata [Spring juhendist](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html).
 
 Kui soovitakse paigaldada vanemasse Java Web Konteinerisse, siis tuleb häälestus teha [Web.xml](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-create-a-deployable-war-file-for-older-containers) kaudu.
-Selleks koha vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#6-teegi-laadimise-h%C3%A4%C3%A4lestamine-vanematel-serveritel-webxml).
+Selle kohta vaata täpsemalt [DHX Java teegi kasutusjuhend](java-teegid-kasutusjuhend.md#6-teegi-laadimise-h%C3%A4%C3%A4lestamine-vanematel-serveritel-webxml).
 
 #### 4.3.1. Installeerida Apache Maven ehitustarkvara
 
@@ -379,9 +379,9 @@ mvn clean install -Denv=production
 Märkus:
 > Võtmega `-Denv=production` määratakse ära millisest kataloogist võetakse WAR sisse lisatavad häälestus failid (`dhx-application.properties` ja `log4j2.xml`).
 >
-> Väärtus `-Denv=production` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/production` alamkataloogidest.
+> Väärtus `-Denv=production` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/production/server` alamkataloogist.
 >
-> Väärtus `-Denv=development` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/development` alamkataloogidest.
+> Väärtus `-Denv=development` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/development/server` alamkataloogist.
 
 
 Selle väljundiks peaks olema SUCCESS:
