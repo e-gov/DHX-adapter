@@ -1140,4 +1140,4 @@ Legend:
 * Document cleaner (deleter) - perioodiline taustaprotsess, mis kustutab lokaalsest andmebaasist ja failisüsteemist vanu dokumente. Vaikimisi on määratud, et kustutatakse üle 30 päeva vanad dokumendid. Vaata parameetreid `dhx.server.delete-old-documents=delete-all` ja `dhx.server.received-document-lifetime=30` ja `dhx.server.failed-document-lifetime=30` juhendist: [Häälestus fail (dhx-application.properties)](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties).
 * Filesystem folder dhx_docs - Lokaalse failisüsteemi kataloog, kuhu salvestatakse maha puhverdatavad dokumendi kapsli failid.
 * PostgreSQL database server - lokaalne andmebaasi server, kuhu salvestatakse (puhverdatakse) saabunud ja välja saadetavad dokumentide metaandmed.
-* dhx adapter database - DHX adapterserveri andmebaasi skeem
+* dhx adapter database - DHX adapterserveri andmebaasi skeem. Vaata [Andmebaasi mudel](adapter-server-haldusjuhend.md#41-andmebaasi-mudel).
