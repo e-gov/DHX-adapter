@@ -170,7 +170,7 @@ Saatmisel dokumentide leidmiseks võib kasutada SQL lauset:
 ```sql
 SELECT d.*, t.*, v.* FROM DOKUMENT d, TRANSPORT t, VASTUVOTJA v
   WHERE t.dokument_id = d.dokument_id AND v.transport_id = t.transport_id
-    AND (t.staatus_id = 101 OR v.staatus_id = 101)
+    AND (v.staatus_id = 101)
 ```
 
 Katkestatud (vea saanud) dokumentide leidmiseks võib kasutada SQL lauset:
