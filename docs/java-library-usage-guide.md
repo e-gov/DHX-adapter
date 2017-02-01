@@ -27,7 +27,7 @@ Table of Contents
 
 DHX Java library implements [DHX protocol](https://e-gov.github.io/DHX/EN.html) functionality for [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat). 
 
-This guide is intended for software developers (DHX implementers), who wish to use DHX protocol in their document management system (DMS).
+This guide is intended for software developers (DHX implementors), who wish to use DHX protocol in their document management system (DMS).
 
 Source code of DHX Java library is located at https://github.com/e-gov/DHX-adapter
 
@@ -304,7 +304,7 @@ dhx.check-recipient | true |  | Specifies whether to validate incoming document 
 dhx.check-sender | false |  | Specifies whether to check the sender validity of the incoming document.  Validation checks whether the sender inside Capsule XML is the same as sender (client) in X-road header.
 dhx.check-duplicate | true |  | Specifies whether to perform duplication checks on incoming documents consignments.  If true, the  `DhxImplementationSpecificService` [isDuplicatePackage](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/DhxImplementationSpecificService.html#isDuplicatePackage-ee.ria.dhx.types.InternalXroadMember-java.lang.String-) is called. If it is duplicate consignment, then respond with error [DHX.Duplicate](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
 **dhx.document-resend-template** | 30,120,1200 |  | Specifies sending re-attempting count and wait times. Used only when sending asynchronously. This example determines that total 4 sending attepts are made. Re-attempt are made at first after 30 seconds, then after 120 seconds (2 minutes) and finally after 1200 seconds (20 minutes). If final attempt fails, then abort sending thread.
-dhx.wsdl-file | dhx.wsdl |  | DHX web service [WSDL file](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) name. This wsdl file is searched from Java Classpath on server restart. WSDL file is same for all DHX implementers and needs no changes.
+dhx.wsdl-file | dhx.wsdl |  | DHX web service [WSDL file](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-ws/src/main/resources/dhx.wsdl) name. This wsdl file is searched from Java Classpath on server restart. WSDL file is same for all DHX implementors and needs no changes.
 dhx.protocol-version | 1.0 |  | DHX protocol version number. Sended inside `sendDocument` request as paramater [DHXVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#p%C3%A4ringu-sisend) value. 
 dhx.check-dhx-version | true |  | Specifies whether to check DHXVersion validity on document arrival. If version is not right, then respond with error [DHX.UnsupportedVersion](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md#veakoodid) to the sender.
 dhx.accepted-dhx-protocol-versions | 1.0 |  | Specifies what DHX protocol versions we accept on document arrival. Comma sparated list. In future it might be `1.0,2.0`. Works together with previous `dhx.check-dhx-version` parameter.
@@ -317,7 +317,7 @@ dhx.xsd.capsule-xsd-file21 | jar://Dvk_kapsel_vers_ 2_1_eng_est.xsd |  | Specifi
 
 Main functions of DHX Java library are [sending documents](https://e-gov.github.io/DHX/EN.html#7-saatmine), [receiving documents](https://e-gov.github.io/DHX/EN.html#8-vastuv%C3%B5tmine) and generating [local address book](https://e-gov.github.io/DHX/EN.html#74-lokaalne-aadressiraamat).
  
-Main functionality, that are of interest to developer (DHX implementer), are in packages 
+Main functionality, that are of interest to developer (DHX implementor), are in packages 
 - [ee.ria.dhx.ws.service](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/package-summary.html) – Java service interfaces
 - [ee.ria.dhx.ws.service.impl](https://e-gov.github.io/DHX-adapter/dhx-adapter-ws/doc/ee/ria/dhx/ws/service/impl/package-summary.html) – Java service implementations
 
