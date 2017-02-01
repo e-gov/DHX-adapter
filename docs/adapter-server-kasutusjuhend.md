@@ -1109,14 +1109,14 @@ Samuti hilisemas `markDocumentsReceived` päringus väärtustama `<client><membe
 * Kuna DHX sees on toetatud ainult kapsli 2.1 versioon, siis kapsli konverteerimist (2.1 versioonist 1.0 versiooni) kunagi ei toimu, sest vana kapsli vana versiooni ei saa keegi saata.
 
 * Väljastatavad veateated (`SOAP:Fault`) on teistsugused kui DVK korral.
-
-* Operatsiooni `getSendStatus` väljundi `<edastus><staatus>` väärtus `katkestatud` ei tähenda et dokument jääb saatmata. Nimelt DHX adapterserver teostab mitu saatmisüritust. `<edastus><staatus>` väljal tagastatakse viimase saatmisürituse tulemus. Täpsemaks kontrolliks, kas dokument jäi lõplikult saatmata (ja rohkem ei üritata), tuleb vaadata mõlemate väljade `<item><olek>` ja `<edastus><staatus>` väärtuseid. Kui mõlemad on `katkestatud`, siis jäi dokument lõplikult saatmata. Kui  `<item><olek>` on alles `saatmisel`, siis proovitakse veel järgnevat saatmisüritust. Saatmisürituste arv ja ooteajad on määratud parameetriga `document-resend-template=30,120,1200`. Vaata [Häälestus fail (dhx-application.properties)](java-teegid-kasutusjuhend.md#7-häälestus-fail-dhx-applicationproperties).   
  
 Mõned asjad mis DHX adapterserveris realiseeritud samamoodi nagu oli DVK keskserveris:
 
 * DHX adapterserveri `getSendingOptions` vastuse elemendi `<ns2:getSendingOptionsResponse  xmlns:ns2="http://www.riik.ee/schemas/dhl"` nimeruum on teine (vana X-tee versiooni nimeruum `http://www.riik.ee/schemas/dhl`) kui päringu sisendi nimeruum (X-tee v6 versiooni `http://producers.dhl.xrd.riik.ee/producer/dhl`).  See toimis samamoodi ka DVK keskserveris.
 
 * DHX adapterserveri `sendDocuments.v4` päringu SOAP kehas toodud [SWAREF](http://www.ws-i.org/profiles/attachmentsprofile-1.0-2004-08-24.html) manuse `cid` väärtus ei pea olema URL kodeeritud (nagu [rfc2392](https://www.ietf.org/rfc/rfc2392.txt) standard seda nõuab). See on tähtis juhul kui manuse "Content-ID" väärtuse sees kasutatakse muid väärtusi kui ASCII A-Z, 0-9 ja sidekriips(-). Näiteks kui cid väärtuses on kaldkriips(/) ja pluss(+), siis XML-is võib selle esitada ilma URL kodeerimata (näiteks `<documentAttachment>cid:miski-cid/12312+ABC.xml</documentAttachment>`). See toimis samamoodi vanas DVK keskserveris.  
+
+* Operatsiooni `getSendStatus` väljundi `<edastus><staatus>` väärtus `katkestatud` tähendab et dokument jäi lõplikult saatmata (ja rohkem ei üritata). Nimelt DHX adapterserver teostab mitu saatmisüritust. Kui eelmine saatmine ebaõnnestus, aga üritatakse veel uuesti saata, siis `<edastus><staatus>` väljal tagastatakse väärtus `saatmisel`. Kui dokument jäi mõnele adresaadile lõplikult saatmata (ja rohkem ei üritata) siis `<item><olek>` väärtuseks jääbki `saatmisel`. Kui kõikidele adresaatidele saatmised õnnestusid, siis `<item><olek>` tagastatakse väärtusega `saadetud`. Saatmisürituste arv ja ooteajad on määratud parameetriga `document-resend-template=30,120,1200`. Vaata [Häälestus fail (dhx-application.properties)](java-teegid-kasutusjuhend.md#7-häälestus-fail-dhx-applicationproperties).   
 
  
 ## 7. DHX adapterserveri detailne sisemine arhitektuur
