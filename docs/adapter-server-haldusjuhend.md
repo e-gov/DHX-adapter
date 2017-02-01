@@ -18,6 +18,7 @@ Sisukord
     * [4\. Dokumentide edastamise vigade põhjuste analüüsimine](#4-dokumentide-edastamise-vigade-p%C3%B5hjuste-anal%C3%BC%C3%BCsimine)
       * [4\.1\. Andmebaasi mudel](#41-andmebaasi-mudel)
         * [4\.1\.1\. Asutuse nime muutmine (sisemise liidese getSendingOptions väljundis)](#411-asutuse-nime-muutmine-sisemise-liidese-getsendingoptions-väljundis)
+        * [4\.1\.2\. Dokumendi määramine uuesti saatmisele]()
       * [4\.2\. Kapslid lokaalses failisüsteemis](#42-kapslid-lokaalses-failis%C3%BCsteemis)
 
 ## 1. Sissejuhatus
@@ -186,6 +187,27 @@ DHS süsteem kasutab üldjuhul `getSendingOptions` väljundina tagastatud asutus
 Asutuse puhul, kellel on kasutusel mitu [DHX alamsüsteemi](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx), näiteks alamsüsteem `DHX.viru`, väljastatakse nimi kujul: `Asutuse nimi (DHX.viru)`. See nimi ei pruugi olla lõppkasutajale arusaadav.
  
 DHS lõppkasutajale arusaadavama alamsüsteemi nime võib määrata, määrates DHX adapterserveri andmebaasis välja `ASUTUS.reaalne_nimi` väärtuseks õige nime, näiteks `Viru Ringkonnaprokuratuur`. 
+
+### 4.1.2. Dokumendi määramine uuesti saatmisele
+
+Juhul, kui dokumendi saatmine adressaadile lõplikult ebaõnnestub, siis märgitakse andmebaassis `VASTUVOTJA.staatus_id` väärtuseks `103` (katkestatud ehk ebaõnnestunud).
+
+Kui uurimise käigus selgub näiteks, et välise adressaadi DHX süsteem oli pikalt maas (kogu saatmisürituste vältel), aga nüüd on see taas üleval, siis võib anda DHX adpaterserverile märku, et peaks algatama uuest selle dokumendi välja saatmise.
+
+Selleks tuleb andmebaasis väärtustada `VASTUVOTJA.dhx_internal_consignment_id=NULL` ja `VASTUVOTJA.staatus_id=101` (saatmisel).
+
+Teades `DOKUMENT.ID` väärtust võib seda teha SQL lausega:
+```sql
+UPDATE vastuvotja v SET
+	v.dhx_internal_consignment_id = NULL,
+	v.staatus_id = 101
+WHERE v.staatus_id = 103
+  AND v.transport_id IN (
+  	SELECT t.transport_id FROM transport t, dokument d
+  	WHERE t.dokument_id = d.dokument_id
+  	  AND d.dokument_id = <VALUE> 
+  ) 
+```
 
 ### 4.2. Kapslid lokaalses failisüsteemis
 
