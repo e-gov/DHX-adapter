@@ -142,7 +142,7 @@ Maven-ga, juhul kui mingi muu kasutatav teek (näiteks axis2-codegen) sõltub ne
 
 Kõige lihtsam on DHX Java teeke kasutada Web (Servlet) Container tarkvara (Tomcat, Jetty, jne) sees.
 
-Uuemates serverites, mis toetavad Java Servlet 3.0 või uuemat spetsifikatsiooni saab Spring Framework häälestuse määrata anontatsioonidega järgmiselt.
+Uuemates serverites, mis toetavad Java Servlet 3.0 või uuemat spetsifikatsiooni saab Spring Framework häälestuse määrata annotatsioonidega järgmiselt.
 
 ```java
 import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
@@ -257,7 +257,7 @@ Selle sisu peaks olema järgmine:
 
 Servleti laadimisel otsitakse Servleti classpathist faili nimega `dhx-application.properties`.
 
-Ehitamisel on soovitav see näiteks paigalda WAR-i sisse `/WEB-INF/classes` alamataloogi.
+Ehitamisel on soovitav see näiteks paigalda WAR-i sisse `/WEB-INF/classes` alamkataloogi.
 
 Selle näide on toodud failis [dhx-application.properties](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/development/ws/dhx-application.properties)
 
@@ -460,7 +460,7 @@ public class Sender {
     // saadame dokumendi üle X-tee ja ootame sünkroonselt vastust
     DhxSendDocumentResult result = dhxPackageService.sendPackage(dhxPackage);
 
-    // kontrollime satmise viga
+    // kontrollime saatmise viga
     if (result.occuredException !=  null 
        || result.getResponse().getFault() != null) {
       // saatmisel ilmnes viga
