@@ -128,7 +128,7 @@ Päringus `<service>` päises ette antud alamelemente `<xRoadInstance>`, `<membe
 Seega need võivad olla samad nagu saadeti vana DVK X-tee teenuse korral (`GOV`, `70006317` - Riigi Infosüsteemi Amet ja `dhl`).
 ```xml 
       <xro:service>
-         <iden:xRoadInstance>ee</iden:xRoadInstance>
+         <iden:xRoadInstance>EE</iden:xRoadInstance>
          <iden:memberClass>GOV</iden:memberClass>
          <iden:memberCode>70006317</iden:memberCode>
          <iden:subsystemCode>dhl</iden:subsystemCode>
@@ -141,7 +141,7 @@ Päringu `<client>` päises ette antud alamelementidest kasutatakse ainult `<mem
 Ülejäänuid `<client>` päise elemente ignoreeritakse. Seega need võivad olla samad nagu vana DVK X-tee teenuse korral saadeti.
 ```xml  
       <xro:client>
-         <iden:xRoadInstance>ee</iden:xRoadInstance>
+         <iden:xRoadInstance>EE</iden:xRoadInstance>
          <iden:memberClass>COM</iden:memberClass>
          <iden:memberCode>30000001</iden:memberCode>
          <iden:subsystemCode>DHX</iden:subsystemCode>
@@ -175,7 +175,7 @@ Päringu `getSendingOptions.v1` näide:
       <xro:protocolVersion>4.0</xro:protocolVersion>
       <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
       <xro:service>
-         <iden:xRoadInstance>ee</iden:xRoadInstance>
+         <iden:xRoadInstance>EE</iden:xRoadInstance>
          <iden:memberClass>GOV</iden:memberClass>
          <iden:memberCode>70006317</iden:memberCode>
          <iden:subsystemCode>dhl</iden:subsystemCode>
@@ -183,7 +183,7 @@ Päringu `getSendingOptions.v1` näide:
          <iden:serviceVersion>v1</iden:serviceVersion>
       </xro:service>
       <xro:client>
-         <iden:xRoadInstance>ee</iden:xRoadInstance>
+         <iden:xRoadInstance>EE</iden:xRoadInstance>
          <iden:memberClass>COM</iden:memberClass>
          <iden:memberCode>10560025</iden:memberCode>
          <iden:subsystemCode>DHX</iden:subsystemCode>
@@ -204,7 +204,7 @@ Vastuse näide:
       <xro:protocolVersion xmlns:xro="http://x-road.eu/xsd/xroad.xsd">4.0</xro:protocolVersion>
       <xro:id xmlns:xro="http://x-road.eu/xsd/xroad.xsd">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
       <xro:service xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
-         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee</iden:xRoadInstance>
+         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">EE</iden:xRoadInstance>
          <iden:memberClass xmlns:iden="http://x-road.eu/xsd/identifiers">COV</iden:memberClass>
          <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">70006317</iden:memberCode>
          <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">dhl</iden:subsystemCode>
@@ -212,7 +212,7 @@ Vastuse näide:
          <iden:serviceVersion xmlns:iden="http://x-road.eu/xsd/identifiers">v1</iden:serviceVersion>
       </xro:service>
       <xro:client xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
-         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">ee</iden:xRoadInstance>
+         <iden:xRoadInstance xmlns:iden="http://x-road.eu/xsd/identifiers">EE</iden:xRoadInstance>
          <iden:memberClass xmlns:iden="http://x-road.eu/xsd/identifiers">COM</iden:memberClass>
          <iden:memberCode xmlns:iden="http://x-road.eu/xsd/identifiers">10560025</iden:memberCode>
          <iden:subsystemCode xmlns:iden="http://x-road.eu/xsd/identifiers">DHX</iden:subsystemCode>
@@ -283,13 +283,13 @@ Päringu sisu näide:
     <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
     </ns4:id>
     <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-      <ns3:xRoadInstance>ee-</ns3:xRoadInstance>
+      <ns3:xRoadInstance>EE</ns3:xRoadInstance>
       <ns3:memberClass>GOV</ns3:memberClass>
       <ns3:memberCode>30000001</ns3:memberCode>
       <ns3:subsystemCode>DHX</ns3:subsystemCode>
     </ns4:client>
     <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-      <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+      <ns3:xRoadInstance>EE</ns3:xRoadInstance>
       <ns3:memberClass>GOV</ns3:memberClass>
       <ns3:memberCode>70006317</ns3:memberCode>
       <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -446,13 +446,13 @@ Vastuse sisu näide:
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>30000001</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>70006317</ns3:memberCode>
          <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -513,13 +513,13 @@ Päringu  `getSendStatus.v1` sisendi näide:
     <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
     </ns4:id>
     <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-      <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+      <ns3:xRoadInstance>EE</ns3:xRoadInstance>
       <ns3:memberClass>COM</ns3:memberClass>
       <ns3:memberCode>30000001</ns3:memberCode>
       <ns3:subsystemCode>DHX</ns3:subsystemCode>
     </ns4:client>
     <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-      <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+      <ns3:xRoadInstance>EE</ns3:xRoadInstance>
       <ns3:memberClass>GOV</ns3:memberClass>
       <ns3:memberCode>70006317</ns3:memberCode>
       <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -554,13 +554,13 @@ Vastuse näide:
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>COM</ns3:memberClass>
          <ns3:memberCode>30000001</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>70006317</ns3:memberCode>
          <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -638,13 +638,13 @@ Päringu keha näide:
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>COM</ns3:memberClass>
          <ns3:memberCode>10560025</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>70006317</ns3:memberCode>
          <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -669,13 +669,13 @@ Vastuse näide:
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>COM</ns3:memberClass>
          <ns3:memberCode>10560025</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>70006317</ns3:memberCode>
          <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -834,13 +834,13 @@ Päringu `markDocumentsReceived.v3` sisendi näide:
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>COM</ns3:memberClass>
          <ns3:memberCode>10560025</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>70006317</ns3:memberCode>
          <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -869,13 +869,13 @@ Vastus:
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>COM</ns3:memberClass>
          <ns3:memberCode>10560025</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>70006317</ns3:memberCode>
          <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -956,13 +956,13 @@ Sisestada representationList päringu keha, väärtustades `<service><memberCode
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>COM</ns3:memberClass>
          <ns3:memberCode>30000001</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>40000001</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
@@ -983,13 +983,13 @@ Kontrollida, kas vastuses on lisatud asutus (75019046, Tallinna Lasteaed Pallip�
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>COM</ns3:memberClass>
          <ns3:memberCode>30000001</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>40000001</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
@@ -1022,13 +1022,13 @@ Vahendatav pöördub dokumendi välja saatmiseks DHX adapterserveri sisemise lii
     <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f
     </ns4:id>
     <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-      <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+      <ns3:xRoadInstance>EE</ns3:xRoadInstance>
       <ns3:memberClass>GOV</ns3:memberClass>
       <ns3:memberCode>75019046</ns3:memberCode>
       <ns3:subsystemCode>DHX</ns3:subsystemCode>
     </ns4:client>
     <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-      <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+      <ns3:xRoadInstance>EE</ns3:xRoadInstance>
       <ns3:memberClass>GOV</ns3:memberClass>
       <ns3:memberCode>70006317</ns3:memberCode>
       <ns3:subsystemCode>dhl</ns3:subsystemCode>
@@ -1069,13 +1069,13 @@ Vahendatav pöördub talle saabunud dokumentide vastu võtmiseks DHX adapterserv
       <ns4:protocolVersion xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">4.0</ns4:protocolVersion>
       <ns4:id xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">64a3ddbd-1620-42c4-b2fe-60b854c2f32f</ns4:id>
       <ns4:client xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>75019046</ns3:memberCode>
          <ns3:subsystemCode>DHX</ns3:subsystemCode>
       </ns4:client>
       <ns4:service ns3:objectType="SERVICE" xmlns:ns2="http://dhx.x-road.eu/producer" xmlns:ns3="http://x-road.eu/xsd/identifiers" xmlns:ns4="http://x-road.eu/xsd/xroad.xsd" xmlns:ns5="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
-         <ns3:xRoadInstance>ee-dev</ns3:xRoadInstance>
+         <ns3:xRoadInstance>EE</ns3:xRoadInstance>
          <ns3:memberClass>GOV</ns3:memberClass>
          <ns3:memberCode>70006317</ns3:memberCode>
          <ns3:subsystemCode>dhl</ns3:subsystemCode>
