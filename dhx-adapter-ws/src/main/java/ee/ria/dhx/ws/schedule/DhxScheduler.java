@@ -8,12 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
 @Slf4j
-@Service
-@Configurable
+@Component
 public class DhxScheduler {
 
   @Autowired

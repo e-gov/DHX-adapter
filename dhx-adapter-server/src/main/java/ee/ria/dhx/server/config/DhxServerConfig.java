@@ -66,7 +66,7 @@ public class DhxServerConfig {
     try {
       SimpleDateFormat sdf = new SimpleDateFormat("YYYY_MM_dd_HHmmss");
       Date date = new Date();
-      String fileName = documentsFolder + "dhx_" + sdf.format(date) + UUID.randomUUID();
+      String fileName = getDocumentsFolder() + "dhx_" + sdf.format(date) + UUID.randomUUID();
       log.debug("creating file: " + fileName);
       File file = new File(fileName);
       file.createNewFile();
@@ -86,12 +86,12 @@ public class DhxServerConfig {
    */
   @Loggable
   public File getDocumentFile(String fileName) throws DhxException {
-    File file = new File(documentsFolder + fileName);
+    File file = new File(getDocumentsFolder() + fileName);
     if (file.exists()) {
       return file;
     } else {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,
-          "File not found! file:" + documentsFolder + fileName);
+          "File not found! file:" + getDocumentsFolder() + fileName);
     }
   }
 
@@ -247,12 +247,25 @@ public class DhxServerConfig {
    * @param documentsFolder the documentsFolder to set
    */
   public void setDocumentsFolder(String documentsFolder) {
+    this.documentsFolder = formatFolder(documentsFolder);
+  }
+  
+  private String formatFolder(String documentsFolder) {
     final String folderSeparator = "/";
     final String folderSeparatorWin = "\\";
     if(!documentsFolder.endsWith(folderSeparator) && !documentsFolder.endsWith(folderSeparatorWin)) {
       documentsFolder = documentsFolder + folderSeparator;
     }
-    this.documentsFolder = documentsFolder;
+    return documentsFolder;
+  }
+
+  /**
+   * Returns the documentsFolder.
+   *
+   * @return the documentsFolder
+   */
+  public String getDocumentsFolder() {    
+    return formatFolder(documentsFolder);
   }
 
 

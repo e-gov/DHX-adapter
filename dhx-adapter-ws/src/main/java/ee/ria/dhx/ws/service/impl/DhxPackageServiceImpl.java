@@ -47,7 +47,7 @@ import java.util.List;
  *
  */
 @Slf4j
-@Service("documentService")
+@Service
 public class DhxPackageServiceImpl implements DhxPackageService {
 
   @Autowired

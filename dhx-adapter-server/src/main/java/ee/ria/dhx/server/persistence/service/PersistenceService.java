@@ -52,7 +52,7 @@ public class PersistenceService {
   @Setter
   OrganisationRepository organisationRepository;
 
-  @Value("${dhx.server.special-orgnisations}")
+  @Value("${dhx.server.special-organisations}")
   @Setter
   String specialOrganisations;
 

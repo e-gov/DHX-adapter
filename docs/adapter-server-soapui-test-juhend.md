@@ -43,7 +43,7 @@ SoapUi testid on koostatud ja nimetatud vastavalt [testilugudele](adapter-server
 | dhs3RepresenteeSubsystem2 | subsytem | testilugudes kirjeldatud DHS3 Xtee liikme vahendatava alamsüsteemi nimi |
 | dhs1MemberCode | 70000004 | testilugudes kirjeldatud DHS1 Xtee liikme memberCode |
 
-**Failid asuvad [xmls](xmls) kaustas. Faili viidetega parameetrid(goodCapsule, badCapsule, notCapsule, bigCapsuleDVK) tuleb muuta igas keskkonnas kus teste käivitatakse. Faili viide peab olema absolute path failini.**  
+**Failid asuvad [xmls](../dhx-adapter-server/tests/xmls) kaustas. Faili viidetega parameetrid(goodCapsule, badCapsule, notCapsule, bigCapsuleDVK) tuleb muuta igas keskkonnas kus teste käivitatakse. Faili viide peab olema absolute path failini.**  
 
 ## SoapUI testide käivitamine
 Testide struktuuri ja käivitamise kirjeldus on esitatud [siin](https://www.soapui.org/functional-testing/structuring-and-running-tests.html). 

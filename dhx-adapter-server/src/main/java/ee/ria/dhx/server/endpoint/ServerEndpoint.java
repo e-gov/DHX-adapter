@@ -47,7 +47,7 @@ public class ServerEndpoint {
   DhxGateway dhxGateway;
 
   @Autowired
-  SoapService dhxDocumentService;
+  SoapService soapService;
 
   @Autowired
   Jaxb2Marshaller marsh;
@@ -79,7 +79,7 @@ public class ServerEndpoint {
       request.getKeha().getDokumendid().setHref(WsUtil.extractAttachment(messageContext,
           request.getKeha().getDokumendid().getHrefString()));
     }
-    SendDocumentsResponse response = dhxDocumentService.sendDocuments(request, client, service);
+    SendDocumentsResponse response = soapService.sendDocuments(request, client, service);
     String contentId = WsUtil.addAttachment(messageContext, response.getKeha().getHref());
     response.getKeha().setHrefString(contentId);
     return response;
@@ -111,7 +111,7 @@ public class ServerEndpoint {
           "Only v1,v2,v3,v4 versions of receiveDocuments are supported");
     }
     ReceiveDocumentsResponse response =
-        dhxDocumentService.receiveDocuments(request, client, service);
+        soapService.receiveDocuments(request, client, service);
     String contentId = WsUtil.addAttachment(messageContext, response.getKeha().getHref());
     response.getKeha().setHrefString(contentId);
     return response;
@@ -140,7 +140,7 @@ public class ServerEndpoint {
           "Only v1,v2,v3 versions of markDocumentsReceived are supported");
     }
     MarkDocumentsReceivedResponse response =
-        dhxDocumentService.markDocumentReceived(request, client, service, messageContext);
+        soapService.markDocumentReceived(request, client, service, messageContext);
     return response;
   }
 
@@ -166,7 +166,7 @@ public class ServerEndpoint {
           "Only v1,v2 versions of getSendStatus are supported");
     }
     GetSendStatusResponse response =
-        dhxDocumentService.getSendStatus(request, client, service, messageContext);
+        soapService.getSendStatus(request, client, service, messageContext);
     String contentId = WsUtil.addAttachment(messageContext, response.getKeha().getHref());
     response.getKeha().setHrefString(contentId);
     return response;
@@ -198,7 +198,7 @@ public class ServerEndpoint {
           "Only v1,v2,v3 versions of getSendingOptions are supported");
     }
     GetSendingOptionsResponse response =
-        dhxDocumentService.getSendingOptions(request, client, service, messageContext);
+        soapService.getSendingOptions(request, client, service, messageContext);
     return response;
   }
 
