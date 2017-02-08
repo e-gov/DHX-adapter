@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.util.Stack;
@@ -57,11 +58,28 @@ public class BigDataMarshallHandler extends BigDataHandler {
       OutputStream stream) throws IOException {
     super(bigDataClass);
     XMLSerializer serializer = new XMLSerializer();
-    serializer.setNamespaces(false);
     serializer.setOutputByteStream(stream);
     super.setHandler(serializer.asContentHandler());
     this.objectToMarshall = objectToMarshall;
     this.stream = stream;
+  }
+  
+  /**
+   * BigDataMarshallHandler constructor.
+   * 
+   * @param bigDataClass class having big data that is being unmarshalled or null if no big datat is
+   *        expected
+   * @param objectToMarshall object to be marshalled
+   * @param writer writer to write marshalled object to
+   * @throws IOException thrown if error occurs
+   */
+  public BigDataMarshallHandler(Class<? extends Object> bigDataClass, Object objectToMarshall,
+      Writer writer) throws IOException {
+    super(bigDataClass);
+    XMLSerializer serializer = new XMLSerializer();
+    serializer.setOutputCharStream(writer);
+    super.setHandler(serializer.asContentHandler());
+    this.objectToMarshall = objectToMarshall;
   }
 
   /**

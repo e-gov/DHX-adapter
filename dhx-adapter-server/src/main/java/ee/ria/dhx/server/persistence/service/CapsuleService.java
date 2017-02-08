@@ -494,7 +494,6 @@ public class CapsuleService {
           for (DecRecipient decRecipient : container.getTransport().getDecRecipient()) {
             if (decRecipient.getOrganisationCode().equals(recipientOrganisationCodeToFind)) {
               decRecipient.setOrganisationCode(recipientOrganisationCode);
-              break;
             }
           }
         }

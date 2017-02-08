@@ -544,19 +544,19 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       throws DhxException {
     try {
       if (log.isDebugEnabled()) {
-        log.debug("marshalling container");
+        log.debug("marshalling container no namespaces");
       }
+      StringWriter writer = new StringWriter();
       Marshaller marshaller = getMarshaller();
       setSchemaForMarshaller(schemaStream, marshaller);
-      StringWriter writer = new StringWriter();
-      marshaller.marshal(container, writer);
+      marshaller.marshal(container,
+          new BigDataMarshallHandler(capsuleConfig.getCurrentCapsuleVersion().getContainerClass(),
+              container, writer));
       return writer;
-    } catch (JAXBException ex) {
+    } catch (IOException | JAXBException ex) {
       log.error(ex.getMessage(), ex);
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
-          "Error occured while creating object from capsule. "
-              + ex.getMessage(),
-          ex);
+          "Error occured while creating object from capsule. " + ex.getMessage(), ex);
     }
   }
 

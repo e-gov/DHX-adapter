@@ -46,7 +46,6 @@
     - [3.2. Duplikaadi kontroll](#3.2)
     - [3.3. DVK süsteemist tulnud dokumendi vastuvõtmine](#3.3)
 
-- [Testplaan](#testplaan)
 
 <a name="test-strateegia"></a>
 # Testimise strateegia
@@ -65,7 +64,7 @@ DHX adapterserveri testikontseptsioon on esitatud joonisel:
 
 - Korrektselt kapseldatud fail - Vastavalt elektroonilise andmevahetuse metaandmete loendile 2.1  korrektselt kapseldatud fail.
 
-DHX adapter serveri testimiseks on vajalikud järgmised X-tee liikmed:
+DHX adapterserveri testimiseks on vajalikud järgmised X-tee liikmed:
 
 DHS 1 – X-tee liige, kellel on olemas DHX alamsüsteem, aga ta ei paku DHX protokollile vastavaid teenuseid või teenusi pakkuv rakendus on maas.
 
@@ -1465,7 +1464,7 @@ Saadetis : korrektselt kapseldatud fail
 
 #### **Verifitseerija toimimine (samm-sammuline):**
 
-- Testija saadab päringu DHX adapter serveri teenusesse sendDocuments.v4
+- Testija saadab päringu DHX adapterserveri teenusesse sendDocuments.v4
 
   - SOAP päringu manusena tuleb lisada korrektselt kapseldatud fail. Manuse ContentId-na tuleb panna 'doc'.
 
@@ -1624,7 +1623,7 @@ Saadetis : kapsli fail, mis ei vasta Elektroonilise andmevahetuse metaandmete lo
 
 #### **Verifitseerija toimimine (samm-sammuline):**
 
-- Testija saadab päringu DHX adapter serveri teenusesse sendDocuments.v4
+- Testija saadab päringu DHX adapterserveri teenusesse sendDocuments.v4
 
   - SOAP päringu manusena tuleb lisada kapsli fail, mis ei vasta Elektroonilise andmevahetuse metaandmete loendile 2.1 (nt puudu kohustuslik väli), aga on XML-vormingus fail õige XML-vorminguga. Manuse ContentId-na tuleb panna 'doc'.
 
@@ -1779,7 +1778,7 @@ Saadetis : fail mis ei ole XML-vormingus või on XML vale vorminguga.
 
 #### **Verifitseerija toimimine (samm-sammuline):**
 
-- Testija saadab päringu DHX adapter serveri teenusesse sendDocument
+- Testija saadab päringu DHX adapterserveri teenusesse sendDocument
 
   - Testija asendab sendDocument päringu XML-i kehas consignmentId elemendi sisu unikaalse id-ga(näiteks suvalise tekstiga).
   - SOAP päringu manusena tuleb lisada fail, mis ei ole XML-vormingus või XML vale vorminguga. Manuse ContentId-na tuleb panna 'doc'.
@@ -2012,7 +2011,7 @@ Saadetis : korrektselt kapseldatud fail
 
 #### **Verifitseerija toimimine (samm-sammuline):**
 
-- Testija saadab päringu DHX adapter serveri teenusesse sendDocuments.v4
+- Testija saadab päringu DHX adapterserveri teenusesse sendDocuments.v4
 
   - SOAP päringu manusena tuleb panna korrektselt kapseldatud faili. Manuse ContentId-na tuleb panna 'doc'.
 
@@ -2286,7 +2285,7 @@ Saadetis :
 #### **Verifitseerija toimimine (samm-sammuline):**
 
 - Testija täidab testi 1.2
-- Testija saadab päringu DHX adapter serveri teenusesse receiveDocuments
+- Testija saadab päringu DHX adapterserveri teenusesse receiveDocuments
 
 #### **Oodatav tulemus** :
 
@@ -2345,7 +2344,7 @@ Saadetis :
 #### **Verifitseerija toimimine (samm-sammuline):**
 
 - Testija täidab testi 1.2
-- Testija saadab päringu DHX adapter serveri teenusesse markDocumentReceived.v3
+- Testija saadab päringu DHX adapterserveri teenusesse markDocumentReceived.v3
 
   - Testija asendab markDocumentReceived päringu XML-i kehas dhlId elemendi sisu dokumendi saatmisel (test 1.2) saadud ID-ga.
 
@@ -2401,7 +2400,7 @@ Saadetis :
 
 #### **Verifitseerija toimimine (samm-sammuline):**
 
-- Testija saadab päringu DHX adapter serveri teenusesse getSendingOptions.v2
+- Testija saadab päringu DHX adapterserveri teenusesse getSendingOptions.v2
 
 #### **Oodatav tulemus** :
 
@@ -2459,7 +2458,7 @@ Saadetis :
 #### **Verifitseerija toimimine (samm-sammuline):**
 
 - Testija täidab testi 2.1
-- Testija saadab päringu DHX adapter serveri teenusesse getSendStatus.v2
+- Testija saadab päringu DHX adapterserveri teenusesse getSendStatus.v2
 
   - Märkus: manuses olev fail on kodeeritud kujul(base64 ja gZip). Manuse sisu näidises tuleb muuta dhl_id, kodeerida base64 kodeeringus ja siis lisada SOAP päringu manusena. Manuse ContentId-na tuleb panna 'doc'.
 
@@ -2520,7 +2519,7 @@ Saadetis : korrektselt kapseldatud fail
 
 #### **Verifitseerija toimimine (samm-sammuline):**
 
-- Testija saadab päringu DHX adapter serveri teenusesse sendDocuments.v4
+- Testija saadab päringu DHX adapterserveri teenusesse sendDocuments.v4
 
   - SOAP päringu manusena tuleb lisada korrektselt kapseldatud fail. Manuse ContentId-na tuleb panna 'doc'.
 
@@ -2808,7 +2807,7 @@ Saadetis :
 #### **Verifitseerija toimimine (samm-sammuline):**
 
 - Testija täidab testi 1.8
-- Testija saadab päringu DHX adapter serveri teenusesse markDocumentReceived.v3
+- Testija saadab päringu DHX adapterserveri teenusesse markDocumentReceived.v3
 
   - Testija asendab markDocumentReceived päringu XML-i kehas dhlId elemendi sisu dokumendi saatmisel (test 1.8) saadud ID-ga.
 
@@ -2915,7 +2914,7 @@ Saadetis :
 #### **Verifitseerija toimimine (samm-sammuline):**
 
 - Testija täidab testi 1.9
-- Testija saadab päringu DHX adapter serveri teenusesse markDocumentReceived.v3
+- Testija saadab päringu DHX adapterserveri teenusesse markDocumentReceived.v3
 
   - Testija asendab markDocumentReceived päringu XML-i kehas dhlId elemendi sisu dokumendi saatmisel (test 1.9) saadud ID-ga.
 
@@ -3134,4 +3133,4 @@ Saatev süsteem : DHS makett
 
 #### **Oodatav tulemus** :
 
-- DVK-st tulnud dokumendi info olemas makettrakenduse süsnmuste logis
+- DVK-st tulnud dokumendi info olemas makettrakenduse sündmuste logis

@@ -58,6 +58,8 @@
 								</appinfo>
 							</annotation>
 						</element>
+						<any namespace="##other" processContents="skip" minOccurs="0"
+							maxOccurs="unbounded" />
 					</sequence>
 				</complexType>
 			</element>
@@ -68,12 +70,16 @@
 							minOccurs="0" />
 						<element name="receiptId" type="string" maxOccurs="1"
 							minOccurs="1" />
+						<any namespace="##other" processContents="skip" minOccurs="0"
+							maxOccurs="unbounded" />
 					</sequence>
 				</complexType>
 			</element>
 			<element name="representationList">
 				<complexType>
 					<sequence>
+						<any namespace="##other" processContents="skip" minOccurs="0"
+							maxOccurs="unbounded" />
 					</sequence>
 				</complexType>
 			</element>
@@ -81,6 +87,8 @@
 				<complexType>
 					<sequence>
 						<element name="representees" type="tns:representees" />
+						<any namespace="##other" processContents="skip" minOccurs="0"
+							maxOccurs="unbounded" />
 					</sequence>
 				</complexType>
 			</element>
