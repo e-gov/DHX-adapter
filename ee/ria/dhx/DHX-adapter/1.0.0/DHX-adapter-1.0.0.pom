@@ -150,7 +150,7 @@
 						<include>**/*</include>
 					</includes>
 					<excludes>
-						<excludes>**/*.war</excludes>
+						<excludes>dhx-adapter-server/*</excludes>
 					</excludes>
 					<merge>true</merge>
 					<repositoryName>DHX-adapter</repositoryName>      <!-- github repo name -->
