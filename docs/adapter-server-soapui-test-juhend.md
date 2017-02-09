@@ -35,7 +35,6 @@ SoapUi testid on koostatud ja nimetatud vastavalt [testilugudele](adapter-server
 | goodCapsule | C:\Users\alex\Desktop\xmls/kapsel_21.xml | viide failile, mis sisaldab Elektroonilise andmevahetuse metaandmete loendile 2.1 vastavalt korrektselt kapseldatud faili.|
 | badCapsule | C:\Users\alex\Desktop\xmls/kapsel_21_wrong.xml | viide failile, mis sisaldab XML-i, mis ei vasta Elektroonilise andmevahetuse metaandmete loendile 2.1 |
 | notCapsule | C:\Users\alex\Desktop\xmls/kapsel_21_not_kapsel.xml | viide failile, mis ei ole XML-vormingus või on XML vales vormingus.  |
-| bigCapsule | C:\Users\alex\Desktop\xmls/kapsel_big_21.xml | viide failile (suur fail), mis sisaldab Elektroonilise andmevahetuse metaandmete loendile 2.1 vastavalt korrektselt kapseldatud faili.|
 | bigCapsuleDVK | C:\Users\alex\Desktop\xmls/kapsel_big_21_5 dvk.xml | viide failile (suur fail), mis sisaldab Elektroonilise andmevahetuse metaandmete loendile 2.1 vastavalt korrektselt kapseldatud fail. |
 | dhs3RepresenteeCode | vahendatav1 | testilugudes kirjeldatud DHS3 Xtee liikme poolt vahendatava ettevõtte registrikood |
 | dhs3RepresenteeSubsystem |  | testilugudes kirjeldatud DHS3 Xtee liikme vahendatava alamsüsteemi nimi |
