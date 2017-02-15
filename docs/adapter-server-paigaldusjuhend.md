@@ -159,6 +159,7 @@ Märkus (Java mälu suurus):
 #### 4.1.4. DHX adapterserver WAR
 
 1) Laadida alla DHX adapterserveri WAR fail `dhx-adapter-server.war`.
+https://github.com/e-gov/DHX-adapter/releases/tag/v1.0.0
 
 2) Kopeerida see Tomcat `apache-tomcat-7.x.x/webapps` alamkataloogi
 (Näiteks Windows keskkonnas `C:\Program Files\apache-tomcat-7.0.73\webapps\` alamkataloogi).
