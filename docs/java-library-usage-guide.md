@@ -98,6 +98,21 @@ The following example is given on how to involve the DHX Java library in existin
 
 The above external dependencies are downloaded automatically by Maven.
 
+The following rows should be appended into Maven pom.xml
+```xml
+  <repositories>
+    <repository>
+      <id>dhx-mvn-repo</id>
+      <name>DHX Maven Repository</name>
+      <url>https://raw.github.com/e-gov/DHX-adapter/mvn-repo/</url>
+      <snapshots>
+          <enabled>true</enabled>
+          <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+```
+
 The following dependencies should be appended into Maven pom.xml
 ```xml
 		<dependency>
