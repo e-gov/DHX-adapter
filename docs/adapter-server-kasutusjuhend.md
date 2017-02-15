@@ -30,7 +30,8 @@ Sisukord
 ## 1. Sissejuhatus
 DHX adapterserver on tarkvara, mis hõlbustab [DHX](https://e-gov.github.io/DHX/) dokumendivahetuse protokolli kasutuselevõtmist.
 
-DHX adapterserveri kasutusjuhend on vajalik eelkõige tarkvaraarendajale, kes teostab dokumendihaldussüsteemi (DHS) ja DHX adapterserveri liidestamist. 
+DHX adapterserveri kasutusjuhend on mõeldud tarkvara arendajale ja arhitektidele, kes teostavad dokumendihaldussüsteemi (DHS) ja DHX adapterserveri liidestamist.
+Täpsem arhitektuuri joonis on toodud dokumendi lõpus.
 
 DHX adapterserveri paigaldamine on kirjeldatud [DHX adapterserveri paigaldusjuhendis](adapter-server-paigaldusjuhend.md).
 
