@@ -98,7 +98,22 @@ Alljärgnevalt on toodud näide, kuidas kaasata DHX Java teegid olemasoleva tark
 
 Ülaltoodud välised sõltuvused laetakse Maveni kasutamise korral automaatselt alla.
 
-Lisada oma DHS tarkvara ehitamise Maven pom.xml sisse järgmised sõltuvused:
+Lisada oma tarkvara projekti ehitamise Maven pom.xml järgmised read:
+```xml
+  <repositories>
+    <repository>
+      <id>dhx-mvn-repo</id>
+      <name>DHX Maven Repository</name>
+      <url>https://raw.github.com/e-gov/DHX-adapter/mvn-repo/</url>
+      <snapshots>
+          <enabled>true</enabled>
+          <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+```
+
+Lisada oma tarkvara projekti ehitamise Maven pom.xml sisse järgmised sõltuvused:
 ```xml
 		<dependency>
 			<groupId>ee.ria.dhx</groupId>
@@ -113,6 +128,7 @@ Lisada oma DHS tarkvara ehitamise Maven pom.xml sisse järgmised sõltuvused:
 			<scope>compile</scope>
 		</dependency>
 ```
+
 ## 4. Teadaolevad probleemid (sõltuvuste konfliktid)
 
 **axiom-dom** ja **axis2-saaj** teekide kasutamisel Java classpathis ei tööta korrektselt XML objektide marshallimine/unmrashallimine (JAXB probleem). Nimelt manused jäävad tühjaks.
