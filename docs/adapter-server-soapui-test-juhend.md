@@ -28,13 +28,13 @@ SoapUi testid on koostatud ja nimetatud vastavalt [testilugudele](adapter-server
 | dhs2Subsystem | DHX | testilugudes kirjeldatud DHS2 Xtee liikme subsystemCode |
 | dhs2Subsystem2 | subsystem |  testilugudes kirjeldatud DHS2 Xtee liikme alamsüsteemi nimi |
 | dhs2RepresenteeCode | 70000001 | testilugudes kirjeldatud DHS2 Xtee liikme poolt vahendatava ettevõtte registrikood |
-| dhs3MemberClass | GOV | testilugudes kirjeldatud DHS3 Xtee liikme memberClass (enda Xtee liikme memberClass) |
-| dhs3MemberCode | 40000001 | testilugudes kirjeldatud DHS3 Xtee liikme memberCode (enda Xtee liikme memberCode)|
-| dhs3Subsystem | DHX | testilugudes kirjeldatud DHS3 Xtee liikme subsystemCode (enda Xtee liikme subsystemCode)|
-| dhs3Subsystem2 | DHX.subsystem | testilugudes kirjeldatud DHS3 Xtee liikme alamsüsteemi nimi (enda Xtee liikme alamsüsteemi nimi)|
-| dhs3RepresenteeCode | vahendatav1 | testilugudes kirjeldatud DHS3 Xtee liikme poolt vahendatava ettevõtte registrikood (enda Xtee liikme poolt vahendatava ettevõtte registrikood)|
-| dhs3RepresenteeCode2 | vahendatav1 | testilugudes kirjeldatud DHS3 Xtee liikme vahendatava registrikood (enda Xtee liikme poolt vahendatava registrikood, vahendatav omab alamsüsteemi)|
-| dhs3RepresenteeSubsystem2 | subsytem | testilugudes kirjeldatud DHS3 Xtee liikme vahendatava alamsüsteemi nimi (enda Xtee liikme poolt vahendatava alamsüsteemi nimi)|
+| dhs3MemberClass | GOV | testilugudes kirjeldatud DHS3 Xtee liikme memberClass (adapterserveri omava asutuse Xtee liikme memberClass) |
+| dhs3MemberCode | 40000001 | testilugudes kirjeldatud DHS3 Xtee liikme memberCode (enda(adapterserveri omava asutuse) Xtee liikme memberCode)|
+| dhs3Subsystem | DHX | testilugudes kirjeldatud DHS3 Xtee liikme subsystemCode (enda(adapterserveri omava asutuse) Xtee liikme subsystemCode)|
+| dhs3Subsystem2 | DHX.subsystem | testilugudes kirjeldatud DHS3 Xtee liikme alamsüsteemi nimi (enda(adapterserveri omava asutuse) Xtee liikme alamsüsteemi nimi)|
+| dhs3RepresenteeCode | vahendatav1 | testilugudes kirjeldatud DHS3 Xtee liikme poolt vahendatava ettevõtte registrikood (enda(adapterserveri omava asutuse) Xtee liikme poolt vahendatava ettevõtte registrikood)|
+| dhs3RepresenteeCode2 | vahendatav1 | testilugudes kirjeldatud DHS3 Xtee liikme vahendatava registrikood (enda(adapterserveri omava asutuse) Xtee liikme poolt vahendatava registrikood, vahendatav omab alamsüsteemi)|
+| dhs3RepresenteeSubsystem2 | subsytem | testilugudes kirjeldatud DHS3 Xtee liikme vahendatava alamsüsteemi nimi (enda(adapterserveri omava asutuse) Xtee liikme poolt vahendatava alamsüsteemi nimi)|
 | goodCapsule | C:\Users\alex\Desktop\xmls/kapsel_21.xml | viide failile, mis sisaldab Elektroonilise andmevahetuse metaandmete loendile 2.1 vastavalt korrektselt kapseldatud faili.|
 | badCapsule | C:\Users\alex\Desktop\xmls/kapsel_21_wrong.xml | viide failile, mis sisaldab XML-i, mis ei vasta Elektroonilise andmevahetuse metaandmete loendile 2.1 |
 | notCapsule | C:\Users\alex\Desktop\xmls/kapsel_21_not_kapsel.xml | viide failile, mis ei ole XML-vormingus või on XML vales vormingus.  |
@@ -43,13 +43,13 @@ SoapUi testid on koostatud ja nimetatud vastavalt [testilugudele](adapter-server
 
 **Failid asuvad [xmls](../dhx-adapter-server/tests/xmls) kaustas. Faili viidetega parameetrid(goodCapsule, badCapsule, notCapsule, bigCapsuleDVK) tuleb muuta igas keskkonnas kus teste käivitatakse. Faili viide peab olema absolute path failini.**  
 
-**Juhul kui adapterserveri omava asutusega on seotud ainult üks DHX süsteem(DHX nimega Xtee alamsüsteem), siis tuleb välja lülitada järgmised testid:
+**Juhul kui adapterserveri omava asutusega on seotud ainult üks DHX süsteem(DHX nimega Xtee alamsüsteem), siis tuleb välja lülitada järgmised testid:**
 * 1.2. Õige kapsli saatmine alamsüsteemile
 
 * 2.8. DHX süsteemist tulnud dokumendi vastuvõtmine. Dokument on suunatud alamsüsteemile.
 * 2.9. DHX süsteemist tulnud dokumendi vastuvõetuks märkimine. Dokument on suunatud alamsüsteemile.
 
-** Juhul kui adapterserveri omava asutusega ei ole seotud ühtegi vahendatava, siis tuleb välja lülitada järgmised testid:
+**Juhul kui adapterserveri omava asutusega ei ole seotud ühtegi vahendatava, siis tuleb välja lülitada järgmised testid:**
 * 1.7. Vahendatavate nimekirja küsimine DVK-st
 * 1.9. Õige kapsli saatmine vahendatavale
 * 1.10. Õige kapsli saatmine vahendatava alamsüsteemile
