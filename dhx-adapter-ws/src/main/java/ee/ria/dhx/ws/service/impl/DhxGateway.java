@@ -200,6 +200,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
       clientXroad.setMemberClass(client.getMemberClass());
       clientXroad.setMemberCode(client.getMemberCode());
       clientXroad.setSubsystemCode(client.getSubsystemCode());
+      clientXroad.setObjectType(XRoadObjectType.SUBSYSTEM);
       return clientXroad;
     }
 
