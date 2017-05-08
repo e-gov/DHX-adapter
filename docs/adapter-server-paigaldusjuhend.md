@@ -158,8 +158,8 @@ Märkus (Java mälu suurus):
 
 #### 4.1.4. DHX adapterserver WAR
 
-1) Laadida alla DHX adapterserveri WAR fail `dhx-adapter-server.war`.
-https://github.com/e-gov/DHX-adapter/releases/tag/v1.0.0
+1) Laadida alla DHX adapterserveri viimase versiooni WAR fail `dhx-adapter-server.war`.
+https://github.com/e-gov/DHX-adapter/releases/
 
 2) Kopeerida see Tomcat `apache-tomcat-7.x.x/webapps` alamkataloogi
 (Näiteks Windows keskkonnas `C:\Program Files\apache-tomcat-7.0.73\webapps\` alamkataloogi).
@@ -402,7 +402,7 @@ Kompileeritud JAR failid tekivad Maven lokaalsesse reposse kataloogi `C:\Users\k
 
 #### 4.3.6. Paigaldada WAR fail
 
-1) Võtta Maven lokaalsest repost ( `kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.0`) tekkinud fail `dhx-adapter-server-1.0.0.war` 
+1) Võtta Maven lokaalsest repost ( `kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.1`) tekkinud fail `dhx-adapter-server-1.0.1.war` 
 ja nimetada see ümber `dhx-adapter-server.war`.
 
 2) Teostada WAR paigaldamine Web Konteiner (Tomcat) serverisse. Vaata [eespool](#41-olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql).
