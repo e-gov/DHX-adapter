@@ -40,7 +40,7 @@ DHX adapterserveri haldamine on kirjeldatud [DHX adapterserveri haldusjuhendis](
 ![](dhx-adapter-server.png)
 
 DHX adapterserver pakub kahte erinevat [SOAP](https://www.w3.org/TR/2000/NOTE-SOAP-20000508/) veebiteenuste liidest:
-* Väline DHX liides (pildil kollane). DHX liides on suunatud väljapoole (teiste asutustega suhtlemiseks). DHX liides implementeerib DHX operatsiooni [sendDocument](https://github.com/e-gov/DHX/blob/master/files/sendDocument.md). Vahendaja korral ka operatsiooni [representationList](https://github.com/e-gov/DHX/blob/master/files/representationList.md) (ei ole lihtsustamise eesmärgil pildil näidatud).
+* Väline DHX liides (pildil kollane). DHX liides on suunatud väljapoole (teiste asutustega suhtlemiseks). DHX liides implementeerib DHX operatsiooni [sendDocument](https://github.com/e-gov/DHX/blob/master/docs/sendDocument.md). Vahendaja korral ka operatsiooni [representationList](https://github.com/e-gov/DHX/blob/master/docs/representationList.md) (ei ole lihtsustamise eesmärgil pildil näidatud).
 * Sisemine liides (pildil roheline). See liides on suunatud sissepoole (asutuse lokaalvõrku). Seda liidest kasutab asutuse dokumendihaldussüsteem (DHS) dokumentide saatmiseks ja vastuvõtmiseks. See liides implementeerib operatsioonid sendDocuments, receiveDocuments, markDocumentsReceived, getSendStatus ja getSendingOptions. Sisemise liidese sünonüümina kasutatakse muudes dokumentides mõistet "DVK protokolli" liides.
 
 DHX adapterserver käitub puhverserverina, võttes mõlema liidese kaudu vastu dokumente, salvestades kõigepealt need enda lokaalses andmebaasis ja failisüsteemis, selleks et need hiljem adressaadile edastada.
@@ -250,7 +250,7 @@ Vastuse näide:
 
 See sisaldab asutuse kohta kolme välja:
 * `<regnr>` - asutuse registrikood või alamsüsteemi kood. Üldjuhul tagastatakse siin asutuse registrikood. Juhul, kui asutus pakub teenust DHX alamsüsteemi kaudu (näiteks subsystemCode=`DHX.subsystem1`), siis  DHX adapterserveri getSendingOptions väljundis tagastatakse see kujul `<regnr>subsystem1.40000001</regnr>`, kus 40000001 on asutuse registrikood. Teatud spetsiifilised asutused on häälestatud tagastama ainult süsteemi koodi (näiteks `<regnr>adit</regnr>`). See on määratud `dhx.server.special-organisations=adit,kovtp,rt,eelnoud` parameetriga. Vaata [DHX adapterserveri paigaldusjuhendist](adapter-server-paigaldusjuhend.md#6-häälestus-fail-dhx-applicationproperties). 
-* `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni ja vahendajate [representationList]((https://github.com/e-gov/DHX/blob/master/files/representationList.md)) teenuse väljundite põhjal. 
+* `<nimi>` - Asutuse või alamsüsteemi nimi. Asutuse nimi leitakse X-tee globaalse konfiguratsiooni ja vahendajate [representationList]((https://github.com/e-gov/DHX/blob/master/docs/representationList.md)) teenuse väljundite põhjal. 
 * `<saatmisviis>` - alati konstant `dhl`.
 
 Märkus:
@@ -903,7 +903,7 @@ Vahendada võib ka X-teega mitteliitunud asutuste dokumente.
 
 X-teega liitunud asutus, kes soovib dokumente vahendada peab registreerima end Vahendajaks (lisatakse X-tee globaalkonfiguratsiooni DHX vahendajate gruppi).
 
-Vahendamise korral peab vahendaja oma turvaserveris avama ja häälestama ka [representationList](https://github.com/e-gov/DHX/blob/master/files/representationList.md) DHX teenuse. 
+Vahendamise korral peab vahendaja oma turvaserveris avama ja häälestama ka [representationList](https://github.com/e-gov/DHX/blob/master/docs/representationList.md) DHX teenuse. 
 
 ### 5.1. Vahendatavate lisamine
 
