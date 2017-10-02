@@ -4,10 +4,19 @@ import ee.ria.dhx.types.InternalXroadMember;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.security.Security;
 
+import javax.annotation.PostConstruct;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 /**
  * Configuration parameters needed for SOAP services.
@@ -76,6 +85,31 @@ public class SoapConfig {
   @Value("${soap.dhx-subsystem-prefix:DHX}")
   String dhxSubsystemPrefix;
 
+  
+
+  @Value("${soap.client-truststore-file}")
+  String clientTruststoreFile;
+
+  @Value("${soap.client-truststore-password}")
+  String clientTruststorePassword;
+
+  @Value("${soap.client-truststore-type:JKS}")
+  String clientTruststoreType;
+
+  
+  public String getClientTrustStoreFile() {
+    return clientTruststoreFile;
+  }
+  
+  public String getClientTrustStorePassword() {
+    return clientTruststorePassword;
+  }
+  
+  public String getClientTrustStoreType() {
+    return clientTruststoreType;
+  }
+
+  
   List<String> acceptedSubsystemsAsList;
 
   /**
@@ -489,4 +523,36 @@ public class SoapConfig {
     this.acceptedSubsystemsAsList = acceptedSubsystemsAsList;
   }
 
+  
+  /**
+   * Expand env vars.
+   *
+   * @param text the text
+   * @return the string
+   */
+  public static String expandEnvVars(String text) {
+      Map<String, String> envMap = System.getenv();
+      for (Entry<String, String> entry : envMap.entrySet()) {
+          String key = entry.getKey();
+          String value = entry.getValue().replace('\\', '/');
+          text = text.replaceAll("\\$\\{" + key + "\\}", value);
+      }
+      return text;
+  }
+
+
+  /**
+   * Inits the.
+   */
+  @PostConstruct
+  public void init() {
+    // setup truststore
+    if (getSecurityServer().toLowerCase().startsWith("https")) {
+        System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
+        System.setProperty("javax.net.ssl.trustStorePassword", getClientTrustStorePassword());
+        System.setProperty("javax.net.ssl.trustStoreType", getClientTrustStoreType());
+    }
+  }
+  
 }
+
