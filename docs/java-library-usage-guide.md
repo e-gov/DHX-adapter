@@ -313,9 +313,9 @@ soap.representatives-service-version | v1 |  | Representee list operation versio
 soap.connection-timeout | 60000 |  | HTTP connection opening timeout (when making SOAP requests). Milliseconds. Default is 1 minute.
 soap.read-timeout | 120000 |  | HTTP response waiting timeout (when making SOAP requests). Milliseconds. Default is 2 minutes. Could be increased in case document files are large. 
 soap.dhx-subsystem-prefix | DHX |  | DHX sub-system prefix. Used for searching DHX addressees from X-road global configuration. DHX protocol requires it to be constant `DHX`
-soap.client-truststore-file | | ${JAVA_HOME}/jre/lib/security/cacerts | Location of the Java keystore file containing the collection of CA certificates trusted by this application process (trust store)
-soap.client-truststore-password | |changeit | Password to unlock the keystore file (store password) specified by soap.client-truststore-file
-soap.client-truststore-type | | JKS | Java keystore file format.  For Java keystore file format, this property has the value jks (or JKS)
+soap.client-truststore-file |  | ${JAVA_HOME}/jre/lib/security/cacerts | Location of the Java keystore file containing the collection of CA certificates trusted by this application process (trust store)
+soap.client-truststore-password |  |changeit | Password to unlock the keystore file (store password) specified by soap.client-truststore-file
+soap.client-truststore-type | JKS |  | Java keystore file format.  For Java keystore file format, this property has the value jks (or JKS)
 dhx.capsule-validate | true |  | Specifies whether to validate the document (both received and sended) Capsule XML against its XSD schema. If document does not validate, then respond with error [DHX.Validation](https://github.com/e-gov/DHX/blob/master/docs/sendDocument.md#veakoodid) to the sender. [Capsule 2.1 XSD Schema](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd)  
 dhx.parse-capsule | true |  | Specifies whether to marshall (parse) the incoming document Capsule XML into Java objects. 
 dhx.check-recipient | true |  | Specifies whether to validate incoming document addressees. Validation checks whether addressee inside Capsule XML is the same as receiver (our own) organization code. If addressee is invalid, then respond with error [DHX.InvalidAddressee](https://github.com/e-gov/DHX/blob/master/docs/sendDocument.md#veakoodid) to the sender.
