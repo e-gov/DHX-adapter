@@ -427,10 +427,10 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="DecMetadata">
+        <xs:element name="DecMetadata" minOccurs="0">
           <xs:annotation>
-            <xs:documentation xml:lang="en">Metadata automatically added by DEC</xs:documentation>
-            <xs:documentation xml:lang="est">DVK poolt automaatselt lisatavad metaandmed</xs:documentation>
+            <xs:documentation xml:lang="en">Metadata automatically added by DEC central server. Deprecated after closing of DEC central server and implementation of DHX</xs:documentation>
+            <xs:documentation xml:lang="est">DVK keskserveri poolt automaatselt lisatavad metaandmed. Ebavajalik pärast DVK keskserveri sulgemist ning DHX-le üleminekut</xs:documentation>
           </xs:annotation>
           <xs:complexType>
             <xs:sequence>
@@ -643,7 +643,7 @@
   </xs:simpleType>
   <xs:simpleType name="PhoneType">
     <xs:restriction base="xs:string">
-      <xs:pattern value="([0-9])*|[+]([0-9])*"/>
+      <xs:pattern value="^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="PostalCodeType">
