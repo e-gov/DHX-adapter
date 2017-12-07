@@ -96,6 +96,14 @@ public class SoapConfig {
   @Value("${soap.client-truststore-type:JKS}")
   String clientTruststoreType;
 
+  @Value("${soap.client.keystore.file}")
+  String clientKeystoreFile;
+
+  @Value("${soap.client.keystore.password}")
+  String clientKeystorePassword;
+  
+  @Value("${soap.client.keystore.type:JKS}")
+  String clientKeystoreType;
   
   public String getClientTrustStoreFile() {
     return clientTruststoreFile;
@@ -107,6 +115,18 @@ public class SoapConfig {
   
   public String getClientTrustStoreType() {
     return clientTruststoreType;
+  }
+
+  public String getClientKeyStoreFile() {
+    return clientKeystoreFile;
+  }
+  
+  public String getClientKeyStorePassword() {
+    return clientKeystorePassword;
+  }
+  
+  public String getClientKeyStoreType() {
+    return clientKeystoreType;
   }
 
   
@@ -551,6 +571,10 @@ public class SoapConfig {
         System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
         System.setProperty("javax.net.ssl.trustStorePassword", getClientTrustStorePassword());
         System.setProperty("javax.net.ssl.trustStoreType", getClientTrustStoreType());
+
+        System.setProperty("javax.net.ssl.keyStore", expandEnvVars(getClientKeyStoreFile()));
+        System.setProperty("javax.net.ssl.keyStorePassword", getClientKeyStorePassword());
+        System.setProperty("javax.net.ssl.keyStoreType", getClientKeyStoreType());
     }
   }
   
