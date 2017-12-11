@@ -316,6 +316,9 @@ soap.dhx-subsystem-prefix | DHX |  | DHX sub-system prefix. Used for searching D
 soap.client-truststore-file |  | ${JAVA_HOME}/jre/lib/security/cacerts | Location of the Java keystore file containing the collection of CA certificates trusted by this application process (trust store)
 soap.client-truststore-password |  |changeit | Password to unlock the keystore file (store password) specified by soap.client-truststore-file
 soap.client-truststore-type | JKS |  | Java keystore file format.  For Java keystore file format, this property has the value jks (or JKS)
+soap.client-keystore-file |  | dhx.jks | Location of the Java keystore file containing the collection of keys (key store)
+soap.client-keystore-password |  |changeit | Password to unlock the keystore file (store password) specified by soap.client-keystore-file
+soap.client-keystore-type | JKS |  | Java keystore file format.  For Java keystore file format, this property has the value jks (or JKS)
 dhx.capsule-validate | true |  | Specifies whether to validate the document (both received and sended) Capsule XML against its XSD schema. If document does not validate, then respond with error [DHX.Validation](https://github.com/e-gov/DHX/blob/master/docs/sendDocument.md#veakoodid) to the sender. [Capsule 2.1 XSD Schema](https://github.com/e-gov/DHX-adapter/blob/master/dhx-adapter-core/src/main/resources/Dvk_kapsel_vers_2_1_eng_est.xsd)  
 dhx.parse-capsule | true |  | Specifies whether to marshall (parse) the incoming document Capsule XML into Java objects. 
 dhx.check-recipient | true |  | Specifies whether to validate incoming document addressees. Validation checks whether addressee inside Capsule XML is the same as receiver (our own) organization code. If addressee is invalid, then respond with error [DHX.InvalidAddressee](https://github.com/e-gov/DHX/blob/master/docs/sendDocument.md#veakoodid) to the sender.

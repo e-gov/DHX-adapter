@@ -96,13 +96,13 @@ public class SoapConfig {
   @Value("${soap.client-truststore-type:JKS}")
   String clientTruststoreType;
 
-  @Value("${soap.client.keystore.file}")
+  @Value("${soap.client-keystore-file}")
   String clientKeystoreFile;
 
-  @Value("${soap.client.keystore.password}")
+  @Value("${soap.client-keystore-password}")
   String clientKeystorePassword;
   
-  @Value("${soap.client.keystore.type:JKS}")
+  @Value("${soap.client-keystore-type:JKS}")
   String clientKeystoreType;
   
   public String getClientTrustStoreFile() {
