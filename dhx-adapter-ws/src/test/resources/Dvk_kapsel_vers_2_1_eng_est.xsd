@@ -643,7 +643,7 @@
   </xs:simpleType>
   <xs:simpleType name="PhoneType">
     <xs:restriction base="xs:string">
-      <xs:pattern value="^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$"/>
+      <xs:pattern value="^[0-9+\(\)#\.\s\/-]+$"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="PostalCodeType">
