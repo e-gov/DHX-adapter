@@ -202,6 +202,13 @@ soap.client-keystore-type=JKS
 
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
+Kui kasutatakse universaalklienti, siis võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
+
+keytool -genkey -keyalg RSA -alias dhx -keypass changeit -keystore dhx.jks -storepass changeit -validity 360
+
+Avada KeyStore Exploreris võtmehoidla ja exportida -> Export Certificate Chain (self signed) sertifikaat, mis tuleb seejärel paigutada tuvaserverisse või Generate CSR ja pärast signeerimist CA poolt paigutada turavserverisse.
+
+
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.   
 
 3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c://logs/dhx-adapter-server.log):
