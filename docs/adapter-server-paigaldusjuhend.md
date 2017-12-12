@@ -200,11 +200,14 @@ soap.client-keystore-type=JKS
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
 Võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
+```
 keytool -genkey -keyalg RSA -alias dhx -keypass changeit -keystore dhx.jks -storepass changeit -validity 360
+```
 
 Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
+```
 keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
-
+```
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.   
 
@@ -301,10 +304,14 @@ soap.client-keystore-type=JKS
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
 
 Võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
+```
 keytool -genkey -keyalg RSA -alias dhx -keypass changeit -keystore dhx.jks -storepass changeit -validity 360
+```
 
 Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
+```
 keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
+```
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.
 
@@ -545,10 +552,14 @@ Märkus:
 > Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud. 
 >
 >Võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
+>```
 >keytool -genkey -keyalg RSA -alias dhx -keypass changeit -keystore dhx.jks -storepass changeit -validity 360
+>```
 >
 >Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
+>```
 >keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
+>```
 
 
 ## 7. Klastrisse paigaldamine (Failover/Load balancing)
