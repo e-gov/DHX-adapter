@@ -187,7 +187,27 @@ spring.datasource.password=123456
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL94Dialect
 ```
+Kui turvaserveri poole pöördumisel kasutatakse HTTPS protokolli, siis lisada järgnevad parameetrid 
+```properites
+soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
+soap.client-truststore-password=changeit
+soap.client-truststore-type=JKS
+soap.client-keystore-file=dhx.jks
+soap.client-keystore-password=changeit
+soap.client-keystore-type=JKS
+```
+
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
+
+Võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
+```
+keytool -genkey -keyalg RSA -alias dhx -keypass changeit -keystore dhx.jks -storepass changeit -validity 360
+```
+
+Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
+```
+keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
+```
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.   
 
@@ -272,7 +292,26 @@ spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 spring.datasource.type=oracle.jdbc.pool.OracleDataSource
 ```
+Kui turvaserveri poole pöördumisel kasutatakse https protokolli, siis lisada järgnevad parameetrid 
+```properites
+soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
+soap.client-truststore-password=changeit
+soap.client-truststore-type=JKS
+soap.client-keystore-file=dhx.jks
+soap.client-keystore-password=changeit
+soap.client-keystore-type=JKS
+```
 Teha muudetud `dhx-application.properties` failist backup koopia kuhugi mujale kataloogi.
+
+Võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
+```
+keytool -genkey -keyalg RSA -alias dhx -keypass changeit -keystore dhx.jks -storepass changeit -validity 360
+```
+
+Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
+```
+keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
+```
 
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.
 
@@ -501,8 +540,26 @@ Märkus:
 >  spring.datasource.driver-class-name=org.postgresql.Driver
 >  spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 >  ```
->
+>Kui turvaserveri poole pöördumisel kasutatakse https protokolli, siis lisada järgnevad parameetrid 
+>```
+>soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
+>soap.client-truststore-password=changeit
+>soap.client-truststore-type=JKS
+>soap.client-keystore-file=dhx.jks
+>soap.client-keystore-password=changeit
+>soap.client-keystore-type=JKS
+>```
 > Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud. 
+>
+>Võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
+>```
+>keytool -genkey -keyalg RSA -alias dhx -keypass changeit -keystore dhx.jks -storepass changeit -validity 360
+>```
+>
+>Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
+>```
+>keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
+>```
 
 
 ## 7. Klastrisse paigaldamine (Failover/Load balancing)

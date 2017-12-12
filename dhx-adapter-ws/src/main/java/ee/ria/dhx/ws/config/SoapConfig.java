@@ -4,10 +4,19 @@ import ee.ria.dhx.types.InternalXroadMember;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.security.Security;
 
+import javax.annotation.PostConstruct;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 /**
  * Configuration parameters needed for SOAP services.
@@ -76,6 +85,51 @@ public class SoapConfig {
   @Value("${soap.dhx-subsystem-prefix:DHX}")
   String dhxSubsystemPrefix;
 
+  
+
+  @Value("${soap.client-truststore-file}")
+  String clientTruststoreFile;
+
+  @Value("${soap.client-truststore-password}")
+  String clientTruststorePassword;
+
+  @Value("${soap.client-truststore-type:JKS}")
+  String clientTruststoreType;
+
+  @Value("${soap.client-keystore-file}")
+  String clientKeystoreFile;
+
+  @Value("${soap.client-keystore-password}")
+  String clientKeystorePassword;
+  
+  @Value("${soap.client-keystore-type:JKS}")
+  String clientKeystoreType;
+  
+  public String getClientTrustStoreFile() {
+    return clientTruststoreFile;
+  }
+  
+  public String getClientTrustStorePassword() {
+    return clientTruststorePassword;
+  }
+  
+  public String getClientTrustStoreType() {
+    return clientTruststoreType;
+  }
+
+  public String getClientKeyStoreFile() {
+    return clientKeystoreFile;
+  }
+  
+  public String getClientKeyStorePassword() {
+    return clientKeystorePassword;
+  }
+  
+  public String getClientKeyStoreType() {
+    return clientKeystoreType;
+  }
+
+  
   List<String> acceptedSubsystemsAsList;
 
   /**
@@ -489,4 +543,40 @@ public class SoapConfig {
     this.acceptedSubsystemsAsList = acceptedSubsystemsAsList;
   }
 
+  
+  /**
+   * Expand env vars.
+   *
+   * @param text the text
+   * @return the string
+   */
+  public static String expandEnvVars(String text) {
+      Map<String, String> envMap = System.getenv();
+      for (Entry<String, String> entry : envMap.entrySet()) {
+          String key = entry.getKey();
+          String value = entry.getValue().replace('\\', '/');
+          text = text.replaceAll("\\$\\{" + key + "\\}", value);
+      }
+      return text;
+  }
+
+
+  /**
+   * Inits the.
+   */
+  @PostConstruct
+  public void init() {
+    // setup truststore
+    if (getSecurityServer().toLowerCase().startsWith("https")) {
+        System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
+        System.setProperty("javax.net.ssl.trustStorePassword", getClientTrustStorePassword());
+        System.setProperty("javax.net.ssl.trustStoreType", getClientTrustStoreType());
+
+        System.setProperty("javax.net.ssl.keyStore", expandEnvVars(getClientKeyStoreFile()));
+        System.setProperty("javax.net.ssl.keyStorePassword", getClientKeyStorePassword());
+        System.setProperty("javax.net.ssl.keyStoreType", getClientKeyStoreType());
+    }
+  }
+  
 }
+

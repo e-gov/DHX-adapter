@@ -140,7 +140,7 @@
 		<profile>
 			<id>production</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
 				<conf>production</conf>
@@ -149,7 +149,7 @@
 		<profile>
 			<id>development</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
 				<conf>development</conf>
