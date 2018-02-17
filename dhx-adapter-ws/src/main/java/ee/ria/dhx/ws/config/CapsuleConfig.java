@@ -23,7 +23,7 @@ public class CapsuleConfig {
   @Value("${dhx.xsd.capsule-xsd-file21:jar://Dvk_kapsel_vers_2_1_eng_est.xsd}")
   private String capsuleXsdFile21;
 
-  @Value("${dhx.xsd.capsule-xsd-file21:V21}")
+  @Value("${dhx.xsd.current-capsule-version:V21}")
   private String currentCapsuleVersionStr;
 
   private CapsuleVersionEnum currentCapsuleVersion;
