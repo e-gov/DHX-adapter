@@ -59,3 +59,15 @@ soap.accepted-subsystems=DHX,DHX.subsystem
 document-resend-template=5,10,15
 #frequency of the address renewal. cron expression
 address-renew-timeout=0 */20 * * * ?
+
+# SSL ühenduse kasutamine
+# Keystore parameetrid viitavad asutuse võtmepaari (või võtmepaare) sisaldavale võtmehoidlale
+soap.client-keystore-file=dhx.jks
+soap.client-keystore-password=changeit
+soap.client-keystore-type=JKS
+
+# Truststore parameetrid viitavad turvaserveri avalikku võtit sisaldavale võtmehoidlale
+soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
+soap.client-truststore-password=changeit
+soap.client-truststore-type=JKS
+
