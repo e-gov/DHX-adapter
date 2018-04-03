@@ -25,6 +25,8 @@ import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
+import org.springframework.core.io.ClassPathResource;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,6 +39,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +49,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
 
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 public class AddressServiceImplTest {
 
   @Mock
@@ -77,6 +83,7 @@ public class AddressServiceImplTest {
     when(config.getXroadInstance()).thenReturn("ee");
     when(config.getDhxRepresentationGroupName()).thenReturn("DHX vahendajad");
     when(config.getDhxSubsystemPrefix()).thenReturn("DHX");
+    when(config.getGlobalConfLocation()).thenReturn("http://x-road.eu/packages/EE_public-anchor.xml");
     DhxOrganisationFactory.setDhxSubsystemPrefix("DHX");
   }
 
@@ -97,17 +104,24 @@ public class AddressServiceImplTest {
 
   private SharedParametersType setReturningGlobalConfAndMock(SharedParametersType params)
       throws Exception {
+    
     addressService = Mockito.spy(addressService);
+    
     Mockito.doReturn(new InputStream() {
+      
       @Override
       public int read() throws IOException {
+        log.debug("AddressServiceImplTest.setReturningGlobalConfAndMock return 0");
         return 0;
       }
-    }).when(addressService).getGlobalConfStream();
+    }).when(addressService).getGlobalConfStream(Mockito.any(String.class));
+    
     JAXBElement<SharedParametersType> jaxbElement = new JAXBElement<SharedParametersType>(
         new QName(SharedParametersType.class.getSimpleName()), SharedParametersType.class, null);
     jaxbElement.setValue(params);
+    
     when(dhxMarshallerService.unmarshall(Mockito.any(InputStream.class))).thenReturn(jaxbElement);
+    
     return params;
   }
 
@@ -185,7 +199,7 @@ public class AddressServiceImplTest {
     assertEquals(0, listRet.size());
     Mockito.verify(specificService).saveAddresseeList(argument.capture());
     List<InternalXroadMember> list = argument.getValue();
-    assertEquals(2, list.size());
+    assertEquals(6, list.size());
     assertEquals("200", list.get(0).getMemberCode());
     assertEquals("DHX", list.get(0).getSubsystemCode());
     assertNull(list.get(0).getRepresentee());
@@ -246,7 +260,7 @@ public class AddressServiceImplTest {
     addressService.getAdresseeList();
     Mockito.verify(specificService).saveAddresseeList(argument.capture());
     List<InternalXroadMember> list = argument.getValue();
-    assertEquals(2, list.size());
+    assertEquals(6, list.size());
     assertEquals("400", list.get(0).getMemberCode());
     assertEquals("DHX", list.get(0).getSubsystemCode());
     assertEquals(true, list.get(0).getRepresentor());
@@ -355,10 +369,11 @@ public class AddressServiceImplTest {
     setReturningGlobalConfAndMock(params);
     ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
     addressService.getAdresseeList();
-    verify(dhxGateway, times(2)).getRepresentationList(Mockito.any(InternalXroadMember.class));
+    
+    verify(dhxGateway, times(6)).getRepresentationList(Mockito.any(InternalXroadMember.class));
     verify(specificService).saveAddresseeList(argument.capture());
     List<InternalXroadMember> list = argument.getValue();
-    assertEquals(5, list.size());
+    assertEquals(15, list.size());
     assertEquals("400", list.get(0).getMemberCode());
     assertEquals("DHX", list.get(0).getSubsystemCode());
     assertEquals(true, list.get(0).getRepresentor());

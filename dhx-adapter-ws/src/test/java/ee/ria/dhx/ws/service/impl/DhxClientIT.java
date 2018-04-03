@@ -376,7 +376,7 @@ public class DhxClientIT {
     InputStream stream =
         new FileInputStream(new ClassPathResource("shared-params.xml").getFile());
     AddressServiceImpl addressServiceImpl = (AddressServiceImpl) addressService;
-    Mockito.doReturn(stream).when(addressServiceImpl).getGlobalConfStream();
+    Mockito.doReturn(stream).when(addressServiceImpl).getGlobalConfStream(Mockito.any(String.class));
     ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
     when(specificService.getAdresseeList()).thenReturn(new ArrayList<InternalXroadMember>());
 

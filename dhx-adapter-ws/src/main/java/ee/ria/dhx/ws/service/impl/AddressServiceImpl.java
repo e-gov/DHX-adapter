@@ -31,6 +31,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ByteArrayOutputStream;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -40,6 +43,17 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBElement;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.InputSource;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 
 /**
  * Implementation of AddressService for creating and storing of address list. Stores address list in
@@ -133,80 +147,143 @@ public class AddressServiceImpl implements AddressService {
     }
   }
 
+  protected Document xmlDocumentFromGlobalConf() throws DhxException {
+    try {
+      
+      log.debug("global conf location: {}", config.getGlobalConfLocation());
+      
+      URL url = new URL(config.getGlobalConfLocation());
+      log.debug("global conf URL: {}", url);
+      URLConnection connection = url.openConnection();
+      InputStream inStream = connection.getInputStream();
+      log.debug("got file from URL");
+      
+      DocumentBuilderFactory xmlFact = DocumentBuilderFactory.newInstance();
+      xmlFact.setValidating(false);
+      xmlFact.setNamespaceAware(true);
+      xmlFact.setIgnoringElementContentWhitespace(true);
+      DocumentBuilder builder = xmlFact.newDocumentBuilder();
+      InputStreamReader inReader = null;
+      Document result = null;
+      
+      try {
+         inReader = new InputStreamReader(inStream, "UTF-8");
+         InputSource src = new InputSource(inReader);
+         result = builder.parse(src);
+      } finally {
+        FileUtil.safeCloseReader(inReader);
+        FileUtil.safeCloseStream(inStream);
+        inReader = null;
+        inStream = null;
+      }
+      return result;
+    } catch (MalformedURLException ex) {
+      log.error("Error occurrred in url", ex);
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "Error occured while getting global conf. "
+              + ex.getMessage(),
+          ex);
+
+    } catch (IOException ex) {
+      log.error("Error occurrred ", ex);
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "Error occured while getting global conf. "
+              + ex.getMessage(),
+          ex);
+    } catch (Exception ex) {
+      log.error(ex.getMessage(), ex);
+      return null;
+    }
+  }
+  
+  
+  
   @Loggable
   protected List<InternalXroadMember> getRenewedAdresseesList()
       throws DhxException {
     List<InternalXroadMember> members = new ArrayList<InternalXroadMember>();
-    SharedParametersType globalConf = getGlobalConf();
-    if (globalConf != null) {
-      for (MemberType member : globalConf.getMember()) {
-        for (SubsystemType subSystem : member.getSubsystem()) {
-          // find DHX subsystem. if found, then member is ready to use
-          // DHX protocol
-          if (subSystem.getSubsystemCode().toUpperCase()
-              .startsWith(config.getDhxSubsystemPrefix().toUpperCase())) {
-            log.debug("Found DHX subsystem for member: {}",
-                member.getMemberCode());
-            // do we have to add self to address list??
-            members.add(new InternalXroadMember(config.getXroadInstance(), member, subSystem
-                .getSubsystemCode(), member.getName()));
+    
+    Document xmlDoc = xmlDocumentFromGlobalConf();
+    NodeList list = xmlDoc.getElementsByTagName("downloadURL");
+    
+    for (int j = 0; j < list.getLength(); j++) {
+      Node node = list.item(j);
+      log.debug("downloadURL = " + node.getTextContent());
+      
+      String downloadURL = node.getTextContent();
+    
+      SharedParametersType globalConf = getGlobalConf(downloadURL);
+      
+      if (globalConf != null) {
+        for (MemberType member : globalConf.getMember()) {
+          for (SubsystemType subSystem : member.getSubsystem()) {
+            // find DHX subsystem. if found, then member is ready to use
+            // DHX protocol
+            if (subSystem.getSubsystemCode().toUpperCase()
+                .startsWith(config.getDhxSubsystemPrefix().toUpperCase())) {
+              log.debug("Found DHX subsystem for member: {}",
+                  member.getMemberCode());
+              // do we have to add self to address list??
+              members.add(new InternalXroadMember(config.getXroadInstance(), member, subSystem
+                  .getSubsystemCode(), member.getName()));
+            }
           }
         }
-      }
-      for (GlobalGroupType group : globalConf.getGlobalGroup()) {
-        log.debug("group: {}", group.getDescription());
-        if (group.getGroupCode().equals(
-            config.getDhxRepresentationGroupName())) {
-          log.debug("Found representation group");
-          for (XRoadClientIdentifierType client : group
-              .getGroupMember()) {
-            // exclude own representatives
-            if (!(client.getMemberCode().equals(
-                config.getMemberCode()) && client
-                    .getSubsystemCode().equals(
-                        config.getDefaultSubsystem()))) {
-              InternalXroadMember member = new InternalXroadMember(
-                  client);
-              InternalXroadMember parentMember = findMember(
-                  client, members);
-              if (parentMember != null) {
-                parentMember.setRepresentor(true);
-              }
-              log.debug("getting representatives for member: {}",
-                  member.toString());
-              try {
-                List<InternalXroadMember> representeeMembers = getRepresentees(member);
-                if (representeeMembers != null
-                    && representeeMembers.size() > 0) {
-                  members.addAll(representeeMembers);
-                }
-              } catch (DhxException ex) {
-                log.error(
-                    "Error occured while getting representationList for: "
-                        + member.toString()
-                        + ex.getMessage(),
-                    ex);
-              }
-              // include own representatives not from x-road
-              // servicce, but from local method
-            } else {
-              InternalXroadMember member = new InternalXroadMember(
-                  client);
-              List<DhxRepresentee> representees = dhxImplementationSpecificService
-                  .getRepresentationList();
-              List<InternalXroadMember> representeesmembers =
-                  new ArrayList<InternalXroadMember>();
-              InternalXroadMember parentMember = findMember(
-                  client, members);
-              for (DhxRepresentee representee : representees) {
+        for (GlobalGroupType group : globalConf.getGlobalGroup()) {
+          log.debug("group: {}", group.getDescription());
+          if (group.getGroupCode().equals(
+              config.getDhxRepresentationGroupName())) {
+            log.debug("Found representation group");
+            for (XRoadClientIdentifierType client : group
+                .getGroupMember()) {
+              // exclude own representatives
+              if (!(client.getMemberCode().equals(
+                  config.getMemberCode()) && client
+                      .getSubsystemCode().equals(
+                          config.getDefaultSubsystem()))) {
+                InternalXroadMember member = new InternalXroadMember(
+                    client);
+                InternalXroadMember parentMember = findMember(
+                    client, members);
                 if (parentMember != null) {
                   parentMember.setRepresentor(true);
                 }
-                representeesmembers
-                    .add(new InternalXroadMember(member,
-                        representee));
+                log.debug("getting representatives for member: {}",
+                    member.toString());
+                try {
+                  List<InternalXroadMember> representeeMembers = getRepresentees(member);
+                  if (representeeMembers != null
+                      && representeeMembers.size() > 0) {
+                    members.addAll(representeeMembers);
+                  }
+                } catch (DhxException ex) {
+                  log.error(
+                      "Error occured while getting representationList for: "
+                          + member.toString()
+                          + ex.getMessage(),
+                      ex);
+                }
+                // include own representatives not from x-road
+                // servicce, but from local method
+              } else {
+                InternalXroadMember member = new InternalXroadMember(
+                    client);
+                List<DhxRepresentee> representees = dhxImplementationSpecificService
+                    .getRepresentationList();
+                List<InternalXroadMember> representeesmembers =
+                    new ArrayList<InternalXroadMember>();
+                InternalXroadMember parentMember = findMember(
+                    client, members);
+                for (DhxRepresentee representee : representees) {
+                  if (parentMember != null) {
+                    parentMember.setRepresentor(true);
+                  }
+                  representeesmembers
+                      .add(new InternalXroadMember(member,
+                          representee));
+                }
+                members.addAll(representeesmembers);
               }
-              members.addAll(representeesmembers);
             }
           }
         }
@@ -249,19 +326,57 @@ public class AddressServiceImpl implements AddressService {
     }
   }
 
-  protected InputStream getGlobalConfStream() throws MalformedURLException, IOException,
+  
+  private static String convertStreamToString(InputStream inputStream) throws IOException {
+    
+    ByteArrayOutputStream result = new ByteArrayOutputStream();
+    byte[] buffer = new byte[1024];
+    int length;
+    while ((length = inputStream.read(buffer)) != -1) {
+        result.write(buffer, 0, length);
+    }
+    // StandardCharsets.UTF_8.name() > JDK 7
+    return result.toString("UTF-8");    
+}
+  
+  protected InputStream getGlobalConfStream(String confURL) throws MalformedURLException, IOException,
       DhxException {
-    URL url = new URL(config.getSecurityServer() + "/"
-        + config.getGlobalConfLocation());
-    log.debug("global conf URL: {}", url);
+    
+    URL url = new URL(confURL);
+        
+    log.debug("internal conf URL: {}", url);
     URLConnection connection = url.openConnection();
     InputStream stream = connection.getInputStream();
+    
+    String internalconf = convertStreamToString(stream);
+    
+    log.debug("internal conf file: {}", internalconf);
+    
+    int pos = internalconf.indexOf("SHARED-PARAMETERS");
+    int pos2 = internalconf.indexOf("Content-location:", pos);
+    
+    pos2 += 18;
+    
+    int pos3 = internalconf.indexOf("\n", pos2);
+
+    //log.debug("internal conf pos: {}, pos2: {}, pos3: {}", pos, pos2, pos3);
+    
+    String urlPath = internalconf.substring(pos2, pos3);
+    
+    log.debug("shared-params file: {}", urlPath);
+    
+    URL urlList = new URL(
+        url.getProtocol(),
+        url.getHost(),
+        url.getPort(),
+        urlPath);
+ 
+    log.debug("shared-params URL: {}", urlList);
+    URLConnection connectionList = urlList.openConnection();
+        
+    InputStream confStream = connection.getInputStream();
+    
     log.debug("got file from URL");
-    InputStream confStream = FileUtil.zipUnpack(
-        stream,
-        config.getGlobalConfLocation() + "/"
-            + config.getXroadInstance() + "/"
-            + config.getGlobalConfFilename());
 
     return confStream;
   }
@@ -272,9 +387,9 @@ public class AddressServiceImpl implements AddressService {
    * @return unmarshalled shared parameters Object
    * @throws DhxException throws if error occurs while getting global configuration
    */
-  private SharedParametersType getGlobalConf() throws DhxException {
+  private SharedParametersType getGlobalConf(String confURL) throws DhxException {
     try {
-      InputStream confStream = getGlobalConfStream();
+      InputStream confStream = getGlobalConfStream(confURL);
       JAXBElement<SharedParametersType> globalConfElement = dhxMarshallerService
           .unmarshall(confStream);
       confStream.close();

@@ -25,19 +25,24 @@ public class AddressServiceImplSpyProvider {
 
   public static AddressService getAddressServiceSpy(AddressService addressService,
       final String shredParamFilename) throws IOException, DhxException {
+    
+    log.debug("AddressServiceImplSpyProvider.AddressService shredParamFilename: {}", shredParamFilename);
+    
     AddressServiceImpl addressServiceImpl = (AddressServiceImpl) addressService;
     Mockito.doAnswer(new Answer() {
       public Object answer(InvocationOnMock invocation) {
         try {
           InputStream stream =
               new FileInputStream(new ClassPathResource(shredParamFilename).getFile());
+          
+          log.debug("AddressServiceImplSpyProvider.AddressService from file");
           return stream;
         } catch (IOException ex) {
           log.error(ex.getMessage(), ex);
         }
         return null;
       }
-    }).when(addressServiceImpl).getGlobalConfStream();
+    }).when(addressServiceImpl).getGlobalConfStream(Mockito.any(String.class));
     // Mockito.doReturn(stream)
     return addressService;
   }
