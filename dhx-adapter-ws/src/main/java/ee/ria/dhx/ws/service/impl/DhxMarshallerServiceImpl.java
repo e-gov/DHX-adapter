@@ -305,6 +305,7 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
   }
 
   @SuppressWarnings("unchecked")
+  @Loggable
   protected <T> T unmarshallNoValidation(final InputStream capsuleStream,
       Unmarshaller unmarshaller, Class<? extends Object> bigDataClass) throws DhxException {
     try {

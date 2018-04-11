@@ -83,7 +83,7 @@ public class AddressServiceImplTest {
     when(config.getXroadInstance()).thenReturn("ee");
     when(config.getDhxRepresentationGroupName()).thenReturn("DHX vahendajad");
     when(config.getDhxSubsystemPrefix()).thenReturn("DHX");
-    when(config.getGlobalConfLocation()).thenReturn("http://x-road.eu/packages/EE_public-anchor.xml");
+    //when(config.getGlobalConfLocation()).thenReturn("http://x-road.eu/packages/EE_public-anchor.xml");
     DhxOrganisationFactory.setDhxSubsystemPrefix("DHX");
   }
 
@@ -199,7 +199,7 @@ public class AddressServiceImplTest {
     assertEquals(0, listRet.size());
     Mockito.verify(specificService).saveAddresseeList(argument.capture());
     List<InternalXroadMember> list = argument.getValue();
-    assertEquals(6, list.size());
+    assertEquals(2, list.size());
     assertEquals("200", list.get(0).getMemberCode());
     assertEquals("DHX", list.get(0).getSubsystemCode());
     assertNull(list.get(0).getRepresentee());
@@ -260,7 +260,7 @@ public class AddressServiceImplTest {
     addressService.getAdresseeList();
     Mockito.verify(specificService).saveAddresseeList(argument.capture());
     List<InternalXroadMember> list = argument.getValue();
-    assertEquals(6, list.size());
+    assertEquals(2, list.size());
     assertEquals("400", list.get(0).getMemberCode());
     assertEquals("DHX", list.get(0).getSubsystemCode());
     assertEquals(true, list.get(0).getRepresentor());
@@ -370,10 +370,10 @@ public class AddressServiceImplTest {
     ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
     addressService.getAdresseeList();
     
-    verify(dhxGateway, times(6)).getRepresentationList(Mockito.any(InternalXroadMember.class));
+    verify(dhxGateway, times(2)).getRepresentationList(Mockito.any(InternalXroadMember.class));
     verify(specificService).saveAddresseeList(argument.capture());
     List<InternalXroadMember> list = argument.getValue();
-    assertEquals(15, list.size());
+    assertEquals(5, list.size());
     assertEquals("400", list.get(0).getMemberCode());
     assertEquals("DHX", list.get(0).getSubsystemCode());
     assertEquals(true, list.get(0).getRepresentor());

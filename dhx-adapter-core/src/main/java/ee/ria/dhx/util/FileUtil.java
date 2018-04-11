@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
@@ -24,8 +25,6 @@ import java.util.zip.ZipInputStream;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-
-// import javax.mail.MessagingException;
 
 /**
  * Utility methods related to files. e.g. creating files, reading files, zipping and unzipping,
@@ -39,6 +38,8 @@ public class FileUtil {
 
   public static final Integer BINARY_BUFFER_SIZE = 100000;
   private static final String DEFAULT_CONTENT_TYPE = "text/xml";
+  public static byte[] MAGIC = { 'P', 'K', 0x3, 0x4 };
+  
 
   /**
    * Generates operationsystem temporary file with unique name. File is written to java.io.tmpdir
@@ -319,10 +320,12 @@ public class FileUtil {
   public static InputStream zipUnpack(InputStream zipStream, String fileToFindInZip)
       throws DhxException {
     try {
-      log.debug("Strating zip unpack. Searching for file: {}", fileToFindInZip);
+      log.debug("Starting zip unpack. Searching for file: {}", fileToFindInZip);
       ZipInputStream zis = new ZipInputStream(zipStream);
       ZipEntry ze;
+      
       log.debug("Zip inputstream created");
+      
       while ((ze = zis.getNextEntry()) != null) {
         log.debug("Zip entry: {}", ze.getName());
         if (ze.getName().equals(fileToFindInZip)) {
@@ -338,6 +341,55 @@ public class FileUtil {
 
   }
 
+  public static boolean isZipStream(InputStream in) {
+    if (!in.markSupported()) {
+      log.debug("isZipStream: markSupported false");
+     in = new BufferedInputStream(in);
+    }
+    boolean isZip = true;
+    try {
+     in.mark(MAGIC.length);
+     for (int i = 0; i < MAGIC.length; i++) {
+      if (MAGIC[i] != (byte) in.read()) {
+       isZip = false;
+       break;
+      }
+     }
+     in.reset();
+    } catch (IOException e) {
+     isZip = false;
+    }
+    return isZip;
+   }
+   
+   /**
+    * Test if a file is a zip file.
+    * 
+    * @param f
+    *            the file to test.
+    * @return
+    */
+   public static boolean isZipFile(File f) {
+   
+    boolean isZip = true;
+    byte[] buffer = new byte[MAGIC.length];
+    try {
+     RandomAccessFile raf = new RandomAccessFile(f, "r");
+     raf.readFully(buffer);
+     for (int i = 0; i < MAGIC.length; i++) {
+      if (buffer[i] != MAGIC[i]) {
+       isZip = false;
+       break;
+      }
+     }
+     raf.close();
+    } catch (Throwable e) {
+     isZip = false;
+    }
+    return isZip;
+   }
+   
+  
   /**
    * Method creates {@link DataHandler} from {@link File}.
    * 

@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>ee.ria.dhx</groupId>
 			<artifactId>dhx-adapter-ws</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

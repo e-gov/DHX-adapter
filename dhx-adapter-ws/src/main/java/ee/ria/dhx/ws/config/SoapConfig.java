@@ -52,7 +52,7 @@ public class SoapConfig {
   @Value("${soap.protocol-version:4.0}")
   String protocolVersion;
 
-  @Value("${soap.global-conf-location:http://x-road.eu/packages/EE_public-anchor.xml}")
+  @Value("${soap.global-conf-location:verificationconf}")
   String globalConfLocation;
 
   @Value("${soap.global-conf-filename:shared-params.xml}")
@@ -331,7 +331,7 @@ public class SoapConfig {
   }
 
   /**
-   * by default http://x-road.eu/packages/EE_public-anchor.xml.
+   * by default verificationconf.
    * 
    * @return the globalConfLocation in the security server
    */
@@ -340,7 +340,7 @@ public class SoapConfig {
   }
 
   /**
-   * by default http://x-road.eu/packages/EE_public-anchor.xml.
+   * by default verificationconf.
    * 
    * @param globalConfLocation the globalConfLocation location
    */
