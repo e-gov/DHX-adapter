@@ -187,7 +187,7 @@ spring.datasource.password=123456
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL94Dialect
 ```
-Kui turvaserveri poole pöördumisel kasutatakse HTTPS protokolli, siis lisada järgnevad parameetrid 
+Kui turvaserveri poole pöördumisel kasutatakse HTTPS protokolli, siis seadistada järgnevad parameetrid (http puhul jätta muutmata)
 ```properites
 soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
 soap.client-truststore-password=changeit
@@ -292,7 +292,7 @@ spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 spring.datasource.type=oracle.jdbc.pool.OracleDataSource
 ```
-Kui turvaserveri poole pöördumisel kasutatakse https protokolli, siis lisada järgnevad parameetrid 
+Kui turvaserveri poole pöördumisel kasutatakse HTTPS protokolli, siis seadistada järgnevad parameetrid (http puhul jätta muutmata)
 ```properites
 soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
 soap.client-truststore-password=changeit
@@ -540,7 +540,7 @@ Märkus:
 >  spring.datasource.driver-class-name=org.postgresql.Driver
 >  spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 >  ```
->Kui turvaserveri poole pöördumisel kasutatakse https protokolli, siis lisada järgnevad parameetrid 
+>Kui turvaserveri poole pöördumisel kasutatakse HTTPS protokolli, siis seadistada järgnevad parameetrid (http puhul jätta muutmata). 
 >```
 >soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
 >soap.client-truststore-password=changeit
