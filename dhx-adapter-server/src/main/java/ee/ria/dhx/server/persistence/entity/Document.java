@@ -30,6 +30,7 @@ public class Document extends BaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long documentId;
 
+  @Column(name = "guid")
   private String guid;
 
   @Column(name = "kapsli_versioon")
@@ -61,6 +62,7 @@ public class Document extends BaseEntity implements Serializable {
   @OneToMany(mappedBy = "dokument", cascade = {CascadeType.ALL})
   private List<Transport> transports;
 
+  @Column(name = "outgoing_document")
   private Boolean outgoingDocument;
 
   public Document() {}

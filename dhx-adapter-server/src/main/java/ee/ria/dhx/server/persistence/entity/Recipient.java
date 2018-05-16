@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Lob;
 
 /**
  * The persistent class for the vastuvotja database table.
@@ -82,6 +83,7 @@ public class Recipient extends BaseEntity implements Serializable {
   @JoinColumn(name = "asutus_id")
   private Organisation organisation;
 
+  @Column(name = "outgoing")
   private Boolean outgoing;
 
   // bi-directional many-to-one association to Klassifikaator
@@ -102,6 +104,8 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "vastuvotja_staatus_id")
   private Integer recipientStatusId;
 
+  @Lob
+  @Column(name = "meta_xml")
   private String metaxml;
 
   public Recipient() {}

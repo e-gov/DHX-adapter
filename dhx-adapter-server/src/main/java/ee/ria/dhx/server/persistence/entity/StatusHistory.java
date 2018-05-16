@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Lob;
 
 /**
  * The persistent class for the staatuse_ajalugu database table.
@@ -38,6 +39,8 @@ public class StatusHistory implements Serializable {
   @Column(name = "fault_string")
   private String faultString;
 
+  @Lob
+  @Column(name = "meta_xml")
   private String metaxml;
 
   @Column(name = "staatuse_muutmise_aeg")
