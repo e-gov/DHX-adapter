@@ -27,16 +27,16 @@ public class StatusHistory implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer statusHistoryId;
 
-  @Column(name = "fault_actor")
+  @Column(name = "fault_actor", length = 2000)
   private String faultActor;
 
-  @Column(name = "fault_code")
+  @Column(name = "fault_code", length = 2000)
   private String faultCode;
 
   @Column(name = "fault_detail", length = 2000)
   private String faultDetail;
 
-  @Column(name = "fault_string")
+  @Column(name = "fault_string", length = 2000)
   private String faultString;
 
   @Lob
