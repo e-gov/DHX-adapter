@@ -663,10 +663,17 @@ public class SoapService {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "No dhl ids are provided to get status for.");
     }
-    list = xmlDoc.getElementsByTagName("dokument_guid");
-    if (list.getLength() > 0) {
-      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-          "Getting send status by dokument_guid is not supported");
+    
+    log.debug("getSendStatus senderMember: {}", senderMember);
+    log.debug("getSendStatus recipientMember: {}", recipientMember);
+    log.debug("getSendStatus recipientMember.getServiceVersion(): {}", recipientMember.getServiceVersion());
+    
+    if (recipientMember.getServiceVersion() == null || !recipientMember.getServiceVersion().equals("v2")) {
+      list = xmlDoc.getElementsByTagName("dokument_guid");
+      if (list.getLength() > 0) {
+        throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+            "Getting send status by dokument_guid is not supported");
+      }
     }
     List<Document> documents = documentRepository.findByDocumentIdIn(dhlIds);
     ObjectFactory factory = new ObjectFactory();
