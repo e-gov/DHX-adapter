@@ -82,10 +82,12 @@ public class SoapConfig {
   @Value("${soap.read-timeout:120000}")
   Integer readTimeout;
 
+  @Value("${soap.keep-alive:true}")
+  Boolean keepAlive;
+
   @Value("${soap.dhx-subsystem-prefix:DHX}")
   String dhxSubsystemPrefix;
 
-  
 
   @Value("${soap.client-truststore-file}")
   String clientTruststoreFile;
@@ -517,6 +519,29 @@ public class SoapConfig {
     this.readTimeout = readTimeout;
   }
 
+  
+  /**
+   * by default true.
+   * 
+   * @return the keepAlive of the HTTP requests
+   */
+  public Boolean getKeepAlive() {
+    return keepAlive;
+  }
+
+  /**
+   * by default true.
+   * 
+   * @param keepAlive the keepAlive of the HTTP requests to set
+   */
+  public void setKeepAlive(Boolean keepAlive) {
+    this.keepAlive = keepAlive;
+  }
+  
+
+  
+  
+  
   /**
    * by default DHX.
    * 
