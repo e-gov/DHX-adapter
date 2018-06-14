@@ -1,4 +1,6 @@
 #NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
-#Tue Apr 10 10:38:16 EEST 2018
-https\://repo.maven.apache.org/maven2/.lastUpdated=1523345896129
+#Mon May 14 15:57:37 EEST 2018
+http\://artifactory.tt.kit\:8081/artifactory/DVK-libs-release-local/.error=Could not transfer artifact ee.ria.dhx\:dhx-adapter-ws\:pom\:1.0.3 from/to ria (http\://artifactory.tt.kit\:8081/artifactory/DVK-libs-release-local)\: artifactory.tt.kit
+@default-ria-http\://artifactory.tt.kit\:8081/artifactory/DVK-libs-release-local/.lastUpdated=1526302656982
+https\://repo.maven.apache.org/maven2/.lastUpdated=1526302657106
 https\://repo.maven.apache.org/maven2/.error=
