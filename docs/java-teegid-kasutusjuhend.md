@@ -311,6 +311,7 @@ soap.representatives-service-code | representationList |  | Määratakse vahenda
 soap.representatives-service-version | v1 |  | Määratakse vahendatavate nimekirja päringu saatmisel X-tee päise `Header/service/serviceVersion` väärtuseks.
 soap.connection-timeout | 60000 |  | SOAP päringute tegemisel kasutatav HTTP ühenduse avamise timeout väärtus millisekundites. Vaikimisi 1 minut
 soap.read-timeout | 120000 |  | SOAP päringute tegemisel kasutatav HTTP päringu vastuse ootamise timeout väärtus millisekundites. Vaikimisi 2 minutit. Kui saadetavad failid on suured, siis võib suurendada.
+soap.http-timeout | 300 |  | HTTP püsiva ühenduse hoidmise väärtus sekundites. Vaikimisi 5 minutit (300 sekundit).
 soap.client-truststore-file |  | ${JAVA_HOME}/jre/lib/security/cacerts | HTTPS ühenduse vastuvõtmisel lubatud sertifikaate sisaldav sertifikaadihoidla
 soap.client-truststore-password |  |changeit | Sertifikaadihoidla parool
 soap.client-truststore-type | JKS |  | HTTPS ühenduse vastuvõtmisel lubatud sertifikaatide hoidla tüüp

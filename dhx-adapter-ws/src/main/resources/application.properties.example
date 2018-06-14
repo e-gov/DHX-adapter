@@ -52,6 +52,7 @@ soap.accepted-subsystems=DHX,DHX.subsystem
 #soap.representatives-service-version=v1
 #soap.connection-timeout=60000
 #soap.read-timeout=120000
+#soap.http-timeout=300
 
 #template representing how many times and with how bug timeouts document will be resent. 
 #for example 5,10,15 means that after first failed try application will wait 5 seconds and try again. 

@@ -85,9 +85,6 @@ public class SoapConfig {
   @Value("${soap.http-timeout:300}")
   Integer httpTimeout;
 
-  @Value("${soap.keep-alive:true}")
-  Boolean keepAlive;
-
   @Value("${soap.dhx-subsystem-prefix:DHX}")
   String dhxSubsystemPrefix;
 
@@ -541,28 +538,6 @@ public class SoapConfig {
     this.httpTimeout = httpTimeout;
   }
 
-  
-  /**
-   * by default true.
-   * 
-   * @return the keepAlive of the HTTP requests
-   */
-  public Boolean getKeepAlive() {
-    return keepAlive;
-  }
-
-  /**
-   * by default true.
-   * 
-   * @param keepAlive the keepAlive of the HTTP requests to set
-   */
-  public void setKeepAlive(Boolean keepAlive) {
-    this.keepAlive = keepAlive;
-  }
-  
-
-  
-  
   
   /**
    * by default DHX.

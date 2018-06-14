@@ -311,7 +311,8 @@ soap.send-document-service-version | v1 |  | Assigned to X-road header `Header/s
 soap.representatives-service-code | representationList |  | Representee list operation name. Assigned to X-road header `Header/service/serviceCode` value in SOAP request.
 soap.representatives-service-version | v1 |  | Representee list operation version. Assigned to X-road header `Header/service/serviceVersion` value in SOAP request.
 soap.connection-timeout | 60000 |  | HTTP connection opening timeout (when making SOAP requests). Milliseconds. Default is 1 minute.
-soap.read-timeout | 120000 |  | HTTP response waiting timeout (when making SOAP requests). Milliseconds. Default is 2 minutes. Could be increased in case document files are large. 
+soap.read-timeout | 120000 |  | HTTP response waiting timeout (when making SOAP requests). Milliseconds. Default is 2 minutes. Could be increased in case document files are large.
+soap.http-timeout | 300 |  | HTTP connection keep alive duration. Seconds. Default is 5 minutes (300 seconds).
 soap.dhx-subsystem-prefix | DHX |  | DHX sub-system prefix. Used for searching DHX addressees from X-road global configuration. DHX protocol requires it to be constant `DHX`
 soap.client-truststore-file |  | ${JAVA_HOME}/jre/lib/security/cacerts | Location of the Java keystore file containing the collection of CA certificates trusted by this application process (trust store)
 soap.client-truststore-password |  |changeit | Password to unlock the keystore file (store password) specified by soap.client-truststore-file
