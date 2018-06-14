@@ -82,6 +82,9 @@ public class SoapConfig {
   @Value("${soap.read-timeout:120000}")
   Integer readTimeout;
 
+  @Value("${soap.http-timeout:300}")
+  Integer httpTimeout;
+
   @Value("${soap.keep-alive:true}")
   Boolean keepAlive;
 
@@ -517,6 +520,25 @@ public class SoapConfig {
    */
   public void setReadTimeout(Integer readTimeout) {
     this.readTimeout = readTimeout;
+  }
+
+
+  /**
+   * by default 300 seconds.
+   * 
+   * @return the httpTimeout of the SOAP requests in seconds
+   */
+  public Integer getHttpTimeout() {
+    return httpTimeout;
+  }
+
+  /**
+   * by default 300 seconds.
+   * 
+   * @param httpTimeout the readTimeout of the SOAP requests in seconds to set
+   */
+  public void setHttpTimeout(Integer httpTimeout) {
+    this.httpTimeout = httpTimeout;
   }
 
   

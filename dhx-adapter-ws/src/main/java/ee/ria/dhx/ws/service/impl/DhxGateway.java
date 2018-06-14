@@ -52,6 +52,17 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.HeaderElement;
+import org.apache.http.HeaderElementIterator;
+import org.apache.http.HttpResponse;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.message.BasicHeaderElementIterator;
+
+
+
 @Slf4j
 @Component
 /**
@@ -87,6 +98,35 @@ public class DhxGateway extends WebServiceGatewaySupport {
     DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender();
     messageSender.setConnectionTimeout(soapConfig.getConnectionTimeout());
     messageSender.setReadTimeout(soapConfig.getReadTimeout());
+    
+    
+    AbstractHttpClient httpClient = (AbstractHttpClient)messageSender.getHttpClient();
+    
+    httpClient.setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
+
+      public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+
+        HeaderElementIterator it = new BasicHeaderElementIterator(
+            response.headerIterator(HTTP.CONN_KEEP_ALIVE));
+          
+          while (it.hasNext()) {
+            HeaderElement he = it.nextElement();
+            String param = he.getName();
+            String value = he.getValue();
+            if (value != null && param.equalsIgnoreCase("timeout")) {
+              
+              try {
+                return Long.parseLong(value) * 1000;
+              } catch(NumberFormatException ignore) {
+              }
+              
+            }
+          }
+          // otherwise keep alive for <soap.http-timeout> seconds
+          return soapConfig.getHttpTimeout() * 1000;
+        }
+      });
+    
     getWebServiceTemplate().setMessageSender(messageSender);
     /*
      * MessageFactory messageFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
