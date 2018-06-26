@@ -1,67 +1,53 @@
 
 
 --- staatuse_ajalugu ---
-create table staatuse_ajalugu_backup as (select * from staatuse_ajalugu);
+alter table STAATUSE_AJALUGU add ( FAULT_ACTOR_2 clob, FAULT_CODE_2 clob, FAULT_DETAIL_2 clob, FAULT_STRING_2 clob);
 
-delete from staatuse_ajalugu;
+update STAATUSE_AJALUGU set FAULT_ACTOR_2 = FAULT_ACTOR;  -- convert varchar2 to CLOB
+update STAATUSE_AJALUGU set FAULT_CODE_2 = FAULT_CODE;  -- convert varchar2 to CLOB
+update STAATUSE_AJALUGU set FAULT_DETAIL_2 = FAULT_DETAIL;  -- convert varchar2 to CLOB
+update STAATUSE_AJALUGU set FAULT_STRING_2 = FAULT_STRING;  -- convert varchar2 to CLOB
 
-alter table staatuse_ajalugu_backup add column meta_xml clob;
-update table staatuse_ajalugu_backup set meta_xml = metaxml;
-alter table staatuse_ajalugu_backup drop column metaxml;
+alter table STAATUSE_AJALUGU drop column FAULT_ACTOR;
+alter table STAATUSE_AJALUGU drop column FAULT_CODE;
+alter table STAATUSE_AJALUGU drop column FAULT_DETAIL;
+alter table STAATUSE_AJALUGU drop column FAULT_STRING;
 
-alter table staatuse_ajalugu add column meta_xml clob;
-alter table staatuse_ajalugu drop column metaxml;
-
-alter table staatuse_ajalugu modify(
-    fault_actor clob,
-    fault_code clob,
-    fault_detail clob,
-    fault_string clob,
-    meta_xml clob
-);
-
-insert into staatuse_ajalugu select * from staatuse_ajalugu_backup;
-
-drop table staatuse_ajalugu_backup;
-
+alter table STAATUSE_AJALUGU rename column FAULT_ACTOR_2 to FAULT_ACTOR;
+alter table STAATUSE_AJALUGU rename column FAULT_CODE_2 to FAULT_CODE;
+alter table STAATUSE_AJALUGU rename column FAULT_DETAIL_2 to FAULT_DETAIL;
+alter table STAATUSE_AJALUGU rename column FAULT_STRING_2 to FAULT_STRING;
 
 
 --- vastuvotja ---
-create table vastuvotja_backup as (select * from vastuvotja);
+alter table VASTUVOTJA add ( FAULT_ACTOR_2 clob, FAULT_CODE_2 clob, FAULT_DETAIL_2 clob, FAULT_STRING_2 clob);
 
-delete from vastuvotja;
+update VASTUVOTJA set FAULT_ACTOR_2 = FAULT_ACTOR;  -- convert varchar2 to CLOB
+update VASTUVOTJA set FAULT_CODE_2 = FAULT_CODE;  -- convert varchar2 to CLOB
+update VASTUVOTJA set FAULT_DETAIL_2 = FAULT_DETAIL;  -- convert varchar2 to CLOB
+update VASTUVOTJA set FAULT_STRING_2 = FAULT_STRING;  -- convert varchar2 to CLOB
 
-alter table vastuvotja_backup add column meta_xml clob;
-update vastuvotja_backup set meta_xml = metaxml;
-alter table vastuvotja_backup drop column metaxml;
+alter table VASTUVOTJA drop column FAULT_ACTOR;
+alter table VASTUVOTJA drop column FAULT_CODE;
+alter table VASTUVOTJA drop column FAULT_DETAIL;
+alter table VASTUVOTJA drop column FAULT_STRING;
 
-alter table vastuvotja add column meta_xml clob;
-alter table vastuvotja drop column metaxml;
-
-alter table vastuvotja modify(
-    fault_actor clob,
-    fault_code clob,
-    fault_detail clob,
-    fault_string clob,
-	meta_xml clob
-);
-
-insert into vastuvotja select * from vastuvotja_backup;
-
-drop table vastuvotja_backup;
+alter table VASTUVOTJA rename column FAULT_ACTOR_2 to FAULT_ACTOR;
+alter table VASTUVOTJA rename column FAULT_CODE_2 to FAULT_CODE;
+alter table VASTUVOTJA rename column FAULT_DETAIL_2 to FAULT_DETAIL;
+alter table VASTUVOTJA rename column FAULT_STRING_2 to FAULT_STRING;
 
 
 
 --- dokument ---
-create table dokument_backup as (select * from dokument);
+alter table dokument add ( sisu_2 clob);
 
-delete from dokument;
+update dokument set sisu_2 = sisu;  -- convert varchar2 to CLOB
 
-alter table dokument modify(
-    sisu clob
-);
 
-insert into dokument select * from dokument_backup;
+alter table dokument drop column sisu;
 
-drop table dokument_backup;
+
+alter table dokument rename column sisu_2 to sisu;
+
 
