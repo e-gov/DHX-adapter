@@ -368,4 +368,20 @@ public class ObjectFactory {
     return new SendDocumentsV4RequestTypeUnencoded.Dokumendid();
   }
 
+  /**
+   * Create an instance of {@link GetSendingOptionsV3Response }
+   * 
+   */
+  public GetSendingOptionsV3Response createGetSendingOptionsV3Response() {
+      return new GetSendingOptionsV3Response();
+  }
+
+  /**
+   * Create an instance of {@link GetSendingOptionV3ResponseBody }
+   * 
+   */
+  public GetSendingOptionV3ResponseBody createGetSendingOptionV3ResponseBody() {
+      return new GetSendingOptionV3ResponseBody();
+  }
+  
 }

@@ -30,6 +30,7 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendSta
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptions;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV2RequestType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionV3ResponseBody;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionRefsArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionType;
@@ -911,36 +912,37 @@ public class SoapService {
       }
     }
 
-    if (recipientMember.getServiceVersion().equals("v1")
-        || recipientMember.getServiceVersion().equals("v2")) {
-      try {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(false);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        org.w3c.dom.Document document = db.newDocument();
+    try {
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      dbf.setNamespaceAware(false);
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      org.w3c.dom.Document document = db.newDocument();
+      
+      if (recipientMember.getServiceVersion().equals("v1")
+          || recipientMember.getServiceVersion().equals("v2")) {
+      
         dhxMarshallerService.getMarshaller().marshal(institutions, document);
         List<Element> eles = new ArrayList<Element>();
         eles.add(document.getDocumentElement());
         response.setAny(eles);
-      } catch (JAXBException | ParserConfigurationException ex) {
-        throw new DhxException("Error occured while marshalling response.", ex);
-      }
-    } else {
-      try {
-        DataHandler handler = convertationService.createDatahandlerFromObject(institutions);
+      } else {
+
+        GetSendingOptionV3ResponseBody keha = fact.createGetSendingOptionV3ResponseBody();
+        
+        keha.setAsutused(institutions);
+        
+        DataHandler handler = convertationService.createDatahandlerFromObject(keha);
         String contentId = WsUtil.addAttachment(context, handler);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(false);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        org.w3c.dom.Document document = db.newDocument();
-        dhxMarshallerService.getMarshaller().marshal(new InstitutionArrayType(), document);
+        dhxMarshallerService.getMarshaller().marshal(fact.createGetSendingOptionV3ResponseBody(), document);
         document.getDocumentElement().setAttribute("href", contentId);
-        List<Element> eles = new ArrayList<Element>();
-        eles.add(document.getDocumentElement());
-        response.setAny(eles);
-      } catch (JAXBException | ParserConfigurationException ex) {
-        throw new DhxException("Error occured while marshalling response.", ex);
       }
+      
+      List<Element> eles = new ArrayList<Element>();
+      eles.add(document.getDocumentElement());
+      response.setAny(eles);
+      
+    } catch (JAXBException | ParserConfigurationException ex) {
+      throw new DhxException("Error occured while marshalling response.", ex);
     }
     return response;
   }
