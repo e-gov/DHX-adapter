@@ -301,6 +301,24 @@
 		</sequence>
 		</complexType>
 	</element>
+  <element name="getSendingOptionsV3Response">
+    <complexType>
+    <sequence>
+      <element name="keha" type="tns:getSendingOptionV3ResponseBody" />
+    </sequence>
+    </complexType>
+  </element>
+  <complexType name="getSendingOptionV3ResponseBody">
+    <sequence>
+      <element name="asutused" type="tns:institutionArrayType" >
+        <annotation>
+          <appinfo>
+            <xrd:title>Asutused</xrd:title>
+          </appinfo>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
 	<complexType name="institutionRefsArrayType">
 		<sequence>
 			<element name="asutus" type="string" maxOccurs="unbounded">
