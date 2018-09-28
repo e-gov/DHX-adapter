@@ -1,41 +1,47 @@
 
 
 --- staatuse_ajalugu ---
-alter table STAATUSE_AJALUGU add ( FAULT_ACTOR_2 clob, FAULT_CODE_2 clob, FAULT_DETAIL_2 clob, FAULT_STRING_2 clob);
+alter table STAATUSE_AJALUGU add ( FAULT_ACTOR_2 clob, FAULT_CODE_2 clob, FAULT_DETAIL_2 clob, FAULT_STRING_2 clob, meta_xml_2 clob);
 
 update STAATUSE_AJALUGU set FAULT_ACTOR_2 = FAULT_ACTOR;  -- convert varchar2 to CLOB
 update STAATUSE_AJALUGU set FAULT_CODE_2 = FAULT_CODE;  -- convert varchar2 to CLOB
 update STAATUSE_AJALUGU set FAULT_DETAIL_2 = FAULT_DETAIL;  -- convert varchar2 to CLOB
 update STAATUSE_AJALUGU set FAULT_STRING_2 = FAULT_STRING;  -- convert varchar2 to CLOB
+update STAATUSE_AJALUGU set meta_xml_2 = meta_xml;  -- convert varchar2 to CLOB
 
 alter table STAATUSE_AJALUGU drop column FAULT_ACTOR;
 alter table STAATUSE_AJALUGU drop column FAULT_CODE;
 alter table STAATUSE_AJALUGU drop column FAULT_DETAIL;
 alter table STAATUSE_AJALUGU drop column FAULT_STRING;
+alter table STAATUSE_AJALUGU drop column meta_xml;
 
 alter table STAATUSE_AJALUGU rename column FAULT_ACTOR_2 to FAULT_ACTOR;
 alter table STAATUSE_AJALUGU rename column FAULT_CODE_2 to FAULT_CODE;
 alter table STAATUSE_AJALUGU rename column FAULT_DETAIL_2 to FAULT_DETAIL;
 alter table STAATUSE_AJALUGU rename column FAULT_STRING_2 to FAULT_STRING;
+alter table STAATUSE_AJALUGU rename column meta_xml_2 to meta_xml;
 
 
 --- vastuvotja ---
-alter table VASTUVOTJA add ( FAULT_ACTOR_2 clob, FAULT_CODE_2 clob, FAULT_DETAIL_2 clob, FAULT_STRING_2 clob);
+alter table VASTUVOTJA add ( FAULT_ACTOR_2 clob, FAULT_CODE_2 clob, FAULT_DETAIL_2 clob, FAULT_STRING_2 clob, meta_xml_2 clob);
 
 update VASTUVOTJA set FAULT_ACTOR_2 = FAULT_ACTOR;  -- convert varchar2 to CLOB
 update VASTUVOTJA set FAULT_CODE_2 = FAULT_CODE;  -- convert varchar2 to CLOB
 update VASTUVOTJA set FAULT_DETAIL_2 = FAULT_DETAIL;  -- convert varchar2 to CLOB
 update VASTUVOTJA set FAULT_STRING_2 = FAULT_STRING;  -- convert varchar2 to CLOB
+update VASTUVOTJA set meta_xml_2 = meta_xml;  -- convert varchar2 to CLOB
 
 alter table VASTUVOTJA drop column FAULT_ACTOR;
 alter table VASTUVOTJA drop column FAULT_CODE;
 alter table VASTUVOTJA drop column FAULT_DETAIL;
 alter table VASTUVOTJA drop column FAULT_STRING;
+alter table VASTUVOTJA drop column meta_xml;
 
 alter table VASTUVOTJA rename column FAULT_ACTOR_2 to FAULT_ACTOR;
 alter table VASTUVOTJA rename column FAULT_CODE_2 to FAULT_CODE;
 alter table VASTUVOTJA rename column FAULT_DETAIL_2 to FAULT_DETAIL;
 alter table VASTUVOTJA rename column FAULT_STRING_2 to FAULT_STRING;
+alter table VASTUVOTJA rename column meta_xml_2 to meta_xml;
 
 
 
