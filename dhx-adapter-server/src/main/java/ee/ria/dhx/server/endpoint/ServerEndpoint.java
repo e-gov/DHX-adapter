@@ -26,6 +26,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
+import org.springframework.ws.server.endpoint.annotation.PayloadRoots;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
@@ -39,8 +40,8 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
  */
 public class ServerEndpoint {
 
-  public static final String NAMESPACE_URI = "http://producers.dhl.xrd.riik.ee/producer/dhl";
-
+  public static final String NAMESPACE_URI_DHX = "http://producers.dhl.xrd.riik.ee/producer/dhl";
+  public static final String NAMESPACE_URI_DVK = "http://producers.dhl.xtee.riik.ee/producer/dhl";
 
 
   @Autowired
@@ -60,7 +61,10 @@ public class ServerEndpoint {
    * @return - service response. contains ID of the saved document
    * @throws DhxException - thrown if error occurred while sending document
    */
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "sendDocuments")
+  @PayloadRoots({
+    @PayloadRoot(localPart = "sendDocuments", namespace = NAMESPACE_URI_DHX),
+    @PayloadRoot(localPart = "sendDocuments", namespace = NAMESPACE_URI_DVK)
+    })
   @ResponsePayload
   @Loggable
   public SendDocumentsResponse sendDocuments(@RequestPayload SendDocuments request,
@@ -95,7 +99,10 @@ public class ServerEndpoint {
    * @return - service response. contains documents to receive
    * @throws DhxException - thrown if error occurred while receiving the documents
    */
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "receiveDocuments")
+  @PayloadRoots({
+    @PayloadRoot(localPart = "receiveDocuments", namespace = NAMESPACE_URI_DHX),
+    @PayloadRoot(localPart = "receiveDocuments", namespace = NAMESPACE_URI_DVK)
+    })
   @ResponsePayload
   @Loggable
   public ReceiveDocumentsResponse receiveDocuments(
@@ -125,7 +132,10 @@ public class ServerEndpoint {
    * @return - service response. contains confirmation of marking the documents as received
    * @throws DhxException - thrown if error occurred while marking documents received
    */
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "markDocumentsReceived")
+  @PayloadRoots({
+    @PayloadRoot(localPart = "markDocumentsReceived", namespace = NAMESPACE_URI_DHX),
+    @PayloadRoot(localPart = "markDocumentsReceived", namespace = NAMESPACE_URI_DVK)
+    })
   @ResponsePayload
   @Loggable
   public MarkDocumentsReceivedResponse markDocumentsReceived(
@@ -153,7 +163,10 @@ public class ServerEndpoint {
    * @return - service response. contains statuses of the documents
    * @throws DhxException - thrown if error occurred while getting send statuses
    */
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getSendStatus")
+  @PayloadRoots({
+    @PayloadRoot(localPart = "getSendStatus", namespace = NAMESPACE_URI_DHX),
+    @PayloadRoot(localPart = "getSendStatus", namespace = NAMESPACE_URI_DVK)
+    })
   @ResponsePayload
   @Loggable
   public GetSendStatusResponse getSendStatus(@RequestPayload GetSendStatus request,
@@ -180,7 +193,10 @@ public class ServerEndpoint {
    * @return - service response. contains sending options(list of organisations)
    * @throws DhxException - thrown if error occurred while getting sending options
    */
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getSendingOptions")
+  @PayloadRoots({
+    @PayloadRoot(localPart = "getSendingOptions", namespace = NAMESPACE_URI_DHX),
+    @PayloadRoot(localPart = "getSendingOptions", namespace = NAMESPACE_URI_DVK)
+    })
   @ResponsePayload
   @Loggable
   public GetSendingOptionsResponse getSendingOptions(@RequestPayload GetSendingOptions request,
