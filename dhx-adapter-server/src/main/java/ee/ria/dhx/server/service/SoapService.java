@@ -922,9 +922,6 @@ public class SoapService {
           || recipientMember.getServiceVersion().equals("v2")) {
       
         dhxMarshallerService.getMarshaller().marshal(institutions, document);
-        List<Element> eles = new ArrayList<Element>();
-        eles.add(document.getDocumentElement());
-        response.setAny(eles);
       } else {
 
         GetSendingOptionV3ResponseBody keha = fact.createGetSendingOptionV3ResponseBody();
