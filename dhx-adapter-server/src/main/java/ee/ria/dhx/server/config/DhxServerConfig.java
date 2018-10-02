@@ -45,7 +45,8 @@ public class DhxServerConfig {
   @Value("${dhx.server-include-xmlns-to-attachments:false}")
   private Boolean includeXmlnsToAttachments;
   
-  @Value("${dhx.server.attachment-content-type:{http://www.w3.org/2001/XMLSchema}base64Binary}")
+  @Value("${dhx.server.attachment-content-type:{http://www.w3.org/2001/XMLSchema}base64Binary}") //- MTOM (application/xop+xml)
+  //                                           {http://ws-i.org/profiles/basic/1.1/xsd}swaRef}") - swaRef (text/xml)
   private String attachmentContentType;
   
   @Value("${dhx.server.attachment-content-encoding:gzip}")
