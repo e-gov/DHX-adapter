@@ -301,16 +301,18 @@
 		</sequence>
 		</complexType>
 	</element>
-  <element name="getSendingOptionsV3Response">
+	
+  <!--element name="getSendingOptionsV3Response">
     <complexType>
     <sequence>
       <element name="keha" type="tns:getSendingOptionV3ResponseBody" />
     </sequence>
     </complexType>
-  </element>
-  <complexType name="getSendingOptionV3ResponseBody">
+  </element-->
+  
+  <complexType name="getSendingOptionsV3ResponseTypeUnencoded">
     <sequence>
-      <element name="asutused" type="tns:institutionArrayType" >
+      <element name="asutused">
         <annotation>
           <appinfo>
             <xrd:title>Asutused</xrd:title>
@@ -319,6 +321,79 @@
       </element>
     </sequence>
   </complexType>
+  
+  
+  <complexType name="getSendingOptionsV3ResponseTypeUnencoded">
+	<sequence>
+	  <element name="asutused">
+		<annotation>
+		  <appinfo>
+			<xrd:title>Asutused</xrd:title>
+		  </appinfo>
+		</annotation>          
+		<complexType>
+		  <sequence>
+			<element name="asutus" maxOccurs="unbounded">
+			  <complexType>
+				<sequence>
+				  <element ref="dhl:regnr" />
+				  <element name="nimi" type="string" />
+				  <element name="saatmine" type="string">
+					<complexType>
+					  <sequence>
+						<element name="saatmisviis" type="string" />
+					  </sequence>
+					</complexType>
+				  </element>
+				  <element name="ks_asutuse_regnr" type="string">
+					<annotation>
+					  <documentation>Kõrgemalseisva asutuse registrikood</documentation>
+					</annotation>
+				  </element>
+				</sequence>
+			  </complexType>
+			</element>
+		  </sequence>
+		</complexType>
+	  </element>
+	  <element name="allyksused">
+		<complexType>
+		  <sequence>
+			<element name="allyksus" maxOccurs="unbounded">
+			  <complexType>
+				<sequence>
+				  <element name="kood" type="string" />
+				  <element name="nimetus" type="string" />
+				  <element name="asutuse_kood" type="string" />
+				  <element name="lyhinimetus" type="string" />
+				  <element name="ks_allyksuse_lyhinimetus" type="string" />
+				</sequence>
+			  </complexType>
+			</element>
+		  </sequence>
+		</complexType>
+	  </element>
+	  <element name="ametikohad">
+		<complexType>
+		  <sequence>
+			<element name="ametikoht" maxOccurs="unbounded">
+			  <complexType>
+				<sequence>
+				  <element name="kood" type="string" />
+				  <element name="nimetus" type="string" />
+				  <element name="asutuse_kood" type="string" />
+				  <element name="lyhinimetus" type="string" />
+				  <element name="ks_allyksuse_lyhinimetus" type="string" />
+				</sequence>
+			  </complexType>
+			</element>
+		  </sequence>
+		</complexType>
+	  </element>
+	</sequence>
+  </complexType>
+      
+        
 	<complexType name="institutionRefsArrayType">
 		<sequence>
 			<element name="asutus" type="string" maxOccurs="unbounded">
