@@ -72,6 +72,55 @@ public class ObjectFactory {
   }
 
   /**
+   * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded }
+   * 
+   */
+  public GetSendingOptionsV3ResponseTypeUnencoded createGetSendingOptionsV3ResponseTypeUnencoded() {
+      return new GetSendingOptionsV3ResponseTypeUnencoded();
+  }
+
+  /**
+   * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad }
+   * 
+   */
+  public GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad createGetSendingOptionsV3ResponseTypeUnencodedAmetikohad() {
+      return new GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad();
+  }
+
+  /**
+   * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused }
+   * 
+   */
+  public GetSendingOptionsV3ResponseTypeUnencoded.Allyksused createGetSendingOptionsV3ResponseTypeUnencodedAllyksused() {
+      return new GetSendingOptionsV3ResponseTypeUnencoded.Allyksused();
+  }
+
+  /**
+   * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused }
+   * 
+   */
+  public GetSendingOptionsV3ResponseTypeUnencoded.Asutused createGetSendingOptionsV3ResponseTypeUnencodedAsutused() {
+      return new GetSendingOptionsV3ResponseTypeUnencoded.Asutused();
+  }
+
+  /**
+   * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus }
+   * 
+   */
+  public GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus createGetSendingOptionsV3ResponseTypeUnencodedAsutusedAsutus() {
+      return new GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus();
+  }
+  
+  /**
+   * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine }
+   * 
+   */
+  public GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine createGetSendingOptionsV3ResponseTypeUnencodedAsutusedAsutusSaatmine() {
+      return new GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine();
+  }
+
+  
+  /**
    * Create an instance of {@link InstitutionRefsTypeUnencoded }
    * 
    * @return {@link InstitutionRefsTypeUnencoded}
@@ -368,20 +417,4 @@ public class ObjectFactory {
     return new SendDocumentsV4RequestTypeUnencoded.Dokumendid();
   }
 
-  /**
-   * Create an instance of {@link GetSendingOptionsV3Response }
-   * 
-   */
-  public GetSendingOptionsV3Response createGetSendingOptionsV3Response() {
-      return new GetSendingOptionsV3Response();
-  }
-
-  /**
-   * Create an instance of {@link GetSendingOptionV3ResponseBody }
-   * 
-   */
-  public GetSendingOptionV3ResponseBody createGetSendingOptionV3ResponseBody() {
-      return new GetSendingOptionV3ResponseBody();
-  }
-  
 }

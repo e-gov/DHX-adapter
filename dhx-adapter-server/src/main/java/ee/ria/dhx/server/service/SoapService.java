@@ -30,7 +30,7 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendSta
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptions;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV2RequestType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionV3ResponseBody;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV3ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionRefsArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionType;
@@ -833,6 +833,7 @@ public class SoapService {
     requestWrapper.setKeha(request);
   }
 
+  
   /**
    * Method returns list of organisations that are able to receive the documents using DHX protocol.
    * 
@@ -844,12 +845,9 @@ public class SoapService {
    * @throws DhxException thrown if error occurs
    */
   @Loggable
-  public GetSendingOptionsResponse getSendingOptions(GetSendingOptions request,
+  public GetSendingOptionsResponse getSendingOptionsV1(GetSendingOptions request,
       InternalXroadMember senderMember,
       InternalXroadMember recipientMember, MessageContext context) throws DhxException {
-    if (request.getKeha() == null) {
-      setGetSendingOptionsRequestBody(request, context, recipientMember);
-    }
     GetSendingOptionsResponse response = new GetSendingOptionsResponse();
     ObjectFactory fact = new ObjectFactory();
     InstitutionArrayType institutions = fact.createInstitutionArrayType();
@@ -873,8 +871,6 @@ public class SoapService {
             }
             institution.setNimi(org.getName() + subsystem);
           }
-
-
         } else {
           Date curDate = new Date(); // skip outdated
           if (org.getRepresenteeStart().getTime() > curDate.getTime()
@@ -918,29 +914,155 @@ public class SoapService {
       DocumentBuilder db = dbf.newDocumentBuilder();
       org.w3c.dom.Document document = db.newDocument();
       
-      if (recipientMember.getServiceVersion().equals("v1")
-          || recipientMember.getServiceVersion().equals("v2")) {
-      
-        dhxMarshallerService.getMarshaller().marshal(institutions, document);
-      } else {
-
-        GetSendingOptionV3ResponseBody keha = fact.createGetSendingOptionV3ResponseBody();
-        
-        keha.setAsutused(institutions);
-        
-        DataHandler handler = convertationService.createDatahandlerFromObject(keha);
-        String contentId = WsUtil.addAttachment(context, handler);
-        dhxMarshallerService.getMarshaller().marshal(fact.createGetSendingOptionV3ResponseBody(), document);
-        document.getDocumentElement().setAttribute("href", contentId);
-      }
+      dhxMarshallerService.getMarshaller().marshal(institutions, document);
       
       List<Element> eles = new ArrayList<Element>();
       eles.add(document.getDocumentElement());
       response.setAny(eles);
       
+      System.out.println(document.toString());
+      
+      
     } catch (JAXBException | ParserConfigurationException ex) {
       throw new DhxException("Error occured while marshalling response.", ex);
     }
+    return response;
+  }
+
+  /**
+   * Method returns list of organisations that are able to receive the documents using DHX protocol.
+   * 
+   * @param request SOAP request object
+   * @param senderMember sender of the request(from SOAP header)
+   * @param recipientMember recipient of the request(from SOAP header)
+   * @param context Soap message context
+   * @return SOAP response object
+   * @throws DhxException thrown if error occurs
+   */
+  @Loggable
+  public GetSendingOptionsResponse getSendingOptionsV3(GetSendingOptions request,
+      InternalXroadMember senderMember,
+      InternalXroadMember recipientMember, MessageContext context) throws DhxException {
+    GetSendingOptionsResponse response = new GetSendingOptionsResponse();
+    ObjectFactory fact = new ObjectFactory();
+    GetSendingOptionsV3ResponseTypeUnencoded.Asutused institutions = fact.createGetSendingOptionsV3ResponseTypeUnencodedAsutused();
+    List<Organisation> orgs = persistenceService.getAdresseeList();
+
+    if (orgs != null && orgs.size() > 0) {
+      for (Organisation org : orgs) {
+        GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus institution = fact.createGetSendingOptionsV3ResponseTypeUnencodedAsutusedAsutus();
+        if (org.getRepresentor() == null) {
+          institution.setRegnr(persistenceService.toDvkCapsuleAddressee(org.getRegistrationCode(),
+              org.getSubSystem()));
+
+          if (!StringUtil.isNullOrEmpty(org.getRealName())) {
+            institution.setNimi(org.getRealName());
+          } else {
+            String subsystem = "";
+            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) 
+                && !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
+              subsystem = "(" 
+                + org.getSubSystem() + ")";
+            }
+            institution.setNimi(org.getName() + subsystem);
+          }
+        } else {
+          Date curDate = new Date(); // skip outdated
+          if (org.getRepresenteeStart().getTime() > curDate.getTime()
+              || (org.getRepresenteeEnd() != null
+                  && org.getRepresenteeEnd().getTime() < curDate.getTime())) {
+            continue;
+          }
+          institution.setRegnr(
+              persistenceService.toDvkCapsuleAddressee(org.getRegistrationCode(),
+                  org.getSubSystem()));
+          if (!StringUtil.isNullOrEmpty(org.getRealName())) {
+            institution.setNimi(org.getRealName());
+          } else {
+            String subsystem = "";
+            if (!StringUtil.isNullOrEmpty(org.getSubSystem()) 
+                && !soapConfig.getDhxSubsystemPrefix().equals(org.getSubSystem())) {
+              subsystem = "(" 
+                + org.getSubSystem() + ")";
+            }
+            institution.setNimi(org.getName() + subsystem);
+          }
+        }
+        
+        GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine saatmine = fact.createGetSendingOptionsV3ResponseTypeUnencodedAsutusedAsutusSaatmine();
+        
+        saatmine.setSaatmisviis("dhl");
+        institution.setSaatmine(saatmine);
+        
+        if (request.getKeha().getAsutused() != null
+            && request.getKeha().getAsutused().getAsutus() != null
+            && request.getKeha().getAsutused().getAsutus().size() > 0) {
+          if (request.getKeha().getAsutused().getAsutus().contains(institution.getRegnr())) {
+            institutions.getAsutus().add(institution);
+          }
+        } else {
+          institutions.getAsutus().add(institution);
+        }
+      }
+    }
+
+    try {
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      dbf.setNamespaceAware(false);
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      org.w3c.dom.Document document = db.newDocument();
+      
+      GetSendingOptionsV3ResponseTypeUnencoded keha = fact.createGetSendingOptionsV3ResponseTypeUnencoded();
+      
+      keha.setAsutused(institutions);
+        
+      DataHandler handler = convertationService.createDatahandlerFromObject(keha);
+      String contentId = WsUtil.addAttachment(context, handler);
+      dhxMarshallerService.getMarshaller().marshal(fact.createGetSendingOptionsV3ResponseTypeUnencoded(), document);
+      document.getDocumentElement().setAttribute("href", contentId);
+      
+      List<Element> eles = new ArrayList<Element>();
+      eles.add(document.getDocumentElement());
+      response.setAny(eles);
+      
+      System.out.println(document.toString());
+      
+    } catch (JAXBException | ParserConfigurationException ex) {
+      throw new DhxException("Error occured while marshalling response.", ex);
+    }
+    return response;
+  }
+  
+  
+  
+  /**
+   * Method returns list of organisations that are able to receive the documents using DHX protocol.
+   * 
+   * @param request SOAP request object
+   * @param senderMember sender of the request(from SOAP header)
+   * @param recipientMember recipient of the request(from SOAP header)
+   * @param context Soap message context
+   * @return SOAP response object
+   * @throws DhxException thrown if error occurs
+   */
+  @Loggable
+  public GetSendingOptionsResponse getSendingOptions(GetSendingOptions request,
+      InternalXroadMember senderMember,
+      InternalXroadMember recipientMember, MessageContext context) throws DhxException {
+    if (request.getKeha() == null) {
+      setGetSendingOptionsRequestBody(request, context, recipientMember);
+    }
+    GetSendingOptionsResponse response;
+      
+      if (recipientMember.getServiceVersion().equals("v1")
+          || recipientMember.getServiceVersion().equals("v2")) {
+      
+        response = getSendingOptionsV1(request, senderMember, recipientMember, context);
+      } else {
+
+        response = getSendingOptionsV3(request, senderMember, recipientMember, context);
+      }
+      
     return response;
   }
 
