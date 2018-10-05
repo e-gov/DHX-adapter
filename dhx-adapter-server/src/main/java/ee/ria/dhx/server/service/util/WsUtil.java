@@ -39,6 +39,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.AttachmentPart;
 
+import org.apache.commons.codec.binary.Base64InputStream;
+
+
 /**
  * Utility methods for web services and attachments.
  * 
@@ -100,8 +103,11 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static InputStream base64Decode(InputStream stream) throws DhxException {
-    InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);
-    return base64DecoderStream;
+    //InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);
+    //return base64DecoderStream;
+
+    Base64InputStream base64InputStream = new Base64InputStream(stream); 
+    return base64InputStream;
   }
 
 
@@ -128,6 +134,8 @@ public class WsUtil {
   private static InputStream base64decodeAndUnzip(InputStream stream) throws DhxException {
     InputStream decoded = stream;
     decoded = base64Decode(decoded);
+    
+    
     return gzipDecompress(decoded);
   }
 
