@@ -12,6 +12,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.security.Security;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
+
 import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
@@ -589,6 +593,24 @@ public class SoapConfig {
    */
   @PostConstruct
   public void init() {
+    
+    log.info("SecurityServer: {}", getSecurityServer());
+    log.info("javax.net.ssl.trustStore: {}", expandEnvVars(getClientTrustStoreFile()));
+    log.info("javax.net.ssl.trustStorePassword: {}", getClientTrustStorePassword());
+    log.info("javax.net.ssl.trustStoreType: {}", getClientTrustStoreType());
+
+    log.info("javax.net.ssl.keyStore: {}", expandEnvVars(getClientKeyStoreFile()));
+    log.info("javax.net.ssl.keyStorePassword: {}", getClientKeyStorePassword());
+    log.info("javax.net.ssl.keyStoreType: {}", getClientKeyStoreType());
+
+    ClassLoader cl = ClassLoader.getSystemClassLoader();
+
+    URL[] urls = ((URLClassLoader)cl).getURLs();
+
+    for(URL url: urls){
+      log.info("SoapConfig.url: {}", url.getFile());
+    }
+    
     // setup truststore
     if (getSecurityServer().toLowerCase().startsWith("https")) {
         System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
