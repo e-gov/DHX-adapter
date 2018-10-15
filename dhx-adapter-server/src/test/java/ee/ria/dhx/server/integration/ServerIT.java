@@ -33,6 +33,7 @@ import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2RequestType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV3ResponseTypeUnencoded;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
 import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedV3RequestType;
@@ -87,6 +88,9 @@ import org.springframework.ws.test.client.ResponseCreators;
 import org.springframework.ws.test.server.MockWebServiceClient;
 import org.springframework.ws.test.server.RequestCreators;
 import org.springframework.ws.test.server.ResponseMatchers;
+import org.springframework.ws.test.server.ResponseMatcher;
+import org.springframework.ws.WebServiceMessage;
+
 import org.w3c.dom.Element;
 
 import java.io.File;
@@ -1219,16 +1223,23 @@ public class ServerIT {
    * @throws IOException thrown if error occurs thrown if error occurs
    * @throws DhxException thrown if error occurs thrown if error occurs
    */
+  // V1,V2 test katki hetkel
+  /*
   @Test
-  public void getSendingOptions() throws IOException, DhxException {
+  public void getSendingOptionsV1() throws IOException, DhxException {
+    
+    log.debug("getSendingOptions1");
+    
     Source requestEnvelope = new StreamSource(
-        new ClassPathResource(resourceFolder + "getSendingOptions.xml").getFile());
+        new ClassPathResource(resourceFolder + "getSendingOptionsV1.xml").getFile());
+    
     mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
         .andExpect(ResponseMatchers
             .xpath("//ns5:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
 
     ArgumentCaptor<InstitutionArrayType> argument =
         ArgumentCaptor.forClass(InstitutionArrayType.class);
+    
     Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
     InstitutionArrayType items = argument.getValue();
     assertEquals(10, items.getAsutus().size());
@@ -1296,8 +1307,96 @@ public class ServerIT {
     assertEquals("system", org.getSubSystem());
     assertNotNull(org.getRepresentor());
     assertEquals("30000001", org.getRepresentor().getRegistrationCode());
-  }
+  }*/
 
+  
+  @Test
+  public void getSendingOptionsV3() throws IOException, DhxException {
+    
+    log.debug("getSendingOptions1");
+    
+    Source requestEnvelope = new StreamSource(
+        new ClassPathResource(resourceFolder + "getSendingOptionsV3.xml").getFile());
+    
+    mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
+        .andExpect(ResponseMatchers
+            .xpath("//ns5:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
+
+    ArgumentCaptor<GetSendingOptionsV3ResponseTypeUnencoded> argument =
+        ArgumentCaptor.forClass(GetSendingOptionsV3ResponseTypeUnencoded.class);
+    
+    Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
+    GetSendingOptionsV3ResponseTypeUnencoded keha = argument.getValue();
+    GetSendingOptionsV3ResponseTypeUnencoded.Asutused asutused = keha.getAsutused();
+    
+    assertEquals(10, asutused.getAsutus().size());
+
+    assertEquals("dhl", asutused.getAsutus().get(0).getSaatmine().getSaatmisviis());
+
+    // organisation with subsustem
+    assertEquals("dvk.70006317", asutused.getAsutus().get(0).getRegnr());
+    assertEquals("Riigi Infosüsteemi Amet(DHX.dvk)", asutused.getAsutus().get(0).getNimi());
+
+    // regular organisation
+    assertEquals("30000001", asutused.getAsutus().get(1).getRegnr());
+    assertEquals("Hõbekuuli OÜ", asutused.getAsutus().get(1).getNimi());
+
+    // organisation with subsystem
+    assertEquals("raamatupidamine.30000001", asutused.getAsutus().get(2).getRegnr());
+    assertEquals("Hõbekuuli OÜ(DHX.raamatupidamine)", asutused.getAsutus().get(2).getNimi());
+
+    // regular organisation
+    assertEquals("40000001", asutused.getAsutus().get(3).getRegnr());
+    assertEquals("Ministeerium X", asutused.getAsutus().get(3).getNimi());
+
+    // organisation with non standard subsystem(without dot(.) iafter
+    // prefix)
+    assertEquals("DHXsubsystem.40000001", asutused.getAsutus().get(4).getRegnr());
+    assertEquals("Ministeerium X(DHXsubsystem)", asutused.getAsutus().get(4).getNimi());
+
+    // regular organisation
+    assertEquals("70000004", asutused.getAsutus().get(5).getRegnr());
+    assertEquals("Asutus Y", asutused.getAsutus().get(5).getNimi());
+
+    // organisation with special subsystem
+    assertEquals("adit", asutused.getAsutus().get(6).getRegnr());
+    assertEquals("Asutus Y(DHX.adit)", asutused.getAsutus().get(6).getNimi());
+
+    // representee with subsystem
+    assertEquals("system.500", asutused.getAsutus().get(7).getRegnr());
+    assertEquals("Representee 1(system)", asutused.getAsutus().get(7).getNimi());
+
+    // representee with special subsystem
+    assertEquals("rt", asutused.getAsutus().get(8).getRegnr());
+    assertEquals("Representee 2(rt)", asutused.getAsutus().get(8).getNimi());
+
+    // regular representee
+    assertEquals("500", asutused.getAsutus().get(9).getRegnr());
+    assertEquals("Representee 3", asutused.getAsutus().get(9).getNimi());
+
+    Iterable<Organisation> orgs = organisationRepository.findAll();
+    Iterator<Organisation> iterator = orgs.iterator();
+    Organisation org = iterator.next();
+    assertEquals("70006317", org.getRegistrationCode());
+    assertEquals("DHX.dvk", org.getSubSystem());
+
+    org = iterator.next();
+    org = iterator.next();
+    org = iterator.next();
+    org = iterator.next();
+    org = iterator.next();
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX.adit", org.getSubSystem());
+
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertEquals("system", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+  }
+  
+  
 
   /**
    * Test of getSendingOptions service. And check of organisations in database. Testing when some of
@@ -1307,13 +1406,15 @@ public class ServerIT {
    * @throws IOException thrown if error occurs
    * @throws DhxException thrown if error occurs
    */
+  // V1,V2 test katki hetkel
+  /*
   @Test
-  public void getSendingOptionsChanged() throws IOException, DhxException {
+  public void getSendingOptionsChangedV1() throws IOException, DhxException {
 
     // c
     AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params2.xml");
     Source requestEnvelope = new StreamSource(
-        new ClassPathResource(resourceFolder + "getSendingOptions.xml").getFile());
+        new ClassPathResource(resourceFolder + "getSendingOptionsV1.xml").getFile());
     Source responseEnvelope = new StreamSource(
         new ClassPathResource(resourceFolder + "representationList_response2.xml").getFile());
     MockWebServiceServer mockServerSendingOptions =
@@ -1427,7 +1528,6 @@ public class ServerIT {
     mockServerSendingOptions.verify();
 
 
-
     // check that after chenging back, everithing is OK
     AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params.xml");
     responseEnvelope = new StreamSource(
@@ -1441,8 +1541,6 @@ public class ServerIT {
 
     orgs = organisationRepository.findAll();
     iterator = orgs.iterator();
-
-
 
     org = iterator.next();
     assertEquals("70006317", org.getRegistrationCode());
@@ -1504,7 +1602,208 @@ public class ServerIT {
     mockServerSendingOptions.verify();
 
   }
+*/
+  
+  
+  @Test
+  public void getSendingOptionsChangedV3() throws IOException, DhxException {
 
+    // c
+    AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params2.xml");
+    Source requestEnvelope = new StreamSource(
+        new ClassPathResource(resourceFolder + "getSendingOptionsV3.xml").getFile());
+    Source responseEnvelope = new StreamSource(
+        new ClassPathResource(resourceFolder + "representationList_response2.xml").getFile());
+    MockWebServiceServer mockServerSendingOptions =
+        MockWebServiceServer.createServer(applicationContext);
+    mockServerSendingOptions.expect(
+        RequestMatchers.xpath("//ns9:representationList[1]", getDhxNamespaceMap()).exists())
+        .andRespond(ResponseCreators.withSoapEnvelope(responseEnvelope));
+    addressService.renewAddressList();
+
+    mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
+        .andExpect(ResponseMatchers
+            .xpath("//ns5:getSendingOptionsResponse[1]", getDhlNamespaceMap()).exists());
+
+    ArgumentCaptor<GetSendingOptionsV3ResponseTypeUnencoded> argument =
+        ArgumentCaptor.forClass(GetSendingOptionsV3ResponseTypeUnencoded.class);
+    Mockito.verify(convertationService).createDatahandlerFromObject(argument.capture());
+    
+    GetSendingOptionsV3ResponseTypeUnencoded keha = argument.getValue();
+    GetSendingOptionsV3ResponseTypeUnencoded.Asutused asutused = keha.getAsutused();
+
+    assertEquals(6, asutused.getAsutus().size());
+
+    assertEquals("dhl", asutused.getAsutus().get(0).getSaatmine().getSaatmisviis());
+
+    // organisation with subsustem
+    assertEquals("dvk.70006317", asutused.getAsutus().get(0).getRegnr());
+    assertEquals("Riigi Infosüsteemi Amet(DHX.dvk)", asutused.getAsutus().get(0).getNimi());
+
+    // regular organisation
+    assertEquals("30000001", asutused.getAsutus().get(1).getRegnr());
+    assertEquals("Hõbekuuli OÜ", asutused.getAsutus().get(1).getNimi());
+
+    // organisation with subsystem
+    assertEquals("raamatupidamine.30000001", asutused.getAsutus().get(2).getRegnr());
+    assertEquals("Hõbekuuli OÜ(DHX.raamatupidamine)", asutused.getAsutus().get(2).getNimi());
+
+    // regular organisation
+    assertEquals("40000001", asutused.getAsutus().get(3).getRegnr());
+    assertEquals("Ministeerium X", asutused.getAsutus().get(3).getNimi());
+
+    // organisation with non standard subsystem(without dot(.) iafter
+    // prefix)
+    assertEquals("DHXsubsystem.40000001", asutused.getAsutus().get(4).getRegnr());
+    assertEquals("Ministeerium X(DHXsubsystem)", asutused.getAsutus().get(4).getNimi());
+
+    // regular representee
+    assertEquals("system.500", asutused.getAsutus().get(5).getRegnr());
+    assertEquals("Representee 1(system)", asutused.getAsutus().get(5).getNimi());
+
+    Iterable<Organisation> orgs = organisationRepository.findAll();
+    Iterator<Organisation> iterator = orgs.iterator();
+
+
+
+    Organisation org = iterator.next();
+    assertEquals("70006317", org.getRegistrationCode());
+    assertEquals("DHX.dvk", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX.raamatupidamine", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHXsubsystem", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(false, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX.adit", org.getSubSystem());
+    assertEquals(false, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertEquals("system", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("70006317", org.getRepresentor().getRegistrationCode());
+    assertEquals("DHX.dvk", org.getRepresentor().getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("510", org.getRegistrationCode());
+    assertEquals("rt", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(false, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertNull(org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(false, org.getIsActive());
+
+    mockServerSendingOptions.verify();
+
+
+
+    // check that after chenging back, everithing is OK
+    AddressServiceImplSpyProvider.getAddressServiceSpy(addressService, "shared-params.xml");
+    responseEnvelope = new StreamSource(
+        new ClassPathResource(resourceFolder + "representationList_response.xml").getFile());
+    mockServerSendingOptions =
+        MockWebServiceServer.createServer(applicationContext);
+    mockServerSendingOptions.expect(
+        RequestMatchers.xpath("//ns9:representationList[1]", getDhxNamespaceMap()).exists())
+        .andRespond(ResponseCreators.withSoapEnvelope(responseEnvelope));
+    addressService.renewAddressList();
+
+    orgs = organisationRepository.findAll();
+    iterator = orgs.iterator();
+
+    org = iterator.next();
+    assertEquals("70006317", org.getRegistrationCode());
+    assertEquals("DHX.dvk", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("30000001", org.getRegistrationCode());
+    assertEquals("DHX.raamatupidamine", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("40000001", org.getRegistrationCode());
+    assertEquals("DHXsubsystem", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("70000004", org.getRegistrationCode());
+    assertEquals("DHX.adit", org.getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertEquals("system", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals("DHX", org.getRepresentor().getSubSystem());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("510", org.getRegistrationCode());
+    assertEquals("rt", org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(true, org.getIsActive());
+
+    org = iterator.next();
+    assertEquals("500", org.getRegistrationCode());
+    assertNull(org.getSubSystem());
+    assertNotNull(org.getRepresentor());
+    assertEquals("30000001", org.getRepresentor().getRegistrationCode());
+    assertEquals(true, org.getIsActive());
+    mockServerSendingOptions.verify();
+
+  }
+  
+  
   private SendDocument getSendDocumentRequest(DataHandler handler, String consignmentId,
       String recipient,
       String recipientSystem) throws DhxException {

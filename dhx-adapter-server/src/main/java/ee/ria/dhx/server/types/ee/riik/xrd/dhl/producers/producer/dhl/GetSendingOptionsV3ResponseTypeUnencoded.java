@@ -8,13 +8,13 @@
 
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
 
 /**
  * <p>Java class for getSendingOptionsV3ResponseTypeUnencoded complex type.
@@ -119,6 +119,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "keha", namespace = "")
 @XmlType(name = "getSendingOptionsV3ResponseTypeUnencoded", propOrder = {
     "asutused",
     "allyksused",
@@ -126,11 +127,11 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetSendingOptionsV3ResponseTypeUnencoded {
 
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     protected GetSendingOptionsV3ResponseTypeUnencoded.Asutused asutused;
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     protected GetSendingOptionsV3ResponseTypeUnencoded.Allyksused allyksused;
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     protected GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad ametikohad;
 
     /**
@@ -140,6 +141,8 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
      *     possible object is
      *     {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused }
      *     
+     * @return possible object is {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused }
+     * 
      */
     public GetSendingOptionsV3ResponseTypeUnencoded.Asutused getAsutused() {
         return asutused;
@@ -164,6 +167,8 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
      *     possible object is
      *     {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused }
      *     
+     * @return possible object is {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused }
+     * 
      */
     public GetSendingOptionsV3ResponseTypeUnencoded.Allyksused getAllyksused() {
         return allyksused;
@@ -188,6 +193,8 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
      *     possible object is
      *     {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad }
      *     
+     * @return possible object is {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad }
+     * 
      */
     public GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad getAmetikohad() {
         return ametikohad;
@@ -269,6 +276,8 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
          * {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused.Allyksus }
          * 
          * 
+         * 
+         * @return List of {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused.Allyksus}
          */
         public List<GetSendingOptionsV3ResponseTypeUnencoded.Allyksused.Allyksus> getAllyksus() {
             if (allyksus == null) {
@@ -509,6 +518,8 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
          * Objects of the following type(s) are allowed in the list
          * {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad.Ametikoht }
          * 
+         * 
+         * @return List of {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad.Ametikoht}
          * 
          */
         public List<GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad.Ametikoht> getAmetikoht() {
@@ -759,6 +770,8 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
          * Objects of the following type(s) are allowed in the list
          * {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus }
          * 
+         * 
+         * @return List of {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus}
          * 
          */
         public List<GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus> getAsutus() {

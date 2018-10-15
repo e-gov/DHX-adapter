@@ -103,11 +103,8 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static InputStream base64Decode(InputStream stream) throws DhxException {
-    //InputStream base64DecoderStream = Base64.getDecoder().wrap(stream);
-    //return base64DecoderStream;
-
-    Base64InputStream base64InputStream = new Base64InputStream(stream); 
-    return base64InputStream;
+    InputStream base64DecoderStream = Base64.getMimeDecoder().wrap(stream);
+    return base64DecoderStream;
   }
 
 

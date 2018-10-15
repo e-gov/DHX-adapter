@@ -89,9 +89,16 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.MarshalException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
 
 /**
  * Class that gets SOAP request objects(from DVK services), processes requests and gives SOAP
@@ -845,9 +852,10 @@ public class SoapService {
    * @throws DhxException thrown if error occurs
    */
   @Loggable
-  public GetSendingOptionsResponse getSendingOptionsV1(GetSendingOptions request,
+  private GetSendingOptionsResponse getSendingOptionsV1(GetSendingOptions request,
       InternalXroadMember senderMember,
       InternalXroadMember recipientMember, MessageContext context) throws DhxException {
+    
     GetSendingOptionsResponse response = new GetSendingOptionsResponse();
     ObjectFactory fact = new ObjectFactory();
     InstitutionArrayType institutions = fact.createInstitutionArrayType();
@@ -901,9 +909,11 @@ public class SoapService {
             && request.getKeha().getAsutused().getAsutus().size() > 0) {
           if (request.getKeha().getAsutused().getAsutus().contains(institution.getRegnr())) {
             institutions.getAsutus().add(institution);
+            //log.debug("getSendingOptionsV1: regnr= " + institution.getRegnr() + ", nimi=" + institution.getNimi() + ", saatmisviis=" + sendingOptions.getSaatmisviis());
           }
         } else {
           institutions.getAsutus().add(institution);
+          //log.debug("getSendingOptionsV1: regnr= " + institution.getRegnr() + ", nimi=" + institution.getNimi() + ", saatmisviis=" + sendingOptions.getSaatmisviis());
         }
       }
     }
@@ -920,9 +930,10 @@ public class SoapService {
       eles.add(document.getDocumentElement());
       response.setAny(eles);
       
-      System.out.println(document.toString());
+      //log.debug("getSendingOptionsV1: document= " + document + ", eles=" + eles + ", institutions=" + institutions.getAsutus());
+      //log.debug("getSendingOptionsV1: documentel= " + document.getDocumentElement() + "documentel1= " + document.getDocumentElement().getChildNodes().getLength());
       
-      
+    //} catch (JAXBException | ParserConfigurationException | java.io.FileNotFoundException ex) {
     } catch (JAXBException | ParserConfigurationException ex) {
       throw new DhxException("Error occured while marshalling response.", ex);
     }
@@ -1024,12 +1035,11 @@ public class SoapService {
       List<Element> eles = new ArrayList<Element>();
       eles.add(document.getDocumentElement());
       response.setAny(eles);
-      
-      System.out.println(document.toString());
-      
+     
     } catch (JAXBException | ParserConfigurationException ex) {
       throw new DhxException("Error occured while marshalling response.", ex);
     }
+    
     return response;
   }
   
@@ -1049,6 +1059,9 @@ public class SoapService {
   public GetSendingOptionsResponse getSendingOptions(GetSendingOptions request,
       InternalXroadMember senderMember,
       InternalXroadMember recipientMember, MessageContext context) throws DhxException {
+    
+    //log.debug("getSendingOptions: request= " + request.toString() + ", recipientMember=" + recipientMember.toString());
+    
     if (request.getKeha() == null) {
       setGetSendingOptionsRequestBody(request, context, recipientMember);
     }
@@ -1062,6 +1075,8 @@ public class SoapService {
 
         response = getSendingOptionsV3(request, senderMember, recipientMember, context);
       }
+      
+      //log.debug("getSendingOptions.response= " + response);
       
     return response;
   }

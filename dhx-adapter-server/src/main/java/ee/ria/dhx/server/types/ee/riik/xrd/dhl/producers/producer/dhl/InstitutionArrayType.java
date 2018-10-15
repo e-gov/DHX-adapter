@@ -9,8 +9,8 @@
 
 package ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
