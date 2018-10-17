@@ -40,9 +40,6 @@ public class ConvertationService {
   @Autowired
   DhxServerConfig config;
 
-  private static final String DEFAULT_CONTENT_TYPE =
-      " {http://www.w3.org/2001/XMLSchema}base64Binary";
-
   /**
    * Creates dataHandler from object. Object will be marshalled, GZipped, base64 encoded and written
    * to file. Datahandler will be created from that file. Written XMLs will have no namespace prefixes.
@@ -73,7 +70,7 @@ public class ConvertationService {
       fos.flush();
       fos.close();
       fos = null;
-      return FileUtil.getDatahandlerFromFile(file, DEFAULT_CONTENT_TYPE);
+      return FileUtil.getDatahandlerFromFile(file, config.getAttachmentContentType());
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,
           "Error occured while creating attachment for response. " + ex.getMessage(), ex);
@@ -116,7 +113,7 @@ public class ConvertationService {
       fos.flush();
       fos.close();
       fos = null;
-      return FileUtil.getDatahandlerFromFile(file, DEFAULT_CONTENT_TYPE);
+      return FileUtil.getDatahandlerFromFile(file, config.getAttachmentContentType());
     } catch (IOException ex) {
       throw new DhxException(DhxExceptionEnum.FILE_ERROR,
           "Error occured while creating attachment for response. " + ex.getMessage(), ex);
