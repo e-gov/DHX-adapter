@@ -41,6 +41,7 @@ import javax.xml.soap.AttachmentPart;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
+import ee.ria.dhx.server.service.util.StreamTypeEnum;
 
 /**
  * Utility methods for web services and attachments.
@@ -63,16 +64,21 @@ public class WsUtil {
    * @return decompressed stream
    * @throws DhxException thrown if error occurs
    */
-  public static InputStream gzipDecompress(InputStream stream) throws DhxException {
+  public static InputStream gzipDecompress(InputStream stream, StreamTypeEnum stremType) throws DhxException {
     try {
       GZIPInputStream gzis = new GZIPInputStream(stream);
       return gzis;
     } catch (IOException ex) {
-      // if we got not base64, then throw specific error about it
-      if (ex.getMessage().indexOf("Illegal base64") >= 0) {
-        throw new DhxException(DhxExceptionEnum.EXTRACTION_ERROR,
+      
+      switch (stremType) {
+      
+        case BASE64BASIC:
+        case BASE64MIME:
+          // if we got not base64, then throw specific error about it
+          throw new DhxException(DhxExceptionEnum.EXTRACTION_ERROR,
             "Not a base64 stream! " + ex.getMessage(), ex);
       }
+      
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Error occured whle unzipping file. " + ex.getMessage(), ex);
     }
@@ -107,7 +113,19 @@ public class WsUtil {
     return base64DecoderStream;
   }
 
+  /**
+   * Creates InputStream that will BASE64 mime decode the stream from input.
+   * 
+   * @param stream - stream to decode
+   * @return decoded stream
+   * @throws DhxException thrown if error occurs
+   */
+  public static InputStream base64MimeDecode(InputStream stream) throws DhxException {
+    InputStream base64DecoderStream = Base64.getMimeDecoder().wrap(stream);
+    return base64DecoderStream;
+  }
 
+  
   /**
    * Creates OutputStream that will BASE64 encode the stream from input.
    * 
@@ -128,15 +146,27 @@ public class WsUtil {
    * @return decoded stream
    * @throws DhxException thrown if error occurs
    */
-  private static InputStream base64decodeAndUnzip(InputStream stream) throws DhxException {
+  private static InputStream base64DecodeAndUnzip(InputStream stream) throws DhxException {
     InputStream decoded = stream;
     decoded = base64Decode(decoded);
-    
-    
-    return gzipDecompress(decoded);
+    return gzipDecompress(decoded, StreamTypeEnum.BASE64BASIC);
   }
 
 
+  /**
+   * Creates InputStream that will BASE64 Mime decode the stream from input.
+   * 
+   * @param stream stream to decode
+   * @return decoded stream
+   * @throws DhxException thrown if error occurs
+   */
+  private static InputStream base64MimeDecodeAndUnzip(InputStream stream) throws DhxException {
+    InputStream decoded = stream;
+    decoded = base64MimeDecode(decoded);
+    return gzipDecompress(decoded, StreamTypeEnum.BASE64MIME);
+  }
+
+  
 
   /**
    * Method reads inputstream into string.
@@ -212,15 +242,26 @@ public class WsUtil {
     InputStream unzippedStream = null;
     try {
       try {
-        unzippedStream = WsUtil.base64decodeAndUnzip(handler.getInputStream());
+        unzippedStream = WsUtil.base64DecodeAndUnzip(handler.getInputStream());
       } catch (DhxException ex) {
-        // if input is not base64, then try to just unzip it. it might be if
+        // if input is not base64 or base64mime, then try to just unzip it. it might be if
         // Content-transfer-encoding is set to base64, then base64 is decoded automatically
         if (ex.getExceptionCode().equals(DhxExceptionEnum.EXTRACTION_ERROR)) {
-          log.debug(
-              "attachment appears to be not encoded in base64, "
-                  + "trying to parse container without base64 decoding.");
-          unzippedStream = WsUtil.gzipDecompress(handler.getInputStream());
+      
+          try {
+            unzippedStream = WsUtil.base64MimeDecodeAndUnzip(handler.getInputStream()); 
+          } catch (DhxException ex1) {    
+        
+            if (ex1.getExceptionCode().equals(DhxExceptionEnum.EXTRACTION_ERROR)) {
+              log.debug(
+                  "attachment appears to be not encoded in base64, "
+                      + "trying to parse container without base64 decoding.");
+              unzippedStream = WsUtil.gzipDecompress(handler.getInputStream(), StreamTypeEnum.GZIP);
+            }
+            else {
+              throw ex1;
+            }
+          }
         } else {
           throw ex;
         }
