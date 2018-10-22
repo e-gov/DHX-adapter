@@ -89,7 +89,7 @@ public class AddressServiceImplTest {
 
   @Test
   public void getAdresseeListNonEmptySaved() throws DhxException {
-    /*List<InternalXroadMember> retList = new ArrayList<InternalXroadMember>();
+    List<InternalXroadMember> retList = new ArrayList<InternalXroadMember>();
     InternalXroadMember member =
         new InternalXroadMember("ee", "class", "code", "subsystem", "name", null);
     retList.add(member);
@@ -98,11 +98,10 @@ public class AddressServiceImplTest {
     List<InternalXroadMember> adressees = addressService.getAdresseeList();
     assertEquals(1, adressees.size());
     assertEquals(member, adressees.get(0));
-    Mockito.verify(specificService, Mockito.times(1)).getAdresseeList();*/
+    Mockito.verify(specificService, Mockito.times(1)).getAdresseeList();
 
   }
 
-  /*
   private SharedParametersType setReturningGlobalConfAndMock(SharedParametersType params)
       throws Exception {
     
@@ -648,6 +647,5 @@ public class AddressServiceImplTest {
     InternalXroadMember memberFound = addressService.getClientForMemberCode("code2", null);
     assertEquals(member, memberFound);
   }
-*/
-  
+
 }
