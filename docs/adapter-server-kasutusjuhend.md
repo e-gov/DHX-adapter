@@ -926,7 +926,7 @@ PostgreSQL baasis INSERT lause:
 ```sql
 INSERT INTO asutus(
   asutus_id, datecreated, datemodified, version, kapsel_versioon, dhx_asutus, 
-  dhl_saatmine, member_class, nimetus, ownrepresentee, registrikood, 
+  dhl_saatmine, member_class, nimetus, own_representee, registrikood, 
   representee_end, representee_start, subsystem, xroad_instance, vahendaja_asutus_id
 ) VALUES (<NEWID>, now(), null, 0, 2.1, false,
   true, null, 'Tallinna Lasteaed Pallipõnn', true, '75019046',
@@ -937,7 +937,7 @@ Oracle korral SQL lause:
 ```sql
 INSERT INTO asutus(
   asutus_id, datecreated, datemodified, version, kapsel_versioon, dhx_asutus, 
-  dhl_saatmine, member_class, nimetus, ownrepresentee, registrikood, 
+  dhl_saatmine, member_class, nimetus, own_representee, registrikood, 
   representee_end, representee_start, subsystem, xroad_instance, vahendaja_asutus_id
 ) VALUES (<NEWID>, sysdate, null, 0, 2.1, 0,
   1, null, 'Tallinna Lasteaed Pallipõnn', 1, '75019046',
