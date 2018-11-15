@@ -1,5 +1,5 @@
-#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
-#Thu Oct 25 10:40:30 EEST 2018
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Nov 15 10:38:15 EET 2018
 dhx-adapter-ws-1.0.4-sources.jar>=
 dhx-adapter-ws-1.0.4.jar>=
 dhx-adapter-ws-1.0.4.pom>=
