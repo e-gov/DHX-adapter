@@ -20,7 +20,6 @@ import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
-import ee.ria.dhx.ws.service.DhxPackageService;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +40,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import java.net.URLClassLoader;
-
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBElement;
 
@@ -62,10 +59,6 @@ public class AddressServiceImpl implements AddressService {
   @Autowired
   @Setter
   SoapConfig config;
-
-  @Autowired
-  @Setter
-  private DhxPackageService dhdPackageService;
 
   @Autowired
   @Setter

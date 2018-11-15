@@ -9,25 +9,20 @@
 		<version>1.0.4</version>
 	</parent>
 	<artifactId>dhx-adapter-server</artifactId>
-	<version>1.0.4</version>
 	<name>dhx-adapter-server</name>
 	<packaging>war</packaging>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
 		<packageName>dhx-adapter-server</packageName>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>ee.ria.dhx</groupId>
 			<artifactId>dhx-adapter-ws</artifactId>
-			<version>1.0.4</version>
-			<scope>compile</scope>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>1.3.5.RELEASE</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -43,22 +38,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
-			<version>1.4.1.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>1.4.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4.1212.jre7</version>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.193</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -69,7 +60,6 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
-			<version>1.12.5.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -79,18 +69,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
-			<version>1.3.5.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.interceptor</groupId>
 			<artifactId>javax.interceptor-api</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.10</version>
 		</dependency>
 
 	</dependencies>
@@ -113,7 +100,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>2.2</version>
 				<configuration>
 					<sources>
 						<source>${project.basedir}/src/main/resources/</source>
@@ -126,7 +112,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>1.4.1.RELEASE</version>
+				<version>${boot.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -137,7 +123,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.2.2</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
