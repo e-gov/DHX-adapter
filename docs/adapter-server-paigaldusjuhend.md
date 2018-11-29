@@ -66,24 +66,24 @@ Märkus (muud andmebaasid):
 >
 > Seega muude andmebaasi serverite ja versioonide kasutamine toimub omal riisikol ja ei pruugi töötada.
 >
-> Paigalduspaketina alla laetav WAR fail sisaldab ainult PostgreSQL ja Oracle andmebaasiga suhtlemise [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity) draivereid. Kui soovitakse kasutada muud andmebaasi, siis tuleb dhx-adapter-serveri WAR fail [ise uuesti ehitada](#43-paigalduspaketi-ise-ehitamine), muutes [pom.xml](../dhx-adapter-server/pom.xml) failis sõltuvusi. 
+> Paigalduspaketina alla laetav WAR fail sisaldab ainult PostgreSQL ja Oracle andmebaasiga suhtlemise [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity) draivereid. Kui soovitakse kasutada muud andmebaasi, siis tuleb dhx-adapter-serveri WAR fail [ise uuesti ehitada](#43-paigalduspaketi-ise-ehitamine), muutes [pom.xml](../dhx-adapter-server/pom.xml) failis sõltuvusi.
 
 Märkus (muud Java web serverid):
-> Apache Tomcat tarkvara võib asendada mõne muu [Java Web konteiner](https://en.wikipedia.org/wiki/Web_container) tarkvaraga. 
+> Apache Tomcat tarkvara võib asendada mõne muu [Java Web konteiner](https://en.wikipedia.org/wiki/Web_container) tarkvaraga.
 > Näiteks [GlassFish](https://glassfish.java.net/),  [WildFly (JBoss)](http://wildfly.org/) või [Jetty](http://www.eclipse.org/jetty/).
 >
 > Paigalduspaketina alla laetav WAR fail sisaldab ainult Apache Tomcat serverisse paigaldamise `spring-boot-starter` [mooduleid](https://spring.io/blog/2014/03/07/deploying-spring-boot-applications). Kui soovitakse kasutatakse muud Java serverit, siis tuleb dhx-adapter-serveri WAR fail ise uuesti ehitada, muutes `pom.xml` failis sõltuvusi.
 
 ## 3. Riistvara nõuded (eeldused)
- 
+
 Minimaalsed nõuded riistvarale on järgmised:
 * Muutmälu 2GB
 * Kõvaketas 70 Gb
 * Protsessor 2 GHz x 2 tuuma
 * Võrgukaart 100 Mbps
 
-Optimaalsed riistvara nõuded sõltuvad asutuse poolt saadetavate dokumentide arvust ja suurusest. 
-Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi. **Soovitav on minimaalsed nõuded kahega korrutada**. 
+Optimaalsed riistvara nõuded sõltuvad asutuse poolt saadetavate dokumentide arvust ja suurusest.
+Samuti sellest kas andmebaasi server paigaldatakse samasse masinasse või eraldi. **Soovitav on minimaalsed nõuded kahega korrutada**.
 
 ## 4. Paigaldamine
 
@@ -96,7 +96,7 @@ Laadida alla ja installeerida PostgreSQL andmebaasi versioon [9.6.x](https://www
 Luuua uus andmebaasi kasutaja (Role). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createrole.html)
 ```sql
 CREATE USER dhxuser WITH PASSWORD '123';
-``` 
+```
 
 Luua uus andmebaas (näiteks nimega `dhx_adapter`). Vaata [PostgreSQL juhend](https://www.postgresql.org/docs/9.6/static/sql-createdatabase.html).
 ```sql
@@ -141,9 +141,9 @@ Märkus (JRE_HOME):
 
 Märkus (Java mälu suurus):
 > CATALINA_OPTS parameetris määratakse Tomcat Java protsessi poolt kasutatava mälu suurus.
-> 
+>
 > Kui kasutatakse minimaalset riistvaralist häälestust (masinas muutmälu 2Gb), siis võiks see olla 1Gb ehk `-Xms1024m -Xmx1024m`
-> 
+>
 > Kui kasutatakse optimaalsemat riistvaralist häälestust (masinas muutmälu 4Gb-8Gb), siis võiks see olla 2Gb kuni 4Gb ehk `-Xms2048m -Xmx2048m` või `-Xms4096m -Xmx4096m`
 
 
@@ -228,7 +228,7 @@ Stop `apache-tomcat-7.x.x/bin/shutdown.bat` (windows) või `apache-tomcat-7.x.x/
 Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/bin/startup.sh` (Linux/Unix).
 
 Märkus:
-> Andmebaasi ühenduse esmakordsel avamisel kontrollitakse kas vajalikud andmebaasi tabelid on juba olemas. 
+> Andmebaasi ühenduse esmakordsel avamisel kontrollitakse kas vajalikud andmebaasi tabelid on juba olemas.
 > Kui tabeleid ei ole, siis luuakse need automaatselt (eraldi SQL skriptiga ei ole vaja andmebaasi tabeleid luua)
 >
 > Selle määrab `dhx-application.properties` failis parameeter `spring.jpa.hibernate.ddl-auto=update` .
@@ -236,7 +236,7 @@ Märkus:
 
 5) Vaadata, kas Tomcat konsoolis või logis esineb veel vigu (ei tohiks esineda)
 
-#### 4.1.6. Paigaldada Tomcat Windows Servicena või Linux deemonina. 
+#### 4.1.6. Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
 Selleks saab kasutada skripti `apache-tomcat-7.x.x/bin/service.bat` (Windows) või `apache-tomcat-7.x.x/bin/daemon.sh` (Linux/Unix).
 
@@ -269,11 +269,11 @@ Vaata [eespoolt](#412-java-8-se)
 
 #### 4.2.3. Apache Tomcat 7
 
-Vaata [eespoolt](#413-apache-tomcat-7) 
+Vaata [eespoolt](#413-apache-tomcat-7)
 
 #### 4.2.4. DHX adapterserver WAR
 
-Vaata [eespoolt](#414-dhx-adapterserver-war) 
+Vaata [eespoolt](#414-dhx-adapterserver-war)
 
 #### 4.2.5. Muuta dhx-application.properties
 
@@ -335,7 +335,7 @@ Start `apache-tomcat-7.x.x/bin/startup.bat` (windows) või `apache-tomcat-7.x.x/
 
 #### 4.2.6. Paigaldada Tomcat Windows Servicena või Linux deemonina.
 
-Vaata [eespoolt](#416-paigaldada-tomcat-windows-servicena-või-linux-deemonina) 
+Vaata [eespoolt](#416-paigaldada-tomcat-windows-servicena-või-linux-deemonina)
 
 ### 4.3. Paigalduspaketi ise ehitamine
 
@@ -357,11 +357,11 @@ Märkus:
 
 Pärast installeerimist veenduda, et keskkonna muutuja JAVA_HOME viitab õigesse JDK kataloogi (näiteks `C:\Program Files\Java\jdk1.8.0_121`).
 
-Käsurealt saab seda kontrollida käsuga `echo %JAVA_HOME%` (Windows) või `echo $JAVA_HOME` (Linux/Unix). 
+Käsurealt saab seda kontrollida käsuga `echo %JAVA_HOME%` (Windows) või `echo $JAVA_HOME` (Linux/Unix).
 
 Kui ei viita, siis paranda JAVA_HOME.
 
-2) Laadida alla [Apache Maven](https://maven.apache.org/download.cgi). 
+2) Laadida alla [Apache Maven](https://maven.apache.org/download.cgi).
 
 3) Pakkida see lahti, näiteks kataloogi `C:\Program Files`, nii et tekib kataloog `C:\Program Files\apache-maven-3.3.9\`
 
@@ -390,7 +390,7 @@ Alternatiiviks (kui ei kasututa Oracle andmebaasi) on [/DHX-adapter/dhx-adapter-
 
 Selleks minna kataloogi kuhu ojdbc6.jar alla laeti, näiteks:
 ```cmd
-cd C:\Users\kasutaja\Downloads 
+cd C:\Users\kasutaja\Downloads
 ```
 
 Käivitada seal Maven käsk:
@@ -441,19 +441,19 @@ Kompileeritud JAR failid tekivad Maven lokaalsesse reposse kataloogi `C:\Users\k
 
 #### 4.3.6. Paigaldada WAR fail
 
-1) Võtta Maven lokaalsest repost ( `kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.1`) tekkinud fail `dhx-adapter-server-1.0.1.war` 
+1) Võtta Maven lokaalsest repost ( `kasutaja/.m2/repository/ee/ria/dhx/dhx-adapter-server/1.0.1`) tekkinud fail `dhx-adapter-server-1.0.1.war`
 ja nimetada see ümber `dhx-adapter-server.war`.
 
 2) Teostada WAR paigaldamine Web Konteiner (Tomcat) serverisse. Vaata [eespool](#41-olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql).
- 
+
 
 
 ## 5. DHX teenuste registreerimine ja avamine X-tee turvaserveris    
 
-Järgnevalt eeldatakse, et asutus on X-tee liikmeks registreerunud, paigaldanud X-tee turvaserveri ja registreerinud enda [DHX*](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx) alamsüsteemi(d) [RIHAs](https://riha.eesti.ee/riha/main). 
+Järgnevalt eeldatakse, et asutus on X-tee liikmeks registreerunud, paigaldanud X-tee turvaserveri ja registreerinud enda [DHX*](https://e-gov.github.io/DHX/#55-reserveeritud-nimi-dhx) alamsüsteemi(d) [RIHAs](https://riha.eesti.ee/riha/main).
 Selle kohta vaata täpsemalt [X-tee rakendusjuhendist](https://moodle.ria.ee/mod/page/view.php?id=288).
 
-**1)** Lisada turvaserveris uus klient enda asutuse DHX alamsüsteemile ja registreerida see (Turvaserveris menüü `Configuration`->`Security Server Clients`->`Add Client`). 
+**1)** Lisada turvaserveris uus klient enda asutuse DHX alamsüsteemile ja registreerida see (Turvaserveris menüü `Configuration`->`Security Server Clients`->`Add Client`).
 
 Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punkt "4.2. ADDING A SECURITY SERVER CLIENT".
 
@@ -465,12 +465,12 @@ Välise DHX liidese WSDL asub DHX adapterserveris üldjuhul aadressil `http://<H
 
 Välise DHX liidese teenuse URL (Service URL) asub DHX adapterserveris üldjuhul aadressil `http://<HOST>:<PORT>/dhx-adapter-server/ws`.
 
-**2.1)** Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures klikata "Services". 
+**2.1)** Turvaserveris valida menüü `Configuration`->`Security Server Clients` ja eelnevalt lisatud kliendi juures klikata "Services".
 
 **2.2)** Seejärel valida "Add WSDL" ja sisestada välise DHX liidese WSDL aadress (`http://<HOST>:<PORT>/dhx-adapter-server/ws/dhx.wsdl`, asendades `<HOST>` ja `<PORT>` enda DHX adapterserveri väärtustega).
 
 **2.3)** Seejärel valida tekkinud teenuse "sendDocument" peal "Edit" ja sisestada "Service URL" väärtuseks välise DHX liidese teenuse URL (`http://<HOST>:<PORT>/dhx-adapter-server/ws`, asendades `<HOST>` ja `<PORT>` enda DHX adapterserveri väärtustega)
- 
+
 **3)** Määrata juurdepääsuõiguseid uuele teenusele.
 
 Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v6_security_server_user_guide.pdf) punkt "7.1. CHANGING THE ACCESS RIGHTS OF A SERVICE".
@@ -483,7 +483,7 @@ Vaata [X-tee turvaserveri kasutusjuhendist (PDF)](http://x-road.eu/docs/x-road_v
 
 Märkus:
 > Üldjuhul piisab õiguste andmisest ainult "sendDocument" teenusele, ning "representationList" teenust võib ignoreerida.
-> 
+>
 > "representationList" teenusele õiguste andmine on vajalik ainult siis, kui asutus käitub [DHX vahendajana](https://e-gov.github.io/DHX/#6-vahendamine).   
 
 ## 6. Häälestus fail (dhx-application.properties)
@@ -499,7 +499,7 @@ dhx.server.special-organisations |  | adit,kovtp,rt,eelnoud | DVK alamsüsteemid
 dhx.server.delete-old-documents |  | delete-all | `delete-all` määrab, et nii dokumendi metaandmed kui ka sisu (fail) kustutatakse perioodilise puhastus protsessi poolt. `delete-content` määrab, et ainult fail kustutatakse (baasi jäävad metaandmete kirjed alles). Muu väärtus jätab kõik alles.
 dhx.server.delete-old-documents-freq | | */20 * * * * ? | Vanade dokumentide kustutamise taustatöö käivitamise periood. Kustutatakse ainult dokumendid, mis on vanemad kui alljärgnevate parameetritega määratud päevade arv (30 päeva). [Crontab formaat](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html) kujul: `<second> <minute> <hour> <day> <month> <weekday>`. Väärtus `*/20` tähendab igal 20-nendal ühikul. Seega `*/20 * * * * ?` tähendab iga 20 sekundi järel.
 dhx.server.received-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse õnnelikult vastu võetud ja edastatud dokument andmebaasi alles. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest.
-dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse probleemselt (veaga) edastatud dokument andmebaasi alles. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest. 
+dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks jäetakse probleemselt (veaga) edastatud dokument andmebaasi alles. Kustutamine sõltub ka parameetri `dhx.server.delete-old-documents` väärtusest.
 dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti "saatmisel" staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
 dhx.server-include-xmlns-to-attachments| false | false | Määrab, et SOAP vastuse manuste sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
 documents.folder | | `C:\\dhx_docs\\` | Kataloog kuhu salvestatakse vastu võetud (edastamist ootavate) dokumentide kapslid. Linux korral kasutada formaati `/kataloog`. Selle kataloogi failisüsteemis peab olema piisavalt vaba ruumi (10-50Gb). Dokumendid kustutatakse teatud perioodi (30 päeva) järel (parameetrid `dhx.server.received-document-lifetime` ja `dhx.server.failed-document-lifetime`)
@@ -512,9 +512,9 @@ Parameeter | Vaikimisi väärtus | Näite väärtus | Kirjeldus
 ------------ | ------------- | ------------- | -------------
 spring.datasource.url | | jdbc:postgresql://localhost:5432/dhx_adapter| Postgres andmebaasi host (localhost), port (5432) ja andmebaasi nimi (dhx_adapter)
 spring.datasource.username | | dhxuser | Postgres andmebaasi kasutajanimi
-spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool 
+spring.datasource.password | | 1*2*3 | Posgres andmebaasi kasutaja parool
 spring.datasource.driver-class-name | | org.postgresql.Driver| Määrab, et kasutame Postgres JDBC draiverit
-spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| Kasutada väärtust "PostgreSQL94Dialect" nii PosgreSQL 9.4 kui ka 9.5 ja  9.6 versioonide korral (väärtusi `PostgreSQL95Dialect` ja `PostgreSQL96Dialect` ei eksisteeri). 
+spring.jpa.properties.hibernate.dialect | | org.hibernate.dialect.PostgreSQL94Dialect| Kasutada väärtust "PostgreSQL94Dialect" nii PosgreSQL 9.4 kui ka 9.5 ja  9.6 versioonide korral (väärtusi `PostgreSQL95Dialect` ja `PostgreSQL96Dialect` ei eksisteeri).
 
 Oracle 11G kasutamise korral tuleb muuta järgmiste parameetrite väärtused.
 
@@ -540,7 +540,7 @@ Märkus:
 >  spring.datasource.driver-class-name=org.postgresql.Driver
 >  spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 >  ```
->Kui turvaserveri poole pöördumisel kasutatakse HTTPS protokolli, siis seadistada järgnevad parameetrid (http puhul jätta muutmata). 
+>Kui turvaserveri poole pöördumisel kasutatakse HTTPS protokolli, siis seadistada järgnevad parameetrid (http puhul jätta muutmata).
 >```
 >soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
 >soap.client-truststore-password=changeit
@@ -549,7 +549,7 @@ Märkus:
 >soap.client-keystore-password=changeit
 >soap.client-keystore-type=JKS
 >```
-> Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud. 
+> Ülejäänud parameetrid võib jätta samaks, nagu vaikimisi määratud.
 >
 >Võtmehoidla puudumisel tuleb luua võtmehoidla järgnevalt (nimi, parool ja kestvus valida sobiv)
 >```
@@ -561,12 +561,17 @@ Märkus:
 >keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
 >```
 
+/health ja /metrics rakendusinfole juurdepääsusks tuleb nende liideste turvapiirangud kas väljalülitada:
+```
+management.security.enabled=false
+```
+või konfigureerida vastavalt (kasutusesoleva) [Spring Boot -i juhendile.](https://docs.spring.io/spring-boot/docs/1.5.17.RELEASE/reference/html/production-ready-endpoints.html)
 
 ## 7. Klastrisse paigaldamine (Failover/Load balancing)
 
-DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse. 
+DHX adapterserveri võib paigaldada [failover](https://en.wikipedia.org/wiki/Failover) või [load balancing](https://en.wikipedia.org/wiki/Load_balancing_%28computing%29) klastrisse.
 
-Sellisel paigaldamisel tuleb arvestada, et ühised (jagatud) ressursid on 
+Sellisel paigaldamisel tuleb arvestada, et ühised (jagatud) ressursid on
 * Andmebaas, kuhu salvestatakse metaandmed
 * Failisüsteemi kataloog, kus salvestatakse dokumendi (kapsli) failid (parameeter `documents.folder`)
 
@@ -579,18 +584,18 @@ Legend:
 * Failover/Loadbalancer - tarkvaraline (näiteks [Apache HTTPD](https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html)) või riistvaraline (näiteks [F5 big-ip](https://f5.com/), [loadbalancer.org](http://loadbalancer.org/) või [Citrix NetScaler](https://www.citrix.com/products/netscaler-adc/)) failover ja/või load-balancer komponent.  
 * dhx-adapter-server (Node A) - klastri esimene server, mis pakub SOAP teenuseid.
 * dhx-adapter-server (Node B) - klastri teine server, mis pakub SOAP teenuseid.
-* Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (kapsli) failid. 
+* Shared Filesystem - jagatud (võrgu) failisüsteem, millesse ajutiselt salvestatakse edastatavate dokumentide (kapsli) failid.
 * Database Server (shared database) - jagatud andmebaas, millesse ajutiselt salvestatakse edastatavate dokumentide metaandmed
 * Document management System (DHS) - Asutuse dokumendihaldussüsteem (näiteks Delta, Amphora vms).
- 
-Klastrisse paigaldamisel tuleb arvestada et: 
+
+Klastrisse paigaldamisel tuleb arvestada et:
 * Jagatud failisüsteem määratakse parameetriga `documents.folder`.
 Selleks tuleb see määrata klastri sõlme külge näiteks eraldi võrgukettana (määrates Windows keskkonnas näiteks `documents.folder=D:\\dhx_docs\\`, või linux keskkonnas näiteks `documents.folder=/mnt/dhxshare`).
 * Dokumentide DHX-i edastamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess.
-See tausta protsess loeb edastamata dokumente jagatud andmebaasist. Selleks, et sõlmed A ja B ei edastaks sama dokumenti samaaegselt (ehk topelt), kasutatakse pessimistlikku lukustamist (sisuliselt päringus määratakse `SELECT ... FOR UPDATE`, vaata täpsemalt [LockModeType.PESSIMISTIC_WRITE](http://docs.oracle.com/javaee/7/api/javax/persistence/LockModeType.html#PESSIMISTIC_WRITE) ja [PostgreSQL row level locks](https://www.postgresql.org/docs/9.6/static/explicit-locking.html#LOCKING-ROWS)). 
+See tausta protsess loeb edastamata dokumente jagatud andmebaasist. Selleks, et sõlmed A ja B ei edastaks sama dokumenti samaaegselt (ehk topelt), kasutatakse pessimistlikku lukustamist (sisuliselt päringus määratakse `SELECT ... FOR UPDATE`, vaata täpsemalt [LockModeType.PESSIMISTIC_WRITE](http://docs.oracle.com/javaee/7/api/javax/persistence/LockModeType.html#PESSIMISTIC_WRITE) ja [PostgreSQL row level locks](https://www.postgresql.org/docs/9.6/static/explicit-locking.html#LOCKING-ROWS)).
 Juhul kui soovitakse, et dokumentide DHX-i edastamist teeks ainult üks klastri sõlm (näiteks A), siis võib teisel sõlmel B muuta parameetri `dhx.server.send-to-dhx` väärtuseks väga pikk periood (näiteks `0 0 0 31 12 ?` määrab, et ainult 31.detsembri keskööl).
-* Vanade dokumentide ja failide kustutamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess. 
-Selles taustaprotsessis kirjete ega failide lukustamist ei kasutata. Seega need tausta protsessid võivad proovida sama dokumenti ja faili samaaegselt kustutada (Viga kirjutatakse logisse ja seda võib ignoreerida). 
+* Vanade dokumentide ja failide kustutamiseks käivitatakse kõikides dhx-adapter-server sõlmedes (pildil nii A kui B) tausta protsess.
+Selles taustaprotsessis kirjete ega failide lukustamist ei kasutata. Seega need tausta protsessid võivad proovida sama dokumenti ja faili samaaegselt kustutada (Viga kirjutatakse logisse ja seda võib ignoreerida).
 Kindluse mõttes on mõistlik ühes klastri sõlmes dokumentide kustutamine keelata (määrata `dhx.server.delete-old-documents=none`).
 
 Klastrisse paigaldusel võib kasutada ka sellist varianti kus sõlmega A suhtleb ainult X-tee turvaserver, sõlmega B suhtleb ainult asutuse DHS süsteem:
@@ -649,4 +654,4 @@ Kui järgnev SOAP päring "getSendingOptions" annab positiivse vastuse, siis võ
 
 5) Käivitada päring ja kontrollida, et vastus ei oleks HTTP viga ega `SOAP-ENV:Fault` viga.
 
-Vaata täpsemalt DHX adapterserveri kasutusjuhendist [WSDL asukohad](adapter-server-kasutusjuhend.md#2-wsdl-asukohad) ja [SoapUI testimine](adapter-server-kasutusjuhend.md#3-soapui-testimine). 
+Vaata täpsemalt DHX adapterserveri kasutusjuhendist [WSDL asukohad](adapter-server-kasutusjuhend.md#2-wsdl-asukohad) ja [SoapUI testimine](adapter-server-kasutusjuhend.md#3-soapui-testimine).
