@@ -427,10 +427,10 @@ public class DhxGateway extends WebServiceGatewaySupport {
       MessageContext messageContext) throws DhxException {
     try {
       InternalXroadMember client = null;
-      SaajSoapMessage soapRequest = (SaajSoapMessage) messageContext
+      SoapMessage soapRequest = (SoapMessage) messageContext
           .getRequest();
       SoapHeader reqheader = soapRequest.getSoapHeader();
-      SaajSoapMessage soapResponse = (SaajSoapMessage) messageContext
+      SoapMessage soapResponse = (SoapMessage) messageContext
           .getResponse();
       SoapHeader respheader = soapResponse.getSoapHeader();
       TransformerFactory transformerFactory = TransformerFactory
@@ -488,7 +488,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
   public InternalXroadMember getXroadService(MessageContext messageContext)
       throws DhxException {
     InternalXroadMember service = null;
-    SaajSoapMessage soapRequest = (SaajSoapMessage) messageContext
+    SoapMessage soapRequest = (SoapMessage) messageContext
         .getRequest();
     SoapHeader reqheader = soapRequest.getSoapHeader();
     Iterator<SoapHeaderElement> itr = reqheader.examineAllHeaderElements();

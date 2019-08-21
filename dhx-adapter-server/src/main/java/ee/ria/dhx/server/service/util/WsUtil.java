@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.mime.Attachment;
+import org.springframework.ws.soap.SoapMessage;
+import org.springframework.ws.soap.axiom.AxiomSoapMessage;
 import org.springframework.ws.soap.saaj.SaajSoapMessage;
 import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.w3c.dom.Document;
@@ -284,7 +286,7 @@ public class WsUtil {
   @Loggable
   public static DataHandler extractAttachment(
       MessageContext messageContext, String attachmentContentId) throws DhxException {
-    SaajSoapMessage soapRequest = (SaajSoapMessage) messageContext
+    SoapMessage soapRequest = (SoapMessage) messageContext
         .getRequest();
     if (attachmentContentId.startsWith("cid:")) {
       attachmentContentId = attachmentContentId.substring(4);
@@ -323,29 +325,11 @@ public class WsUtil {
   @Loggable
   public static String addAttachment(
       MessageContext messageContext, DataHandler attachmentHandler) throws DhxException {
-    SaajSoapMessage soapResponse = (SaajSoapMessage) messageContext
-        .getResponse();
-    AttachmentPart part = soapResponse.getSaajMessage().createAttachmentPart(attachmentHandler);
-    if (attachmentContentType == null) {
-      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
-      attachmentContentType = config.getAttachmentContentType();
-    }
-    if (attachmentContentEncoding == null) {
-      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
-      attachmentContentEncoding = config.getAttachmentContentEncoding();
-    }
-    if (attachmentContentTransferEncoding == null) {
-      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
-      attachmentContentTransferEncoding = config.getAttachmentContentTransferEncoding();
-    }
-    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TYPE, attachmentContentType);
-    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_ENCODING,
-        attachmentContentEncoding);
-    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TRANSFER_ENCODING,
-        attachmentContentTransferEncoding);
     String contentId = UUID.randomUUID().toString();
-    part.setContentId(contentId);
-    soapResponse.getSaajMessage().addAttachmentPart(part);
+
+    AxiomSoapMessage soapResponse = (AxiomSoapMessage) messageContext.getResponse();
+    soapResponse.addAttachment(contentId, attachmentHandler);
+
     return ATTACHMENT_CONTENT_ID_PREFIX + contentId;
 
   }

@@ -10,6 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.ws.soap.SoapMessageFactory;
+import org.springframework.ws.soap.axiom.AxiomSoapMessageFactory;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
@@ -57,12 +59,8 @@ public class DhxServerWebServiceConfig {
    * @return messagefactory
    */
   @Bean(name = "messageFactory")
-  public SaajSoapMessageFactory messageFactory() {
-    SaajSoapMessageFactory smf = new SaajSoapMessageFactory();
-    Map<String, String> props = new HashMap<String, String>();
-    props.put(SOAPMessage.WRITE_XML_DECLARATION, Boolean.toString(true));
-    smf.setMessageProperties(props);
-    return smf;
+  public SoapMessageFactory messageFactory() {
+    return new AxiomSoapMessageFactory();
   }
 
   /**
