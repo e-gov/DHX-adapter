@@ -2,6 +2,16 @@ package ee.ria.dhx.ws.config;
 
 import ee.ria.dhx.types.InternalXroadMember;
 
+import org.apache.http.HeaderElement;
+import org.apache.http.HeaderElementIterator;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeaderElementIterator;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -170,6 +180,50 @@ public class SoapConfig {
       system = getDhxSubsystemPrefix() + "." + system;
     }
     return system.toUpperCase();
+  }
+
+  @Bean
+  public ConnectionKeepAliveStrategy soapHttpClientKeepAliveStrategy() {
+    return new ConnectionKeepAliveStrategy() {
+
+      public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+
+        HeaderElementIterator it = new BasicHeaderElementIterator(response.headerIterator(HTTP.CONN_KEEP_ALIVE));
+
+        while (it.hasNext()) {
+          HeaderElement he = it.nextElement();
+          String param = he.getName();
+          String value = he.getValue();
+          if (value != null && param.equalsIgnoreCase("timeout")) {
+
+            try {
+              return Long.parseLong(value) * 1000;
+            } catch(NumberFormatException ignore) {
+            }
+
+          }
+        }
+        // otherwise keep alive for <soap.http-timeout> seconds
+        return getHttpTimeout() * 1000;
+      }
+    };
+  }
+
+  @Bean
+  public RequestConfig defaultRequestConfig() {
+      return RequestConfig.custom()
+              .setConnectTimeout(getConnectionTimeout())
+              .setConnectionRequestTimeout(getReadTimeout())
+              .build();
+  }
+
+  @Bean
+  public HttpClient soapHttpClient(ConnectionKeepAliveStrategy soapHttpClientKeepAliveStrategy,
+                                   RequestConfig defaultRequestConfig) {
+    return HttpClientBuilder.create()
+            .setKeepAliveStrategy(soapHttpClientKeepAliveStrategy)
+            .setDefaultRequestConfig(defaultRequestConfig)
+            .build();
   }
 
   /**

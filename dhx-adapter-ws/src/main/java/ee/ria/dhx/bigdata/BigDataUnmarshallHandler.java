@@ -79,8 +79,8 @@ public class BigDataUnmarshallHandler extends BigDataHandler {
 
   @Override
   @Loggable(Loggable.TRACE)
-  protected void handleBigDataCharacters(char[] chars) throws IOException {
-    writer.write(chars);
+  protected void handleBigDataCharacters(char[] chars, int start, int length) throws IOException {
+    writer.write(chars, start, length);
   }
 
   @Override

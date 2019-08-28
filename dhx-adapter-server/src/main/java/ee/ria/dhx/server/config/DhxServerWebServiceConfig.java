@@ -60,7 +60,10 @@ public class DhxServerWebServiceConfig {
    */
   @Bean(name = "messageFactory")
   public SoapMessageFactory messageFactory() {
-    return new AxiomSoapMessageFactory();
+    return new AxiomSoapMessageFactory() {{
+      setAttachmentCaching(true);
+      setAttachmentCacheThreshold(10 /* MB */ * 1024 /* KB */ * 1024 /* Byte */); // TODO: make it configurable
+    }};
   }
 
   /**

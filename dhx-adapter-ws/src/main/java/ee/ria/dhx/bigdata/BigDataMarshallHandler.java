@@ -124,7 +124,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
 
   @Override
   public void endDocument() throws SAXException {
-    log.info("document started !!!!");
+    log.info("document ended !!!!");
     if (!nonamespaces)
       super.endDocument();
   }
@@ -209,7 +209,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
 
   @Override
   @Loggable
-  protected void handleBigDataCharacters(char[] chars) throws IOException {
+  protected void handleBigDataCharacters(char[] chars, int start, int length) throws IOException {
     log.error("CHARECTER CANNOT BE HERE!!!!");
   }
 

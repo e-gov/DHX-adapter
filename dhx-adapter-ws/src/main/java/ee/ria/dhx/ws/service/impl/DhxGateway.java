@@ -16,7 +16,7 @@ import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadObjectType;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.representation.XRoadRepresentedPartyType;
 import ee.ria.dhx.util.StringUtil;
-import ee.ria.dhx.ws.DhxHttpComponentsMessageSender;
+import ee.ria.dhx.ws.connection.DhxHttpComponentsMessageSender;
 import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
@@ -24,6 +24,7 @@ import ee.ria.dhx.ws.service.DhxMarshallerService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
@@ -52,15 +53,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
-import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.conn.ConnectionKeepAliveStrategy;
-import org.apache.http.HeaderElement;
-import org.apache.http.HeaderElementIterator;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.message.BasicHeaderElementIterator;
-
 
 
 @Slf4j
@@ -88,6 +80,9 @@ public class DhxGateway extends WebServiceGatewaySupport {
   @Autowired
   Jaxb2Marshaller dhxJaxb2Marshaller;
 
+  @Autowired
+  HttpClient soapHttpClient;
+
   /**
    * Postconstruct method which sets marshaller and unmarshaller.
    */
@@ -95,37 +90,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
   public void init() {
     setMarshaller(dhxJaxb2Marshaller);
     setUnmarshaller(dhxJaxb2Marshaller);
-    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender();
-    messageSender.setConnectionTimeout(soapConfig.getConnectionTimeout());
-    messageSender.setReadTimeout(soapConfig.getReadTimeout());
-    
-    
-    AbstractHttpClient httpClient = (AbstractHttpClient)messageSender.getHttpClient();
-    
-    httpClient.setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
-
-      public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-
-        HeaderElementIterator it = new BasicHeaderElementIterator(
-            response.headerIterator(HTTP.CONN_KEEP_ALIVE));
-          
-          while (it.hasNext()) {
-            HeaderElement he = it.nextElement();
-            String param = he.getName();
-            String value = he.getValue();
-            if (value != null && param.equalsIgnoreCase("timeout")) {
-              
-              try {
-                return Long.parseLong(value) * 1000;
-              } catch(NumberFormatException ignore) {
-              }
-              
-            }
-          }
-          // otherwise keep alive for <soap.http-timeout> seconds
-          return soapConfig.getHttpTimeout() * 1000;
-        }
-      });
+    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient);
     
     getWebServiceTemplate().setMessageSender(messageSender);
     /*
