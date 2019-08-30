@@ -4,10 +4,7 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.util.FileUtil;
-import ee.ria.dhx.ws.config.SoapConfig;
-import ee.ria.dhx.ws.context.AppContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,12 +12,11 @@ import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.mime.Attachment;
 import org.springframework.ws.soap.SoapMessage;
 import org.springframework.ws.soap.axiom.AxiomSoapMessage;
-import org.springframework.ws.soap.saaj.SaajSoapMessage;
-import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -28,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PipedInputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -39,11 +36,6 @@ import javax.activation.DataHandler;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.AttachmentPart;
-
-import org.apache.commons.codec.binary.Base64InputStream;
-
-import ee.ria.dhx.server.service.util.StreamTypeEnum;
 
 /**
  * Utility methods for web services and attachments.
@@ -149,8 +141,8 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   private static InputStream base64DecodeAndUnzip(InputStream stream) throws DhxException {
-    InputStream decoded = stream;
-    decoded = base64Decode(decoded);
+    stream = ensureStreamSpeedForBase64(stream);
+    InputStream decoded = base64Decode(stream);
     return gzipDecompress(decoded, StreamTypeEnum.BASE64BASIC);
   }
 
@@ -163,12 +155,23 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   private static InputStream base64MimeDecodeAndUnzip(InputStream stream) throws DhxException {
-    InputStream decoded = stream;
-    decoded = base64MimeDecode(decoded);
+    stream = ensureStreamSpeedForBase64(stream);
+    InputStream decoded = base64MimeDecode(stream);
     return gzipDecompress(decoded, StreamTypeEnum.BASE64MIME);
   }
 
-  
+  /**
+   * PipedInputStream is not playing well with Base64 encoding/decoding. Wrap PipedInputStream
+   * into BufferedInputStream to increase Base64 operations performance.
+   *
+   * @param stream stream to decode
+   * @return
+   */
+  private static InputStream ensureStreamSpeedForBase64(InputStream stream) {
+    return stream instanceof PipedInputStream
+            ? new BufferedInputStream(stream)
+            : stream;
+  }
 
   /**
    * Method reads inputstream into string.

@@ -78,7 +78,6 @@ public class MarshallerConfig {
   public Jaxb2Marshaller getDhxJaxb2Marshaller() {
     DhxJaxb2Marshaller dhxJaxb2Marshaller = null;
     dhxJaxb2Marshaller = new DhxJaxb2Marshaller();
-    //dhxJaxb2Marshaller.setMtomEnabled(true);
     log.debug("Creating marshaller for folowing paths: "
         + dhxConfig.getMarshallContext());
     dhxJaxb2Marshaller.setContextPaths(dhxConfig.getMarshallContextAsList());
