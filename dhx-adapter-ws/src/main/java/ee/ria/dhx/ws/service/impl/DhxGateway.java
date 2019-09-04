@@ -26,9 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
 import org.springframework.ws.WebServiceMessage;
+import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.client.WebServiceFaultException;
 import org.springframework.ws.client.core.SimpleFaultMessageResolver;
 import org.springframework.ws.client.core.WebServiceMessageCallback;
@@ -37,6 +39,7 @@ import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.soap.SoapHeader;
 import org.springframework.ws.soap.SoapHeaderElement;
 import org.springframework.ws.soap.SoapMessage;
+import org.springframework.ws.soap.axiom.AxiomSoapMessage;
 import org.springframework.ws.soap.saaj.SaajSoapMessage;
 import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.springframework.xml.transform.StringSource;
@@ -83,11 +86,16 @@ public class DhxGateway extends WebServiceGatewaySupport {
   @Autowired
   HttpClient soapHttpClient;
 
+  @Autowired
+  @Qualifier("axiomSoapMessageFactorySend")
+  WebServiceMessageFactory messageFactory;
+
   /**
    * Postconstruct method which sets marshaller and unmarshaller.
    */
   @PostConstruct
   public void init() {
+    setMessageFactory(messageFactory);
     setMarshaller(dhxJaxb2Marshaller);
     setUnmarshaller(dhxJaxb2Marshaller);
     DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient);
@@ -131,8 +139,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
         throws IOException, TransformerException {
       try {
         SoapHeader header = ((SoapMessage) message).getSoapHeader();
-        for (Iterator it = ((SaajSoapMessage) message).getSaajMessage()
-            .getAttachments(); it.hasNext();) {
+        for (Iterator it = ((AxiomSoapMessage) message).getAttachments(); it.hasNext();) {
           AttachmentPart attachment = (AttachmentPart) it.next();
           log.debug("attachment part: {}",
               attachment.getContentType());
