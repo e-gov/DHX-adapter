@@ -1,12 +1,14 @@
 package ee.ria.dhx.ws.config;
 
 import org.springframework.beans.factory.annotation.Value;
-// import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -128,6 +130,15 @@ public class DhxConfig {
       this.jaxbContext = JAXBContext.newInstance(marshallContext);
     }
     return jaxbContext;
+  }
+
+  @Bean
+  public Executor taskExecutor() {
+    return new ThreadPoolTaskExecutor() {{
+      setCorePoolSize(2);
+      setMaxPoolSize(10);
+      setWaitForTasksToCompleteOnShutdown(true);
+    }};
   }
 
 

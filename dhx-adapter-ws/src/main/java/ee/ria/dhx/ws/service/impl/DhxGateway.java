@@ -30,17 +30,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
 import org.springframework.ws.WebServiceMessage;
-import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.client.WebServiceFaultException;
 import org.springframework.ws.client.core.SimpleFaultMessageResolver;
 import org.springframework.ws.client.core.WebServiceMessageCallback;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.context.MessageContext;
+import org.springframework.ws.mime.Attachment;
 import org.springframework.ws.soap.SoapHeader;
 import org.springframework.ws.soap.SoapHeaderElement;
 import org.springframework.ws.soap.SoapMessage;
+import org.springframework.ws.soap.SoapMessageFactory;
 import org.springframework.ws.soap.axiom.AxiomSoapMessage;
-import org.springframework.ws.soap.saaj.SaajSoapMessage;
 import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.springframework.xml.transform.StringSource;
 
@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBElement;
@@ -88,7 +89,10 @@ public class DhxGateway extends WebServiceGatewaySupport {
 
   @Autowired
   @Qualifier("axiomSoapMessageFactorySend")
-  WebServiceMessageFactory messageFactory;
+  SoapMessageFactory messageFactory;
+
+  @Autowired
+  Executor executor;
 
   /**
    * Postconstruct method which sets marshaller and unmarshaller.
@@ -98,7 +102,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
     setMessageFactory(messageFactory);
     setMarshaller(dhxJaxb2Marshaller);
     setUnmarshaller(dhxJaxb2Marshaller);
-    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient);
+    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient, executor);
     
     getWebServiceTemplate().setMessageSender(messageSender);
     /*
@@ -139,15 +143,6 @@ public class DhxGateway extends WebServiceGatewaySupport {
         throws IOException, TransformerException {
       try {
         SoapHeader header = ((SoapMessage) message).getSoapHeader();
-        for (Iterator it = ((AxiomSoapMessage) message).getAttachments(); it.hasNext();) {
-          AttachmentPart attachment = (AttachmentPart) it.next();
-          log.debug("attachment part: {}",
-              attachment.getContentType());
-          attachment
-              .setMimeHeader(
-                  HttpTransportConstants.HEADER_CONTENT_TRANSFER_ENCODING,
-                  "base64");
-        }
         // Transformer transformer =
         // SAXTransformerFactory.newInstance().newTransformer();
         TransformerFactory fact = TransformerFactory

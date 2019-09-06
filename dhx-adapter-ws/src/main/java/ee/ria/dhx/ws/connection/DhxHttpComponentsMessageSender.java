@@ -9,11 +9,15 @@ import org.springframework.ws.transport.http.HttpTransportConstants;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.Executor;
 
 public class DhxHttpComponentsMessageSender extends HttpComponentsMessageSender {
 
-    public DhxHttpComponentsMessageSender(HttpClient httpClient) {
+    private final Executor executor;
+
+    public DhxHttpComponentsMessageSender(HttpClient httpClient, Executor executor) {
         super(httpClient);
+        this.executor = executor;
     }
 
     @Override
@@ -25,7 +29,7 @@ public class DhxHttpComponentsMessageSender extends HttpComponentsMessageSender 
         }
 
         HttpContext httpContext = this.createContext(uri);
-        return new ChunkedHttpComponentsConnection(this.getHttpClient(), httpPost, httpContext);
+        return new ChunkedHttpComponentsConnection(this.getHttpClient(), httpPost, httpContext, executor);
     }
 
 }

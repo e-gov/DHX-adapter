@@ -4,6 +4,7 @@ package ee.ria.dhx.server.endpoint.config;
 import ee.ria.dhx.server.config.DhxServerConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,7 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
   DhxServerConfig config;
 
   @Autowired
+  @Qualifier("axiomSoapMessageFactoryReceive")
   Jaxb2Marshaller marshaller;
 
   /**
@@ -46,28 +48,21 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
    * @return DefaultMethodEndpointAdapter
    */
   @Bean(name = "dhxServerMethodEndpointAdapter")
-  public DefaultMethodEndpointAdapter dhxMethodEndpointAdapter() {
-    List<MethodArgumentResolver> argumentResolvers = null;
-    List<MethodReturnValueHandler> returnValueHandlers = null;
-    if (argumentResolvers == null) {
-      argumentResolvers = new ArrayList<MethodArgumentResolver>();
-    }
-    if (returnValueHandlers == null) {
-      returnValueHandlers = new ArrayList<MethodReturnValueHandler>();
-    }
-    returnValueHandlers.addAll(methodProcessors());
-    argumentResolvers.addAll(methodProcessors());
-
+  public DefaultMethodEndpointAdapter dhxServerMethodEndpointAdapter(
+          DefaultMethodEndpointAdapter defaultMethodEndpointAdapter,
+          List<MarshallingPayloadMethodProcessor> dhxServerMethodProcessors) {
+    final List<MethodArgumentResolver> argumentResolvers = new ArrayList<MethodArgumentResolver>(dhxServerMethodProcessors);
+    final List<MethodReturnValueHandler> returnValueHandlers = new ArrayList<MethodReturnValueHandler>(dhxServerMethodProcessors);
 
     argumentResolvers.add(new MessageContextMethodArgumentResolver());
 
-    returnValueHandlers.addAll(defaultMethodEndpointAdapter().getMethodReturnValueHandlers());
-    argumentResolvers.addAll(defaultMethodEndpointAdapter().getMethodArgumentResolvers());
+    argumentResolvers.addAll(defaultMethodEndpointAdapter.getMethodArgumentResolvers());
+    returnValueHandlers.addAll(defaultMethodEndpointAdapter.getMethodReturnValueHandlers());
 
-    DefaultMethodEndpointAdapter adapter = new DefaultMethodEndpointAdapter();
-    adapter.setMethodArgumentResolvers(argumentResolvers);
-    adapter.setMethodReturnValueHandlers(returnValueHandlers);
-    return adapter;
+    return new DefaultMethodEndpointAdapter() {{
+      setMethodArgumentResolvers(argumentResolvers);
+      setMethodReturnValueHandlers(returnValueHandlers);
+    }};
   }
 
   /**
@@ -77,12 +72,9 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
    */
   @Bean(name = "dhxServerMethodProcessors")
   public List<MarshallingPayloadMethodProcessor> methodProcessors() {
-    List<MarshallingPayloadMethodProcessor> retVal =
-        new ArrayList<MarshallingPayloadMethodProcessor>();
-    Jaxb2Marshaller marshallerMtom = marshaller;
-    retVal.add(new MarshallingPayloadMethodProcessor(marshallerMtom));
-
-    return retVal;
+    return new ArrayList<MarshallingPayloadMethodProcessor>() {{
+      add(new MarshallingPayloadMethodProcessor(marshaller));
+    }};
   }
 
 

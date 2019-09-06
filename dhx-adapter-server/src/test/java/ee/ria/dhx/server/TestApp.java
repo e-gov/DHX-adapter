@@ -17,15 +17,24 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.ws.soap.SoapMessageFactory;
+import org.springframework.ws.soap.axiom.AxiomSoapMessageFactory;
 
 import java.io.IOException;
 
 // @SpringBootApplication
 @TestPropertySource("classpath:test-application.properties")
-@ComponentScan(basePackages = "ee.ria.dhx.ws.config,ee.ria.dhx.ws.schedule,"
-    + "ee.ria.dhx.ws.service.impl,ee.ria.dhx.server.service,ee.ria.dhx.server.config"
-    + ",ee.ria.dhx.server.persistence.*,ee.ria.dhx.server.scheduler,"
-    + "ee.ria.dhx.ws,ee.ria.dhx.server.endpoint.config")
+@ComponentScan(basePackages = {
+        "ee.ria.dhx.ws.config",
+        "ee.ria.dhx.ws.schedule",
+        "ee.ria.dhx.ws.service.impl",
+        "ee.ria.dhx.server.service",
+        "ee.ria.dhx.server.config",
+        "ee.ria.dhx.server.persistence.*",
+        "ee.ria.dhx.server.scheduler",
+        "ee.ria.dhx.ws",
+        "ee.ria.dhx.server.endpoint.config"
+})
 @EnableTransactionManagement
 @Slf4j
 // @EnableAutoConfiguration
@@ -36,10 +45,10 @@ public class TestApp {
     return new PropertySourcesPlaceholderConfigurer();
   }
 
-  @Bean
+  @Bean("axiomSoapMessageFactoryReceive")
   @Primary
-  public Jaxb2Marshaller jaxb2MarshallerSpy(Jaxb2Marshaller dhxJaxb2Marshaller) {
-    return Mockito.spy(dhxJaxb2Marshaller);
+  public Jaxb2Marshaller jaxb2MarshallerSpy(Jaxb2Marshaller axiomSoapMessageFactoryReceive) {
+    return Mockito.spy(axiomSoapMessageFactoryReceive);
   }
 
   @Bean
@@ -62,6 +71,12 @@ public class TestApp {
     folder.setName("/");
     repository.save(folder);
     return repository;
+  }
+
+  @Bean
+  @Primary
+  public SoapMessageFactory messageFactory(SoapMessageFactory axiomSoapMessageFactorySend) {
+    return Mockito.spy(axiomSoapMessageFactorySend);
   }
 
 }

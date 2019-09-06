@@ -95,17 +95,4 @@ public class DhxServerWebServiceConfig {
   }
 
 
-  /**
-   * Creates messageFactory for sending and returns.
-   * @return messagefactory
-   */
-  @Bean
-  public SoapMessageFactory axiomSoapMessageFactorySend() {
-    return new AxiomSoapMessageFactory() {{
-      setAttachmentCaching(true);
-      setAttachmentCacheThreshold(10 /* MB */ * 1024 /* KB */ * 1024 /* Byte */); // TODO: make it configurable
-    }};
-  }
-
-
 }
