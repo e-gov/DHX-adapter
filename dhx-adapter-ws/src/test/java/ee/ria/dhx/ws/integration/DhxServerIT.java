@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.ws.test.server.RequestCreators.withSoapEnvelope;
 
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.mock.MockWebServiceClient;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.IncomingDhxPackage;
 import ee.ria.dhx.types.InternalXroadMember;
@@ -32,7 +33,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ws.context.MessageContext;
-import org.springframework.ws.test.server.MockWebServiceClient;
 import org.springframework.ws.test.server.ResponseMatchers;
 
 import java.util.ArrayList;
