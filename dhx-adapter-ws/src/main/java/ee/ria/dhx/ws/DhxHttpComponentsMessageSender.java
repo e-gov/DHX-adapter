@@ -1,5 +1,6 @@
 package ee.ria.dhx.ws;
 
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.springframework.ws.transport.WebServiceConnection;
 import org.springframework.ws.transport.http.HttpComponentsConnection;
@@ -10,6 +11,10 @@ import java.io.IOException;
 import java.net.URI;
 
 public class DhxHttpComponentsMessageSender extends HttpComponentsMessageSender {
+
+  public DhxHttpComponentsMessageSender (HttpClient httpClient){
+    super(httpClient);
+  }
 
   @Override
   public WebServiceConnection createConnection(URI uri) throws IOException {
