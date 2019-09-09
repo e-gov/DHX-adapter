@@ -104,27 +104,24 @@ public class DhxGateway extends WebServiceGatewaySupport {
             .setSocketTimeout(soapConfig.getReadTimeout())
             .build();
 
-    KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-    //KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+    KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+    KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
 
     InputStream keystoreIn = new FileInputStream(soapConfig.getClientKeyStoreFile());
-    //InputStream truststoreIn = new FileInputStream(soapConfig.getClientTrustStoreFile());
+    File trustStoreFile = new File(soapConfig.getClientTrustStoreFile());
 
-    File tsFile = new File(soapConfig.getClientTrustStoreFile());
+    keyStore.load(keystoreIn, soapConfig.getClientKeyStorePassword().toCharArray());
+    trustStore.load(new FileInputStream(trustStoreFile), soapConfig.getClientTrustStorePassword().toCharArray());
 
-    keystore.load(keystoreIn, soapConfig.getClientKeyStorePassword().toCharArray());
-    //trustStore.load(new FileInputStream(tsFile), soapConfig.getClientTrustStorePassword().toCharArray());
-
-    //TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
     SSLContext sslContext = SSLContexts
           .custom()
-          .loadTrustMaterial(tsFile, soapConfig.getClientTrustStorePassword().toCharArray())
-          .loadKeyMaterial(keystore, soapConfig.getClientKeyStorePassword().toCharArray())
+          .loadTrustMaterial(trustStoreFile, soapConfig.getClientTrustStorePassword().toCharArray())
+          .loadKeyMaterial(keyStore, soapConfig.getClientKeyStorePassword().toCharArray())
           .build();
 
     HttpClient httpClient = HttpClientBuilder
       .create()
-      .setSSLSocketFactory(new SSLConnectionSocketFactory(sslContext, new String[]{"TLSv1"}, null,
+      .setSSLSocketFactory(new SSLConnectionSocketFactory(sslContext, new String[]{"TLSv1.1", "TLSv1.2"}, null,
               SSLConnectionSocketFactory.getDefaultHostnameVerifier()))
       .setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
 
@@ -150,7 +147,6 @@ public class DhxGateway extends WebServiceGatewaySupport {
             return soapConfig.getHttpTimeout() * 1000;
           }
         })
-      .setConnectionManager(new BasicHttpClientConnectionManager())
       .setDefaultRequestConfig(requestConfig)
       .build();
 
