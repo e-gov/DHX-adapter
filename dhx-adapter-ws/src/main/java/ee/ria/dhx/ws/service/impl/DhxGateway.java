@@ -105,9 +105,22 @@ public class DhxGateway extends WebServiceGatewaySupport {
             .build();
 
     KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-    InputStream in = new FileInputStream(soapConfig.getClientKeyStoreFile());
-    keystore.load(in, soapConfig.getClientKeyStorePassword().toCharArray());
-    SSLContext sslContext = SSLContexts.custom().loadKeyMaterial(keystore, soapConfig.getClientKeyStorePassword().toCharArray()).build();
+    //KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+
+    InputStream keystoreIn = new FileInputStream(soapConfig.getClientKeyStoreFile());
+    //InputStream truststoreIn = new FileInputStream(soapConfig.getClientTrustStoreFile());
+
+    File tsFile = new File(soapConfig.getClientTrustStoreFile());
+
+    keystore.load(keystoreIn, soapConfig.getClientKeyStorePassword().toCharArray());
+    //trustStore.load(new FileInputStream(tsFile), soapConfig.getClientTrustStorePassword().toCharArray());
+
+    //TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+    SSLContext sslContext = SSLContexts
+          .custom()
+          .loadTrustMaterial(tsFile, soapConfig.getClientTrustStorePassword().toCharArray())
+          .loadKeyMaterial(keystore, soapConfig.getClientKeyStorePassword().toCharArray())
+          .build();
 
     HttpClient httpClient = HttpClientBuilder
       .create()
