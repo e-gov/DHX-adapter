@@ -216,12 +216,18 @@ public class SoapConfig {
   public SSLContext sslContext(KeyStore clientTrustStore, KeyStore clientKeyStore) throws KeyStoreException,
           NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
     SSLContextBuilder sslContextBuilder = SSLContexts.custom();
-    TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
     if (getSecurityServer().toUpperCase().startsWith("HTTPS")) {
       if (clientKeyStore != null) {
         sslContextBuilder.loadKeyMaterial(clientKeyStore, getClientTrustStorePassword().toCharArray());
       }
-      sslContextBuilder.loadTrustMaterial(clientTrustStore, acceptingTrustStrategy);
+      TrustStrategy acceptingTrustStrategy = new TrustStrategy()
+        {
+            public boolean isTrusted(X509Certificate[] arg0, String arg1)
+            {
+                return true;
+            }
+        };
+        sslContextBuilder.loadTrustMaterial(clientTrustStore, acceptingTrustStrategy);
     }
     return sslContextBuilder.build();
   }
