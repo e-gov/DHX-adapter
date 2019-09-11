@@ -2,21 +2,39 @@ package ee.ria.dhx.ws.config;
 
 import ee.ria.dhx.types.InternalXroadMember;
 
+import org.apache.http.HeaderElement;
+import org.apache.http.HeaderElementIterator;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeaderElementIterator;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.SSLContexts;
+import org.apache.http.ssl.TrustStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 
+import java.io.*;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.security.Security;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
 
 import javax.annotation.PostConstruct;
+import javax.net.ssl.SSLContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -170,6 +188,89 @@ public class SoapConfig {
       system = getDhxSubsystemPrefix() + "." + system;
     }
     return system.toUpperCase();
+  }
+
+  @Bean
+  public KeyStore clientTrustStore () throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    KeyStore trustStore = null;
+    if (getSecurityServer().toUpperCase().startsWith("HTTPS")) {
+      trustStore = KeyStore.getInstance(getClientTrustStoreType());
+      File trustStoreFile = new File(getClientTrustStoreFile());
+      trustStore.load(new FileInputStream(trustStoreFile), getClientTrustStorePassword().toCharArray());
+    }
+    return trustStore;
+  }
+
+  @Bean
+  public KeyStore clientKeyStore() throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+    KeyStore keyStore = null;
+    if (getSecurityServer().toUpperCase().startsWith("HTTPS")) {
+      keyStore = KeyStore.getInstance(getClientKeyStoreType());
+      InputStream keystoreIn = new FileInputStream(getClientKeyStoreFile());
+      keyStore.load(keystoreIn, getClientKeyStorePassword().toCharArray());
+    }
+    return keyStore;
+  }
+
+  @Bean
+  public SSLContext sslContext(KeyStore clientTrustStore, KeyStore clientKeyStore) throws KeyStoreException,
+          NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+    SSLContextBuilder sslContextBuilder = SSLContexts.custom();
+    TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+    if (getSecurityServer().toUpperCase().startsWith("HTTPS")) {
+      if (clientKeyStore != null) {
+        sslContextBuilder.loadKeyMaterial(clientKeyStore, getClientTrustStorePassword().toCharArray());
+      }
+      sslContextBuilder.loadTrustMaterial(clientTrustStore, acceptingTrustStrategy);
+    }
+    return sslContextBuilder.build();
+  }
+
+  @Bean
+  public SSLConnectionSocketFactory sslSocketFactory(SSLContext sslContext) {
+    return new SSLConnectionSocketFactory(sslContext, new String[]{"TLSv1.1", "TLSv1.2"}, null,
+            SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+  }
+
+  @Bean
+  public RequestConfig requestConfig() {
+    return RequestConfig.custom()
+            .setConnectionRequestTimeout(getConnectionTimeout())
+            .setSocketTimeout(getReadTimeout())
+            .build();
+  }
+
+  @Bean
+  public HttpClient httpClient() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, UnrecoverableKeyException, KeyManagementException {
+    return HttpClientBuilder
+            .create()
+            .setSSLSocketFactory(sslSocketFactory(sslContext(clientTrustStore(), clientKeyStore())))
+            .setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
+
+              public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+
+                HeaderElementIterator it = new BasicHeaderElementIterator(
+                        response.headerIterator(HTTP.CONN_KEEP_ALIVE));
+
+                while (it.hasNext()) {
+                  HeaderElement he = it.nextElement();
+                  String param = he.getName();
+                  String value = he.getValue();
+                  if (value != null && param.equalsIgnoreCase("timeout")) {
+
+                    try {
+                      return Long.parseLong(value) * 1000;
+                    } catch(NumberFormatException ignore) {
+                    }
+
+                  }
+                }
+                // otherwise keep alive for <soap.http-timeout> seconds
+                return getHttpTimeout() * 1000;
+              }
+            })
+            .setDefaultRequestConfig(requestConfig())
+            .build();
   }
 
   /**

@@ -24,10 +24,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.conn.ssl.*;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
@@ -45,29 +41,16 @@ import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.springframework.xml.transform.StringSource;
 
 import java.io.*;
-import java.security.*;
-import java.security.cert.CertificateException;
 import java.util.Iterator;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
-import org.apache.http.ssl.SSLContexts;
 
-import javax.net.ssl.SSLContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-
-import org.apache.http.conn.ConnectionKeepAliveStrategy;
-import org.apache.http.HeaderElement;
-import org.apache.http.HeaderElementIterator;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.message.BasicHeaderElementIterator;
-
 
 
 @Slf4j
@@ -91,71 +74,18 @@ public class DhxGateway extends WebServiceGatewaySupport {
   @Autowired
   Jaxb2Marshaller dhxJaxb2Marshaller;
 
+  @Autowired
+  private HttpClient httpClient;
+
   /**
    * Postconstruct method which sets marshaller and unmarshaller.
    */
   @PostConstruct
-  public void init() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, KeyManagementException, UnrecoverableKeyException {
+  public void init() {
     setMarshaller(dhxJaxb2Marshaller);
     setUnmarshaller(dhxJaxb2Marshaller);
-
-    RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectionRequestTimeout(soapConfig.getConnectionTimeout())
-            .setSocketTimeout(soapConfig.getReadTimeout())
-            .build();
-
-    KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-    KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-
-    InputStream keystoreIn = new FileInputStream(soapConfig.getClientKeyStoreFile());
-    File trustStoreFile = new File(soapConfig.getClientTrustStoreFile());
-
-    keyStore.load(keystoreIn, soapConfig.getClientKeyStorePassword().toCharArray());
-    trustStore.load(new FileInputStream(trustStoreFile), soapConfig.getClientTrustStorePassword().toCharArray());
-
-    SSLContext sslContext = SSLContexts
-          .custom()
-          .loadTrustMaterial(trustStoreFile, soapConfig.getClientTrustStorePassword().toCharArray())
-          .loadKeyMaterial(keyStore, soapConfig.getClientKeyStorePassword().toCharArray())
-          .build();
-
-    HttpClient httpClient = HttpClientBuilder
-      .create()
-      .setSSLSocketFactory(new SSLConnectionSocketFactory(sslContext, new String[]{"TLSv1.1", "TLSv1.2"}, null,
-              SSLConnectionSocketFactory.getDefaultHostnameVerifier()))
-      .setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
-
-        public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-
-          HeaderElementIterator it = new BasicHeaderElementIterator(
-              response.headerIterator(HTTP.CONN_KEEP_ALIVE));
-
-            while (it.hasNext()) {
-              HeaderElement he = it.nextElement();
-              String param = he.getName();
-              String value = he.getValue();
-              if (value != null && param.equalsIgnoreCase("timeout")) {
-
-                try {
-                  return Long.parseLong(value) * 1000;
-                } catch(NumberFormatException ignore) {
-                }
-
-              }
-            }
-            // otherwise keep alive for <soap.http-timeout> seconds
-            return soapConfig.getHttpTimeout() * 1000;
-          }
-        })
-      .setDefaultRequestConfig(requestConfig)
-      .build();
-
     DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(httpClient);
     getWebServiceTemplate().setMessageSender(messageSender);
-    /*
-     * MessageFactory messageFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-     * setMessageFactory(new SaajSoapMessageFactory(messageFactory));
-     */
   }
 
   /**
