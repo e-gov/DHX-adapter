@@ -2,7 +2,6 @@ package ee.ria.dhx.ws.service.impl;
 
 import com.jcabi.aspects.Loggable;
 
-import com.sun.xml.internal.ws.util.xml.StAXSource;
 import ee.ria.dhx.bigdata.BigDataMarshallHandler;
 import ee.ria.dhx.bigdata.BigDataXmlReader;
 import ee.ria.dhx.bigdata.ReflectionUtil;

@@ -1,9 +1,10 @@
 package ee.ria.dhx.ws.config;
 
+import ee.ria.dhx.ws.DhxOrganisationFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.context.annotation.Scope;
 
 import java.util.Arrays;
 import java.util.List;
@@ -126,19 +127,12 @@ public class DhxConfig {
    */
   @Bean
   public JAXBContext getJaxbContext() throws JAXBException {
-    if (this.jaxbContext == null) {
-      this.jaxbContext = JAXBContext.newInstance(marshallContext);
-    }
-    return jaxbContext;
+    return JAXBContext.newInstance(marshallContext);
   }
 
   @Bean
-  public Executor taskExecutor() {
-    return new ThreadPoolTaskExecutor() {{
-      setCorePoolSize(2);
-      setMaxPoolSize(10);
-      setWaitForTasksToCompleteOnShutdown(true);
-    }};
+  public DhxOrganisationFactory dhxOrganisationFactory() {
+    return new DhxOrganisationFactory();
   }
 
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,7 +43,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 import org.springframework.ws.context.MessageContext;
@@ -97,6 +100,9 @@ public class DhxPackageServceImplTest {
   private SoapConfig soapConfig;
 
   @InjectMocks
+  private DhxOrganisationFactory dhxOrganisationFactory = spy(DhxOrganisationFactory.class);
+
+  @InjectMocks
   private DhxPackageServiceImpl dhxPackageService;
 
 
@@ -119,10 +125,10 @@ public class DhxPackageServceImplTest {
     when(capsuleConfig.getCurrentCapsuleVersion()).thenReturn(CapsuleVersionEnum.V21);
     when(capsuleConfig.getXsdForVersion(CapsuleVersionEnum.V21)).thenReturn("jar://Dvk_kapsel_vers_2_1_eng_est.xsd");
 
-    DhxOrganisationFactory.setDhxSubsystemPrefix("DHX");
     List<String> subsystems = Lists.newArrayList("DHX");
     when(soapConfig.getAcceptedSubsystemsAsList()).thenReturn(subsystems);
     when(soapConfig.getMemberCode()).thenReturn("401");
+    when(soapConfig.getDhxSubsystemPrefix()).thenReturn("DHX");
 
     CapsuleAdressee addressee = new CapsuleAdressee("401");
     List<CapsuleAdressee> addressees = Lists.newArrayList(addressee);
@@ -382,7 +388,6 @@ public class DhxPackageServceImplTest {
   @Test
   public void receiveDocumentFromEndpointNonDefaultSubsystem() throws DhxException, IOException {
     // Prepare
-    DhxOrganisationFactory.setDhxSubsystemPrefix("DHX");
     List<String> subsystems = Lists.newArrayList("DHX.subsystem");
     when(soapConfig.getAcceptedSubsystemsAsList()).thenReturn(subsystems);
     when(dhxConfig.getParseCapsule()).thenReturn(true);
