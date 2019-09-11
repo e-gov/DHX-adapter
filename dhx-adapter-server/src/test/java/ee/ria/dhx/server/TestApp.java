@@ -45,10 +45,10 @@ public class TestApp {
     return new PropertySourcesPlaceholderConfigurer();
   }
 
-  @Bean("axiomSoapMessageFactoryReceive")
+  @Bean
   @Primary
-  public Jaxb2Marshaller jaxb2MarshallerSpy(Jaxb2Marshaller axiomSoapMessageFactoryReceive) {
-    return Mockito.spy(axiomSoapMessageFactoryReceive);
+  public Jaxb2Marshaller jaxb2MarshallerSpy(Jaxb2Marshaller dhxJaxb2Marshaller) {
+    return Mockito.spy(dhxJaxb2Marshaller);
   }
 
   @Bean
@@ -75,8 +75,8 @@ public class TestApp {
 
   @Bean
   @Primary
-  public SoapMessageFactory messageFactory(SoapMessageFactory axiomSoapMessageFactorySend) {
-    return Mockito.spy(axiomSoapMessageFactorySend);
+  public SoapMessageFactory messageFactory(SoapMessageFactory axiomSoapMessageFactoryReceive) {
+    return Mockito.spy(axiomSoapMessageFactoryReceive);
   }
 
 }

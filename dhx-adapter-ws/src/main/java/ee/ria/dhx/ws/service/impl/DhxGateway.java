@@ -91,9 +91,6 @@ public class DhxGateway extends WebServiceGatewaySupport {
   @Qualifier("axiomSoapMessageFactorySend")
   SoapMessageFactory messageFactory;
 
-  @Autowired
-  Executor executor;
-
   /**
    * Postconstruct method which sets marshaller and unmarshaller.
    */
@@ -102,7 +99,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
     setMessageFactory(messageFactory);
     setMarshaller(dhxJaxb2Marshaller);
     setUnmarshaller(dhxJaxb2Marshaller);
-    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient, executor);
+    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient);
     
     getWebServiceTemplate().setMessageSender(messageSender);
     /*

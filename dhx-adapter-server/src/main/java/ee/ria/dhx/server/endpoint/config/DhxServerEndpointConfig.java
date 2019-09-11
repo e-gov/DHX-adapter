@@ -37,7 +37,6 @@ public class DhxServerEndpointConfig extends WsConfigurationSupport {
   DhxServerConfig config;
 
   @Autowired
-  @Qualifier("axiomSoapMessageFactoryReceive")
   Jaxb2Marshaller marshaller;
 
   /**

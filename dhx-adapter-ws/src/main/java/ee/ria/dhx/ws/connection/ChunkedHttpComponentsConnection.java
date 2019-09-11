@@ -1,44 +1,42 @@
 package ee.ria.dhx.ws.connection;
 
-import ee.ria.dhx.ws.connection.stream.AsyncPipedOutputStream;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.protocol.HttpContext;
 import org.springframework.ws.WebServiceMessage;
 import org.springframework.ws.transport.http.HttpComponentsConnection;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.lang.reflect.Field;
-import java.util.concurrent.Executor;
 
 public class ChunkedHttpComponentsConnection extends HttpComponentsConnection {
 
     private final HttpClient httpClient;
     private final HttpContext httpContext;
-    private final Executor executor;
 
-    private PipedOutputStream requestOutputBuffer;
-    private PipedInputStream requestInputBuffer;
+    private FileOutputStream requestOutputBuffer;
+    private File tempFile;
 
-    protected ChunkedHttpComponentsConnection(HttpClient httpClient, HttpPost httpPost, HttpContext httpContext, Executor executor) {
+    protected ChunkedHttpComponentsConnection(HttpClient httpClient, HttpPost httpPost, HttpContext httpContext) {
         super(httpClient, httpPost, httpContext);
         this.httpClient = httpClient;
         this.httpContext = httpContext;
-        this.executor = executor;
     }
 
     @Override
     protected void onSendBeforeWrite(WebServiceMessage message) throws IOException {
-        final PipedOutputStream requestOutputBuffer;
-        this.requestOutputBuffer = requestOutputBuffer = new AsyncPipedOutputStream(executor);
-        this.requestInputBuffer = new PipedInputStream(requestOutputBuffer);
+        this.tempFile = File.createTempFile("dhx_chunked_", ".tmp");
+        this.requestOutputBuffer = new FileOutputStream(tempFile);
     }
 
     @Override
@@ -48,18 +46,30 @@ public class ChunkedHttpComponentsConnection extends HttpComponentsConnection {
 
     @Override
     protected void onSendAfterWrite(WebServiceMessage message) throws IOException {
-        InputStreamEntity chunkedEntity = new InputStreamEntity(this.requestInputBuffer) {{
-            setChunked(true);
-        }};
+        final File tempFile = this.tempFile;
+        FileEntity chunkedEntity = new FileEntity(tempFile) {
+            {
+                setChunked(true);
+            }
+
+            public InputStream getContent() throws IOException {
+                return new FileInputStream(tempFile) {
+                    @Override
+                    public void close() throws IOException {
+                        super.close();
+                        tempFile.delete();
+                    }
+                };
+            }
+        };
         this.getHttpPost().setEntity(chunkedEntity);
         this.requestOutputBuffer = null;
-        this.requestInputBuffer = null;
+        this.tempFile = null;
         if (this.httpContext != null) {
             setHttpResponse(this.httpClient.execute(this.getHttpPost(), this.httpContext));
         } else {
             setHttpResponse(this.httpClient.execute(this.getHttpPost()));
         }
-
     }
 
     @SneakyThrows
@@ -68,7 +78,7 @@ public class ChunkedHttpComponentsConnection extends HttpComponentsConnection {
     }
 
     private void setParentField(String fieldName, Object newValue) throws NoSuchFieldException, IllegalAccessException {
-        Field field = super.getClass().getField(fieldName);
+        Field field = getClass().getSuperclass().getDeclaredField(fieldName);
         FieldUtils.writeField(field, this, newValue, true);
     }
 }

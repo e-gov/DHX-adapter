@@ -90,7 +90,7 @@ public class DhxServerWebServiceConfig {
   public SoapMessageFactory axiomSoapMessageFactoryReceive() {
     return new AxiomSoapMessageFactory() {{
       setAttachmentCaching(true);
-      setAttachmentCacheThreshold(1024 /* MB */ * 1024 /* KB */ * 1024 /* Byte */); // TODO: make it configurable
+      setAttachmentCacheThreshold(50 /* MB */ * 1024 /* KB */ * 1024 /* Byte */); // TODO: make it configurable
     }};
   }
 
