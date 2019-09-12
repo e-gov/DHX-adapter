@@ -295,7 +295,7 @@ public class MarshallerConfig {
           String contentId = UUID.randomUUID() + "@" + dataHandler.getName();
           this.mimeContainer.addAttachment(contentId, dataHandler);
           log.debug("DhxJaxb2AttachmentMarshaller.addSwaRefAttachment contentId={}", contentId);
-          return contentId;
+          return CID + contentId;
       }
 
       @Override

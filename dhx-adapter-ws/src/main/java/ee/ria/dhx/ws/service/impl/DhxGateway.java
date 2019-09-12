@@ -290,6 +290,10 @@ public class DhxGateway extends WebServiceGatewaySupport {
               + " faultString:"
               + response.getFault().getFaultString()));
     } catch (WebServiceFaultException ex) {
+      log.warn("Document send failed: {} ReceiptId: {} Fault: {}",
+              document.getService().toString(),
+              document.getService().getRepresentee(),
+              ex.getMessage());
       Fault fault = new Fault();
       fault.setFaultCode(ex.getWebServiceMessage().getFaultCode()
           .getLocalPart());
