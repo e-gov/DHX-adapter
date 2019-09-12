@@ -18,11 +18,6 @@ import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-/*
- * import org.springframework.ws.test.server.MockWebServiceClient; import
- * org.springframework.ws.test.server.RequestCreator; import
- * org.springframework.ws.test.server.RequestCreators;
- */
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -45,8 +40,6 @@ import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-
-// import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Tests on DhxEndpoint. Real XML-s are sent to endpoint and received response is being validated.

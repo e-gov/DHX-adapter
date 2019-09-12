@@ -49,12 +49,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 
-//import org.apache.axiom.om.OMException;
-//import org.apache.axiom.om.OMXMLStreamReader;
-//import javax.xml.stream.XMLStreamReader;
-
-
-
 /**
  * Contains beans needed for marshalling.
  * 

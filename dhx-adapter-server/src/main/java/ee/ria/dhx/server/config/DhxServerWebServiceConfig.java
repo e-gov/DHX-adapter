@@ -3,7 +3,6 @@ package ee.ria.dhx.server.config;
 
 
 import ee.ria.dhx.server.endpoint.config.DhxServerEndpointConfig;
-import ee.ria.dhx.ws.config.DhxWebServiceConfig;
 import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
 
 import lombok.Getter;
@@ -12,19 +11,13 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.ws.soap.SoapMessageFactory;
 import org.springframework.ws.soap.axiom.AxiomSoapMessageFactory;
-import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.soap.SOAPMessage;
 
 /**
  * Class creates beans needed for web services. Those beans are meant to use only if there is no

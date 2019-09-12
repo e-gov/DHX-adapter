@@ -35,24 +35,19 @@ import org.springframework.ws.client.core.SimpleFaultMessageResolver;
 import org.springframework.ws.client.core.WebServiceMessageCallback;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.context.MessageContext;
-import org.springframework.ws.mime.Attachment;
 import org.springframework.ws.soap.SoapHeader;
 import org.springframework.ws.soap.SoapHeaderElement;
 import org.springframework.ws.soap.SoapMessage;
 import org.springframework.ws.soap.SoapMessageFactory;
-import org.springframework.ws.soap.axiom.AxiomSoapMessage;
-import org.springframework.ws.transport.http.HttpTransportConstants;
 import org.springframework.xml.transform.StringSource;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.concurrent.Executor;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBElement;
-import javax.xml.soap.AttachmentPart;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;

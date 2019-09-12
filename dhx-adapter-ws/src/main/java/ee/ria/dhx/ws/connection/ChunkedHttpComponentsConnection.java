@@ -6,20 +6,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.FileEntity;
-import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.protocol.HttpContext;
 import org.springframework.ws.WebServiceMessage;
 import org.springframework.ws.transport.http.HttpComponentsConnection;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 
 public class ChunkedHttpComponentsConnection extends HttpComponentsConnection {
 

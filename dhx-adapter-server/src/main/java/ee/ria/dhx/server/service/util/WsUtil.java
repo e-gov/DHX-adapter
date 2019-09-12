@@ -48,9 +48,6 @@ import javax.xml.parsers.ParserConfigurationException;
 @Slf4j
 public class WsUtil {
 
-  private static String attachmentContentEncoding;
-  private static String attachmentContentType;
-  private static String attachmentContentTransferEncoding;
   private static final String ATTACHMENT_CONTENT_ID_PREFIX = "cid:";
 
   /**

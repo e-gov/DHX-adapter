@@ -4,7 +4,6 @@ package ee.ria.dhx.server.endpoint.config;
 import ee.ria.dhx.server.config.DhxServerConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

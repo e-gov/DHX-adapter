@@ -41,7 +41,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
