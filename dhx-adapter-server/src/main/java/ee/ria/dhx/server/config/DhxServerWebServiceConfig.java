@@ -3,19 +3,24 @@ package ee.ria.dhx.server.config;
 
 
 import ee.ria.dhx.server.endpoint.config.DhxServerEndpointConfig;
+import ee.ria.dhx.ws.config.DhxWebServiceConfig;
 import ee.ria.dhx.ws.config.endpoint.DhxEndpointConfig;
 
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.ws.soap.SoapMessageFactory;
 import org.springframework.ws.soap.axiom.AxiomSoapMessageFactory;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +36,14 @@ import javax.xml.soap.SOAPMessage;
  */
 @Configuration
 public class DhxServerWebServiceConfig {
+
+  @Value("${soap.dhx.attachment.cache.threshold:#{null}}")
+  @Getter
+  Integer attachmentCacheThreshold;
+
+  @Value("${soap.dhx.attachment.cache.dir:#{null}}")
+  @Getter
+  String attachmentCacheDir;
 
 
   /**
@@ -73,11 +86,10 @@ public class DhxServerWebServiceConfig {
     }};
   }
 
-  public MessageDispatcherServlet messageDispatcherServlet(final ApplicationContext applicationContext,
+  public MessageDispatcherServlet messageDispatcherServlet(final WebApplicationContext applicationContext,
                                                            final String messageFactoryBeanName) {
-    return new MessageDispatcherServlet() {{
+    return new MessageDispatcherServlet(applicationContext) {{
       setTransformWsdlLocations(true);
-      setApplicationContext(applicationContext);
       setMessageFactoryBeanName(messageFactoryBeanName);
     }};
   }
@@ -89,8 +101,16 @@ public class DhxServerWebServiceConfig {
   @Bean
   public SoapMessageFactory axiomSoapMessageFactoryReceive() {
     return new AxiomSoapMessageFactory() {{
-      setAttachmentCaching(true);
-      setAttachmentCacheThreshold(50 /* MB */ * 1024 /* KB */ * 1024 /* Byte */); // TODO: make it configurable
+      Integer attachmentCacheThreshold = DhxServerWebServiceConfig.this.getAttachmentCacheThreshold();
+      if (attachmentCacheThreshold != null) {
+        setAttachmentCaching(true);
+        setAttachmentCacheThreshold(attachmentCacheThreshold /* MB */ * 1024 /* KB */ * 1024 /* Byte */);
+
+        String attachmentCacheDir = DhxServerWebServiceConfig.this.getAttachmentCacheDir();
+        if (attachmentCacheDir != null) {
+          setAttachmentCacheDir(new File(attachmentCacheDir));
+        }
+      }
     }};
   }
 
