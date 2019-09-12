@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Lob;
 
 /**
  * The persistent class for the vastuvotja database table.
@@ -47,19 +46,15 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "dok_id_teises_serveris")
   private Integer dokIdTeisesServeris;
 
-  @Lob
   @Column(name = "fault_actor")
   private String faultActor;
 
-  @Lob
   @Column(name = "fault_code")
   private String faultCode;
 
-  @Lob
   @Column(name = "fault_detail")
   private String faultDetail;
 
-  @Lob
   @Column(name = "fault_string")
   private String faultString;
 
@@ -108,7 +103,6 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "vastuvotja_staatus_id")
   private Integer recipientStatusId;
 
-  @Lob
   @Column(name = "meta_xml")
   private String metaxml;
 
