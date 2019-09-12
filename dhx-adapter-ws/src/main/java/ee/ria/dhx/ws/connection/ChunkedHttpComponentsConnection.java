@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 public class ChunkedHttpComponentsConnection extends HttpComponentsConnection {
 
@@ -46,22 +48,7 @@ public class ChunkedHttpComponentsConnection extends HttpComponentsConnection {
 
     @Override
     protected void onSendAfterWrite(WebServiceMessage message) throws IOException {
-        final File tempFile = this.tempFile;
-        FileEntity chunkedEntity = new FileEntity(tempFile) {
-            {
-                setChunked(true);
-            }
-
-            public InputStream getContent() throws IOException {
-                return new FileInputStream(tempFile) {
-                    @Override
-                    public void close() throws IOException {
-                        super.close();
-                        tempFile.delete();
-                    }
-                };
-            }
-        };
+        FileEntity chunkedEntity = new DeleteOnCloseChunkedFileEntity(this.tempFile);
         this.getHttpPost().setEntity(chunkedEntity);
         this.requestOutputBuffer = null;
         this.tempFile = null;
