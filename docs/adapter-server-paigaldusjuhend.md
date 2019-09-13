@@ -58,7 +58,7 @@ Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
 ## 2. Tarkvara nõuded (baastarkvara eeldused)
 
-* **Java SE 7**, **Java SE 8** või **Java 11**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
+* **Java SE 8** või **Java 11**. Käivitamiseks on vajalik [Java SE 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
 * **Apache Tomcat 7**. Tarkvara käivitamiseks on vajalik [Apache Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
 * **PostgreSQL 9.6** või **Oracle 11g**. Andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) (kaasa arvatud 11g Express Edition) või uuemaid versioone.
 * Operatsioonisüsteem - Java poolt [toetatud süsteem](https://www.java.com/en/download/help/sysreq.xml).

@@ -132,7 +132,7 @@ Lisada oma tarkvara projekti ehitamise Maven pom.xml sisse järgmised sõltuvuse
 
 ### 3.1. JDK 11+
 
-Kasutades JDK 11 versiooni rakenduse ehitamisel on tarvilik kasutada `jdk11` profiili.
+Kasutades JDK 11 versiooni rakenduse ehitamisel on tarvilik kasutada `jdk11` Maven profiili.
 
 > ```mvn install -P jdk11```
 
