@@ -13,6 +13,7 @@ Sisukord
     * [1\. Sissejuhatus](#1-sissejuhatus)
     * [2\. Välised sõltuvused ja baasplatvorm](#2-v%C3%A4lised-s%C3%B5ltuvused-ja-baasplatvorm)
     * [3\. Ehitamine](#3-ehitamine)
+    * [3\.1\. JDK 11+](#31-jdk-11)
     * [4\. Teadaolevad probleemid (sõltuvuste konfliktid)](#4-teadaolevad-probleemid-s%C3%B5ltuvuste-konfliktid)
     * [5\. Teegi laadimise häälestamine uuematel serveritel (annotatsioonid)](#5-teegi-laadimise-h%C3%A4%C3%A4lestamine-uuematel-serveritel-annotatsioonid)
     * [6\. Teegi laadimise häälestamine vanematel serveritel (web\.xml)](#6-teegi-laadimise-h%C3%A4%C3%A4lestamine-vanematel-serveritel-webxml)
@@ -128,6 +129,12 @@ Lisada oma tarkvara projekti ehitamise Maven pom.xml sisse järgmised sõltuvuse
 			<scope>compile</scope>
 		</dependency>
 ```
+
+### 3.1. JDK 11+
+
+Kasutades JDK 11 versiooni rakenduse ehitamisel on tarvilik kasutada `jdk11` profiili.
+
+> ```mvn install -P jdk11```
 
 ## 4. Teadaolevad probleemid (sõltuvuste konfliktid)
 

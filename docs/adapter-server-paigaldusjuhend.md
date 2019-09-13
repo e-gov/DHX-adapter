@@ -15,14 +15,18 @@ Sisukord
     * [4\. Paigaldamine](#4-paigaldamine)
       * [4\.1\. Olemasoleva paigalduspaketiga (WAR) \- Tomcat ja PostgeSQL](#41-olemasoleva-paigalduspaketiga-war---tomcat-ja-postgesql)
         * [4\.1\.1\. PostgreSQL 9\.6](#411-postgresql-96)
-        * [4\.1\.2 Java 8 SE](#412-java-8-se)
+        * [4\.1\.2\. Java SE](#412-java-se)
+        * [4\.1\.2\.1\. Java 8 SE](#4121-java-8-se)
+        * [4\.1\.2\.2\. Java 11+ SE](#4122-java-11-se)
         * [4\.1\.3\. Apache Tomcat 7](#413-apache-tomcat-7)
         * [4\.1\.4\. DHX adapterserver WAR](#414-dhx-adapterserver-war)
         * [4\.1\.5\. Muuta dhx\-application\.properties](#415-muuta-dhx-applicationproperties)
         * [4\.1\.6\. Paigaldada Tomcat Windows Servicena või Linux deemonina\.](#416-paigaldada-tomcat-windows-servicena-v%C3%B5i-linux-deemonina)
       * [4\.2\. Olemasoleva paigalduspaketiga (WAR) \- Tomcat ja Oracle 11g Express edition](#42-olemasoleva-paigalduspaketiga-war---tomcat-ja-oracle-11g-express-edition)
         * [4\.2\.1\. Oracle 11g Express Edition](#421-oracle-11g-express-edition)
-        * [4\.2\.2\. Java 8 SE](#422-java-8-se)
+        * [4\.2\.2\. Java SE](#422-java-se)
+        * [4\.2\.2\.1\. Java 8 SE](#4221-java-8-se)
+        * [4\.2\.2\.2\. Java 11+ SE](#4222-java-11-se)
         * [4\.2\.3\. Apache Tomcat 7](#423-apache-tomcat-7)
         * [4\.2\.4\. DHX adapterserver WAR](#424-dhx-adapterserver-war)
         * [4\.2\.5\. Muuta dhx\-application\.properties](#425-muuta-dhx-applicationproperties)
@@ -54,7 +58,7 @@ Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
 ## 2. Tarkvara nõuded (baastarkvara eeldused)
 
-* **Java SE 8** või **Java SE 7**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
+* **Java SE 7**, **Java SE 8** või **Java 11**. Käivitamiseks on vajalik [Java SE 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (või uuem) versioon.
 * **Apache Tomcat 7**. Tarkvara käivitamiseks on vajalik [Apache Tomcat 7](http://tomcat.apache.org/download-70.cgi) või uuem versioon.
 * **PostgreSQL 9.6** või **Oracle 11g**. Andmebaasi serverina on soovituslik kasutada [PostgreSQL 9.6](https://www.postgresql.org/) või [Oracle 11g](http://www.oracle.com/technetwork/database/index.html) (kaasa arvatud 11g Express Edition) või uuemaid versioone.
 * Operatsioonisüsteem - Java poolt [toetatud süsteem](https://www.java.com/en/download/help/sysreq.xml).
@@ -108,10 +112,18 @@ Anda loodud kasutajale kõik selle andmebaasi õigused.
 GRANT ALL PRIVILEGES ON DATABASE dhx_adapter to dhxuser;
 ```
 
-#### 4.1.2 Java 8 SE
+#### 4.1.2. Java SE
 
-Laadida alla ja installeerida [Java 8 SE Runtime environment](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
+##### 4.1.2.1. Java 8 SE
 
+Laadida alla ja installeerida [Java 8 SE Runtime environment](https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
+
+##### 4.1.2.2. Java 11+ SE
+
+> **!!!TÄHELEPANU!!!** Alates Oracle JDK 11-st on oluliselt muutunud Java litsents, mis lubab seda kasutada tasuta vaid **personaalseks** ja **arenduse**
+otstarbeks. Komplikatsioonide tekkimise vältimiseks kasutada [OpenJDK](https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase11-5116896.html) väljalaskeid
+
+Laadida alla ja paigaldada [OpenJDK](https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase11-5116896.html).
 
 #### 4.1.3. Apache Tomcat 7
 
@@ -262,9 +274,15 @@ grant resource to dhxadapter;
 grant unlimited tablespace to dhxadapter;
 ```
 
-#### 4.2.2. Java 8 SE
+#### 4.2.2. Java SE
 
-Vaata [eespoolt](#412-java-8-se)
+##### 4.2.2.1. Java 8 SE
+
+Vaata [eespoolt](#4121-java-8-se)
+
+##### 4.2.2.2. Java 11+ SE
+
+Vaata [eespoolt](#4122-java-11-se)
 
 
 #### 4.2.3. Apache Tomcat 7

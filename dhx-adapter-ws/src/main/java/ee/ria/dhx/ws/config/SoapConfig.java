@@ -603,12 +603,13 @@ public class SoapConfig {
     log.info("javax.net.ssl.keyStorePassword: {}", getClientKeyStorePassword());
     log.info("javax.net.ssl.keyStoreType: {}", getClientKeyStoreType());
 
-    ClassLoader cl = ClassLoader.getSystemClassLoader();
+    String pathSeparator = System.getProperty("path.separator");
+    String[] classPathEntries = System
+            .getProperty("java.class.path")
+            .split(pathSeparator);
 
-    URL[] urls = ((URLClassLoader)cl).getURLs();
-
-    for(URL url: urls){
-      log.info("SoapConfig.url: {}", url.getFile());
+    for(String classPathEntry: classPathEntries){
+      log.info("SoapConfig.url: {}", classPathEntry);
     }
     
     // setup truststore
