@@ -1,0 +1,123 @@
+version: "2.1"
+
+services:
+  setup-wiremock:
+    build: conf/setup
+    command: "sh -c 'curl -L https://github.com/RasmusSoot/wiremock-proxy/releases/download/v1.0/wiremock-proxy-1.0.jar -o /data/conf/wiremock/extensions/wiremock-proxy-1.0.jar && cd /data/conf/wiremock && zip stubs/__files/verificationconf.zip verificationconf/ -r'"
+    volumes:
+    - ".:/data"
+  setup-hobekuul:
+    build: conf/postgres-client
+    environment:
+    - PGPASSWORD=secret
+    command: sh -c "psql -v ON_ERROR_STOP=1 -h postgres-hobekuul -d dhx_adapter -U postgres -p 5432 -a -w -f /data/esindatavad_asutused.sql"
+    volumes:
+    - "./conf/hobekuul:/data"
+    depends_on:
+      dhx-adapter-hobekuul:
+        condition: service_healthy
+  postgres-hobekuul:
+    image: postgres:9.6
+    volumes:
+    - data-hobekuul:/var/lib/postgresql/data
+    - "./conf/postgres/init_postgres_database.sql:/docker-entrypoint-initdb.d/init_postgres_database.sql"
+    healthcheck:
+      test: ["CMD-SHELL", "psql postgresql://dhxuser:123@localhost:5432/dhx_adapter -c 'select 1;'"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    environment:
+    - POSTGRES_PASSWORD=secret
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=dhx_adapter
+  postgres-test:
+    image: postgres:9.6
+    volumes:
+    - data-test:/var/lib/postgresql/data
+    - "./conf/postgres/init_postgres_database.sql:/docker-entrypoint-initdb.d/init_postgres_database.sql"
+    environment:
+    - POSTGRES_PASSWORD=secret
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=dhx_adapter
+    healthcheck:
+      test: ["CMD-SHELL", "psql postgresql://dhxuser:123@localhost:5432/dhx_adapter -c 'select 1;'"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+  dhx-adapter-hobekuul:
+    image: tomcat:8.5
+    volumes:
+    - "../dhx-adapter-server/target/dhx-adapter-server.war:/usr/local/tomcat/webapps/dhx-adapter-server.war"
+    - "./conf/tomcat/dhx-application-hobekuul.properties:/conf/dhx-application.properties"
+    - "./conf/tomcat/catalina.properties:/usr/local/tomcat/conf/catalina.properties"
+    - "./conf/tomcat//context.xml:/usr/local/tomcat/conf/context.xml"
+    - "./conf/tomcat/server.xml:/usr/local/tomcat/conf/server.xml"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/dhx-adapter-server/health"]
+      interval: 1s
+      timeout: 1s
+      retries: 180
+    depends_on:
+      postgres-hobekuul:
+        condition: service_healthy
+      xroad-mock:
+        condition: service_started
+
+  dhx-adapter-test:
+    image: tomcat:8.5
+    volumes:
+    - "../dhx-adapter-server/target/dhx-adapter-server.war:/usr/local/tomcat/webapps/dhx-adapter-server.war"
+    - "./conf/tomcat/dhx-application-test.properties:/conf/dhx-application.properties"
+    - "./conf/tomcat/catalina.properties:/usr/local/tomcat/conf/catalina.properties"
+    - "./conf/tomcat//context.xml:/usr/local/tomcat/conf/context.xml"
+    - "./conf/tomcat/server.xml:/usr/local/tomcat/conf/server.xml"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/dhx-adapter-server/health"]
+      interval: 1s
+      timeout: 1s
+      retries: 180
+    depends_on:
+      setup-hobekuul:
+        condition: service_started
+      postgres-test:
+        condition: service_healthy
+      xroad-mock:
+        condition: service_started
+  xroad-mock:
+    image: rodolpheche/wiremock:2.24.1-alpine
+    volumes:
+    - "./conf/wiremock/stubs:/home/wiremock"
+    - "./conf/wiremock/extensions:/var/wiremock/extensions"
+    command: '--verbose --extensions com.github.rasmussoot.wiremock.WireMockProxyTransformer'
+  test:
+    image: maven:3-jdk-8-slim
+    user: "${USER_ID}:${USER_ID}"
+    command: "sh -c 'cd src/dhx-adapter-e2e-tests && mvn -Duser.home=/var/maven -B clean verify'"
+    volumes:
+    - "../:/src"
+    - "~/.m2:/var/maven/.m2"
+    environment:
+      MAVEN_CONFIG: /var/maven/.m2
+      DHX_ADAPTER_TEST_DHX_URL: http://dhx-adapter-test:8080/dhx-adapter-server/ws
+      DHX_ADAPTER_TEST_DVK_URL: http://dhx-adapter-test:8080/dhx-adapter-server/wsServer
+      DHX_ADAPTER_TEST_HEALTH_URL: http://dhx-adapter-test:8080/dhx-adapter-server/health
+      DHX_ADAPTER_TEST_METRICS_URL: http://dhx-adapter-test:8080/dhx-adapter-server/metrics
+      DHX_ADAPTER_HOBEKUUL_DHX_URL: http://dhx-adapter-hobekuul:8080/dhx-adapter-server/ws
+      DHX_ADAPTER_HOBEKUUL_HEALTH_URL: http://dhx-adapter-hobekuul:8080/dhx-adapter-server/health
+    depends_on:
+      dhx-adapter-test:
+        condition: service_healthy
+      dhx-adapter-hobekuul:
+        condition: service_healthy
+  report:
+    image: maven:3-jdk-8-slim
+    user: "${USER_ID}:${USER_ID}"
+    command: "sh -c 'cd src/dhx-adapter-e2e-tests && mvn -Duser.home=/var/maven -B allure:report'"
+    volumes:
+    - "../:/src"
+    - "~/.m2:/var/maven/.m2"
+    environment:
+      MAVEN_CONFIG: /var/maven/.m2
+volumes:
+  data-hobekuul:
+  data-test:

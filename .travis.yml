@@ -4,17 +4,30 @@ addons:
   apt:
     packages:
     - xmlstarlet
+services:
+- docker
 jdk:
 - openjdk8
 branches:
   only:
+  - develop
   - master
 before_install:
 - export TZ=Europe/Helsinki
 - xmlstarlet ed -N x="http://maven.apache.org/POM/4.0.0" -d "//x:dependency[x:groupId[contains(text(),'com.oracle')]]" dhx-adapter-server/pom.xml > dhx-adapter-server/pom_without_oracle.xml
 - mv dhx-adapter-server/pom_without_oracle.xml dhx-adapter-server/pom.xml
 install: true
-script: mvn clean verify -q
+script:
+- mvn clean verify -q
+- docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml down -v
+- docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml build
+- docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml up --exit-code-from setup-wiremock setup-wiremock
+- USER_ID=${UID} COMPOSE_HTTP_TIMEOUT=300 docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from test test
+after_script:
+- USER_ID=${UID} docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from report report
+- docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml down -v
+- pip install --user --upgrade awscli && aws s3 cp dhx-adapter-e2e-tests/target/site/allure-maven-plugin/ s3://$AWS_REPORTS_BUCKET/$TRAVIS_BUILD_NUMBER/$TRAVIS_JOB_NUMBER --recursive --acl public-read
+- echo "Report available at https://$AWS_REPORTS_BUCKET.s3.$AWS_DEFAULT_REGION.amazonaws.com/$TRAVIS_BUILD_NUMBER/$TRAVIS_JOB_NUMBER/index.html"
 notifications:
   email:
     recipients:
