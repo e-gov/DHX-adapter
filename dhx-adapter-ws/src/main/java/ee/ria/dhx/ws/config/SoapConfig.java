@@ -1,5 +1,7 @@
 package ee.ria.dhx.ws.config;
 
+import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.types.InternalXroadMember;
 
 import org.apache.http.HeaderElement;
@@ -193,21 +195,32 @@ public class SoapConfig {
   @Bean
   public KeyStore clientTrustStore () throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
     KeyStore trustStore = null;
-    if (getSecurityServer().toUpperCase().startsWith("HTTPS")) {
+    String clientTrustStoreFile = getClientTrustStoreFile();
+    if (isHttpsRequired(clientTrustStoreFile)) {
+      File trustStoreFile = new File(clientTrustStoreFile);
       trustStore = KeyStore.getInstance(getClientTrustStoreType());
-      File trustStoreFile = new File(getClientTrustStoreFile());
       trustStore.load(new FileInputStream(trustStoreFile), getClientTrustStorePassword().toCharArray());
     }
     return trustStore;
   }
 
   @Bean
-  public KeyStore clientKeyStore() throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+  public KeyStore clientKeyStore() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, DhxException, IOException {
     KeyStore keyStore = null;
-    if (getSecurityServer().toUpperCase().startsWith("HTTPS")) {
-      keyStore = KeyStore.getInstance(getClientKeyStoreType());
-      InputStream keystoreIn = new FileInputStream(getClientKeyStoreFile());
-      keyStore.load(keystoreIn, getClientKeyStorePassword().toCharArray());
+    String clientKeyStoreFile = getClientKeyStoreFile();
+    if (isHttpsRequired(clientKeyStoreFile)) {
+        keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        InputStream keystoreIn;
+        try {
+          keystoreIn = new FileInputStream(clientKeyStoreFile);
+        } catch (IOException ex) {
+          log.error("Error occurrred ", ex);
+          throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+                "This file does not exist "
+                      + ex.getMessage(),
+            ex);
+        }
+        keyStore.load(keystoreIn, getClientKeyStorePassword().toCharArray());
     }
     return keyStore;
   }
@@ -227,9 +240,13 @@ public class SoapConfig {
                 return true;
             }
         };
-        sslContextBuilder.loadTrustMaterial(clientTrustStore, acceptingTrustStrategy);
+      sslContextBuilder.loadTrustMaterial(clientTrustStore, acceptingTrustStrategy);
     }
     return sslContextBuilder.build();
+  }
+
+  public boolean isHttpsRequired(String keystoreFile) {
+    return keystoreFile != null && getSecurityServer().toUpperCase().startsWith("HTTPS");
   }
 
   @Bean
@@ -247,7 +264,7 @@ public class SoapConfig {
   }
 
   @Bean
-  public HttpClient httpClient() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, UnrecoverableKeyException, KeyManagementException {
+  public HttpClient httpClient() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, UnrecoverableKeyException, KeyManagementException, DhxException {
     return HttpClientBuilder
             .create()
             .setSSLSocketFactory(sslSocketFactory(sslContext(clientTrustStore(), clientKeyStore())))
