@@ -56,12 +56,8 @@ import java.util.List;
 public class DhxPackageServceImplTest {
 
   private static final String FILE_NAME_KAPSEL_21_XML = "kapsel_21.xml";
-  private static final String FILE_NAME_KAPSEL_21_BIG_XML = "kapsel_21_big.xml";
   private FileDataHandler FILE_HANDLER_KAPSEL_21_XML = FileUtil.getDatahandlerFromFile(
           ResourceUtils.getFile("classpath:" + FILE_NAME_KAPSEL_21_XML)
-  );
-  private FileDataHandler FILE_HANDLER_KAPSEL_21_BIG_XML = FileUtil.getDatahandlerFromFile(
-          ResourceUtils.getFile("classpath:" + FILE_NAME_KAPSEL_21_BIG_XML)
   );
 
   private final SendDocument REQUEST = new SendDocument() {{
@@ -203,28 +199,6 @@ public class DhxPackageServceImplTest {
             .receiveDocument(any(IncomingDhxPackage.class), any(MessageContext.class));
     verify(dhxImplementationSpecificService, times(1))
             .isDuplicatePackage(any(InternalXroadMember.class), anyString());
-  }
-
-  @Test
-  public void receiveDocumentFromEndpointBigFile() throws DhxException, IOException {
-    // Prepare
-    REQUEST.setDocumentAttachment(FILE_HANDLER_KAPSEL_21_BIG_XML);
-    when(dhxConfig.getParseCapsule()).thenReturn(true);
-    when(dhxImplementationSpecificService.receiveDocument(any(IncomingDhxPackage.class), any(MessageContext.class)))
-            .thenReturn("id1");
-    when(dhxMarshallerService.unmarshallAndValidate(any(InputStream.class), any(InputStream.class)))
-            .thenReturn(new DecContainer());
-    // Test
-    SendDocumentResponse response = dhxPackageService.receiveDocumentFromEndpoint(REQUEST, CLIENT, SERVICE, null);
-    // Verify
-    assertEquals("id1", response.getReceiptId());
-    assertNull(response.getFault());
-    /*verify(dhxMarshallerService, times(1))
-            .unmarshallAndValidate(any(InputStream.class), any(InputStream.class));
-    verify(dhxImplementationSpecificService, times(1))
-            .receiveDocument(any(IncomingDhxPackage.class), any(MessageContext.class));
-    verify(dhxImplementationSpecificService, times(1))
-            .isDuplicatePackage(any(InternalXroadMember.class), anyString());*/
   }
 
   @Test
