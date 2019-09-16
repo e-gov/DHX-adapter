@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -46,15 +48,19 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "dok_id_teises_serveris")
   private Integer dokIdTeisesServeris;
 
+  @Type(type = "text")
   @Column(name = "fault_actor")
   private String faultActor;
 
+  @Type(type = "text")
   @Column(name = "fault_code")
   private String faultCode;
 
+  @Type(type = "text")
   @Column(name = "fault_detail")
   private String faultDetail;
 
+  @Type(type = "text")
   @Column(name = "fault_string")
   private String faultString;
 
