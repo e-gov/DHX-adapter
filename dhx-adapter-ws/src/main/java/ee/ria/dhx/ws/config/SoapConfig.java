@@ -113,19 +113,19 @@ public class SoapConfig {
   String dhxSubsystemPrefix;
 
 
-  @Value("${soap.client-truststore-file}")
+  @Value("${soap.client-truststore-file:#{null}}")
   String clientTruststoreFile;
 
-  @Value("${soap.client-truststore-password}")
+  @Value("${soap.client-truststore-password:#{null}}")
   String clientTruststorePassword;
 
   @Value("${soap.client-truststore-type:JKS}")
   String clientTruststoreType;
 
-  @Value("${soap.client-keystore-file}")
+  @Value("${soap.client-keystore-file:#{null}}")
   String clientKeystoreFile;
 
-  @Value("${soap.client-keystore-password}")
+  @Value("${soap.client-keystore-password:#{null}}")
   String clientKeystorePassword;
   
   @Value("${soap.client-keystore-type:JKS}")
