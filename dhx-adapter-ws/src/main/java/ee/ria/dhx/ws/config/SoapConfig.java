@@ -718,15 +718,20 @@ public class SoapConfig {
    */
   @PostConstruct
   public void init() {
-    
-    log.info("SecurityServer: {}", getSecurityServer());
-    log.info("javax.net.ssl.trustStore: {}", expandEnvVars(getClientTrustStoreFile()));
-    log.info("javax.net.ssl.trustStorePassword: {}", getClientTrustStorePassword());
-    log.info("javax.net.ssl.trustStoreType: {}", getClientTrustStoreType());
 
-    log.info("javax.net.ssl.keyStore: {}", expandEnvVars(getClientKeyStoreFile()));
-    log.info("javax.net.ssl.keyStorePassword: {}", getClientKeyStorePassword());
-    log.info("javax.net.ssl.keyStoreType: {}", getClientKeyStoreType());
+    log.info("SecurityServer: {}", getSecurityServer());
+
+    if (isHttpsRequired(getClientTrustStoreFile())) {
+      log.info("javax.net.ssl.trustStore: {}", expandEnvVars(getClientTrustStoreFile()));
+      log.info("javax.net.ssl.trustStorePassword: {}", getClientTrustStorePassword());
+      log.info("javax.net.ssl.trustStoreType: {}", getClientTrustStoreType());
+    }
+
+    if (isHttpsRequired(getClientKeyStoreFile())) {
+      log.info("javax.net.ssl.keyStore: {}", expandEnvVars(getClientKeyStoreFile()));
+      log.info("javax.net.ssl.keyStorePassword: {}", getClientKeyStorePassword());
+      log.info("javax.net.ssl.keyStoreType: {}", getClientKeyStoreType());
+    }
 
     ClassLoader cl = ClassLoader.getSystemClassLoader();
 
@@ -737,14 +742,16 @@ public class SoapConfig {
     }
     
     // setup truststore
-    if (getSecurityServer().toLowerCase().startsWith("https")) {
-        System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
-        System.setProperty("javax.net.ssl.trustStorePassword", getClientTrustStorePassword());
-        System.setProperty("javax.net.ssl.trustStoreType", getClientTrustStoreType());
+    if (isHttpsRequired(getClientTrustStoreFile())) {
+      System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
+      System.setProperty("javax.net.ssl.trustStorePassword", getClientTrustStorePassword());
+      System.setProperty("javax.net.ssl.trustStoreType", getClientTrustStoreType());
+    }
 
-        System.setProperty("javax.net.ssl.keyStore", expandEnvVars(getClientKeyStoreFile()));
-        System.setProperty("javax.net.ssl.keyStorePassword", getClientKeyStorePassword());
-        System.setProperty("javax.net.ssl.keyStoreType", getClientKeyStoreType());
+    if (isHttpsRequired(getClientKeyStoreFile())) {
+      System.setProperty("javax.net.ssl.keyStore", expandEnvVars(getClientKeyStoreFile()));
+      System.setProperty("javax.net.ssl.keyStorePassword", getClientKeyStorePassword());
+      System.setProperty("javax.net.ssl.keyStoreType", getClientKeyStoreType());
     }
   }
   
