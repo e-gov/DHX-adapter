@@ -201,7 +201,7 @@ public class SoapConfig {
   public KeyStore clientTrustStore() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
     KeyStore trustStore = null;
     if (isHttpsRequired()) {
-      File trustStoreFile = new File(getClientTrustStoreType());
+      File trustStoreFile = new File(getClientTrustStoreFile());
       trustStore = KeyStore.getInstance(getClientTrustStoreType());
       trustStore.load(new FileInputStream(trustStoreFile), getClientTrustStorePassword().toCharArray());
     }
