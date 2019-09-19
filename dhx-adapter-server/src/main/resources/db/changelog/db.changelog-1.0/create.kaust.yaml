@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-3
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: kaust
+      changes:
+        - createTable:
+            tableName: kaust
+            columns:
+              - column:
+                  name: kaust_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: kaust_pkey
+              - column:
+                  name: date_created
+                  type: datetime
+              - column:
+                  name: date_modified
+                  type: datetime
+              - column:
+                  name: version
+                  type: int
+              - column:
+                  name: kausta_number
+                  type: nvarchar
+                  constraints:
+                    unique: true
+              - column:
+                  name: nimi
+                  type: nvarchar
+              - column:
+                  name: ylemkaust_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_kaust_ylemkaust
+                    references: kaust(kaust_id)
+                    deferrable: false
+                    initiallyDeferred: false

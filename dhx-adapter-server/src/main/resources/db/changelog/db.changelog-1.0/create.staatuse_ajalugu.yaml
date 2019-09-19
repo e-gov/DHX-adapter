@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-8
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: staatuse_ajalugu
+      changes:
+        - createTable:
+            tableName: staatuse_ajalugu
+            columns:
+              - column:
+                  name: staatuse_ajalugu_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: staatuse_ajalugu_pkey
+              - column:
+                  name: fault_actor
+                  type: nvarchar
+              - column:
+                  name: fault_code
+                  type: clob
+              - column:
+                  name: fault_detail
+                  type: clob
+              - column:
+                  name: fault_string
+                  type: clob
+              - column:
+                  name: meta_xml
+                  type: clob
+              - column:
+                  name: vastuvotja_staatus_id
+                  type: int
+              - column:
+                  name: staatuse_muutmise_aeg
+                  type: datetime
+              - column:
+                  name: staatus_id
+                  type: int
+              - column:
+                  name: vastuvotja_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_staatuse_ajalugu_vastuvotja
+                    references: vastuvotja(vastuvotja_id)
+                    deferrable: false
+                    initiallyDeferred: false

@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -48,19 +49,23 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "dok_id_teises_serveris")
   private Integer dokIdTeisesServeris;
 
-  @Type(type = "text")
+  @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_actor")
   private String faultActor;
 
-  @Type(type = "text")
+  @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_code")
   private String faultCode;
 
-  @Type(type = "text")
+  @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_detail")
   private String faultDetail;
 
-  @Type(type = "text")
+  @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_string")
   private String faultString;
 

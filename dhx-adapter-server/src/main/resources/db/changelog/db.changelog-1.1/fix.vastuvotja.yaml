@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-11
+      author: Kaarel Raspel
+      changes:
+        - modifyDataType:
+            columnName: fault_actor
+            newDataType: clob
+            tableName: vastuvotja
+        - modifyDataType:
+            columnName: fault_code
+            newDataType: clob
+            tableName: vastuvotja
+        - modifyDataType:
+            columnName: fault_detail
+            newDataType: clob
+            tableName: vastuvotja
+        - modifyDataType:
+            columnName: fault_string
+            newDataType: clob
+            tableName: vastuvotja

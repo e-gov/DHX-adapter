@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-2
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: asutus
+      changes:
+        - createTable:
+            tableName: asutus
+            columns:
+              - column:
+                  name: asutus_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: asutus_pkey
+              - column:
+                  name: date_created
+                  type: datetime
+              - column:
+                  name: date_modified
+                  type: datetime
+              - column:
+                  name: version
+                  type: int
+              - column:
+                  name: kapsel_versioon
+                  type: nvarchar
+              - column:
+                  name: dhx_asutus
+                  type: boolean
+              - column:
+                  name: dhl_saatmine
+                  type: boolean
+              - column:
+                  name: member_class
+                  type: nvarchar
+              - column:
+                  name: nimetus
+                  type: nvarchar
+              - column:
+                  name: own_representee
+                  type: boolean
+              - column:
+                  name: reaalne_nimi
+                  type: nvarchar
+              - column:
+                  name: registrikood
+                  type: nvarchar
+              - column:
+                  name: representee_end
+                  type: datetime
+              - column:
+                  name: representee_start
+                  type: datetime
+              - column:
+                  name: subsystem
+                  type: nvarchar
+              - column:
+                  name: xroad_instance
+                  type: nvarchar
+              - column:
+                  name: vahendaja_asutus_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_asutus_vahendaja_asutus
+                    references: asutus(asutus_id)
+                    deferrable: false
+                    initiallyDeferred: false
+
+        - addUniqueConstraint:
+            columnNames: registrikood, subsystem
+            constraintName: uq_asutus_registrikood_subsystem
+            tableName: asutus

@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-5
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: transport
+      changes:
+        - createTable:
+            tableName: transport
+            columns:
+              - column:
+                  name: transport_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: transport_pkey
+              - column:
+                  name: date_created
+                  type: datetime
+              - column:
+                  name: date_modified
+                  type: datetime
+              - column:
+                  name: version
+                  type: int
+              - column:
+                  name: saatmise_lopp
+                  type: datetime
+              - column:
+                  name: saatmise_algus
+                  type: datetime
+              - column:
+                  name: staatus_id
+                  type: int
+              - column:
+                  name: dokument_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_transport_dokument
+                    references: dokument(dokument_id)
+                    deferrable: false
+                    initiallyDeferred: false
