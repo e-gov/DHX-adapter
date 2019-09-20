@@ -16,7 +16,6 @@ import ee.ria.dhx.ws.service.DhxMarshallerService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.xml.serialize.XMLSerializer;
 import org.codehaus.stax2.XMLStreamReader2;
 import org.codehaus.stax2.validation.XMLValidationException;
 import org.codehaus.stax2.validation.XMLValidationSchema;
