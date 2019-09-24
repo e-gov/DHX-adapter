@@ -11,6 +11,7 @@ jdk:
 branches:
   only:
   - master
+  - sonar
 before_install:
 - export TZ=Europe/Helsinki
 - xmlstarlet ed -N x="http://maven.apache.org/POM/4.0.0" -d "//x:dependency[x:groupId[contains(text(),'com.oracle')]]" dhx-adapter-server/pom.xml > dhx-adapter-server/pom_without_oracle.xml
