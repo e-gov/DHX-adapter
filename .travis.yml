@@ -17,6 +17,16 @@ before_install:
 - mv dhx-adapter-server/pom_without_oracle.xml dhx-adapter-server/pom.xml
 install: true
 script: mvn clean install -q sonar:sonar -Pcoverage -Dsonar.projectKey=e-gov_DHX-adapter
+deploy:
+  provider: releases
+  api_key: "$GITHUB_OAUTH_TOKEN"
+  file_glob: true
+  file: 
+  - "/home/travis/.m2/repository/ee/ria/dhx/dhx-adapter-server/*/dhx-adapter-server-*.war"
+  skip_cleanup: true
+  on:
+   branch: sonar
+  draft: true
 notifications:
   email:
     recipients:
