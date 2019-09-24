@@ -4,8 +4,8 @@ addons:
   apt:
     packages:
     - xmlstarlet
-    sonarcloud:
-     organization: e-gov  
+  sonarcloud:
+    organization: e-gov
 jdk:
 - openjdk8
 branches:
@@ -16,10 +16,5 @@ before_install:
 - xmlstarlet ed -N x="http://maven.apache.org/POM/4.0.0" -d "//x:dependency[x:groupId[contains(text(),'com.oracle')]]" dhx-adapter-server/pom.xml > dhx-adapter-server/pom_without_oracle.xml
 - mv dhx-adapter-server/pom_without_oracle.xml dhx-adapter-server/pom.xml
 install: true
-script: mvn clean verify -q sonar:sonar -Pcoverage -Dsonar.projectKey=e-gov_DHX-adapter
-notifications:
-  email:
-    recipients:
-    - rasmus.soot@nortal.com
-    on_success: change
-    on_failure: always
+script: mvn clean install -q sonar:sonar -Pcoverage -Dsonar.projectKey=e-gov_DHX-adapter
+
