@@ -16,7 +16,7 @@ before_install:
 - xmlstarlet ed -N x="http://maven.apache.org/POM/4.0.0" -d "//x:dependency[x:groupId[contains(text(),'com.oracle')]]" dhx-adapter-server/pom.xml > dhx-adapter-server/pom_without_oracle.xml
 - mv dhx-adapter-server/pom_without_oracle.xml dhx-adapter-server/pom.xml
 install: true
-script: mvn clean install -q sonar:sonar -Pcoverage -Dsonar.projectKey=e-gov_DHX-adapter
+script: mvn clean install -q sonar:sonar -Pproduction -Dsonar.projectKey=e-gov_DHX-adapter
 deploy:
   provider: releases
   api_key: "$GITHUB_OAUTH_TOKEN"
