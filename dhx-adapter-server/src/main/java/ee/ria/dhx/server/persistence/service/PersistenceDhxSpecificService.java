@@ -63,6 +63,9 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   @Autowired
   PersistenceService persistenceService;
 
+  @Autowired
+  DhxOrganisationFactory dhxOrganisationFactory;
+
   /**
    * Returns all organisations from database that are active and marked as own representees.
    */
@@ -83,7 +86,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
   @Loggable
   public boolean isDuplicatePackage(InternalXroadMember from, String consignmentId)
       throws DhxException {
-    DhxOrganisation dhxOrg = DhxOrganisationFactory.createDhxOrganisation(from);
+    DhxOrganisation dhxOrg = dhxOrganisationFactory.createDhxOrganisation(from);
     Organisation org = organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrg.getCode(),
         dhxOrg.getSystem());
     log.debug("checking duplicates for organisation: {}", org);

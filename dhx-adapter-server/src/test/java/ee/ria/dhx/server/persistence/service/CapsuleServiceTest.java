@@ -31,6 +31,7 @@ import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.CapsuleConfig;
 import ee.ria.dhx.ws.config.DhxConfig;
+import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
 import org.junit.Before;
@@ -38,6 +39,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -81,9 +83,17 @@ public class CapsuleServiceTest {
 
   @Mock
   DhxConfig config;
+
+  @Mock
+  SoapConfig soapConfig;
   
   @Mock
   DhxServerConfig serverConfig;
+
+  @InjectMocks
+  DhxOrganisationFactory dhxOrganisationFactory = new DhxOrganisationFactory();
+
+
 
   CapsuleService capsuleService;
   
@@ -100,10 +110,10 @@ public class CapsuleServiceTest {
     capsuleService.setDhxMarshallerService(dhxMarshallerService);
     capsuleService.setOrganisationRepository(organisationRepository);
     capsuleService.setPersistenceService(persistenceService);
+    capsuleService.setDhxOrganisationFactory(dhxOrganisationFactory);
     when(capsuleConfig.getCurrentCapsuleVersion()).thenReturn(CapsuleVersionEnum.V21);
     when(capsuleConfig.getXsdForVersion(CapsuleVersionEnum.V21))
         .thenReturn("jar://Dvk_kapsel_vers_2_1_eng_est.xsd");
-    DhxOrganisationFactory.setDhxSubsystemPrefix("DHX");
     List<CapsuleAdressee> addressees = new ArrayList<CapsuleAdressee>();
     CapsuleAdressee adressee = new CapsuleAdressee("401", null, null);
     addressees.add(adressee);
@@ -115,6 +125,7 @@ public class CapsuleServiceTest {
     when(persistenceService.getFolderByNameOrDefaultFolder("/")).thenReturn(folder);
     capsuleService.setConfig(config);
     when(config.getCapsuleValidate()).thenReturn(true);
+    when(soapConfig.getDhxSubsystemPrefix()).thenReturn("DHX");
     capsuleService.setDhxServerConfig(serverConfig);
     testFile = testFolder.newFile(filename);
     when(serverConfig.createDocumentFile()).thenReturn(testFile);
@@ -178,7 +189,7 @@ public class CapsuleServiceTest {
     InternalXroadMember client = getMember("400", null);
     InternalXroadMember service = getMember("401", null);
     SendDocument sendDocument = getSendDocument(null, null, handler);
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
+    DhxOrganisation recipient = dhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
 
     // mock container
@@ -257,7 +268,7 @@ public class CapsuleServiceTest {
     DhxRepresentee serviceRepresentee = new DhxRepresentee("500", null, null, null, "system");
     InternalXroadMember service = getMember("401", serviceRepresentee);
     SendDocument sendDocument = getSendDocument(null, null, handler);
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
+    DhxOrganisation recipient = dhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
 
     // mock container
@@ -302,7 +313,7 @@ public class CapsuleServiceTest {
     InternalXroadMember client = getMember("400", null);
     InternalXroadMember service = getMember("401", null);
     SendDocument sendDocument = getSendDocument(null, null, handler);
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
+    DhxOrganisation recipient = dhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
 
     // mock container
@@ -350,7 +361,7 @@ public class CapsuleServiceTest {
     InternalXroadMember client = getMember("400", clientRepresentee);
     InternalXroadMember service = getMember("401", null);
     SendDocument sendDocument = getSendDocument(null, null, handler);
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
+    DhxOrganisation recipient = dhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
 
     // mock container
@@ -404,7 +415,7 @@ public class CapsuleServiceTest {
     InternalXroadMember client = getMember("400", null);
     InternalXroadMember service = getMember("401", null);
     SendDocument sendDocument = getSendDocument(null, null, handler);
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
+    DhxOrganisation recipient = dhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
 
     // mock container
@@ -449,7 +460,7 @@ public class CapsuleServiceTest {
     InternalXroadMember client = getMember("400", null);
     InternalXroadMember service = getMember("401", null);
     SendDocument sendDocument = getSendDocument(null, null, handler);
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
+    DhxOrganisation recipient = dhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
 
     // mock container
@@ -498,7 +509,7 @@ public class CapsuleServiceTest {
     InternalXroadMember client = getMember("400", null);
     InternalXroadMember service = getMember("401", null);
     SendDocument sendDocument = getSendDocument(null, null, handler);
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(service);
+    DhxOrganisation recipient = dhxOrganisationFactory.createDhxOrganisation(service);
     IncomingDhxPackage pckg = new IncomingDhxPackage(client, service, sendDocument, recipient);
     // mock container
     DecContainer container = getDecContainer(client, service);

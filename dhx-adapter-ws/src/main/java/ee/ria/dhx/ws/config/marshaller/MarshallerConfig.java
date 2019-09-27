@@ -49,12 +49,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 
-//import org.apache.axiom.om.OMException;
-//import org.apache.axiom.om.OMXMLStreamReader;
-//import javax.xml.stream.XMLStreamReader;
-
-
-
 /**
  * Contains beans needed for marshalling.
  * 
@@ -78,10 +72,10 @@ public class MarshallerConfig {
   public Jaxb2Marshaller getDhxJaxb2Marshaller() {
     DhxJaxb2Marshaller dhxJaxb2Marshaller = null;
     dhxJaxb2Marshaller = new DhxJaxb2Marshaller();
-    //dhxJaxb2Marshaller.setMtomEnabled(true);
     log.debug("Creating marshaller for folowing paths: "
         + dhxConfig.getMarshallContext());
     dhxJaxb2Marshaller.setContextPaths(dhxConfig.getMarshallContextAsList());
+    dhxJaxb2Marshaller.setMtomEnabled(true);
     return dhxJaxb2Marshaller;
   }
 
@@ -295,7 +289,7 @@ public class MarshallerConfig {
           String contentId = UUID.randomUUID() + "@" + dataHandler.getName();
           this.mimeContainer.addAttachment(contentId, dataHandler);
           log.debug("DhxJaxb2AttachmentMarshaller.addSwaRefAttachment contentId={}", contentId);
-          return contentId;
+          return CID + contentId;
       }
 
       @Override

@@ -25,6 +25,8 @@ import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxImplementationSpecificService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
 import org.springframework.core.io.ClassPathResource;
 
 import org.junit.Before;
@@ -39,7 +41,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +65,9 @@ public class AddressServiceImplTest {
   @Mock
   DhxGateway dhxGateway;
 
+  @InjectMocks
+  DhxOrganisationFactory dhxOrganisationFactory;
+
   AddressServiceImpl addressService;
 
   @Mock
@@ -80,11 +84,11 @@ public class AddressServiceImplTest {
     addressService.setDhxGateway(dhxGateway);
     addressService.setDhxMarshallerService(dhxMarshallerService);
     addressService.setDhxImplementationSpecificService(specificService);
+    addressService.setDhxOrganisationFactory(dhxOrganisationFactory);
     when(config.getXroadInstance()).thenReturn("ee");
     when(config.getDhxRepresentationGroupName()).thenReturn("DHX vahendajad");
     when(config.getDhxSubsystemPrefix()).thenReturn("DHX");
     //when(config.getGlobalConfLocation()).thenReturn("http://x-road.eu/packages/EE_public-anchor.xml");
-    DhxOrganisationFactory.setDhxSubsystemPrefix("DHX");
   }
 
   @Test

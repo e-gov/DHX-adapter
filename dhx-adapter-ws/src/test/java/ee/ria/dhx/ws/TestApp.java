@@ -13,10 +13,16 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.ws.soap.SoapMessageFactory;
 
 // @SpringBootApplication
 @TestPropertySource("classpath:test-application.properties")
-@ComponentScan(basePackages = "ee.ria.dhx.ws.config,ee.ria.dhx.ws.config.endpoint,ee.ria.dhx.ws,ee.ria.dhx.ws.service.impl")
+@ComponentScan(basePackages = {
+        "ee.ria.dhx.ws.config",
+        "ee.ria.dhx.ws.config.endpoint",
+        "ee.ria.dhx.ws",
+        "ee.ria.dhx.ws.service.impl"
+})
 @Slf4j
 // @EnableAutoConfiguration
 public class TestApp {
@@ -47,6 +53,12 @@ public class TestApp {
     DhxImplementationSpecificService specificService =
         Mockito.mock(DhxImplementationSpecificService.class);
     return specificService;
+  }
+
+  @Bean
+  @Primary
+  public SoapMessageFactory messageFactory(SoapMessageFactory axiomSoapMessageFactorySend) {
+    return Mockito.spy(axiomSoapMessageFactorySend);
   }
 
 }

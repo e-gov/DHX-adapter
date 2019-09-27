@@ -61,7 +61,7 @@ public abstract class BigDataHandler implements ContentHandler {
       Stack<String> currentObjPath, String uri, String localName, String qname,
       Attributes attributes) throws DhxException;
 
-  protected abstract void handleBigDataCharacters(char[] chars) throws IOException;
+  protected abstract void handleBigDataCharacters(char[] chars, int start, int length) throws IOException;
 
   protected abstract void handleBigDataEndElement(String uri, String localName, String qname)
       throws IOException, SAXException;
@@ -154,13 +154,7 @@ public abstract class BigDataHandler implements ContentHandler {
   public void characters(char[] ch, int start, int length) throws SAXException {
     if (isDocument) {
       try {
-        char[] charSub;
-        if (start > 0 || ch.length > length) {
-          charSub = Arrays.copyOfRange(ch, start, start + length);
-        } else {
-          charSub = ch;
-        }
-        handleBigDataCharacters(charSub);
+        handleBigDataCharacters(ch, start, length);
       } catch (IOException ex) {
         throw new SAXException("Error occured while reading document." + ex.getMessage(), ex);
       }

@@ -82,6 +82,10 @@ public class CapsuleService {
 
   @Autowired
   @Setter
+  DhxOrganisationFactory dhxOrganisationFactory;
+
+  @Autowired
+  @Setter
   PersistenceService persistenceService;
 
   @Autowired
@@ -136,7 +140,7 @@ public class CapsuleService {
       Document document = new Document();
       document.setCapsuleVersion(version.toString());
       DhxOrganisation dhxSenderOrg =
-          DhxOrganisationFactory.createDhxOrganisation(pckg.getClient());
+          dhxOrganisationFactory.createDhxOrganisation(pckg.getClient());
       Organisation senderOrg =
           organisationRepository.findByRegistrationCodeAndSubSystem(dhxSenderOrg.getCode(),
               dhxSenderOrg.getSystem());
@@ -322,7 +326,7 @@ public class CapsuleService {
     if (StringUtil.isNullOrEmpty(senderMember.getSubsystemCode())) {
       senderMember.setSubsystemCode(null);
     }
-    DhxOrganisation dhxSenderOrg = DhxOrganisationFactory.createDhxOrganisation(senderMember);
+    DhxOrganisation dhxSenderOrg = dhxOrganisationFactory.createDhxOrganisation(senderMember);
     Organisation senderOrg =
         organisationRepository.findByRegistrationCodeAndSubSystem(dhxSenderOrg.getCode(),
             dhxSenderOrg.getSystem());

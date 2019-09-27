@@ -73,6 +73,10 @@ public class AddressServiceImpl implements AddressService {
   DhxImplementationSpecificService dhxImplementationSpecificService;
 
   @Autowired
+  @Setter
+  DhxOrganisationFactory dhxOrganisationFactory;
+
+  @Autowired
   DhxConfig dhxConfig;
 
   public AddressServiceImpl() {}
@@ -346,12 +350,12 @@ public class AddressServiceImpl implements AddressService {
     List<InternalXroadMember> members = getAdresseeList();
     Date curDate = new Date();
     DhxOrganisation soughtOrganisation =
-        DhxOrganisationFactory.createDhxOrganisation(memberCode, system);
+        dhxOrganisationFactory.createDhxOrganisation(memberCode, system);
     if (members != null && members.size() > 0) {
       log.debug("local adressee list size: {}", members.size());
       for (InternalXroadMember member : members) {
         DhxOrganisation addresslistOrganisation =
-            DhxOrganisationFactory.createDhxOrganisation(member);
+            dhxOrganisationFactory.createDhxOrganisation(member);
         if (addresslistOrganisation.equals(soughtOrganisation)) {
           if (member.getRepresentee() == null
               || (member.getRepresentee().getStartDate().getTime() <= curDate.getTime()

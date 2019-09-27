@@ -1,7 +1,7 @@
 package ee.ria.dhx.ws.config;
 
+import ee.ria.dhx.ws.DhxOrganisationFactory;
 import org.springframework.beans.factory.annotation.Value;
-// import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -124,10 +124,12 @@ public class DhxConfig {
    */
   @Bean
   public JAXBContext getJaxbContext() throws JAXBException {
-    if (this.jaxbContext == null) {
-      this.jaxbContext = JAXBContext.newInstance(marshallContext);
-    }
-    return jaxbContext;
+    return JAXBContext.newInstance(marshallContext);
+  }
+
+  @Bean
+  public DhxOrganisationFactory dhxOrganisationFactory() {
+    return new DhxOrganisationFactory();
   }
 
 

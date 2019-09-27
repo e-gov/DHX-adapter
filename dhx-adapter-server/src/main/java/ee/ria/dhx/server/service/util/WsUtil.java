@@ -4,28 +4,29 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.util.FileUtil;
-import ee.ria.dhx.ws.config.SoapConfig;
-import ee.ria.dhx.ws.context.AppContext;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.mime.Attachment;
-import org.springframework.ws.soap.saaj.SaajSoapMessage;
-import org.springframework.ws.transport.http.HttpTransportConstants;
+import org.springframework.ws.soap.SoapMessage;
+import org.springframework.ws.soap.axiom.AxiomSoapMessage;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -37,11 +38,6 @@ import javax.activation.DataHandler;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.AttachmentPart;
-
-import org.apache.commons.codec.binary.Base64InputStream;
-
-import ee.ria.dhx.server.service.util.StreamTypeEnum;
 
 /**
  * Utility methods for web services and attachments.
@@ -52,9 +48,6 @@ import ee.ria.dhx.server.service.util.StreamTypeEnum;
 @Slf4j
 public class WsUtil {
 
-  private static String attachmentContentEncoding;
-  private static String attachmentContentType;
-  private static String attachmentContentTransferEncoding;
   private static final String ATTACHMENT_CONTENT_ID_PREFIX = "cid:";
 
   /**
@@ -121,6 +114,7 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static InputStream base64MimeDecode(InputStream stream) throws DhxException {
+    stream = ensureInputStreamSpeedForBase64(stream);
     InputStream base64DecoderStream = Base64.getMimeDecoder().wrap(stream);
     return base64DecoderStream;
   }
@@ -134,8 +128,8 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   public static OutputStream getBase64EncodeStream(OutputStream stream) throws DhxException {
-    BufferedOutputStream os = new BufferedOutputStream(stream);
-    OutputStream base64EncoderStream = Base64.getEncoder().wrap(os);
+    stream = ensureOutputStreamSpeedForBase64(stream);
+    OutputStream base64EncoderStream = Base64.getEncoder().wrap(stream);
     return base64EncoderStream;
   }
 
@@ -147,26 +141,59 @@ public class WsUtil {
    * @throws DhxException thrown if error occurs
    */
   private static InputStream base64DecodeAndUnzip(InputStream stream) throws DhxException {
-    InputStream decoded = stream;
-    decoded = base64Decode(decoded);
-    return gzipDecompress(decoded, StreamTypeEnum.BASE64BASIC);
+    return base64DecodeAndUnzip(stream, StreamTypeEnum.BASE64BASIC);
   }
 
 
   /**
    * Creates InputStream that will BASE64 Mime decode the stream from input.
-   * 
+   *
    * @param stream stream to decode
    * @return decoded stream
    * @throws DhxException thrown if error occurs
    */
   private static InputStream base64MimeDecodeAndUnzip(InputStream stream) throws DhxException {
-    InputStream decoded = stream;
-    decoded = base64MimeDecode(decoded);
-    return gzipDecompress(decoded, StreamTypeEnum.BASE64MIME);
+    return base64DecodeAndUnzip(stream, StreamTypeEnum.BASE64MIME);
   }
 
-  
+
+  /**
+   * Creates InputStream that will decode the stream from input.
+   *
+   * @param stream stream to decode
+   * @return decoded stream
+   * @throws DhxException thrown if error occurs
+   */
+  private static InputStream base64DecodeAndUnzip(InputStream stream, StreamTypeEnum streamType) throws DhxException {
+    InputStream decoded = base64MimeDecode(stream);
+    return gzipDecompress(decoded, streamType);
+  }
+
+  /**
+   * PipedInputStream and FileInputStream do not play well with Base64 encoding/decoding.
+   * Wrap these streams into BufferedInputStream to increase Base64 operations performance.
+   *
+   * @param stream stream to decode
+   * @return
+   */
+  private static InputStream ensureInputStreamSpeedForBase64(InputStream stream) {
+    return stream instanceof PipedInputStream || stream instanceof FileInputStream
+            ? new BufferedInputStream(stream)
+            : stream;
+  }
+
+  /**
+   * PipedInputStream and FileInputStream do not play well with Base64 encoding/decoding.
+   * Wrap these streams into BufferedInputStream to increase Base64 operations performance.
+   *
+   * @param stream stream to decode
+   * @return
+   */
+  private static OutputStream ensureOutputStreamSpeedForBase64(OutputStream stream) {
+    return stream instanceof PipedOutputStream || stream instanceof FileOutputStream
+            ? new BufferedOutputStream(stream)
+            : stream;
+  }
 
   /**
    * Method reads inputstream into string.
@@ -284,7 +311,7 @@ public class WsUtil {
   @Loggable
   public static DataHandler extractAttachment(
       MessageContext messageContext, String attachmentContentId) throws DhxException {
-    SaajSoapMessage soapRequest = (SaajSoapMessage) messageContext
+    SoapMessage soapRequest = (SoapMessage) messageContext
         .getRequest();
     if (attachmentContentId.startsWith("cid:")) {
       attachmentContentId = attachmentContentId.substring(4);
@@ -323,29 +350,11 @@ public class WsUtil {
   @Loggable
   public static String addAttachment(
       MessageContext messageContext, DataHandler attachmentHandler) throws DhxException {
-    SaajSoapMessage soapResponse = (SaajSoapMessage) messageContext
-        .getResponse();
-    AttachmentPart part = soapResponse.getSaajMessage().createAttachmentPart(attachmentHandler);
-    if (attachmentContentType == null) {
-      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
-      attachmentContentType = config.getAttachmentContentType();
-    }
-    if (attachmentContentEncoding == null) {
-      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
-      attachmentContentEncoding = config.getAttachmentContentEncoding();
-    }
-    if (attachmentContentTransferEncoding == null) {
-      DhxServerConfig config = AppContext.getApplicationContext().getBean(DhxServerConfig.class);
-      attachmentContentTransferEncoding = config.getAttachmentContentTransferEncoding();
-    }
-    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TYPE, attachmentContentType);
-    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_ENCODING,
-        attachmentContentEncoding);
-    part.addMimeHeader(HttpTransportConstants.HEADER_CONTENT_TRANSFER_ENCODING,
-        attachmentContentTransferEncoding);
     String contentId = UUID.randomUUID().toString();
-    part.setContentId(contentId);
-    soapResponse.getSaajMessage().addAttachmentPart(part);
+
+    AxiomSoapMessage soapResponse = (AxiomSoapMessage) messageContext.getResponse();
+    soapResponse.addAttachment(contentId, attachmentHandler);
+
     return ATTACHMENT_CONTENT_ID_PREFIX + contentId;
 
   }
