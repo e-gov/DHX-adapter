@@ -1,6 +1,7 @@
 package ee.ria.dhx.server;
 
 import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.server.config.WebMvcConfigurer;
 import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.service.ConvertationService;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
@@ -24,17 +26,22 @@ import java.io.IOException;
 
 // @SpringBootApplication
 @TestPropertySource("classpath:test-application.properties")
-@ComponentScan(basePackages = {
-        "ee.ria.dhx.ws.config",
-        "ee.ria.dhx.ws.schedule",
-        "ee.ria.dhx.ws.service.impl",
-        "ee.ria.dhx.server.service",
-        "ee.ria.dhx.server.config",
-        "ee.ria.dhx.server.persistence.*",
-        "ee.ria.dhx.server.scheduler",
-        "ee.ria.dhx.ws",
-        "ee.ria.dhx.server.endpoint.config"
-})
+@ComponentScan(
+        basePackages = {
+                "ee.ria.dhx.ws.config",
+                "ee.ria.dhx.ws.schedule",
+                "ee.ria.dhx.ws.service.impl",
+                "ee.ria.dhx.server.service",
+                "ee.ria.dhx.server.config",
+                "ee.ria.dhx.server.persistence.*",
+                "ee.ria.dhx.server.scheduler",
+                "ee.ria.dhx.ws",
+                "ee.ria.dhx.server.endpoint.config"
+        },
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebMvcConfigurer.class)
+        }
+)
 @EnableTransactionManagement
 @Slf4j
 // @EnableAutoConfiguration

@@ -3,14 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
 		<version>${revision}</version>
 	</parent>
+
 	<artifactId>dhx-adapter-core</artifactId>
 	<name>dhx-adapter-core</name>
 	<packaging>jar</packaging>
+
 	<dependencies>
 		<dependency>
 			<groupId>wsdl4j</groupId>

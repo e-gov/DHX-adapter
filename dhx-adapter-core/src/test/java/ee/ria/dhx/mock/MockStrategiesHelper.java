@@ -5,8 +5,7 @@
 
 package ee.ria.dhx.mock;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -21,8 +20,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
 
+@Slf4j
 public class MockStrategiesHelper extends org.springframework.ws.test.support.MockStrategiesHelper {
-    private static final Log logger = LogFactory.getLog(MockStrategiesHelper.class);
     private final ConfigurableListableBeanFactory beanFactory;
     private ApplicationContext applicationContext;
 
@@ -40,8 +39,8 @@ public class MockStrategiesHelper extends org.springframework.ws.test.support.Mo
             return null;
         } else if (map.size() == 1) {
             Entry<String, T> entry = (Entry)map.entrySet().iterator().next();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Using " + ClassUtils.getShortName(type) + " [" + (String)entry.getKey() + "]");
+            if (log.isDebugEnabled()) {
+                log.debug("Using " + ClassUtils.getShortName(type) + " [" + (String)entry.getKey() + "]");
             }
 
             return entry.getValue();

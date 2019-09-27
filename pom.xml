@@ -13,6 +13,7 @@
 	<artifactId>DHX-adapter</artifactId>
 	<version>${revision}</version>
 	<packaging>pom</packaging>
+
 	<properties>
 		<revision>1.0.4-SNAPSHOT</revision>
 
@@ -21,7 +22,7 @@
 		<!-- Specifies which configuration resources to use in the build -->
 		<resourceDir>conf/${conf}</resourceDir>
 		<jcabi.aspectj>1.9.2</jcabi.aspectj>
-		<boot.version>${parent.version}</boot.version>
+		<boot.version>1.5.17.RELEASE</boot.version>
 	</properties>
 	<modules>
 		<module>dhx-adapter-core</module>
