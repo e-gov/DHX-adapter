@@ -1,0 +1,94 @@
+body {
+    padding-top: 50px;
+}
+
+.navbar {
+    height: 50px;
+    padding: 0 15px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+}
+
+.navbar a {
+    color: white;
+    line-height: 3em;
+}
+
+.navbar span.title {
+    color: white;
+    font-size: 2.5em;
+}
+
+.table-area {
+    position: relative;
+    z-index: 0;
+    margin-top: 131px;
+}
+
+table.responsive-table {
+    display: table;
+    /* required for table-layout to be used (not normally necessary; included for completeness) */
+    table-layout: fixed;
+    /* this keeps your columns with fixed with exactly the right width */
+    width: 100%;
+    /* table must have width set for fixed layout to work as expected */
+    height: 100%;
+}
+
+table.responsive-table thead {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
+    line-height: 3em;
+    background: #eee;
+    table-layout: fixed;
+    display: table;
+}
+
+form table th .checkbox:first-child {
+    margin-top: 0px;
+}
+
+form table th .checkbox:last-child {
+    margin-bottom: 0px;
+}
+
+table th {
+    background: #eee;
+}
+
+table td {
+    line-height: 2em;
+}
+
+table td.no-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+table tr > td,
+table.responsive-table th {
+    text-align: left;
+}
+table th.text-center {
+    text-align: center;
+}
+table th + th {
+    border-left: 1px solid #ddd;
+}
+table th dl.date-range {
+    margin-bottom: 0px;
+}
+table th dl.date-range dt {
+    width: 60px;
+    line-height:34px;
+}
+table th dl.date-range dd {
+    margin-left: 60px;
+}

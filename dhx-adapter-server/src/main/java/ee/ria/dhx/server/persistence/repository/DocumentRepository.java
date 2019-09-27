@@ -5,7 +5,9 @@ import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
  * @author Aleksei Kokarev
  *
  */
+@Transactional
 public interface DocumentRepository extends CrudRepository<Document, Long> {
 
   List<Document> findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(

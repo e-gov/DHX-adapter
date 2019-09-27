@@ -1,26 +1,103 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset = "UTF-8" />
-    <title>Spring Boot Application</title>
+    <title>DHX Monitooring</title>
+    <th:block th:include="fragments/general :: headerfiles" />
 </head>
+<body th:switch="${receiver}">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <a th:href="@{/monitoring/documents}">Tagasi</a>
+    </nav>
 
-<body>
-<h2>List of documents</h2>
-
-<table>
-    <tr>
-        <th>Dokumendi id</th>
-        <th>Saatja registrikood</th>
-        <th>Saatja</th>
-    </tr>
-
-    <tr th:each="status : ${documentStatuses}">
-        <td th:text="${status.dokumentId}">Id</td>
-        <td th:text="${status.saatjaRegistrikood}">Saatja registrikood</td>
-        <td th:text="${status.saatja}">Saatja</td>
-    </tr>
-</table>
+    <h2 th:case="null">Adresseeritud dokumenti ei leitud!</h2>
+    <div th:case="*" class="container">
+        <div class="row">
+            <h2>Dokumendi info</h2>
+            <dl class="dl-horizontal" th:with="document=${receiver.transport.dokument}">
+                <dt>Tüüp</dt>
+                <dd th:text="${document.outgoingDocument} ? 'Saadetav' : 'Vastuvõetav'"></dd>
+                <!-- TODO: Uncomment if document title has been introduced -->
+                <!--<dt>Title</dt>
+                <dd th:text="${document.title}"></dd>-->
+                <dt>Kapsli versioon</dt>
+                <dd th:text="${document.capsuleVersion}"></dd>
+                <dt>Kaust</dt>
+                <dd th:text="${document.folder.name}"></dd>
+                <dt>Loomise kuupäev</dt>
+                <dd th:text="${document.dateCreated}"></dd>
+            </dl>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h2>Saatja</h2>
+                <dl class="dl-horizontal" th:with="senderOrganization=${receiver.transport.senders[0].organisation}">
+                    <dt>Organisatsioon</dt>
+                    <dd th:text="${senderOrganization.name}"></dd>
+                    <dt>X-Tee keskkond</dt>
+                    <dd th:text="${senderOrganization.xroadInstance}"></dd>
+                    <dt>Klass</dt>
+                    <dd th:text="${senderOrganization.memberClass}"></dd>
+                    <dt>Registrikood</dt>
+                    <dd th:text="${senderOrganization.registrationCode}"></dd>
+                    <dt>Alamsüsteem</dt>
+                    <dd th:text="${senderOrganization.subSystem}"></dd>
+                    <dt>Aktiivne?</dt>
+                    <dd th:text="${senderOrganization.isActive}"></dd>
+                </dl>
+            </div>
+            <div class="col-xs-6">
+                <h2>Vastuvõtja</h2>
+                <dl class="dl-horizontal" th:with="receiverOrganization=${receiver.organisation}">
+                    <dt>Organisatsioon</dt>
+                    <dd th:text="${receiverOrganization.name}"></dd>
+                    <dt>X-Tee keskkond</dt>
+                    <dd th:text="${receiverOrganization.xroadInstance}"></dd>
+                    <dt>Klass</dt>
+                    <dd th:text="${receiverOrganization.memberClass}"></dd>
+                    <dt>Registrikood</dt>
+                    <dd th:text="${receiverOrganization.registrationCode}"></dd>
+                    <dt>Alamsüsteem</dt>
+                    <dd th:text="${receiverOrganization.subSystem}"></dd>
+                    <dt>Aktiivne?</dt>
+                    <dd th:text="${receiverOrganization.isActive}"></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <h2 th:text="'Transpordi staatus: ' + ${T(ee.ria.dhx.server.persistence.enumeration.StatusEnum).forClassificatorId(receiver.statusId).classificatorName}"></h2>
+        </div>
+        <div class="row">
+            <section class="content-area" th:with="statusHistory=${receiver.statusHistory}">
+                <h2>Transpordi ajalugu</h2>
+                <th:block th:switch="${#lists.size(statusHistory)}">
+                    <h2 th:case="0">Staatused puuduvad!</h2>
+                    <table th:case="*" class="table">
+                        <thead>
+                        <tr>
+                            <th rowspan="2">Aeg</th>
+                            <th colspan="4" class="text-center">Viga</th>
+                        </tr>
+                        <tr>
+                            <th>Teostaja</th>
+                            <th>Kood</th>
+                            <th>Teade</th>
+                            <th>Detailselt</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="status : ${statusHistory}">
+                            <td th:text="${status.statusChangeDate}"></td>
+                            <td th:text="${status.faultActor} ?: '-'"></td>
+                            <td th:text="${status.faultCode} ?: '-'"></td>
+                            <td th:text="${status.faultString} ?: '-'"></td>
+                            <td th:text="${status.faultDetail} ?: '-'"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </th:block>
+            </section>
+        </div>
+    </div>
 
 </body>
 </html>

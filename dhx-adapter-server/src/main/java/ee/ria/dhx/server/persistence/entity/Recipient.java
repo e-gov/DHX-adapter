@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import javax.persistence.Lob;
  */
 @Entity
 @Table(name = "vastuvotja")
+@Transactional
 public class Recipient extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -438,6 +441,7 @@ public class Recipient extends BaseEntity implements Serializable {
    *
    * @return the statusHistory
    */
+  @Transactional
   public List<StatusHistory> getStatusHistory() {
     return statusHistory;
   }

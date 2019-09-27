@@ -19,15 +19,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * @author Aleksei Kokarev
  *
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "ee.ria.dhx.ws.config,ee.ria.dhx.ws.schedule,"
+        + "ee.ria.dhx.ws.service.impl,ee.ria.dhx.server.service,ee.ria.dhx.server.config"
+        + ",ee.ria.dhx.server.persistence.*,ee.ria.dhx.server.scheduler,ee.ria.dhx.ws"
+        + ",ee.ria.dhx.server.controllers,ee.ria.dhx.server.converters")
 @EnableScheduling
-@EnableAutoConfiguration
-@EnableWebMvc
-@ComponentScan(basePackages = "ee.ria.dhx.ws.config,ee.ria.dhx.ws.schedule,"
-    + "ee.ria.dhx.ws.service.impl,ee.ria.dhx.server.service,ee.ria.dhx.server.config"
-    + ",ee.ria.dhx.server.persistence.*,ee.ria.dhx.server.scheduler,ee.ria.dhx.ws"
-    + ",ee.ria.dhx.server.controllers")
 @EnableAsync
+@EnableWebMvc
 @PropertySource("classpath:dhx-application.properties")
 @Slf4j
 public class Application extends SpringBootServletInitializer {

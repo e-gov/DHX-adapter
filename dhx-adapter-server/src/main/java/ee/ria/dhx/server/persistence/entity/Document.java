@@ -37,9 +37,6 @@ public class Document extends BaseEntity implements Serializable {
   @Column(name = "kapsli_versioon")
   private String capsuleVersion;
 
-  @Column(name = "sailitustahtaeg")
-  private Timestamp storageDeadline;
-
   @Lob
   @Column(name = "sisu")
   private String content;
@@ -150,24 +147,6 @@ public class Document extends BaseEntity implements Serializable {
    */
   public void setCapsuleVersion(String capsuleVersion) {
     this.capsuleVersion = capsuleVersion;
-  }
-
-  /**
-   * Returns the storageDeadline.
-   *
-   * @return the storageDeadline
-   */
-  public Timestamp getStorageDeadline() {
-    return storageDeadline;
-  }
-
-  /**
-   * Sets the storageDeadline.
-   *
-   * @param storageDeadline the storageDeadline to set
-   */
-  public void setStorageDeadline(Timestamp storageDeadline) {
-    this.storageDeadline = storageDeadline;
   }
 
   /**
@@ -306,10 +285,9 @@ public class Document extends BaseEntity implements Serializable {
   @Override
   public String toString() {
     return "Document [documentId=" + documentId + ", guid=" + guid + ", capsuleVersion="
-        + capsuleVersion + ", storageDeadline=" + storageDeadline + ", size=" + size
-        + ", containerVersion=" + containerVersion + ", organisation=" + organisation
-        + ", folder=" + folder + ", transports=" + transports + ", outgoingDocument="
-        + outgoingDocument + "]";
+        + capsuleVersion + ", size=" + size + ", containerVersion=" + containerVersion
+        + ", organisation=" + organisation + ", folder=" + folder + ", transports="
+        + transports + ", outgoingDocument=" + outgoingDocument + "]";
   }
 
 
