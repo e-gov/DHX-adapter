@@ -64,19 +64,8 @@ public interface RecipientRepository extends JpaRepository<Recipient, Long> {
                "AND (true = :#{T(org.apache.commons.lang3.StringUtils).isEmpty(#senderSubsystem)} OR so.subSystem LIKE %:#{#senderSubsystem}%) " +
                //"AND (true = :#{T(org.apache.commons.lang3.StringUtils).isEmpty(#documentTitle)} OR d.title LIKE %:documentTitle%) " + // TODO: Uncomment if document title has been introduced
                "AND (true = :#{#dateCreatedFrom == null} OR d.dateCreated >= :#{#dateCreatedFrom}) " +
-               "AND (true = :#{#dateCreatedTo == null} OR d.dateCreated <= :#{#dateCreatedTo != null ? T(org.apache.commons.lang3.time.DateUtils).addDays(#dateCreatedTo, 1) : null}) "
-               /*"AND ( " +
-                     "( r.dhxInternalConsignmentId = null )" +
-                     "OR ( " +
-                         "r.dhxInternalConsignmentId != null AND " +
-                         "r.dateModified > ?#{T(java.util.Date).from(" +
-                             "T(java.time.Instant).now().minus(" +
-                                 "properties['dhx.resend.timeout'], " +
-                                 "T(java.time.temporal.ChronoUnit).SECONDS" +
-                             ")" +
-                         ")} " +
-                     ")" +
-               ")" +*/)
+               "AND (true = :#{#dateCreatedTo == null} OR d.dateCreated <= :#{#dateCreatedTo != null ? T(org.apache.commons.lang3.time.DateUtils).addDays(#dateCreatedTo, 1) : null}) " +
+         "ORDER BY d.dateCreated DESC")
   Page<Recipient> findAllBy(
           @Param("statuses") Collection<StatusEnum> statuses,
           @Param("isOutgoing") Boolean isOutgoing,
