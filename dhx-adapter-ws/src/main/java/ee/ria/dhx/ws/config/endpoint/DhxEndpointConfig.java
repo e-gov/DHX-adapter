@@ -40,26 +40,21 @@ public class DhxEndpointConfig extends WsConfigurationSupport {
    * Injects DefaultMethodEndpointAdapter which supports SOAP message attachments. Sets proper
    * marshaller. That bean might iterfere with another same bean if it is defined(in that case most
    * probably code need to be changed to define single bean which will staisfy both needs).
-   * 
+   *
+   * @param dhxMethodProcessors collection of marshalling payload method processors
    * @return DefaultMethodEndpointAdapter
    */
   @Bean(name = "dhxMethodEndpointAdapter")
-  public DefaultMethodEndpointAdapter dhxMethodEndpointAdapter() {
-    List<MethodArgumentResolver> argumentResolvers = null;
-    List<MethodReturnValueHandler> returnValueHandlers = null;
-    if (argumentResolvers == null) {
-      argumentResolvers = new ArrayList<MethodArgumentResolver>();
-    }
-    if (returnValueHandlers == null) {
-      returnValueHandlers = new ArrayList<MethodReturnValueHandler>();
-    }
-    returnValueHandlers.addAll(methodProcessors());
-    argumentResolvers.addAll(methodProcessors());
+  public DefaultMethodEndpointAdapter dhxMethodEndpointAdapter(List<MarshallingPayloadMethodProcessor> dhxMethodProcessors) {
+    final List<MethodArgumentResolver> argumentResolvers = new ArrayList<MethodArgumentResolver>(dhxMethodProcessors);
+    final List<MethodReturnValueHandler> returnValueHandlers = new ArrayList<MethodReturnValueHandler>(dhxMethodProcessors);
+
     argumentResolvers.add(new MessageContextMethodArgumentResolver());
-    DefaultMethodEndpointAdapter adapter = new DefaultMethodEndpointAdapter();
-    adapter.setMethodArgumentResolvers(argumentResolvers);
-    adapter.setMethodReturnValueHandlers(returnValueHandlers);
-    return adapter;
+
+    return new DefaultMethodEndpointAdapter() {{
+      setMethodArgumentResolvers(argumentResolvers);
+      setMethodReturnValueHandlers(returnValueHandlers);
+    }};
   }
 
   /**

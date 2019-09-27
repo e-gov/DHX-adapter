@@ -54,6 +54,14 @@ soap.accepted-subsystems=DHX,DHX.subsystem
 #soap.read-timeout=120000
 #soap.http-timeout=300
 
+# # # # #
+# Increasing memory efficiency while sending large documents
+# # # # #
+# Tells DHX to use filesystem caching instead of memory if attachment size is bigger than following value in MB.
+#soap.dhx.attachment.cache.threshold=10
+# Specify directory to be used for caching. By default Java temp directory.
+#soap.dhx.attachment.cache.dir=
+
 #template representing how many times and with how bug timeouts document will be resent. 
 #for example 5,10,15 means that after first failed try application will wait 5 seconds and try again. 
 #If second attempt fails, then there will be 10 seconds timeout before third attempt and so on

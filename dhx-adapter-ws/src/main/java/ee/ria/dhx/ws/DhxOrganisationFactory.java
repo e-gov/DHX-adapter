@@ -5,9 +5,8 @@ import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocument;
 import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.config.SoapConfig;
-import ee.ria.dhx.ws.context.AppContext;
 
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Class for creating DhxOrganisation. Simplifies object creation by setting dhxSubsystemPrefix
@@ -18,8 +17,8 @@ import lombok.Setter;
  */
 public class DhxOrganisationFactory {
 
-  @Setter
-  private static String dhxSubsystemPrefix;
+  @Autowired
+  SoapConfig soapConfig;
 
   /**
    * Method for creating DhxOrganisation. Simplifies object creation by setting dhxSubsystemPrefix
@@ -29,11 +28,8 @@ public class DhxOrganisationFactory {
    * @param system - system of the organisation(either Xroad subsystem or representee system)
    * @return DhxOrganisation object
    */
-  public static DhxOrganisation createDhxOrganisation(String memberCode, String system) {
-    if (dhxSubsystemPrefix == null) {
-      SoapConfig config = AppContext.getApplicationContext().getBean(SoapConfig.class);
-      dhxSubsystemPrefix = config.getDhxSubsystemPrefix();
-    }
+  public DhxOrganisation createDhxOrganisation(String memberCode, String system) {
+    String dhxSubsystemPrefix = soapConfig.getDhxSubsystemPrefix();
     return new DhxOrganisation(memberCode, system, dhxSubsystemPrefix);
   }
 
@@ -44,11 +40,8 @@ public class DhxOrganisationFactory {
    * @param member - Xroad member of the organisation
    * @return DhxOrganisation object
    */
-  public static DhxOrganisation createDhxOrganisation(InternalXroadMember member) {
-    if (dhxSubsystemPrefix == null) {
-      SoapConfig config = AppContext.getApplicationContext().getBean(SoapConfig.class);
-      dhxSubsystemPrefix = config.getDhxSubsystemPrefix();
-    }
+  public DhxOrganisation createDhxOrganisation(InternalXroadMember member) {
+    String dhxSubsystemPrefix = soapConfig.getDhxSubsystemPrefix();
     return new DhxOrganisation(member, dhxSubsystemPrefix);
   }
 
@@ -60,7 +53,7 @@ public class DhxOrganisationFactory {
    * @param service - recipient of the request
    * @return DhxOrganisation object
    */
-  public static DhxOrganisation createIncomingRecipientOrgnisation(SendDocument document,
+  public DhxOrganisation createIncomingRecipientOrgnisation(SendDocument document,
       InternalXroadMember service) {
     String code;
     String system;
@@ -71,7 +64,7 @@ public class DhxOrganisationFactory {
       code = service.getMemberCode();
       system = service.getSubsystemCode();
     }
-    DhxOrganisation recipient = DhxOrganisationFactory.createDhxOrganisation(code, system);
+    DhxOrganisation recipient = createDhxOrganisation(code, system);
     return recipient;
   }
 

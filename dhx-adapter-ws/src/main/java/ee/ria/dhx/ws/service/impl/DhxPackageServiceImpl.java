@@ -71,6 +71,9 @@ public class DhxPackageServiceImpl implements DhxPackageService {
   @Autowired
   DhxImplementationSpecificService dhxImplementationSpecificService;
 
+  @Autowired
+  DhxOrganisationFactory dhxOrganisationFactory;
+
   private void checkProtocolVersion(String protocolVersion)
       throws DhxException {
     log.debug("checking protocol version " + protocolVersion);
@@ -237,7 +240,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
       }
       log.info("Document received.");
       DhxOrganisation recipient =
-          DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
+          dhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
       IncomingDhxPackage dhxDocument = new IncomingDhxPackage(client,
           service, document, container,
           CapsuleVersionEnum.forClass(container.getClass()), recipient);
@@ -299,7 +302,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
         log.debug("Validating capsule is disabled");
       }
       DhxOrganisation recipient =
-          DhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
+          dhxOrganisationFactory.createIncomingRecipientOrgnisation(document, service);
       IncomingDhxPackage dhxDocument = new IncomingDhxPackage(client,
           service, document, recipient);
       if (config.getCheckRecipient()) {
@@ -348,13 +351,13 @@ public class DhxPackageServiceImpl implements DhxPackageService {
         if (representee.getStartDate().getTime() <= curDate.getTime()
             && (representee.getEndDate() == null || representee
                 .getEndDate().getTime() >= curDate.getTime())) {
-          recipientList.add(DhxOrganisationFactory.createDhxOrganisation(representee
+          recipientList.add(dhxOrganisationFactory.createDhxOrganisation(representee
               .getRepresenteeCode(), representee.getRepresenteeSystem()));
         }
       }
     }
     for (String subSystem : soapConfig.getAcceptedSubsystemsAsList()) {
-      recipientList.add(DhxOrganisationFactory.createDhxOrganisation(soapConfig.getMemberCode(),
+      recipientList.add(dhxOrganisationFactory.createDhxOrganisation(soapConfig.getMemberCode(),
           subSystem));
     }
     Boolean found = false;
@@ -403,7 +406,7 @@ public class DhxPackageServiceImpl implements DhxPackageService {
   protected void checkSender(InternalXroadMember client,
       CapsuleAdressee capsuleSender) throws DhxException {
     log.info("Checking sender.");
-    DhxOrganisation sender = DhxOrganisationFactory.createDhxOrganisation(client);
+    DhxOrganisation sender = dhxOrganisationFactory.createDhxOrganisation(client);
     if (client.getRepresentee() != null) {
       InternalXroadMember member = addressService.getClientForMemberCode(
           client.getMemberCode(), client.getSubsystemCode());

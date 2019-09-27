@@ -37,6 +37,7 @@ import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Configuration
@@ -234,7 +235,7 @@ public class SoapConfig {
           NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
     SSLContextBuilder sslContextBuilder = SSLContexts.custom();
     if (isHttpsRequired()) {
-      if (clientKeyStore != null) {
+      if (!StringUtils.isEmpty(clientKeyStore)) {
         sslContextBuilder.loadKeyMaterial(clientKeyStore, getClientTrustStorePassword().toCharArray());
       }
       sslContextBuilder.loadTrustMaterial(clientTrustStore, null);
@@ -247,7 +248,7 @@ public class SoapConfig {
   }
 
   public boolean isHttpsRequired(String keystoreFile) {
-    return keystoreFile != null && isHttpsRequired();
+    return !StringUtils.isEmpty(keystoreFile) && isHttpsRequired();
   }
 
   @Bean
@@ -265,36 +266,50 @@ public class SoapConfig {
   }
 
   @Bean
-  public HttpClient httpClient(SSLConnectionSocketFactory sslSocketFactory, RequestConfig requestConfig) {
+  public HttpClient soapHttpClient(ConnectionKeepAliveStrategy soapHttpClientKeepAliveStrategy,
+                                   SSLConnectionSocketFactory sslSocketFactory,
+                                   RequestConfig defaultRequestConfig) {
     return HttpClientBuilder
             .create()
             .setSSLSocketFactory(sslSocketFactory)
-            .setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
-
-              public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-
-                HeaderElementIterator it = new BasicHeaderElementIterator(
-                        response.headerIterator(HTTP.CONN_KEEP_ALIVE));
-
-                while (it.hasNext()) {
-                  HeaderElement he = it.nextElement();
-                  String param = he.getName();
-                  String value = he.getValue();
-                  if (value != null && param.equalsIgnoreCase("timeout")) {
-
-                    try {
-                      return Long.parseLong(value) * 1000;
-                    } catch(NumberFormatException ignore) {
-                    }
-
-                  }
-                }
-                // otherwise keep alive for <soap.http-timeout> seconds
-                return getHttpTimeout() * 1000;
-              }
-            })
-            .setDefaultRequestConfig(requestConfig)
+            .setKeepAliveStrategy(soapHttpClientKeepAliveStrategy)
+            .setDefaultRequestConfig(defaultRequestConfig)
             .build();
+  }
+
+  @Bean
+  public ConnectionKeepAliveStrategy soapHttpClientKeepAliveStrategy() {
+    return new ConnectionKeepAliveStrategy() {
+
+      public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+
+        HeaderElementIterator it = new BasicHeaderElementIterator(response.headerIterator(HTTP.CONN_KEEP_ALIVE));
+
+        while (it.hasNext()) {
+          HeaderElement he = it.nextElement();
+          String param = he.getName();
+          String value = he.getValue();
+          if (value != null && param.equalsIgnoreCase("timeout")) {
+
+            try {
+              return Long.parseLong(value) * 1000;
+            } catch(NumberFormatException ignore) {
+            }
+
+          }
+        }
+        // otherwise keep alive for <soap.http-timeout> seconds
+        return getHttpTimeout() * 1000;
+      }
+    };
+  }
+
+  @Bean
+  public RequestConfig defaultRequestConfig() {
+      return RequestConfig.custom()
+              .setConnectTimeout(getConnectionTimeout())
+              .setConnectionRequestTimeout(getReadTimeout())
+              .build();
   }
 
   /**

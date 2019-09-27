@@ -10,8 +10,8 @@
         <Pattern>%d %p %c{1.} [%t] ----- %m%n</Pattern>
       </PatternLayout>
       <Policies>
-        <TimeBasedTriggeringPolicy interval="24" modulate="false"/>
         <SizeBasedTriggeringPolicy size="1 MB"/>
+        <TimeBasedTriggeringPolicy interval="1" modulate="false"/>
       </Policies>
     </RollingFile>
   </Appenders>
