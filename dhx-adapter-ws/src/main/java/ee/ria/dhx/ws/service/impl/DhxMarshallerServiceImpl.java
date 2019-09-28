@@ -2,6 +2,7 @@ package ee.ria.dhx.ws.service.impl;
 
 import com.jcabi.aspects.Loggable;
 
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import ee.ria.dhx.bigdata.BigDataMarshallHandler;
 import ee.ria.dhx.bigdata.BigDataXmlReader;
 import ee.ria.dhx.bigdata.ReflectionUtil;

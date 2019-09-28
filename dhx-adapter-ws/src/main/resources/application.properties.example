@@ -69,13 +69,18 @@ document-resend-template=5,10,15
 #frequency of the address renewal. cron expression
 address-renew-timeout=0 */20 * * * ?
 
-# SSL ühenduse kasutamine
-# Keystore parameetrid viitavad asutuse võtmepaari (või võtmepaare) sisaldavale võtmehoidlale
+## TLS connection configuration ##
+# While setting 'soap.security-server' property as HTTPS url the following properties need to be defined.
+#
+# For testing purposes only! While setting "HTTPS NO AUTH" in security server needs to be set 'true'
+# soap.client-keystore.no-auth=false
+#
+# Client keystore parameters. Not required if 'soap.client-keystore.no-auth' equals 'true'.
 soap.client-keystore-file=dhx.jks
 soap.client-keystore-password=changeit
 soap.client-keystore-type=JKS
 
-# Truststore parameetrid viitavad turvaserveri avalikku võtit sisaldavale võtmehoidlale
+# Truststore parameters. Keystore containing security server certificate's certificate chain.
 soap.client-truststore-file=${JAVA_HOME}/jre/lib/security/cacerts
 soap.client-truststore-password=changeit
 soap.client-truststore-type=JKS
