@@ -16,6 +16,7 @@ import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.InternalXroadMember;
+import ee.ria.dhx.ws.DhxOrganisationFactory;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.AddressService;
 
@@ -23,6 +24,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -42,6 +44,9 @@ public class PersistenceServiceTest {
 
   PersistenceService persistenceService;
 
+  @InjectMocks
+  DhxOrganisationFactory dhxOrganisationFactory;
+
   @Mock
   SoapConfig config;
 
@@ -55,6 +60,7 @@ public class PersistenceServiceTest {
     persistenceService.setAddressService(addressService);
     persistenceService.setFolderRepository(folderRepository);
     persistenceService.setOrganisationRepository(organisationRepository);
+    persistenceService.setDhxOrganisationFactory(dhxOrganisationFactory);
     Folder folder = new Folder();
     folder.setName("folder");
     persistenceService.setSpecialOrganisations("adit,kovtp,rt,eelnoud");

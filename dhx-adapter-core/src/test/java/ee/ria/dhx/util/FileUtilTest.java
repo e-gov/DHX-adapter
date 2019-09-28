@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import ee.ria.dhx.exception.DhxException;
-import ee.ria.dhx.util.FileUtil;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,10 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.mail.util.ByteArrayDataSource;
 
 public class FileUtilTest {
 
