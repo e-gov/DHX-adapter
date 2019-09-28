@@ -2,8 +2,46 @@ databaseChangeLog:
   - changeSet:
       id: 1568889143255-9
       author: Kaarel Raspel
+      comment: Try to convert 'dokument' field 'sisu' to CLOB (Oracle) or TEXT (Postgres) type if needed.
+      preConditions:
+        - onFail: MARK_RAN
+        - or:
+          - and:
+            - dbms:
+                  type: oracle
+            - not:
+              - sqlCheck:
+                    expectedResult: 0
+                    sql: |-
+                      SELECT COUNT(*) FROM user_tab_columns
+                      WHERE
+                        LOWER(table_name) = 'dokument'
+                        AND LOWER(column_name) = 'sisu'
+                        AND LOWER(data_type) != 'clob'
+          - and:
+            - dbms:
+                  type: postgresql
+            - not:
+              - sqlCheck:
+                    expectedResult: 0
+                    sql: |-
+                      SELECT COUNT(*) FROM information_schema.columns
+                      WHERE
+                        LOWER(table_name) = 'dokument'
+                        AND LOWER(column_name) = 'sisu'
+                        AND LOWER(data_type) != 'text'
       changes:
-        - modifyDataType:
-            columnName: sisu
-            newDataType: clob
-            tableName: dokument
+        - sql:
+            dbms: oracle
+            endDelimiter: \nGO
+            splitStatements: false
+            sql: |-
+              ALTER TABLE dokument ADD (clob_sisu CLOB);
+              UPDATE dokument SET clob_sisu = sisu;
+              ALTER TABLE dokument DROP COLUMN sisu;
+              ALTER TABLE dokument RENAME COLUMN clob_sisu TO sisu;
+        - sql:
+            dbms: postgresql
+            splitStatements: false
+            sql: |-
+              ALTER TABLE dokument ALTER COLUMN sisu TYPE text;
