@@ -54,6 +54,7 @@ public class WsUtil {
    * Creates InputStream that will GZIP decompress the stream from input.
    * 
    * @param stream stream to decompress
+   * @param stremType Stream type
    * @return decompressed stream
    * @throws DhxException thrown if error occurs
    */

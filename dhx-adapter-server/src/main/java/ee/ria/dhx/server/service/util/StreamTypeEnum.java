@@ -3,7 +3,7 @@ package ee.ria.dhx.server.service.util;
 /**
  * Enumeration of the stream types.
  * 
- * @author 
+ * @author Tarmo Kalda
  *
  */
 public enum StreamTypeEnum {

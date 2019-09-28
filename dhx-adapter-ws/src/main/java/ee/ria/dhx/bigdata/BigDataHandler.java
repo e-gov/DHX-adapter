@@ -135,7 +135,7 @@ public abstract class BigDataHandler implements ContentHandler {
         isDocument = true;
         BigDataXmlElement annotation = dataField.getAnnotation(BigDataXmlElement.class);
         if (annotation != null) {
-          String name = annotation.name();
+          String name = annotation.name().intern();
           qname = qname.replace(localName, name);
           localName = name;
         }
