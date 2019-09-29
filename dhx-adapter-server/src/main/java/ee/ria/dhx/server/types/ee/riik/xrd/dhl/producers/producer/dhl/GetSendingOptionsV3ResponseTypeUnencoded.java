@@ -136,12 +136,10 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
 
     /**
      * Gets the value of the asutused property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused }
-     *     
-     * @return possible object is {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused }
      * 
      */
     public GetSendingOptionsV3ResponseTypeUnencoded.Asutused getAsutused() {
@@ -162,12 +160,10 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
 
     /**
      * Gets the value of the allyksused property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused }
-     *     
-     * @return possible object is {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused }
      * 
      */
     public GetSendingOptionsV3ResponseTypeUnencoded.Allyksused getAllyksused() {
@@ -188,12 +184,10 @@ public class GetSendingOptionsV3ResponseTypeUnencoded {
 
     /**
      * Gets the value of the ametikohad property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad }
-     *     
-     * @return possible object is {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad }
      * 
      */
     public GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad getAmetikohad() {

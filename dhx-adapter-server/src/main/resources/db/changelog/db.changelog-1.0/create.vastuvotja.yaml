@@ -1,0 +1,102 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-7
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: vastuvotja
+      changes:
+        - createTable:
+            tableName: vastuvotja
+            columns:
+              - column:
+                  name: vastuvotja_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: vastuvotja_pkey
+              - column:
+                  name: date_created
+                  type: datetime
+              - column:
+                  name: date_modified
+                  type: datetime
+              - column:
+                  name: version
+                  type: int
+              - column:
+                  name: dhx_external_consignment_id
+                  type: nvarchar
+              - column:
+                  name: dhx_external_receipt_id
+                  type: nvarchar
+              - column:
+                  name: dhx_internal_consignment_id
+                  type: nvarchar
+              - column:
+                  name: dok_id_teises_serveris
+                  type: int
+              - column:
+                  name: fault_actor
+                  type: nvarchar
+              - column:
+                  name: fault_code
+                  type: clob
+              - column:
+                  name: fault_detail
+                  type: clob
+              - column:
+                  name: fault_string
+                  type: clob
+              - column:
+                  name: last_send_date
+                  type: datetime
+              - column:
+                  name: meta_xml
+                  type: nvarchar
+              - column:
+                  name: outgoing
+                  type: boolean
+              - column:
+                  name: isikukood
+                  type: nvarchar
+              - column:
+                  name: vastuvotja_staatus_id
+                  type: int
+              - column:
+                  name: saatmise_lopp
+                  type: datetime
+              - column:
+                  name: saatmise_algus
+                  type: datetime
+              - column:
+                  name: saatmisviis_id
+                  type: int
+              - column:
+                  name: staatuse_muutmise_aeg
+                  type: datetime
+              - column:
+                  name: staatus_id
+                  type: int
+              - column:
+                  name: allyksus
+                  type: nvarchar
+              - column:
+                  name: asutus_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_vastuvotja_asutus
+                    references: asutus(asutus_id)
+                    deferrable: false
+                    initiallyDeferred: false
+              - column:
+                  name: transport_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_vastuvotja_transport
+                    references: transport(transport_id)
+                    deferrable: false
+                    initiallyDeferred: false

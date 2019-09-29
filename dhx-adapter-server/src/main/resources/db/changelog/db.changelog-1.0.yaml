@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-1
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sequenceExists:
+                sequenceName: hibernate_sequence
+      changes:
+        - createSequence:
+            sequenceName: hibernate_sequence
+
+  - include:
+      file: db.changelog-1.0/create.kaust.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-1.0/create.asutus.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-1.0/create.dokument.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-1.0/create.transport.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-1.0/create.saatja.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-1.0/create.vastuvotja.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-1.0/create.staatuse_ajalugu.yaml
+      relativeToChangelogFile: true
