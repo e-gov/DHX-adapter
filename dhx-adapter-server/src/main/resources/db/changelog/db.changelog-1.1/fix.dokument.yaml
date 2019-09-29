@@ -13,7 +13,7 @@ databaseChangeLog:
               - sqlCheck:
                     expectedResult: 0
                     sql: |-
-                      SELECT COUNT(*) FROM information_schema.columns
+                      SELECT COUNT(*) FROM user_tab_columns
                       WHERE
                         LOWER(table_name) = 'dokument'
                         AND LOWER(column_name) = 'sisu'
@@ -25,7 +25,7 @@ databaseChangeLog:
               - sqlCheck:
                     expectedResult: 0
                     sql: |-
-                      SELECT COUNT(*) FROM user_tab_columns
+                      SELECT COUNT(*) FROM information_schema.columns
                       WHERE
                         LOWER(table_name) = 'dokument'
                         AND LOWER(column_name) = 'sisu'
