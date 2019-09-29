@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import javax.persistence.Lob;
 
 /**
  * The persistent class for the document database table.
- * 
+ *
  */
 @Entity
 @Table(name = "dokument")
@@ -41,6 +43,7 @@ public class Document extends BaseEntity implements Serializable {
   private Timestamp storageDeadline;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "sisu")
   private String content;
 
