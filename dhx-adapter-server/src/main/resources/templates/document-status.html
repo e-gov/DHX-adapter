@@ -42,7 +42,7 @@
                     <dt>Alamsüsteem</dt>
                     <dd th:text="${senderOrganization.subSystem}"></dd>
                     <dt>Aktiivne?</dt>
-                    <dd th:text="${senderOrganization.isActive}"></dd>
+                    <dd th:text="${senderOrganization.isActive} ? 'Jah' : 'Ei'"></dd>
                 </dl>
             </div>
             <div class="col-xs-6">
@@ -59,7 +59,7 @@
                     <dt>Alamsüsteem</dt>
                     <dd th:text="${receiverOrganization.subSystem}"></dd>
                     <dt>Aktiivne?</dt>
-                    <dd th:text="${receiverOrganization.isActive}"></dd>
+                    <dd th:text="${receiverOrganization.isActive} ? 'Jah' : 'Ei'"></dd>
                 </dl>
             </div>
         </div>

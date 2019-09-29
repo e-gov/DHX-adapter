@@ -1,6 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
 import org.hibernate.annotations.Type;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "vastuvotja")
+@Transactional
 public class Recipient extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -83,7 +86,7 @@ public class Recipient extends BaseEntity implements Serializable {
   private Timestamp statusChangeDate;
 
   // bi-directional many-to-one association to StaatuseAjalugu
-  @OneToMany(mappedBy = "recipient", cascade = {CascadeType.ALL})
+  @OneToMany(mappedBy = "recipient", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private List<StatusHistory> statusHistory;
 
   // bi-directional many-to-one association to Asutus

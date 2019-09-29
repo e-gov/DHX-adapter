@@ -26,6 +26,7 @@ public class DocumentController {
     @Autowired
     private RecipientRepository recipientRepository;
 
+    @Transactional
     @GetMapping(value = "/documents")
     public String getDocuments(@RequestParam(required = false, defaultValue = "101,103") StatusEnum[] statuses,
                                @RequestParam(required = false, defaultValue = "") Boolean isOutgoing,
@@ -61,7 +62,6 @@ public class DocumentController {
         return "documents-index";
     }
 
-    @Transactional
     @GetMapping(value = "/documents/{document_id}/recipient/{recipient_id}/status")
     public String getDocumentStatus(@PathVariable("document_id") long documentId,
                                     @PathVariable("recipient_id") long recipientId,
