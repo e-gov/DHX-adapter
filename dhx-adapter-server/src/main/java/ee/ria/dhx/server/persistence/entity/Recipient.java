@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,11 +14,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Lob;
 
 /**
  * The persistent class for the vastuvotja database table.
@@ -48,18 +50,22 @@ public class Recipient extends BaseEntity implements Serializable {
   private Integer dokIdTeisesServeris;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_actor")
   private String faultActor;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_code")
   private String faultCode;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_detail")
   private String faultDetail;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_string")
   private String faultString;
 
@@ -108,7 +114,6 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "vastuvotja_staatus_id")
   private Integer recipientStatusId;
 
-  @Lob
   @Column(name = "meta_xml")
   private String metaxml;
 
