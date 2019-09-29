@@ -41,7 +41,7 @@ databaseChangeLog:
                   type: int
               - column:
                   name: fault_actor
-                  type: clob
+                  type: nvarchar
               - column:
                   name: fault_code
                   type: clob

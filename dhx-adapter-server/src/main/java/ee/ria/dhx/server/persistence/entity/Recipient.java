@@ -49,8 +49,6 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "dok_id_teises_serveris")
   private Integer dokIdTeisesServeris;
 
-  @Lob
-  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_actor")
   private String faultActor;
 
