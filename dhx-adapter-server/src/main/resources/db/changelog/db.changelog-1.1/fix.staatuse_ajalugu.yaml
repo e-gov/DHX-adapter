@@ -18,13 +18,18 @@ databaseChangeLog:
                     SELECT COUNT(*) FROM user_tab_columns
                     WHERE
                       LOWER(table_name) = 'staatuse_ajalugu'
-                      AND LOWER(column_name) IN (
-                        'fault_actor',
-                        'fault_code',
-                        'fault_detail',
-                        'fault_string'
+                      AND (
+                        (
+                          LOWER(column_name) IN (
+                            'fault_code',
+                            'fault_detail',
+                            'fault_string'
+                          ) AND LOWER(data_type) != 'clob'
+                        ) OR (
+                          LOWER(column_name) = 'fault_actor'
+                          AND LOWER(data_type) != 'nvarchar2'
+                        )
                       )
-                      AND LOWER(data_type) != 'clob'
           - and:
             - dbms:
                   type: postgresql
@@ -35,13 +40,18 @@ databaseChangeLog:
                     SELECT COUNT(*) FROM information_schema.columns
                     WHERE
                       LOWER(table_name) = 'staatuse_ajalugu'
-                      AND LOWER(column_name) IN (
-                        'fault_actor',
-                        'fault_code',
-                        'fault_detail',
-                        'fault_string'
+                      AND (
+                        (
+                          LOWER(column_name) IN (
+                            'fault_code',
+                            'fault_detail',
+                            'fault_string'
+                          ) AND LOWER(udt_name) != 'text'
+                        ) OR (
+                          LOWER(column_name) = 'fault_actor'
+                          AND LOWER(udt_name) != 'varchar'
+                        )
                       )
-                      AND LOWER(data_type) != 'text'
       changes:
         - sql:
             dbms: oracle
@@ -49,13 +59,13 @@ databaseChangeLog:
             splitStatements: false
             sql: |-
               ALTER TABLE staatuse_ajalugu ADD (
-                clob_fault_actor CLOB,
+                nvarchar2_fault_actor NVARCHAR2(2000),
                 clob_fault_code CLOB,
                 clob_fault_detail CLOB,
                 clob_fault_string CLOB
               );
               UPDATE staatuse_ajalugu SET
-                clob_fault_actor = fault_actor,
+                nvarchar2_fault_actor = dbms_lob.substr(fault_actor, amount=>2000),
                 clob_fault_code = fault_code,
                 clob_fault_detail = fault_detail,
                 clob_fault_string = fault_string;
@@ -65,7 +75,7 @@ databaseChangeLog:
                 fault_detail,
                 fault_string
               );
-              ALTER TABLE staatuse_ajalugu RENAME COLUMN clob_fault_actor TO fault_actor;
+              ALTER TABLE staatuse_ajalugu RENAME COLUMN nvarchar2_fault_actor TO fault_actor;
               ALTER TABLE staatuse_ajalugu RENAME COLUMN clob_fault_code TO fault_code;
               ALTER TABLE staatuse_ajalugu RENAME COLUMN clob_fault_detail TO fault_detail;
               ALTER TABLE staatuse_ajalugu RENAME COLUMN clob_fault_string TO fault_string;
@@ -74,12 +84,17 @@ databaseChangeLog:
             splitStatements: false
             sql: |-
               ALTER TABLE staatuse_ajalugu
-                ADD COLUMN text_fault_actor TEXT,
+                ADD COLUMN varchar_fault_actor VARCHAR,
                 ADD COLUMN text_fault_code TEXT,
                 ADD COLUMN text_fault_detail TEXT,
                 ADD COLUMN text_fault_string TEXT;
               UPDATE staatuse_ajalugu SET
-                text_fault_actor = fault_actor,
+                varchar_fault_actor = SUBSTRING(fault_actor, 1, (
+                  SELECT character_maximum_length FROM information_schema.columns
+                  WHERE
+                    LOWER(table_name) = 'vastuvotja'
+                    AND LOWER(column_name) = 'varchar_fault_actor'
+                )),
                 text_fault_code = fault_code,
                 text_fault_detail = fault_detail,
                 text_fault_string = fault_string;
@@ -88,7 +103,7 @@ databaseChangeLog:
                 DROP COLUMN fault_code,
                 DROP COLUMN fault_detail,
                 DROP COLUMN fault_string;
-              ALTER TABLE staatuse_ajalugu RENAME text_fault_actor TO fault_actor;
+              ALTER TABLE staatuse_ajalugu RENAME varchar_fault_actor TO fault_actor;
               ALTER TABLE staatuse_ajalugu RENAME text_fault_code TO fault_code;
               ALTER TABLE staatuse_ajalugu RENAME text_fault_detail TO fault_detail;
               ALTER TABLE staatuse_ajalugu RENAME text_fault_string TO fault_string;

@@ -29,7 +29,7 @@ databaseChangeLog:
                       WHERE
                         LOWER(table_name) = 'dokument'
                         AND LOWER(column_name) = 'sisu'
-                        AND LOWER(data_type) != 'text'
+                        AND LOWER(udt_name) != 'text'
       changes:
         - sql:
             dbms: oracle
