@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,6 +23,22 @@ import javax.persistence.Table;
  * The persistent class for the transport database table.
  * 
  */
+/*// TODO: Make eager loading work
+@NamedEntityGraph(
+        name = "transport[dokument, senders[organisation]]",
+        includeAllAttributes = true,
+        subgraphs = {
+                @NamedSubgraph(name = "dokument", attributeNodes = {
+                        @NamedAttributeNode(value = "documentId"),
+                        @NamedAttributeNode(value = "outgoingDocument"),
+                        @NamedAttributeNode(value = "content"),
+                        @NamedAttributeNode(value = "dateCreated")
+                }),
+                @NamedSubgraph(name = "senders[organisation]", attributeNodes = {
+                        @NamedAttributeNode(value = "organisation")
+                })
+        }
+)*/
 @Entity
 @Table(name = "transport")
 public class Transport extends BaseEntity implements Serializable {

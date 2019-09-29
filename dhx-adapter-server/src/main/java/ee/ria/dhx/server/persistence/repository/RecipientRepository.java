@@ -7,6 +7,7 @@ import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -48,9 +49,12 @@ public interface RecipientRepository extends JpaRepository<Recipient, Long> {
       Integer documentId, Folder folder, Organisation org);
 
   @Transactional
+  //@EntityGraph("recipient[organisation, transport[dokument, senders[organisation]]]") // TODO: Make eager loading work
+  @EntityGraph(attributePaths = "statusHistory")                                        // TODO: So far make eager loading work for 'statusHistory'
   public Recipient findByRecipientIdAndTransportDokumentDocumentId(Long recipientId, Long documentId);
 
   @Transactional
+  //@EntityGraph("recipient[organisation, transport[dokument, senders[organisation]]]") // TODO: Make eager loading work
   @Query("SELECT r FROM ee.ria.dhx.server.persistence.entity.Recipient r " +
          "JOIN r.transport t " +
          "LEFT OUTER JOIN t.senders s " +

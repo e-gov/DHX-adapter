@@ -18,6 +18,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -26,6 +30,31 @@ import javax.persistence.Table;
  * The persistent class for the vastuvotja database table.
  * 
  */
+/*// TODO: Make eager loading work
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "recipient[organisation, transport[dokument, senders[organisation]]]",
+                includeAllAttributes = true,
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "organisation",
+                                attributeNodes = {
+                                        @NamedAttributeNode("name"),
+                                        @NamedAttributeNode("xroadInstance"),
+                                        @NamedAttributeNode("memberClass"),
+                                        @NamedAttributeNode("registrationCode"),
+                                        @NamedAttributeNode("subSystem"),
+                                        @NamedAttributeNode("isActive")
+                                }),
+                        @NamedSubgraph(
+                                name = "transport[dokument, senders[organisation]]",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "dokument"),
+                                        @NamedAttributeNode(value = "senders"),
+                                })
+                }
+        )
+})*/
 @Entity
 @Table(name = "vastuvotja")
 @Transactional
@@ -86,7 +115,7 @@ public class Recipient extends BaseEntity implements Serializable {
   private Timestamp statusChangeDate;
 
   // bi-directional many-to-one association to StaatuseAjalugu
-  @OneToMany(mappedBy = "recipient", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "recipient", cascade = {CascadeType.ALL})
   private List<StatusHistory> statusHistory;
 
   // bi-directional many-to-one association to Asutus

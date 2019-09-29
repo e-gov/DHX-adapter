@@ -3,7 +3,6 @@ package ee.ria.dhx.server.persistence.entity;
 import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
