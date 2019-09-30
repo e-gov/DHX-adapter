@@ -6,6 +6,7 @@ services:
     command: "sh -c 'curl -L https://github.com/RasmusSoot/wiremock-proxy/releases/download/v1.0/wiremock-proxy-1.0.jar -o /data/conf/wiremock/extensions/wiremock-proxy-1.0.jar && cd /data/conf/wiremock && zip stubs/__files/verificationconf.zip verificationconf/ -r'"
     volumes:
     - ".:/data"
+
   setup-hobekuul:
     build: conf/postgres-client
     environment:
@@ -16,6 +17,7 @@ services:
     depends_on:
       dhx-adapter-hobekuul:
         condition: service_healthy
+
   postgres-hobekuul:
     image: postgres:9.6
     volumes:
@@ -30,6 +32,7 @@ services:
     - POSTGRES_PASSWORD=secret
     - POSTGRES_USER=postgres
     - POSTGRES_DB=dhx_adapter
+
   postgres-test:
     image: postgres:9.6
     volumes:
@@ -44,11 +47,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 15
+
   dhx-adapter-hobekuul:
     image: tomcat:8.5
     volumes:
+    - documents-hobekuul:/documents
     - "../dhx-adapter-server/target/dhx-adapter-server.war:/usr/local/tomcat/webapps/dhx-adapter-server.war"
     - "./conf/tomcat/dhx-application-hobekuul.properties:/conf/dhx-application.properties"
+    - "./conf/tomcat/log4j2.xml:/conf/log4j2.xml"
     - "./conf/tomcat/catalina.properties:/usr/local/tomcat/conf/catalina.properties"
     - "./conf/tomcat//context.xml:/usr/local/tomcat/conf/context.xml"
     - "./conf/tomcat/server.xml:/usr/local/tomcat/conf/server.xml"
@@ -66,8 +72,10 @@ services:
   dhx-adapter-test:
     image: tomcat:8.5
     volumes:
+    - documents-test:/documents
     - "../dhx-adapter-server/target/dhx-adapter-server.war:/usr/local/tomcat/webapps/dhx-adapter-server.war"
     - "./conf/tomcat/dhx-application-test.properties:/conf/dhx-application.properties"
+    - "./conf/tomcat/log4j2.xml:/conf/log4j2.xml"
     - "./conf/tomcat/catalina.properties:/usr/local/tomcat/conf/catalina.properties"
     - "./conf/tomcat//context.xml:/usr/local/tomcat/conf/context.xml"
     - "./conf/tomcat/server.xml:/usr/local/tomcat/conf/server.xml"
@@ -83,6 +91,7 @@ services:
         condition: service_healthy
       xroad-mock:
         condition: service_started
+
   xroad-mock:
     image: rodolpheche/wiremock:2.24.1-alpine
     volumes:
@@ -121,3 +130,5 @@ services:
 volumes:
   data-hobekuul:
   data-test:
+  documents-test:
+  documents-hobekuul:

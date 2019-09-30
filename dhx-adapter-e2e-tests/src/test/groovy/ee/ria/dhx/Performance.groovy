@@ -19,7 +19,7 @@ class Performance extends Spec {
         String basePath = 'performance/'
         File inFile = new File(basePath + testFile)
         File outFile = new File(basePath + kapselFile)
-        outFile.text = Steps.generateDVKAttachment(Steps.getKapsel('10391131', recipient, inFile.text))
+        outFile.text = DVK.generateAttachment(Steps.getKapsel('10391131', recipient, inFile.text))
         where:
         testFile       | kapselFile            | sender     | recipient
         '100kb.base64' | 'kapsel_100KB.base64' | '10391131' | '70000001'
@@ -31,6 +31,7 @@ class Performance extends Spec {
     }
 
     @Ignore
+    @Unroll
     def "Add DVK samplers to JMeter summary where vastuvotja #vastuvotja"() {
 
         given:

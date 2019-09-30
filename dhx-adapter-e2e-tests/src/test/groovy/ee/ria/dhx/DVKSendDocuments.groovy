@@ -16,10 +16,10 @@ class DVKSendDocuments extends Spec {
 
     def "Valid request returns dhl_id"() {
         given:
-        String xml = Steps.sendDocumentsRequest(['dokumendid href="cid:doc"': null,
-                                                 'kaust'                    : '/',
+        String xml = DVK.sendDocumentsRequest(['dokumendid href="cid:doc"': null,
+                                               'kaust'                    : '/',
         ])
-        String kapsel = Steps.generateDVKAttachment(Steps.getKapsel('10391131', '10391131'))
+        String kapsel = DVK.generateAttachment(Steps.getKapsel('10391131', '10391131'))
 
 
         Response response = Steps.multipartGiven()
@@ -39,6 +39,6 @@ class DVKSendDocuments extends Spec {
                         .charset("UTF-8").build())
                 .when().post(Steps.conf.test.dvkServiceUrl).then().extract().response()
         response.then().statusCode(200)
-        assertThat(Steps.parseDVKResponseAttachment(response.body().asString()), containsString("dhl_id"))
+        assertThat(DVK.parseResponseAttachment(response.body().asString()), containsString("dhl_id"))
     }
 }

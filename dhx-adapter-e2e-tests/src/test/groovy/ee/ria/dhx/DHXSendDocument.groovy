@@ -15,9 +15,9 @@ class DHXSendDocument extends Spec {
     def "Valid request returns receipt"() {
         given:
 
-        String xml = Steps.sendDocumentRequest(['DHXVersion'        : '1.0',
-                                                'documentAttachment': 'cid:doc',
-                                                'consignmentId'     : UUID.randomUUID()])
+        String xml = DHX.sendDocumentRequest(['DHXVersion'        : '1.0',
+                                              'documentAttachment': 'cid:doc',
+                                              'consignmentId'     : UUID.randomUUID()])
         String kapsel = Steps.getKapsel('10391131', '10391131').bytes.encodeBase64()
         Steps.multipartGiven()
                 .filter(new MultipartAllureFilter())

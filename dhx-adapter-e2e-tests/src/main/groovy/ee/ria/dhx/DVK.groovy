@@ -1,113 +1,103 @@
 package ee.ria.dhx
 
-
-import io.qameta.allure.Step
-import io.qameta.allure.restassured.AllureRestAssured
-import io.restassured.RestAssured
-import io.restassured.http.ContentType
-import io.restassured.internal.http.BoundaryExtractor
-import io.restassured.internal.http.CharsetExtractor
-import io.restassured.internal.http.ContentTypeExtractor
-import io.restassured.internal.http.HTTPBuilder
-import io.restassured.response.Response
-import io.restassured.specification.RequestSpecification
-import org.apache.http.entity.mime.FormBodyPartBuilder
+import groovy.xml.MarkupBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-import static io.restassured.config.MultiPartConfig.multiPartConfig
-import static org.apache.commons.lang3.StringUtils.*
+import javax.mail.internet.MimeMultipart
+import javax.mail.internet.MimeUtility
+import javax.mail.util.ByteArrayDataSource
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 
 @Component
-class Steps {
+class DVK {
 
     static Configuration conf
 
 
     @Autowired
-    Steps(Configuration conf) {
+    DVK(Configuration conf) {
         this.conf = conf
     }
 
-    static RequestSpecification multipartGiven() {
-        //Override io.restassured.internal.RequestSpecificationImpl.registerRestAssuredEncoders
-        RequestSpecification request = RestAssured.given().config(RestAssured.config()
-                .multiPartConfig(multiPartConfig().defaultSubtype("related")))
-        request.metaClass.registerRestAssuredEncoders = { HTTPBuilder http ->
-            System.out.println("Override")
-            // Multipart form-data
-            if (multiParts.isEmpty()) {
-                return;
-            }
+    static Map sendDocumentHeaderData() {
+        return [requestHash    : "29KTVbZf83XlfdYrsxjaSYMGoxvktnTUBTtA4BmSrh1e\n" +
+                "gtRtvR9VY8QycYaVdsKtGJIh/8CpucYWPbWfaIgJDQ==",
+                protocolVersion: '4.0',
+                id             : UUID.randomUUID(),
+                userId         : "TEST",
+                service        : [xRoadInstance : 'ee-dev',
+                                  memberClass   : 'COM',
+                                  memberCode    : '10391131',
+                                  subsystemCode : 'DHX',
+                                  serviceCode   : 'sendDocuments',
+                                  serviceVersion: 'v1'],
+                client         : [xRoadInstance: 'ee-dev',
+                                  memberClass  : 'COM',
+                                  memberCode   : '10391131',
+                                  subsystemCode: 'DHX']
+        ]
+    }
 
-            if (hasFormParams()) {
-                convertFormParamsToMultiPartParams()
-            }
+    static Map sendDocumentsHeaderData() {
+        return [requestHash    : "29KTVbZf83XlfdYrsxjaSYMGoxvktnTUBTtA4BmSrh1e\n" +
+                "gtRtvR9VY8QycYaVdsKtGJIh/8CpucYWPbWfaIgJDQ==",
+                protocolVersion: '4.0',
+                id             : UUID.randomUUID(),
+                userId         : "TEST",
+                service        : [xRoadInstance : 'ee-dev',
+                                  memberClass   : 'COM',
+                                  memberCode    : '10391131',
+                                  subsystemCode : 'DHX',
+                                  serviceCode   : 'sendDocuments',
+                                  serviceVersion: 'v4'],
+                client         : [xRoadInstance: 'ee-dev',
+                                  memberClass  : 'COM',
+                                  memberCode   : '10391131',
+                                  subsystemCode: 'DHX']
+        ]
+    }
 
-            def contentTypeAsString = headers.getValue(CONTENT_TYPE)
-            def ct = ContentTypeExtractor.getContentTypeWithoutCharset(contentTypeAsString)
-            def subType;
-            if (ct?.toLowerCase()?.startsWith(MULTIPART_CONTENT_TYPE_PREFIX_WITH_SLASH)) {
-                subType = substringAfter(ct, MULTIPART_CONTENT_TYPE_PREFIX_WITH_SLASH)
-            } else if (ct?.toLowerCase()?.contains(MULTIPART_CONTENT_TYPE_PREFIX_WITH_PLUS)) {
-                subType = substringBefore(substringAfter(ct, MULTIPART_CONTENT_TYPE_PREFIX_WITH_PLUS), "+")
-            } else {
-                throw new IllegalArgumentException("Content-Type $ct is not valid when using multiparts, it must start with \"$MULTIPART_CONTENT_TYPE_PREFIX_WITH_SLASH\" or contain \"$MULTIPART_CONTENT_TYPE_PREFIX_WITH_PLUS\".");
-            }
-
-            def charsetFromContentType = CharsetExtractor.getCharsetFromContentType(contentTypeAsString)
-            def charsetToUse = isBlank(charsetFromContentType) ? restAssuredConfig().getMultiPartConfig().defaultCharset() : charsetFromContentType
-            def boundaryFromContentType = BoundaryExtractor.getBoundaryFromContentType(contentTypeAsString)
-            String boundaryToUse = boundaryFromContentType ?: restAssuredConfig().getMultiPartConfig().defaultBoundary()
-            boundaryToUse = boundaryToUse ?: generateBoundary()
-            if (!boundaryFromContentType) {
-                removeHeader(CONTENT_TYPE) // there should only be one
-                contentType(contentTypeAsString + "; boundary=\"" + boundaryToUse + "\"")
-            }
-
-            def multipartMode = httpClientConfig().httpMultipartMode()
-            // For "defaultCharset" to be taken into account we need to
-
-            http.encoders.putAt ct, { contentType, content ->
-                DHXMultiPartEntity entity = new DHXMultiPartEntity(subType, charsetToUse, multipartMode, boundaryToUse);
-
-                multiParts.each {
-                    def body = it.contentBody
-                    def controlName = it.controlName
-                    def headers = it.headers
-                    if (headers.isEmpty()) {
-                        entity.addPart(controlName, body);
-                    } else {
-                        def builder = FormBodyPartBuilder.create(controlName, body)
-                        headers.each { name, value ->
-                            builder.addField(name, value)
-                        }
-                        entity.addPart(builder.build())
+    static String sendDocumentsRequest(Map data, Map headerData = sendDocumentsHeaderData()) {
+        def writer = new StringWriter()
+        def xml = new MarkupBuilder(writer)
+        xml.'soapenv:Envelope'('xmlns:iden': 'http://x-road.eu/xsd/identifiers', 'xmlns:prod': 'http://dhx.x-road.eu/producer', 'xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/', 'xmlns:xro': 'http://x-road.eu/xsd/xroad.xsd', 'xmlns:dhl': "http://producers.dhl.xrd.riik.ee/producer/dhl") {
+            'soapenv:Header'() {
+                'xro:requestHash'(algorithmId: 'http://www.w3.org/2001/04/xmlenc#sha512', headerData.requestHash)
+                headerData.findAll {
+                    !["requestHash", "service", "client"].contains(it.key) && it.value != null
+                }.each { key, value ->
+                    "xro:${key}" "${value}"
+                }
+                'xro:service'('iden:objectType': 'SERVICE') {
+                    headerData.service.findAll { it.value != null }.each { key, value ->
+                        "iden:${key}" "${value}"
                     }
                 }
-
-                entity;
+                'xro:client'('iden:objectType': 'SUBSYSTEM') {
+                    headerData.client.findAll { it.value != null }.each { key, value ->
+                        "iden:${key}" "${value}"
+                    }
+                }
             }
+            'soapenv:Body'() {
+                'dhl:sendDocuments'() {
+                    'keha'() {
+                        data.each { key, value ->
+                            if (value != null) {
+                                "${key}" "${value}"
+                            } else {
+                                "${key}" null
+                            }
+
+                        }
+                    }
+                }
+            }
+
         }
-        return request
-    }
-
-    @Step("DHX-adapter Test /health request")
-    static Response testHealthEndpoint() {
-        return RestAssured.given()
-                .contentType(ContentType.JSON)
-                .filter(new AllureRestAssured())
-                .when()
-                .get(conf.test.getHealthUrl())
-    }
-
-    @Step("DHX-adapter Test /metrics request")
-    static Response testMetricsEndpoint() {
-        return RestAssured.given()
-                .contentType(ContentType.JSON)
-                .filter(new AllureRestAssured())
-                .when()
-                .get(conf.test.metricsUrl)
+        return writer.toString()
     }
 
     static String getKapsel(String decSender, String decRecipient) {
@@ -422,4 +412,31 @@ a6lfM+3v7oFf1OzfsbCx/p3W2j9odu2/CybRfSxGP2H5hfb656Gl/oT0L+W1P7S9iy79PpYu1r1K
   </DecMetadata>
 </DecContainer>"""
     }
+
+    public static String generateAttachment(String document) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        def gos = new GZIPOutputStream(bos);
+        gos.write(document.bytes)
+        gos.finish();
+        return bos.toByteArray().encodeBase64()
+    }
+
+    public static String parseDVKResponseBody(String message) {
+        ByteArrayDataSource datasource = new ByteArrayDataSource(message, "multipart/related");
+        MimeMultipart multipart = new MimeMultipart(datasource)
+        return multipart.getBodyPart(0).content
+
+        //multipart.getBodyPart(0).contentType == text/xml; charset=utf-8
+        //multipart.getBodyPart(1).contentType == {http://www.w3.org/2001/XMLSchema}base64Binary
+    }
+
+
+    public static String parseResponseAttachment(String message) {
+        ByteArrayDataSource datasource = new ByteArrayDataSource(message, "multipart/related");
+        MimeMultipart multipart = new MimeMultipart(datasource)
+        def base64DecoderStream = MimeUtility.decode(multipart.getBodyPart(1).content, "base64");
+        GZIPInputStream gis = new GZIPInputStream(base64DecoderStream);
+        return gis.text;
+    }
+
 }
