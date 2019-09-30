@@ -6,7 +6,13 @@ import io.qameta.allure.restassured.AllureRestAssured
 import io.restassured.RestAssured
 import io.restassured.builder.MultiPartSpecBuilder
 import io.restassured.http.ContentType
+import io.restassured.internal.http.BoundaryExtractor
+import io.restassured.internal.http.CharsetExtractor
+import io.restassured.internal.http.ContentTypeExtractor
+import io.restassured.internal.http.HTTPBuilder
 import io.restassured.response.Response
+import io.restassured.specification.RequestSpecification
+import org.apache.http.entity.mime.FormBodyPartBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -15,6 +21,12 @@ import javax.mail.internet.MimeUtility
 import javax.mail.util.ByteArrayDataSource
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+
+import static io.restassured.config.MultiPartConfig.multiPartConfig
+import static org.apache.commons.lang3.StringUtils.isBlank
+import static org.apache.commons.lang3.StringUtils.substringAfter
+import static org.apache.commons.lang3.StringUtils.substringAfter
+import static org.apache.commons.lang3.StringUtils.substringBefore
 
 @Component
 class Steps {
@@ -25,6 +37,68 @@ class Steps {
     @Autowired
     Steps(Configuration conf) {
         this.conf = conf
+    }
+    static RequestSpecification multipartGiven() {
+        //Override io.restassured.internal.RequestSpecificationImpl.registerRestAssuredEncoders
+        RequestSpecification request = RestAssured.given().config(RestAssured.config()
+                .multiPartConfig(multiPartConfig().defaultSubtype("related")))
+        request.metaClass.registerRestAssuredEncoders = { HTTPBuilder http ->
+            System.out.println("Override")
+            // Multipart form-data
+            if (multiParts.isEmpty()) {
+                return;
+            }
+
+            if (hasFormParams()) {
+                convertFormParamsToMultiPartParams()
+            }
+
+            def contentTypeAsString = headers.getValue(CONTENT_TYPE)
+            def ct = ContentTypeExtractor.getContentTypeWithoutCharset(contentTypeAsString)
+            def subType;
+            if (ct?.toLowerCase()?.startsWith(MULTIPART_CONTENT_TYPE_PREFIX_WITH_SLASH)) {
+                subType = substringAfter(ct, MULTIPART_CONTENT_TYPE_PREFIX_WITH_SLASH)
+            } else if (ct?.toLowerCase()?.contains(MULTIPART_CONTENT_TYPE_PREFIX_WITH_PLUS)) {
+                subType = substringBefore(substringAfter(ct, MULTIPART_CONTENT_TYPE_PREFIX_WITH_PLUS), "+")
+            } else {
+                throw new IllegalArgumentException("Content-Type $ct is not valid when using multiparts, it must start with \"$MULTIPART_CONTENT_TYPE_PREFIX_WITH_SLASH\" or contain \"$MULTIPART_CONTENT_TYPE_PREFIX_WITH_PLUS\".");
+            }
+
+            def charsetFromContentType = CharsetExtractor.getCharsetFromContentType(contentTypeAsString)
+            def charsetToUse = isBlank(charsetFromContentType) ? restAssuredConfig().getMultiPartConfig().defaultCharset() : charsetFromContentType
+            def boundaryFromContentType = BoundaryExtractor.getBoundaryFromContentType(contentTypeAsString)
+            String boundaryToUse = boundaryFromContentType ?: restAssuredConfig().getMultiPartConfig().defaultBoundary()
+            boundaryToUse = boundaryToUse ?: generateBoundary()
+            if (!boundaryFromContentType) {
+                removeHeader(CONTENT_TYPE) // there should only be one
+                contentType(contentTypeAsString + "; boundary=\"" + boundaryToUse + "\"")
+            }
+
+            def multipartMode = httpClientConfig().httpMultipartMode()
+            // For "defaultCharset" to be taken into account we need to
+
+            http.encoders.putAt ct, { contentType, content ->
+                DHXMultiPartEntity entity = new DHXMultiPartEntity(subType, charsetToUse, multipartMode, boundaryToUse);
+
+                multiParts.each {
+                    def body = it.contentBody
+                    def controlName = it.controlName
+                    def headers = it.headers
+                    if (headers.isEmpty()) {
+                        entity.addPart(controlName, body);
+                    } else {
+                        def builder = FormBodyPartBuilder.create(controlName, body)
+                        headers.each { name, value ->
+                            builder.addField(name, value)
+                        }
+                        entity.addPart(builder.build())
+                    }
+                }
+
+                entity;
+            }
+        }
+        return request
     }
 
     @Step("DHX-adapter Test /health request")
@@ -434,7 +508,107 @@ a6lfM+3v7oFf1OzfsbCx/p3W2j9odu2/CybRfSxGP2H5hfb656Gl/oT0L+W1P7S9iy79PpYu1r1K
   </DecMetadata>
 </DecContainer>"""
     }
-
+    static String getKapsel(String decSender, String decRecipient, String content) {
+        return """<DecContainer xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
+  <Transport>
+    <DecSender>
+      <OrganisationCode>${decSender}</OrganisationCode>
+      <PersonalIdCode>EE38806190294</PersonalIdCode>
+    </DecSender>
+\t <DecRecipient>
+      <OrganisationCode>${decRecipient}</OrganisationCode>
+    </DecRecipient>
+  </Transport>
+  <RecordCreator>
+    <Person>
+      <Name>Lauri Tammemäe</Name>
+      <GivenName>Lauri</GivenName>
+      <Surname>Tammemäe</Surname>
+      <PersonalIdCode>EE38806190294</PersonalIdCode>
+      <Residency>EE</Residency>
+    </Person>
+    <ContactData>
+      <Adit>true</Adit>
+      <Phone>3726630276</Phone>
+      <Email>lauri.tammemae@ria.ee</Email>
+      <WebPage>www.hot.ee/lauri</WebPage>
+      <MessagingAddress>skype: lauri.tammemae</MessagingAddress>
+      <PostalAddress>
+        <Country>Eesti</Country>
+        <County>Harju maakond</County>
+        <LocalGovernment>Tallinna linn</LocalGovernment>
+        <AdministrativeUnit>Mustamäe linnaosa</AdministrativeUnit>
+        <SmallPlace>Pääsukese KÜ</SmallPlace>
+        <LandUnit></LandUnit>
+        <Street>Mustamäe tee</Street>
+        <HouseNumber>248</HouseNumber>
+        <BuildingPartNumber>62</BuildingPartNumber>
+        <PostalCode>11212</PostalCode>
+      </PostalAddress>
+    </ContactData>
+  </RecordCreator>
+  <RecordSenderToDec>
+    <Person>
+      <Name>Lauri Tammemäe</Name>
+      <GivenName>Lauri</GivenName>
+      <Surname>Tammemäe</Surname>
+      <PersonalIdCode>EE38806190294</PersonalIdCode>
+      <Residency>EE</Residency>
+    </Person>
+    <ContactData>
+      <Adit>false</Adit>
+      <Phone>3726630276</Phone>
+      <Email>lauri.tammemae@ria.ee</Email>
+      <WebPage>www.hot.ee/lauri</WebPage>
+      <MessagingAddress>skype: lauri.tammemae</MessagingAddress>
+      <PostalAddress>
+        <Country>Eesti</Country>
+        <County>Harju maakond</County>
+        <LocalGovernment>Tallinna linn</LocalGovernment>
+        <AdministrativeUnit>Mustamäe linnaosa</AdministrativeUnit>
+        <SmallPlace>Pääsukese KÜ</SmallPlace>
+        <LandUnit></LandUnit>
+        <Street>Mustamäe tee</Street>
+        <HouseNumber>248</HouseNumber>
+        <BuildingPartNumber>62</BuildingPartNumber>
+        <PostalCode>11212</PostalCode>
+      </PostalAddress>
+    </ContactData>
+  </RecordSenderToDec>
+  <Recipient>
+    <Organisation>
+      <Name>Riigi Infosüsteemi Amet</Name>
+      <OrganisationCode>70006317</OrganisationCode>
+      <Residency>EE</Residency>
+    </Organisation>
+  </Recipient>
+  <RecordMetadata>
+    <RecordGuid>25892e17-80f6-415f-9c65-7395632f0234</RecordGuid>
+    <RecordType>Kiri</RecordType>
+    <RecordOriginalIdentifier>213465</RecordOriginalIdentifier>
+    <RecordDateRegistered>2012-11-11T19:18:03</RecordDateRegistered>
+    <RecordTitle>Ettepanek</RecordTitle>
+    <RecordLanguage>EE</RecordLanguage>
+  </RecordMetadata>
+  <Access>
+    <AccessConditionsCode>Avalik</AccessConditionsCode>
+  </Access>
+  <File>
+    <FileGuid>25892e17-80f6-415f-9c65-7395632f0001</FileGuid>
+    <RecordMainComponent>0</RecordMainComponent>
+    <FileName>Ettepanek.doc</FileName>
+    <MimeType>application/msword</MimeType>
+    <FileSize>211543</FileSize>
+    <ZipBase64Content>${content}</ZipBase64Content>
+  </File>
+  <RecordTypeSpecificMetadata />
+  <DecMetadata>
+    <DecId>99999999</DecId>
+    <DecFolder>/</DecFolder>
+    <DecReceiptDate>2012-11-11T19:20:42</DecReceiptDate>
+  </DecMetadata>
+</DecContainer>"""
+    }
     public static String generateDVKAttachment(String document) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         def gos = new GZIPOutputStream(bos);

@@ -1,13 +1,11 @@
 package ee.ria.dhx
 
 
-import io.restassured.RestAssured
 import io.restassured.builder.MultiPartSpecBuilder
 import io.restassured.response.Response
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer
 import org.springframework.test.context.ContextConfiguration
 
-import static io.restassured.config.MultiPartConfig.multiPartConfig
 import static org.hamcrest.Matchers.containsString
 import static org.junit.Assert.assertThat
 
@@ -23,8 +21,8 @@ class DVKSendDocuments extends Spec {
         ])
         String kapsel = Steps.generateDVKAttachment(Steps.getKapsel('10391131', '10391131'))
 
-        RestAssured.config = RestAssured.config().multiPartConfig(multiPartConfig().defaultSubtype("related"));
-        Response response = RestAssured.given()
+
+        Response response = Steps.multipartGiven()
                 .filter(new MultipartAllureFilter())
                 .multiPart(new MultiPartSpecBuilder(xml)
                         .fileName("")
