@@ -1,0 +1,62 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "/verificationconf"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/zip",
+          "Content-Disposition": "filename=\"verificationconf.zip\""
+        },
+        "bodyFileName": "verificationconf.zip",
+        "transformers": [
+          "proxy"
+        ],
+        "transformerParameters": {
+          "urlPrefixToRemove": "/"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/cgi-bin/consumer_proxy",
+        "bodyPatterns": [ {
+          "matches": "(?m)[.\\s\\S]*service.*>[.\\s\\S]*memberCode>30000001</[a-z0-9]*:memberCode>[.\\s\\S]*"
+        }
+        ]
+      },
+      "response": {
+        "proxyBaseUrl": "http://dhx-adapter-hobekuul:8080/dhx-adapter-server/ws",
+        "transformers": [
+          "proxy"
+        ],
+        "transformerParameters": {
+          "urlPrefixToRemove": "/cgi-bin/consumer_proxy"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/cgi-bin/consumer_proxy",
+        "bodyPatterns": [ {
+          "matches": "(?m)[.\\s\\S]*service.*>[.\\s\\S]*memberCode>10391131</[a-z0-9]*:memberCode>[.\\s\\S]*"
+        }
+        ]
+      },
+      "response": {
+        "proxyBaseUrl": "http://dhx-adapter-test:8080/dhx-adapter-server/ws",
+        "transformers": [
+          "proxy"
+        ],
+        "transformerParameters": {
+          "urlPrefixToRemove": "/cgi-bin/consumer_proxy"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1.1 r1855137">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments">Generate files with: head -c 10MB &lt; /dev/urandom | gzip | base64 --wrap=0 &gt; 10mb.base64</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Small Files Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${num_threads_small}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_period}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${duration}</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DVK sendDocuments - 100KB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xtee=&quot;http://x-tee.riik.ee/xsd/xtee.xsd&quot; xmlns:dhl=&quot;http://producers.dhl.xrd.riik.ee/producer/dhl&quot;&gt;&#xd;
+    &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+         &lt;ns4:client xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;!--&lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;--&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+         &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;70000001&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocuments&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v4&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;dhl:sendDocuments&gt;&#xd;
+         &lt;keha&gt;&#xd;
+            &lt;dokumendid href=&quot;cid:doc&quot;&gt;&#xd;
+            &lt;doc&gt;cid:doc&lt;/doc&gt;&#xd;
+            &lt;/dokumendid&gt;&#xd;
+            &lt;kaust&gt;/&lt;/kaust&gt;&#xd;
+         &lt;/keha&gt;&#xd;
+      &lt;/dhl:sendDocuments&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: application/octet-stream; &#xd;
+	name=binaryContent5653537629501048292.tmp&#xd;
+Content-Transfer-Encoding: binary&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent5653537629501048292.tmp&quot;; filename=&quot;binaryContent5653537629501048292.tmp&quot;&#xd;
+&#xd;
+${__StringFromFile(kapsel_100KB.base64)}&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/wsServer</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DHX sendDocument - 100KB file" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xro=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:iden=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:prod=&quot;http://dhx.x-road.eu/producer&quot;&gt;&#xd;
+   &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+    &lt;ns4:client ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+    &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocument&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v1&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   	&lt;rep:representedParty xmlns:rep=&quot;http://x-road.eu/xsd/representation.xsd&quot;/&gt;&lt;xro:userId/&gt;&lt;xro:issue/&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;prod:sendDocument&gt;&#xd;
+         	&lt;!--Optional:--&gt;&#xd;
+          &lt;prod:DHXVersion&gt;1.0&lt;/prod:DHXVersion&gt;&#xd;
+         	&lt;prod:documentAttachment&gt;cid:doc&lt;/prod:documentAttachment&gt;&#xd;
+         	&lt;prod:consignmentId&gt;${__UUID()}&lt;/prod:consignmentId&gt;&#xd;
+      &lt;/prod:sendDocument&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/plain; charset=UTF-8; &#xd;
+	name=binaryContent1489825202469856491.tmp&#xd;
+Content-Transfer-Encoding: quoted-printable&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent1489825202469856491.tmp&quot;; filename=&quot;binaryContent1489825202469856491.tmp&quot;&#xd;
+&#xd;
+&lt;DecContainer xmlns=3D&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+  &lt;Transport&gt;&#xd;
+    &lt;DecSender&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+    &lt;/DecSender&gt;&#xd;
+    &lt;DecRecipient&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+    &lt;/DecRecipient&gt;&#xd;
+  &lt;/Transport&gt;&#xd;
+  &lt;RecordCreator&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;true&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;() - + 37266   30276   &lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordCreator&gt;&#xd;
+  &lt;RecordSenderToDec&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;false&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;+3726630276&lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordSenderToDec&gt;&#xd;
+  &lt;Recipient&gt;&#xd;
+    &lt;Organisation&gt;&#xd;
+      &lt;Name&gt;Riigi Infos=C3=BCsteemi Amet&lt;/Name&gt;&#xd;
+      &lt;OrganisationCode&gt;70006317&lt;/OrganisationCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Organisation&gt;&#xd;
+  &lt;/Recipient&gt;&#xd;
+  &lt;RecordMetadata&gt;&#xd;
+    &lt;RecordGuid&gt;25892e17-80f6-415f-9c65-7395632f0234&lt;/RecordGuid&gt;&#xd;
+    &lt;RecordType&gt;Kiri&lt;/RecordType&gt;&#xd;
+    &lt;RecordOriginalIdentifier&gt;213465&lt;/RecordOriginalIdentifier&gt;&#xd;
+    &lt;RecordDateRegistered&gt;2012-11-11T19:18:03&lt;/RecordDateRegistered&gt;&#xd;
+    &lt;RecordTitle&gt;Ettepanek&lt;/RecordTitle&gt;&#xd;
+    &lt;RecordLanguage&gt;EE&lt;/RecordLanguage&gt;&#xd;
+  &lt;/RecordMetadata&gt;&#xd;
+  &lt;Access&gt;&#xd;
+    &lt;AccessConditionsCode&gt;AK&lt;/AccessConditionsCode&gt;&#xd;
+  &lt;/Access&gt;&#xd;
+  &lt;File&gt;&#xd;
+    &lt;FileGuid&gt;25892e17-80f6-415f-9c65-7395632f0001&lt;/FileGuid&gt;&#xd;
+    &lt;RecordMainComponent&gt;0&lt;/RecordMainComponent&gt;&#xd;
+    &lt;FileName&gt;Ettepanek.doc&lt;/FileName&gt;&#xd;
+    &lt;MimeType&gt;application/msword&lt;/MimeType&gt;&#xd;
+    &lt;FileSize&gt;211543&lt;/FileSize&gt;&#xd;
+    &lt;ZipBase64Content&gt;${__StringFromFile(100kb.base64)}&lt;/ZipBase64Content&gt;&#xd;
+  &lt;/File&gt;&#xd;
+  &lt;RecordTypeSpecificMetadata /&gt;&#xd;
+  &lt;DecMetadata&gt;&#xd;
+    &lt;DecId&gt;99999999&lt;/DecId&gt;&#xd;
+    &lt;DecFolder&gt;/&lt;/DecFolder&gt;&#xd;
+    &lt;DecReceiptDate&gt;2012-11-11T19:20:42&lt;/DecReceiptDate&gt;&#xd;
+  &lt;/DecMetadata&gt;&#xd;
+&lt;/DecContainer&gt;&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/ws</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="699321715">receiptId</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+          <stringProp name="ConstantTimer.delay">${delay}</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Medium Files Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${num_threads_medium}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_period}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${duration}</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DVK sendDocuments - 10MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xtee=&quot;http://x-tee.riik.ee/xsd/xtee.xsd&quot; xmlns:dhl=&quot;http://producers.dhl.xrd.riik.ee/producer/dhl&quot;&gt;&#xd;
+    &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+         &lt;ns4:client xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;!--&lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;--&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+         &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;70000002&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocuments&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v4&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;dhl:sendDocuments&gt;&#xd;
+         &lt;keha&gt;&#xd;
+            &lt;dokumendid href=&quot;cid:doc&quot;&gt;&#xd;
+            &lt;doc&gt;cid:doc&lt;/doc&gt;&#xd;
+            &lt;/dokumendid&gt;&#xd;
+            &lt;kaust&gt;/&lt;/kaust&gt;&#xd;
+         &lt;/keha&gt;&#xd;
+      &lt;/dhl:sendDocuments&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: application/octet-stream; &#xd;
+	name=binaryContent5653537629501048292.tmp&#xd;
+Content-Transfer-Encoding: binary&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent5653537629501048292.tmp&quot;; filename=&quot;binaryContent5653537629501048292.tmp&quot;&#xd;
+&#xd;
+${__StringFromFile(kapsel_10MB.base64)}&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/wsServer</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DVK sendDocuments - 20MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xtee=&quot;http://x-tee.riik.ee/xsd/xtee.xsd&quot; xmlns:dhl=&quot;http://producers.dhl.xrd.riik.ee/producer/dhl&quot;&gt;&#xd;
+    &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+         &lt;ns4:client xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;!--&lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;--&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+         &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;70000002&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocuments&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v4&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;dhl:sendDocuments&gt;&#xd;
+         &lt;keha&gt;&#xd;
+            &lt;dokumendid href=&quot;cid:doc&quot;&gt;&#xd;
+            &lt;doc&gt;cid:doc&lt;/doc&gt;&#xd;
+            &lt;/dokumendid&gt;&#xd;
+            &lt;kaust&gt;/&lt;/kaust&gt;&#xd;
+         &lt;/keha&gt;&#xd;
+      &lt;/dhl:sendDocuments&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: application/octet-stream; &#xd;
+	name=binaryContent5653537629501048292.tmp&#xd;
+Content-Transfer-Encoding: binary&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent5653537629501048292.tmp&quot;; filename=&quot;binaryContent5653537629501048292.tmp&quot;&#xd;
+&#xd;
+${__StringFromFile(kapsel_20MB.base64)}&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/wsServer</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DVK sendDocuments - 50MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xtee=&quot;http://x-tee.riik.ee/xsd/xtee.xsd&quot; xmlns:dhl=&quot;http://producers.dhl.xrd.riik.ee/producer/dhl&quot;&gt;&#xd;
+    &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+         &lt;ns4:client xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;!--&lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;--&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+         &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;70000002&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocuments&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v4&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;dhl:sendDocuments&gt;&#xd;
+         &lt;keha&gt;&#xd;
+            &lt;dokumendid href=&quot;cid:doc&quot;&gt;&#xd;
+            &lt;doc&gt;cid:doc&lt;/doc&gt;&#xd;
+            &lt;/dokumendid&gt;&#xd;
+            &lt;kaust&gt;/&lt;/kaust&gt;&#xd;
+         &lt;/keha&gt;&#xd;
+      &lt;/dhl:sendDocuments&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: application/octet-stream; &#xd;
+	name=binaryContent5653537629501048292.tmp&#xd;
+Content-Transfer-Encoding: binary&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent5653537629501048292.tmp&quot;; filename=&quot;binaryContent5653537629501048292.tmp&quot;&#xd;
+&#xd;
+${__StringFromFile(kapsel_50MB.base64)}&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/wsServer</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DHX sendDocument - 10MB file" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xro=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:iden=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:prod=&quot;http://dhx.x-road.eu/producer&quot;&gt;&#xd;
+   &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+    &lt;ns4:client ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+    &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocument&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v1&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   	&lt;rep:representedParty xmlns:rep=&quot;http://x-road.eu/xsd/representation.xsd&quot;/&gt;&lt;xro:userId/&gt;&lt;xro:issue/&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;prod:sendDocument&gt;&#xd;
+         	&lt;!--Optional:--&gt;&#xd;
+          &lt;prod:DHXVersion&gt;1.0&lt;/prod:DHXVersion&gt;&#xd;
+         	&lt;prod:documentAttachment&gt;cid:doc&lt;/prod:documentAttachment&gt;&#xd;
+         	&lt;prod:consignmentId&gt;${__UUID()}&lt;/prod:consignmentId&gt;&#xd;
+      &lt;/prod:sendDocument&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/plain; charset=UTF-8; &#xd;
+	name=binaryContent1489825202469856491.tmp&#xd;
+Content-Transfer-Encoding: quoted-printable&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent1489825202469856491.tmp&quot;; filename=&quot;binaryContent1489825202469856491.tmp&quot;&#xd;
+&#xd;
+&lt;DecContainer xmlns=3D&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+  &lt;Transport&gt;&#xd;
+    &lt;DecSender&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+    &lt;/DecSender&gt;&#xd;
+    &lt;DecRecipient&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+    &lt;/DecRecipient&gt;&#xd;
+  &lt;/Transport&gt;&#xd;
+  &lt;RecordCreator&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;true&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;() - + 37266   30276   &lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordCreator&gt;&#xd;
+  &lt;RecordSenderToDec&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;false&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;+3726630276&lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordSenderToDec&gt;&#xd;
+  &lt;Recipient&gt;&#xd;
+    &lt;Organisation&gt;&#xd;
+      &lt;Name&gt;Riigi Infos=C3=BCsteemi Amet&lt;/Name&gt;&#xd;
+      &lt;OrganisationCode&gt;70006317&lt;/OrganisationCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Organisation&gt;&#xd;
+  &lt;/Recipient&gt;&#xd;
+  &lt;RecordMetadata&gt;&#xd;
+    &lt;RecordGuid&gt;25892e17-80f6-415f-9c65-7395632f0234&lt;/RecordGuid&gt;&#xd;
+    &lt;RecordType&gt;Kiri&lt;/RecordType&gt;&#xd;
+    &lt;RecordOriginalIdentifier&gt;213465&lt;/RecordOriginalIdentifier&gt;&#xd;
+    &lt;RecordDateRegistered&gt;2012-11-11T19:18:03&lt;/RecordDateRegistered&gt;&#xd;
+    &lt;RecordTitle&gt;Ettepanek&lt;/RecordTitle&gt;&#xd;
+    &lt;RecordLanguage&gt;EE&lt;/RecordLanguage&gt;&#xd;
+  &lt;/RecordMetadata&gt;&#xd;
+  &lt;Access&gt;&#xd;
+    &lt;AccessConditionsCode&gt;AK&lt;/AccessConditionsCode&gt;&#xd;
+  &lt;/Access&gt;&#xd;
+  &lt;File&gt;&#xd;
+    &lt;FileGuid&gt;25892e17-80f6-415f-9c65-7395632f0001&lt;/FileGuid&gt;&#xd;
+    &lt;RecordMainComponent&gt;0&lt;/RecordMainComponent&gt;&#xd;
+    &lt;FileName&gt;Ettepanek.doc&lt;/FileName&gt;&#xd;
+    &lt;MimeType&gt;application/msword&lt;/MimeType&gt;&#xd;
+    &lt;FileSize&gt;211543&lt;/FileSize&gt;&#xd;
+    &lt;ZipBase64Content&gt;${__StringFromFile(10mb.base64)}&lt;/ZipBase64Content&gt;&#xd;
+  &lt;/File&gt;&#xd;
+  &lt;RecordTypeSpecificMetadata /&gt;&#xd;
+  &lt;DecMetadata&gt;&#xd;
+    &lt;DecId&gt;99999999&lt;/DecId&gt;&#xd;
+    &lt;DecFolder&gt;/&lt;/DecFolder&gt;&#xd;
+    &lt;DecReceiptDate&gt;2012-11-11T19:20:42&lt;/DecReceiptDate&gt;&#xd;
+  &lt;/DecMetadata&gt;&#xd;
+&lt;/DecContainer&gt;&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/ws</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="699321715">receiptId</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DHX sendDocument - 20MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xro=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:iden=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:prod=&quot;http://dhx.x-road.eu/producer&quot;&gt;&#xd;
+   &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+    &lt;ns4:client ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+    &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocument&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v1&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   	&lt;rep:representedParty xmlns:rep=&quot;http://x-road.eu/xsd/representation.xsd&quot;/&gt;&lt;xro:userId/&gt;&lt;xro:issue/&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;prod:sendDocument&gt;&#xd;
+         	&lt;!--Optional:--&gt;&#xd;
+          &lt;prod:DHXVersion&gt;1.0&lt;/prod:DHXVersion&gt;&#xd;
+         	&lt;prod:documentAttachment&gt;cid:doc&lt;/prod:documentAttachment&gt;&#xd;
+         	&lt;prod:consignmentId&gt;${__UUID()}&lt;/prod:consignmentId&gt;&#xd;
+      &lt;/prod:sendDocument&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/plain; charset=UTF-8; &#xd;
+	name=binaryContent1489825202469856491.tmp&#xd;
+Content-Transfer-Encoding: quoted-printable&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent1489825202469856491.tmp&quot;; filename=&quot;binaryContent1489825202469856491.tmp&quot;&#xd;
+&#xd;
+&lt;DecContainer xmlns=3D&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+  &lt;Transport&gt;&#xd;
+    &lt;DecSender&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+    &lt;/DecSender&gt;&#xd;
+    &lt;DecRecipient&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+    &lt;/DecRecipient&gt;&#xd;
+  &lt;/Transport&gt;&#xd;
+  &lt;RecordCreator&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;true&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;() - + 37266   30276   &lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordCreator&gt;&#xd;
+  &lt;RecordSenderToDec&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;false&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;+3726630276&lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordSenderToDec&gt;&#xd;
+  &lt;Recipient&gt;&#xd;
+    &lt;Organisation&gt;&#xd;
+      &lt;Name&gt;Riigi Infos=C3=BCsteemi Amet&lt;/Name&gt;&#xd;
+      &lt;OrganisationCode&gt;70006317&lt;/OrganisationCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Organisation&gt;&#xd;
+  &lt;/Recipient&gt;&#xd;
+  &lt;RecordMetadata&gt;&#xd;
+    &lt;RecordGuid&gt;25892e17-80f6-415f-9c65-7395632f0234&lt;/RecordGuid&gt;&#xd;
+    &lt;RecordType&gt;Kiri&lt;/RecordType&gt;&#xd;
+    &lt;RecordOriginalIdentifier&gt;213465&lt;/RecordOriginalIdentifier&gt;&#xd;
+    &lt;RecordDateRegistered&gt;2012-11-11T19:18:03&lt;/RecordDateRegistered&gt;&#xd;
+    &lt;RecordTitle&gt;Ettepanek&lt;/RecordTitle&gt;&#xd;
+    &lt;RecordLanguage&gt;EE&lt;/RecordLanguage&gt;&#xd;
+  &lt;/RecordMetadata&gt;&#xd;
+  &lt;Access&gt;&#xd;
+    &lt;AccessConditionsCode&gt;AK&lt;/AccessConditionsCode&gt;&#xd;
+  &lt;/Access&gt;&#xd;
+  &lt;File&gt;&#xd;
+    &lt;FileGuid&gt;25892e17-80f6-415f-9c65-7395632f0001&lt;/FileGuid&gt;&#xd;
+    &lt;RecordMainComponent&gt;0&lt;/RecordMainComponent&gt;&#xd;
+    &lt;FileName&gt;Ettepanek.doc&lt;/FileName&gt;&#xd;
+    &lt;MimeType&gt;application/msword&lt;/MimeType&gt;&#xd;
+    &lt;FileSize&gt;211543&lt;/FileSize&gt;&#xd;
+    &lt;ZipBase64Content&gt;${__StringFromFile(20mb.base64)}&lt;/ZipBase64Content&gt;&#xd;
+  &lt;/File&gt;&#xd;
+  &lt;RecordTypeSpecificMetadata /&gt;&#xd;
+  &lt;DecMetadata&gt;&#xd;
+    &lt;DecId&gt;99999999&lt;/DecId&gt;&#xd;
+    &lt;DecFolder&gt;/&lt;/DecFolder&gt;&#xd;
+    &lt;DecReceiptDate&gt;2012-11-11T19:20:42&lt;/DecReceiptDate&gt;&#xd;
+  &lt;/DecMetadata&gt;&#xd;
+&lt;/DecContainer&gt;&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/ws</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="699321715">receiptId</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DHX sendDocument - 50MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xro=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:iden=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:prod=&quot;http://dhx.x-road.eu/producer&quot;&gt;&#xd;
+   &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+    &lt;ns4:client ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+    &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocument&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v1&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   	&lt;rep:representedParty xmlns:rep=&quot;http://x-road.eu/xsd/representation.xsd&quot;/&gt;&lt;xro:userId/&gt;&lt;xro:issue/&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;prod:sendDocument&gt;&#xd;
+         	&lt;!--Optional:--&gt;&#xd;
+          &lt;prod:DHXVersion&gt;1.0&lt;/prod:DHXVersion&gt;&#xd;
+         	&lt;prod:documentAttachment&gt;cid:doc&lt;/prod:documentAttachment&gt;&#xd;
+         	&lt;prod:consignmentId&gt;${__UUID()}&lt;/prod:consignmentId&gt;&#xd;
+      &lt;/prod:sendDocument&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/plain; charset=UTF-8; &#xd;
+	name=binaryContent1489825202469856491.tmp&#xd;
+Content-Transfer-Encoding: quoted-printable&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent1489825202469856491.tmp&quot;; filename=&quot;binaryContent1489825202469856491.tmp&quot;&#xd;
+&#xd;
+&lt;DecContainer xmlns=3D&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+  &lt;Transport&gt;&#xd;
+    &lt;DecSender&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+    &lt;/DecSender&gt;&#xd;
+    &lt;DecRecipient&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+    &lt;/DecRecipient&gt;&#xd;
+  &lt;/Transport&gt;&#xd;
+  &lt;RecordCreator&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;true&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;() - + 37266   30276   &lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordCreator&gt;&#xd;
+  &lt;RecordSenderToDec&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;false&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;+3726630276&lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordSenderToDec&gt;&#xd;
+  &lt;Recipient&gt;&#xd;
+    &lt;Organisation&gt;&#xd;
+      &lt;Name&gt;Riigi Infos=C3=BCsteemi Amet&lt;/Name&gt;&#xd;
+      &lt;OrganisationCode&gt;70006317&lt;/OrganisationCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Organisation&gt;&#xd;
+  &lt;/Recipient&gt;&#xd;
+  &lt;RecordMetadata&gt;&#xd;
+    &lt;RecordGuid&gt;25892e17-80f6-415f-9c65-7395632f0234&lt;/RecordGuid&gt;&#xd;
+    &lt;RecordType&gt;Kiri&lt;/RecordType&gt;&#xd;
+    &lt;RecordOriginalIdentifier&gt;213465&lt;/RecordOriginalIdentifier&gt;&#xd;
+    &lt;RecordDateRegistered&gt;2012-11-11T19:18:03&lt;/RecordDateRegistered&gt;&#xd;
+    &lt;RecordTitle&gt;Ettepanek&lt;/RecordTitle&gt;&#xd;
+    &lt;RecordLanguage&gt;EE&lt;/RecordLanguage&gt;&#xd;
+  &lt;/RecordMetadata&gt;&#xd;
+  &lt;Access&gt;&#xd;
+    &lt;AccessConditionsCode&gt;AK&lt;/AccessConditionsCode&gt;&#xd;
+  &lt;/Access&gt;&#xd;
+  &lt;File&gt;&#xd;
+    &lt;FileGuid&gt;25892e17-80f6-415f-9c65-7395632f0001&lt;/FileGuid&gt;&#xd;
+    &lt;RecordMainComponent&gt;0&lt;/RecordMainComponent&gt;&#xd;
+    &lt;FileName&gt;Ettepanek.doc&lt;/FileName&gt;&#xd;
+    &lt;MimeType&gt;application/msword&lt;/MimeType&gt;&#xd;
+    &lt;FileSize&gt;211543&lt;/FileSize&gt;&#xd;
+    &lt;ZipBase64Content&gt;${__StringFromFile(50mb.base64)}&lt;/ZipBase64Content&gt;&#xd;
+  &lt;/File&gt;&#xd;
+  &lt;RecordTypeSpecificMetadata /&gt;&#xd;
+  &lt;DecMetadata&gt;&#xd;
+    &lt;DecId&gt;99999999&lt;/DecId&gt;&#xd;
+    &lt;DecFolder&gt;/&lt;/DecFolder&gt;&#xd;
+    &lt;DecReceiptDate&gt;2012-11-11T19:20:42&lt;/DecReceiptDate&gt;&#xd;
+  &lt;/DecMetadata&gt;&#xd;
+&lt;/DecContainer&gt;&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/ws</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="699321715">receiptId</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+          <stringProp name="ConstantTimer.delay">${delay}</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Large Files Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${num_threads_large}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_period}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${duration}</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DVK sendDocuments - 100MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xtee=&quot;http://x-tee.riik.ee/xsd/xtee.xsd&quot; xmlns:dhl=&quot;http://producers.dhl.xrd.riik.ee/producer/dhl&quot;&gt;&#xd;
+    &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+         &lt;ns4:client xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;!--&lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;--&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+         &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;70000003&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocuments&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v4&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;dhl:sendDocuments&gt;&#xd;
+         &lt;keha&gt;&#xd;
+            &lt;dokumendid href=&quot;cid:doc&quot;&gt;&#xd;
+            &lt;doc&gt;cid:doc&lt;/doc&gt;&#xd;
+            &lt;/dokumendid&gt;&#xd;
+            &lt;kaust&gt;/&lt;/kaust&gt;&#xd;
+         &lt;/keha&gt;&#xd;
+      &lt;/dhl:sendDocuments&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: application/octet-stream; &#xd;
+	name=binaryContent5653537629501048292.tmp&#xd;
+Content-Transfer-Encoding: binary&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent5653537629501048292.tmp&quot;; filename=&quot;binaryContent5653537629501048292.tmp&quot;&#xd;
+&#xd;
+${__StringFromFile(kapsel_100MB.base64)}&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/wsServer</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DVK sendDocuments  - 200MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xtee=&quot;http://x-tee.riik.ee/xsd/xtee.xsd&quot; xmlns:dhl=&quot;http://producers.dhl.xrd.riik.ee/producer/dhl&quot;&gt;&#xd;
+    &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+         &lt;ns4:client xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;!--&lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;--&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+         &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;70000003&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocuments&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v4&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;dhl:sendDocuments&gt;&#xd;
+         &lt;keha&gt;&#xd;
+            &lt;dokumendid href=&quot;cid:doc&quot;&gt;&#xd;
+            &lt;doc&gt;cid:doc&lt;/doc&gt;&#xd;
+            &lt;/dokumendid&gt;&#xd;
+            &lt;kaust&gt;/&lt;/kaust&gt;&#xd;
+         &lt;/keha&gt;&#xd;
+      &lt;/dhl:sendDocuments&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: application/octet-stream; &#xd;
+	name=binaryContent5653537629501048292.tmp&#xd;
+Content-Transfer-Encoding: binary&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent5653537629501048292.tmp&quot;; filename=&quot;binaryContent5653537629501048292.tmp&quot;&#xd;
+&#xd;
+${__StringFromFile(kapsel_200MB.base64)}&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/wsServer</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DHX sendDocument - 100MB file" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xro=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:iden=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:prod=&quot;http://dhx.x-road.eu/producer&quot;&gt;&#xd;
+   &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+    &lt;ns4:client ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+    &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocument&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v1&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   	&lt;rep:representedParty xmlns:rep=&quot;http://x-road.eu/xsd/representation.xsd&quot;/&gt;&lt;xro:userId/&gt;&lt;xro:issue/&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;prod:sendDocument&gt;&#xd;
+         	&lt;!--Optional:--&gt;&#xd;
+          &lt;prod:DHXVersion&gt;1.0&lt;/prod:DHXVersion&gt;&#xd;
+         	&lt;prod:documentAttachment&gt;cid:doc&lt;/prod:documentAttachment&gt;&#xd;
+         	&lt;prod:consignmentId&gt;${__UUID()}&lt;/prod:consignmentId&gt;&#xd;
+      &lt;/prod:sendDocument&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/plain; charset=UTF-8; &#xd;
+	name=binaryContent1489825202469856491.tmp&#xd;
+Content-Transfer-Encoding: quoted-printable&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent1489825202469856491.tmp&quot;; filename=&quot;binaryContent1489825202469856491.tmp&quot;&#xd;
+&#xd;
+&lt;DecContainer xmlns=3D&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+  &lt;Transport&gt;&#xd;
+    &lt;DecSender&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+    &lt;/DecSender&gt;&#xd;
+    &lt;DecRecipient&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+    &lt;/DecRecipient&gt;&#xd;
+  &lt;/Transport&gt;&#xd;
+  &lt;RecordCreator&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;true&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;() - + 37266   30276   &lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordCreator&gt;&#xd;
+  &lt;RecordSenderToDec&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;false&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;+3726630276&lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordSenderToDec&gt;&#xd;
+  &lt;Recipient&gt;&#xd;
+    &lt;Organisation&gt;&#xd;
+      &lt;Name&gt;Riigi Infos=C3=BCsteemi Amet&lt;/Name&gt;&#xd;
+      &lt;OrganisationCode&gt;70006317&lt;/OrganisationCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Organisation&gt;&#xd;
+  &lt;/Recipient&gt;&#xd;
+  &lt;RecordMetadata&gt;&#xd;
+    &lt;RecordGuid&gt;25892e17-80f6-415f-9c65-7395632f0234&lt;/RecordGuid&gt;&#xd;
+    &lt;RecordType&gt;Kiri&lt;/RecordType&gt;&#xd;
+    &lt;RecordOriginalIdentifier&gt;213465&lt;/RecordOriginalIdentifier&gt;&#xd;
+    &lt;RecordDateRegistered&gt;2012-11-11T19:18:03&lt;/RecordDateRegistered&gt;&#xd;
+    &lt;RecordTitle&gt;Ettepanek&lt;/RecordTitle&gt;&#xd;
+    &lt;RecordLanguage&gt;EE&lt;/RecordLanguage&gt;&#xd;
+  &lt;/RecordMetadata&gt;&#xd;
+  &lt;Access&gt;&#xd;
+    &lt;AccessConditionsCode&gt;AK&lt;/AccessConditionsCode&gt;&#xd;
+  &lt;/Access&gt;&#xd;
+  &lt;File&gt;&#xd;
+    &lt;FileGuid&gt;25892e17-80f6-415f-9c65-7395632f0001&lt;/FileGuid&gt;&#xd;
+    &lt;RecordMainComponent&gt;0&lt;/RecordMainComponent&gt;&#xd;
+    &lt;FileName&gt;Ettepanek.doc&lt;/FileName&gt;&#xd;
+    &lt;MimeType&gt;application/msword&lt;/MimeType&gt;&#xd;
+    &lt;FileSize&gt;211543&lt;/FileSize&gt;&#xd;
+    &lt;ZipBase64Content&gt;${__StringFromFile(100mb.base64)}&lt;/ZipBase64Content&gt;&#xd;
+  &lt;/File&gt;&#xd;
+  &lt;RecordTypeSpecificMetadata /&gt;&#xd;
+  &lt;DecMetadata&gt;&#xd;
+    &lt;DecId&gt;99999999&lt;/DecId&gt;&#xd;
+    &lt;DecFolder&gt;/&lt;/DecFolder&gt;&#xd;
+    &lt;DecReceiptDate&gt;2012-11-11T19:20:42&lt;/DecReceiptDate&gt;&#xd;
+  &lt;/DecMetadata&gt;&#xd;
+&lt;/DecContainer&gt;&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/ws</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="699321715">receiptId</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DHX sendDocument - 200MB file" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/xml; charset=UTF-8&#xd;
+Content-Transfer-Encoding: 8bit&#xd;
+Content-ID: &lt;rootpart@soapui.org&gt;&#xd;
+&#xd;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xro=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:iden=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:prod=&quot;http://dhx.x-road.eu/producer&quot;&gt;&#xd;
+   &lt;soapenv:Header&gt;&#xd;
+       &lt;ns4:protocolVersion xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;4.0&lt;/ns4:protocolVersion&gt;&#xd;
+    &lt;ns4:id xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;64a3ddbd-1620-42c4-b2fe-60b854c2f32f&#xd;
+    &lt;/ns4:id&gt;&#xd;
+    &lt;ns4:client ns3:objectType=&quot;SUBSYSTEM&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+    &lt;/ns4:client&gt;&#xd;
+    &lt;ns4:service ns3:objectType=&quot;SERVICE&quot; xmlns:ns2=&quot;http://dhx.x-road.eu/producer&quot; xmlns:ns3=&quot;http://x-road.eu/xsd/identifiers&quot; xmlns:ns4=&quot;http://x-road.eu/xsd/xroad.xsd&quot; xmlns:ns5=&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+      &lt;ns3:xRoadInstance&gt;ee-dev&lt;/ns3:xRoadInstance&gt;&#xd;
+      &lt;ns3:memberClass&gt;COM&lt;/ns3:memberClass&gt;&#xd;
+      &lt;ns3:memberCode&gt;10391131&lt;/ns3:memberCode&gt;&#xd;
+      &lt;ns3:subsystemCode&gt;DHX&lt;/ns3:subsystemCode&gt;&#xd;
+      &lt;ns3:serviceCode&gt;sendDocument&lt;/ns3:serviceCode&gt;&#xd;
+      &lt;ns3:serviceVersion&gt;v1&lt;/ns3:serviceVersion&gt;&#xd;
+    &lt;/ns4:service&gt;&#xd;
+   	&lt;rep:representedParty xmlns:rep=&quot;http://x-road.eu/xsd/representation.xsd&quot;/&gt;&lt;xro:userId/&gt;&lt;xro:issue/&gt;&#xd;
+   &lt;/soapenv:Header&gt;&#xd;
+   &lt;soapenv:Body&gt;&#xd;
+      &lt;prod:sendDocument&gt;&#xd;
+         	&lt;!--Optional:--&gt;&#xd;
+          &lt;prod:DHXVersion&gt;1.0&lt;/prod:DHXVersion&gt;&#xd;
+         	&lt;prod:documentAttachment&gt;cid:doc&lt;/prod:documentAttachment&gt;&#xd;
+         	&lt;prod:consignmentId&gt;${__UUID()}&lt;/prod:consignmentId&gt;&#xd;
+      &lt;/prod:sendDocument&gt;&#xd;
+   &lt;/soapenv:Body&gt;&#xd;
+&lt;/soapenv:Envelope&gt;&#xd;
+------=_Part_31_1660674656.1568971558172&#xd;
+Content-Type: text/plain; charset=UTF-8; &#xd;
+	name=binaryContent1489825202469856491.tmp&#xd;
+Content-Transfer-Encoding: quoted-printable&#xd;
+Content-ID: &lt;doc&gt;&#xd;
+Content-Disposition: attachment; name=&quot;binaryContent1489825202469856491.tmp&quot;; filename=&quot;binaryContent1489825202469856491.tmp&quot;&#xd;
+&#xd;
+&lt;DecContainer xmlns=3D&quot;http://www.riik.ee/schemas/deccontainer/vers_2_1/&quot;&gt;&#xd;
+  &lt;Transport&gt;&#xd;
+    &lt;DecSender&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+    &lt;/DecSender&gt;&#xd;
+    &lt;DecRecipient&gt;&lt;OrganisationCode&gt;10391131&lt;/OrganisationCode&gt;&#xd;
+    &lt;/DecRecipient&gt;&#xd;
+  &lt;/Transport&gt;&#xd;
+  &lt;RecordCreator&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;true&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;() - + 37266   30276   &lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordCreator&gt;&#xd;
+  &lt;RecordSenderToDec&gt;&#xd;
+    &lt;Person&gt;&#xd;
+      &lt;Name&gt;Lauri Tammem=C3=A4e&lt;/Name&gt;&#xd;
+      &lt;GivenName&gt;Lauri&lt;/GivenName&gt;&#xd;
+      &lt;Surname&gt;Tammem=C3=A4e&lt;/Surname&gt;&#xd;
+      &lt;PersonalIdCode&gt;EE38806190294&lt;/PersonalIdCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Person&gt;&#xd;
+    &lt;ContactData&gt;&#xd;
+      &lt;Adit&gt;false&lt;/Adit&gt;&#xd;
+      &lt;Phone&gt;+3726630276&lt;/Phone&gt;&#xd;
+      &lt;Email&gt;lauri.tammemae@ria.ee&lt;/Email&gt;&#xd;
+      &lt;WebPage&gt;www.hot.ee/lauri&lt;/WebPage&gt;&#xd;
+      &lt;MessagingAddress&gt;skype: lauri.tammemae&lt;/MessagingAddress&gt;&#xd;
+      &lt;PostalAddress&gt;&#xd;
+        &lt;Country&gt;Eesti&lt;/Country&gt;&#xd;
+        &lt;County&gt;Harju maakond&lt;/County&gt;&#xd;
+        &lt;LocalGovernment&gt;Tallinna linn&lt;/LocalGovernment&gt;&#xd;
+        &lt;AdministrativeUnit&gt;Mustam=C3=A4e linnaosa&lt;/AdministrativeUnit&gt;&#xd;
+        &lt;SmallPlace&gt;P=C3=A4=C3=A4sukese K=C3=9C&lt;/SmallPlace&gt;&#xd;
+        &lt;LandUnit&gt;&lt;/LandUnit&gt;&#xd;
+        &lt;Street&gt;Mustam=C3=A4e tee&lt;/Street&gt;&#xd;
+        &lt;HouseNumber&gt;248&lt;/HouseNumber&gt;&#xd;
+        &lt;BuildingPartNumber&gt;62&lt;/BuildingPartNumber&gt;&#xd;
+        &lt;PostalCode&gt;11212&lt;/PostalCode&gt;&#xd;
+      &lt;/PostalAddress&gt;&#xd;
+    &lt;/ContactData&gt;&#xd;
+  &lt;/RecordSenderToDec&gt;&#xd;
+  &lt;Recipient&gt;&#xd;
+    &lt;Organisation&gt;&#xd;
+      &lt;Name&gt;Riigi Infos=C3=BCsteemi Amet&lt;/Name&gt;&#xd;
+      &lt;OrganisationCode&gt;70006317&lt;/OrganisationCode&gt;&#xd;
+      &lt;Residency&gt;EE&lt;/Residency&gt;&#xd;
+    &lt;/Organisation&gt;&#xd;
+  &lt;/Recipient&gt;&#xd;
+  &lt;RecordMetadata&gt;&#xd;
+    &lt;RecordGuid&gt;25892e17-80f6-415f-9c65-7395632f0234&lt;/RecordGuid&gt;&#xd;
+    &lt;RecordType&gt;Kiri&lt;/RecordType&gt;&#xd;
+    &lt;RecordOriginalIdentifier&gt;213465&lt;/RecordOriginalIdentifier&gt;&#xd;
+    &lt;RecordDateRegistered&gt;2012-11-11T19:18:03&lt;/RecordDateRegistered&gt;&#xd;
+    &lt;RecordTitle&gt;Ettepanek&lt;/RecordTitle&gt;&#xd;
+    &lt;RecordLanguage&gt;EE&lt;/RecordLanguage&gt;&#xd;
+  &lt;/RecordMetadata&gt;&#xd;
+  &lt;Access&gt;&#xd;
+    &lt;AccessConditionsCode&gt;AK&lt;/AccessConditionsCode&gt;&#xd;
+  &lt;/Access&gt;&#xd;
+  &lt;File&gt;&#xd;
+    &lt;FileGuid&gt;25892e17-80f6-415f-9c65-7395632f0001&lt;/FileGuid&gt;&#xd;
+    &lt;RecordMainComponent&gt;0&lt;/RecordMainComponent&gt;&#xd;
+    &lt;FileName&gt;Ettepanek.doc&lt;/FileName&gt;&#xd;
+    &lt;MimeType&gt;application/msword&lt;/MimeType&gt;&#xd;
+    &lt;FileSize&gt;211543&lt;/FileSize&gt;&#xd;
+    &lt;ZipBase64Content&gt;${__StringFromFile(200mb.base64)}&lt;/ZipBase64Content&gt;&#xd;
+  &lt;/File&gt;&#xd;
+  &lt;RecordTypeSpecificMetadata /&gt;&#xd;
+  &lt;DecMetadata&gt;&#xd;
+    &lt;DecId&gt;99999999&lt;/DecId&gt;&#xd;
+    &lt;DecFolder&gt;/&lt;/DecFolder&gt;&#xd;
+    &lt;DecReceiptDate&gt;2012-11-11T19:20:42&lt;/DecReceiptDate&gt;&#xd;
+  &lt;/DecMetadata&gt;&#xd;
+&lt;/DecContainer&gt;&#xd;
+------=_Part_31_1660674656.1568971558172--&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/dhx-adapter-server/ws</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="699321715">receiptId</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+          <stringProp name="ConstantTimer.delay">${delay}</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+      </hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="duration" elementType="Argument">
+            <stringProp name="Argument.name">duration</stringProp>
+            <stringProp name="Argument.value">${__P(duration,60)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="rampup_period" elementType="Argument">
+            <stringProp name="Argument.name">rampup_period</stringProp>
+            <stringProp name="Argument.value">${__P(rampup_period,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="num_threads_small" elementType="Argument">
+            <stringProp name="Argument.name">num_threads_small</stringProp>
+            <stringProp name="Argument.value">${__P(num_threads_small,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="num_threads_medium" elementType="Argument">
+            <stringProp name="Argument.name">num_threads_medium</stringProp>
+            <stringProp name="Argument.value">${__P(num_threads_medium,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="num_threads_large" elementType="Argument">
+            <stringProp name="Argument.name">num_threads_large</stringProp>
+            <stringProp name="Argument.value">${__P(num_threads_large,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="hostname" elementType="Argument">
+            <stringProp name="Argument.name">hostname</stringProp>
+            <stringProp name="Argument.value">${__P(hostname,localhost)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="port" elementType="Argument">
+            <stringProp name="Argument.name">port</stringProp>
+            <stringProp name="Argument.value">${__P(port,8081)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="protocol" elementType="Argument">
+            <stringProp name="Argument.name">protocol</stringProp>
+            <stringProp name="Argument.value">${__P(protocol,http)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="delay" elementType="Argument">
+            <stringProp name="Argument.name">delay</stringProp>
+            <stringProp name="Argument.value">${__P(delay,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">Content-Type</stringProp>
+            <stringProp name="Header.value">multipart/related; type=&quot;text/xml&quot;; start=&quot;&lt;rootpart@soapui.org&gt;&quot;; boundary=&quot;----=_Part_31_1660674656.1568971558172&quot;</stringProp>
+          </elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
