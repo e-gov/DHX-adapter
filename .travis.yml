@@ -4,13 +4,10 @@ addons:
   apt:
     packages:
     - xmlstarlet
-matrix:
-  include:
-    # 8
-    - jdk: openjdk8
-    # 11
-    - jdk: openjdk11
-      script: mvn clean install -q -P jdk11 sonar:sonar -Dsonar.projectKey=e-gov_DHX-adapter
+  sonarcloud:
+    organization: e-gov
+jdk:
+- openjdk8
 branches:
   only:
   - master
