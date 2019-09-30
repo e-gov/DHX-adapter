@@ -73,52 +73,9 @@ class DHX {
         return writer.toString()
     }
 
-    static String dhxSendDocumentBody() {
-        return """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:rep="http://x-road.eu/xsd/representation.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:prod="http://dhx.x-road.eu/producer">
-   <soapenv:Header>
-      <xro:protocolVersion>4.0</xro:protocolVersion>
-      <xro:issue>?</xro:issue>
-      <xro:userId>?</xro:userId>
-      <xro:id>64a3ddbd-1620-42c4-b2fe-60b854c2f32f</xro:id>
-      <rep:representedParty>
-         <!--Optional:-->
-         <rep:partyClass>?</rep:partyClass>
-         <rep:partyCode>?</rep:partyCode>
-      </rep:representedParty>
-      <xro:service iden:objectType="SERVICE">
-         <iden:xRoadInstance>?</iden:xRoadInstance>
-         <iden:memberClass>?</iden:memberClass>
-         <iden:memberCode>?</iden:memberCode>
-         <!--Optional:-->
-         <iden:subsystemCode>?</iden:subsystemCode>
-         <iden:serviceCode>?</iden:serviceCode>
-         <!--Optional:-->
-         <iden:serviceVersion>?</iden:serviceVersion>
-      </xro:service>
-      <xro:client iden:objectType="?">
-         <iden:xRoadInstance>?</iden:xRoadInstance>
-         <iden:memberClass>?</iden:memberClass>
-         <iden:memberCode>?</iden:memberCode>
-         <!--Optional:-->
-         <iden:subsystemCode>?</iden:subsystemCode>
-      </xro:client>
-   </soapenv:Header>
-   <soapenv:Body>
-      <prod:sendDocument>
-         <!--Optional:-->
-         <prod:recipient>?</prod:recipient>
-         <!--Optional:-->
-         <prod:recipientSystem>?</prod:recipientSystem>
-         <prod:consignmentId>?</prod:consignmentId>
-         <prod:documentAttachment>cid:803149665201</prod:documentAttachment>
-      </prod:sendDocument>
-   </soapenv:Body>
-</soapenv:Envelope>"""
-    }
-
     @Step("DHX sendDocument request")
     static Response dhxSendDocument(String xml, String attachment, String url) {
-        return RestAssured.given()
+        return Steps.multipartGiven()
                 .filter(new MultipartAllureFilter())
                 .multiPart(new MultiPartSpecBuilder(xml)
                         .fileName("binaryContent2450448932417715564.tmp")

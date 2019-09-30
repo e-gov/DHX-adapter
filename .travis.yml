@@ -15,7 +15,7 @@ matrix:
     # 11
     - jdk: openjdk11
       script: 
-      - mvn clean verify -q -P jdk11
+      - mvn clean verify -q -P jdk11,production
       - docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml down -v
       - docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml build
       - docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml up --exit-code-from setup-wiremock setup-wiremock
