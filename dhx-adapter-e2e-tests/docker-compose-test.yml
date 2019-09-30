@@ -49,7 +49,7 @@ services:
       retries: 15
 
   dhx-adapter-hobekuul:
-    image: tomcat:8.5
+    image: tomcat:${TOMCAT_VERSION-8.5}
     volumes:
     - documents-hobekuul:/documents
     - "../dhx-adapter-server/target/dhx-adapter-server.war:/usr/local/tomcat/webapps/dhx-adapter-server.war"
@@ -70,7 +70,7 @@ services:
         condition: service_started
 
   dhx-adapter-test:
-    image: tomcat:8.5
+    image: tomcat:${TOMCAT_VERSION-8.5}
     volumes:
     - documents-test:/documents
     - "../dhx-adapter-server/target/dhx-adapter-server.war:/usr/local/tomcat/webapps/dhx-adapter-server.war"
