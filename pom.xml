@@ -11,7 +11,7 @@
 		<revision>1.0.4-SNAPSHOT</revision>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
+		<java.version>1.8</java.version>
 		<!-- Specifies which configuration resources to use in the build -->
 		<resourceDir>conf/${conf}</resourceDir>
 		<jcabi.aspectj>1.9.2</jcabi.aspectj>
