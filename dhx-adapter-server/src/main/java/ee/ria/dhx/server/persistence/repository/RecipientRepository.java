@@ -61,8 +61,7 @@ public interface RecipientRepository extends JpaRepository<Recipient, Long> {
          "LEFT OUTER JOIN s.organisation so " +
          "JOIN t.dokument d " +
          "WHERE " +
-               "r.outgoing = true " +
-               "AND (true = :#{#statuses == null || #statuses.size() == 0} OR r.statusId IN (:#{#statuses.![classificatorId]})) " +
+               "(true = :#{#statuses == null || #statuses.size() == 0} OR r.statusId IN (:#{#statuses.![classificatorId]})) " +
                "AND (true = :#{#isOutgoing == null} OR d.outgoingDocument = :#{#isOutgoing}) " +
                "AND (true = :#{T(org.apache.commons.lang3.StringUtils).isEmpty(#senderRegCode)} OR so.registrationCode LIKE %:#{#senderRegCode}%) " +
                "AND (true = :#{T(org.apache.commons.lang3.StringUtils).isEmpty(#senderSubsystem)} OR so.subSystem LIKE %:#{#senderSubsystem}%) " +
