@@ -2,6 +2,7 @@ package ee.ria.dhx.ws.service.impl;
 
 import com.jcabi.aspects.Loggable;
 
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import ee.ria.dhx.bigdata.BigDataMarshallHandler;
 import ee.ria.dhx.bigdata.BigDataXmlReader;
 import ee.ria.dhx.bigdata.ReflectionUtil;
@@ -16,7 +17,10 @@ import ee.ria.dhx.ws.service.DhxMarshallerService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.xml.serialize.XMLSerializer;
+import org.codehaus.stax2.XMLStreamReader2;
+import org.codehaus.stax2.validation.XMLValidationException;
+import org.codehaus.stax2.validation.XMLValidationSchema;
+import org.codehaus.stax2.validation.XMLValidationSchemaFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
@@ -43,13 +47,13 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 /**
  * Version DhxMarshallerService for capsules with big data files. No limitation on data file size is
@@ -586,20 +590,27 @@ public class DhxMarshallerServiceImpl implements DhxMarshallerService {
       throws DhxException {
     try {
       log.info("Starting validating document capsule.");
-      Source schemaSource = new StreamSource(schemaStream);
       // to prevent original inpustream closing crete a new one
-      Source xmlFile = new StreamSource(fileStream);
-      SchemaFactory schemaFactory = SchemaFactory
-          .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-      Schema schema = schemaFactory.newSchema(schemaSource);
-      Validator validator = schema.newValidator();
-      validator.validate(xmlFile);
+      XMLValidationSchemaFactory schemaFactory = XMLValidationSchemaFactory.newInstance(XMLValidationSchema.SCHEMA_ID_W3C_SCHEMA);
+      XMLValidationSchema validationSchema = schemaFactory.createSchema(schemaStream);
+      XMLStreamReader2 xmlStreamReader = (XMLStreamReader2) XMLInputFactory.newInstance().createXMLStreamReader(fileStream);
+      xmlStreamReader.validateAgainst(validationSchema);
+
+      try {
+        while (xmlStreamReader.hasNext()) {
+          xmlStreamReader.next();
+        }
+      } finally {
+        xmlStreamReader.close();
+      }
+
       log.info("Document capsule is validated.");
-    } catch (Exception ex) {
+    } catch (XMLValidationException ex) {
       throw new DhxException(DhxExceptionEnum.CAPSULE_VALIDATION_ERROR,
-          "Error occured while validating capsule. "
-              + ex.getMessage(),
-          ex);
+              "Error occurred while validating capsule. " + ex.getMessage(), ex);
+    } catch (Exception ex) {
+      throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+          "Error occurred while preparing for capsule validation. " + ex.getMessage(), ex);
     }
   }
 

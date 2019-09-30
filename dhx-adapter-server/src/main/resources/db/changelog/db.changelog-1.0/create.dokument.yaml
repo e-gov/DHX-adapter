@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-4
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: dokument
+      changes:
+        - createTable:
+            tableName: dokument
+            columns:
+              - column:
+                  name: dokument_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: dokument_pkey
+              - column:
+                  name: date_created
+                  type: datetime
+              - column:
+                  name: date_modified
+                  type: datetime
+              - column:
+                  name: version
+                  type: int
+              - column:
+                  name: kapsli_versioon
+                  type: nvarchar
+              - column:
+                  name: versioon
+                  type: int
+              - column:
+                  name: sisu
+                  type: clob
+              - column:
+                  name: guid
+                  type: nvarchar
+              - column:
+                  name: outgoing_document
+                  type: boolean
+              - column:
+                  name: suurus
+                  type: bigint
+              - column:
+                  name: sailitustahtaeg
+                  type: datetime
+              - column:
+                  name: kaust_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_dokument_kaust
+                    references: kaust(kaust_id)
+                    deferrable: false
+                    initiallyDeferred: false
+              - column:
+                  name: asutus_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_dokument_asutus
+                    references: asutus(asutus_id)
+                    deferrable: false
+                    initiallyDeferred: false

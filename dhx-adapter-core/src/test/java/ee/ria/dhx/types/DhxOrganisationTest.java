@@ -1,7 +1,5 @@
 package ee.ria.dhx.types;
 
-import ee.ria.dhx.types.DhxOrganisation;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;

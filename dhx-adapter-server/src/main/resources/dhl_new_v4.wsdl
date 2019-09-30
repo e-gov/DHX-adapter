@@ -12,7 +12,7 @@
 		xmlns:ref="http://ws-i.org/profiles/basic/1.1/xsd"
 		xmlns:xrd="http://x-road.eu/xsd/xroad.xsd">
 	<types>
-		<schema targetNamespace="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns="http://www.w3.org/2001/XMLSchema">
+		<schema targetNamespace="http://producers.dhl.xrd.riik.ee/producer/dhl" xmlns="https://www.w3.org/2001/XMLSchema">
 			
 			<import namespace="http://ws-i.org/profiles/basic/1.1/xsd" schemaLocation="http://ws-i.org/profiles/basic/1.1/swaref.xsd" />
 			<import namespace="http://www.riik.ee/schemas/dhl" schemaLocation="http://www.riik.ee/schemas/dhl/dhl.xsd"/>
@@ -285,7 +285,7 @@
 	
 	<service name="dhlService">
 		<port name="dhlHttpSoapPort" binding="tns:dhlSoapBinding">
-			<soap:address location="http://TURVASERVER/cgi-bin/consumer_proxy"/>
+			<soap:address location="http://TURVASERVER/dhx-adapter-server/wsServer"/>
 			<xrd:title>Dokumendihoidla</xrd:title>
 			<xrd:title xml:lang="en">Document repository</xrd:title>
 		</port>

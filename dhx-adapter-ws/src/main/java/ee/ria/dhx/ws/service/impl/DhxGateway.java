@@ -16,15 +16,16 @@ import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadObjectType;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.representation.XRoadRepresentedPartyType;
 import ee.ria.dhx.util.StringUtil;
-import ee.ria.dhx.ws.DhxHttpComponentsMessageSender;
-import ee.ria.dhx.ws.config.DhxConfig;
+import ee.ria.dhx.ws.connection.DhxHttpComponentsMessageSender;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
 import org.springframework.ws.WebServiceMessage;
@@ -36,30 +37,19 @@ import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.soap.SoapHeader;
 import org.springframework.ws.soap.SoapHeaderElement;
 import org.springframework.ws.soap.SoapMessage;
-import org.springframework.ws.soap.saaj.SaajSoapMessage;
-import org.springframework.ws.transport.http.HttpTransportConstants;
+import org.springframework.ws.soap.SoapMessageFactory;
 import org.springframework.xml.transform.StringSource;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Iterator;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+
 import javax.xml.bind.JAXBElement;
-import javax.xml.soap.AttachmentPart;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-
-import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.conn.ConnectionKeepAliveStrategy;
-import org.apache.http.HeaderElement;
-import org.apache.http.HeaderElementIterator;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.message.BasicHeaderElementIterator;
 
 
 
@@ -75,10 +65,6 @@ public class DhxGateway extends WebServiceGatewaySupport {
 
   @Autowired
   @Setter
-  private DhxConfig config;
-
-  @Autowired
-  @Setter
   private SoapConfig soapConfig;
 
   @Autowired
@@ -88,50 +74,24 @@ public class DhxGateway extends WebServiceGatewaySupport {
   @Autowired
   Jaxb2Marshaller dhxJaxb2Marshaller;
 
+  @Autowired
+  HttpClient soapHttpClient;
+
+  @Autowired
+  @Qualifier("axiomSoapMessageFactorySend")
+  SoapMessageFactory messageFactory;
+
   /**
    * Postconstruct method which sets marshaller and unmarshaller.
    */
   @PostConstruct
   public void init() {
+    setMessageFactory(messageFactory);
     setMarshaller(dhxJaxb2Marshaller);
     setUnmarshaller(dhxJaxb2Marshaller);
-    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender();
-    messageSender.setConnectionTimeout(soapConfig.getConnectionTimeout());
-    messageSender.setReadTimeout(soapConfig.getReadTimeout());
-    
-    
-    AbstractHttpClient httpClient = (AbstractHttpClient)messageSender.getHttpClient();
-    
-    httpClient.setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
-
-      public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-
-        HeaderElementIterator it = new BasicHeaderElementIterator(
-            response.headerIterator(HTTP.CONN_KEEP_ALIVE));
-          
-          while (it.hasNext()) {
-            HeaderElement he = it.nextElement();
-            String param = he.getName();
-            String value = he.getValue();
-            if (value != null && param.equalsIgnoreCase("timeout")) {
-              
-              try {
-                return Long.parseLong(value) * 1000;
-              } catch(NumberFormatException ignore) {
-              }
-              
-            }
-          }
-          // otherwise keep alive for <soap.http-timeout> seconds
-          return soapConfig.getHttpTimeout() * 1000;
-        }
-      });
+    DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient);
     
     getWebServiceTemplate().setMessageSender(messageSender);
-    /*
-     * MessageFactory messageFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-     * setMessageFactory(new SaajSoapMessageFactory(messageFactory));
-     */
   }
 
   /**
@@ -166,16 +126,6 @@ public class DhxGateway extends WebServiceGatewaySupport {
         throws IOException, TransformerException {
       try {
         SoapHeader header = ((SoapMessage) message).getSoapHeader();
-        for (Iterator it = ((SaajSoapMessage) message).getSaajMessage()
-            .getAttachments(); it.hasNext();) {
-          AttachmentPart attachment = (AttachmentPart) it.next();
-          log.debug("attachment part: {}",
-              attachment.getContentType());
-          attachment
-              .setMimeHeader(
-                  HttpTransportConstants.HEADER_CONTENT_TRANSFER_ENCODING,
-                  "base64");
-        }
         // Transformer transformer =
         // SAXTransformerFactory.newInstance().newTransformer();
         TransformerFactory fact = TransformerFactory
@@ -326,6 +276,10 @@ public class DhxGateway extends WebServiceGatewaySupport {
               + " faultString:"
               + response.getFault().getFaultString()));
     } catch (WebServiceFaultException ex) {
+      log.warn("Document send failed: {} ReceiptId: {} Fault: {}",
+              document.getService().toString(),
+              document.getService().getRepresentee(),
+              ex.getMessage());
       Fault fault = new Fault();
       fault.setFaultCode(ex.getWebServiceMessage().getFaultCode()
           .getLocalPart());
@@ -427,10 +381,10 @@ public class DhxGateway extends WebServiceGatewaySupport {
       MessageContext messageContext) throws DhxException {
     try {
       InternalXroadMember client = null;
-      SaajSoapMessage soapRequest = (SaajSoapMessage) messageContext
+      SoapMessage soapRequest = (SoapMessage) messageContext
           .getRequest();
       SoapHeader reqheader = soapRequest.getSoapHeader();
-      SaajSoapMessage soapResponse = (SaajSoapMessage) messageContext
+      SoapMessage soapResponse = (SoapMessage) messageContext
           .getResponse();
       SoapHeader respheader = soapResponse.getSoapHeader();
       TransformerFactory transformerFactory = TransformerFactory
@@ -488,7 +442,7 @@ public class DhxGateway extends WebServiceGatewaySupport {
   public InternalXroadMember getXroadService(MessageContext messageContext)
       throws DhxException {
     InternalXroadMember service = null;
-    SaajSoapMessage soapRequest = (SaajSoapMessage) messageContext
+    SoapMessage soapRequest = (SoapMessage) messageContext
         .getRequest();
     SoapHeader reqheader = soapRequest.getSoapHeader();
     Iterator<SoapHeaderElement> itr = reqheader.examineAllHeaderElements();

@@ -2,6 +2,8 @@ package ee.ria.dhx.bigdata;
 
 import com.jcabi.aspects.Loggable;
 
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.util.FileUtil;
@@ -9,8 +11,6 @@ import ee.ria.dhx.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -124,7 +124,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
 
   @Override
   public void endDocument() throws SAXException {
-    log.info("document started !!!!");
+    log.info("document ended !!!!");
     if (!nonamespaces)
       super.endDocument();
   }
@@ -209,7 +209,7 @@ public class BigDataMarshallHandler extends BigDataHandler {
 
   @Override
   @Loggable
-  protected void handleBigDataCharacters(char[] chars) throws IOException {
+  protected void handleBigDataCharacters(char[] chars, int start, int length) throws IOException {
     log.error("CHARECTER CANNOT BE HERE!!!!");
   }
 

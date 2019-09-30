@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-6
+      author: Kaarel Raspel
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: saatja
+      changes:
+        - createTable:
+            tableName: saatja
+            columns:
+              - column:
+                  name: saatja_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: saatja_pkey
+              - column:
+                  name: date_created
+                  type: datetime
+              - column:
+                  name: date_modified
+                  type: datetime
+              - column:
+                  name: version
+                  type: int
+              - column:
+                  name: isikukood
+                  type: nvarchar
+              - column:
+                  name: allyksus
+                  type: nvarchar
+              - column:
+                  name: asutus_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_saatja_asutus
+                    references: asutus(asutus_id)
+                    deferrable: false
+                    initiallyDeferred: false
+              - column:
+                  name: transport_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_saatja_transport
+                    references: transport(transport_id)
+                    deferrable: false
+                    initiallyDeferred: false

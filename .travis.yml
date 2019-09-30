@@ -4,10 +4,16 @@ addons:
   apt:
     packages:
     - xmlstarlet
+
 services:
 - docker
-jdk:
-- openjdk8
+matrix:
+  include:
+    # 8
+    - jdk: openjdk8
+    # 11
+    - jdk: openjdk11
+      script: mvn clean verify -q -P jdk11
 branches:
   only:
   - develop

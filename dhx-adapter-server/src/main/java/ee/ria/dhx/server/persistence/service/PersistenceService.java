@@ -70,6 +70,10 @@ public class PersistenceService {
   @Setter
   DocumentRepository documentRepository;
 
+  @Autowired
+  @Setter
+  DhxOrganisationFactory dhxOrganisationFactory;
+
   private static final String DEFAULT_FOLDERNAME = "/";
 
   /**
@@ -120,7 +124,7 @@ public class PersistenceService {
               "Unable to find member in addressregistry by regsitration code: "
                   + capsuleOrganisationId);
         }
-        DhxOrganisation dhxOrganisation = DhxOrganisationFactory.createDhxOrganisation(member);
+        DhxOrganisation dhxOrganisation = dhxOrganisationFactory.createDhxOrganisation(member);
         org = organisationRepository.findByRegistrationCodeAndSubSystem(dhxOrganisation.getCode(),
             dhxOrganisation.getSystem());
       }

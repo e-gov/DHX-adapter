@@ -108,7 +108,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link SignatureType }
-   * 
+   *
    * @return {@link SignatureType}
    */
   public SignatureType createSignatureType() {
@@ -117,7 +117,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link SignatureValueType }
-   * 
+   *
    * @return {@link SignatureValueType}
    */
   public SignatureValueType createSignatureValueType() {
@@ -126,7 +126,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link SignedInfoType }
-   * 
+   *
    * @return {@link SignedInfoType}
    */
   public SignedInfoType createSignedInfoType() {
@@ -135,7 +135,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link CanonicalizationMethodType }
-   * 
+   *
    * @return {@link CanonicalizationMethodType}
    */
   public CanonicalizationMethodType createCanonicalizationMethodType() {
@@ -144,7 +144,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link SignatureMethodType }
-   * 
+   *
    * @return {@link SignatureMethodType}
    */
   public SignatureMethodType createSignatureMethodType() {
@@ -153,7 +153,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link ReferenceType }
-   * 
+   *
    * @return {@link ReferenceType}
    */
   public ReferenceType createReferenceType() {
@@ -162,7 +162,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link TransformsType }
-   * 
+   *
    * @return {@link TransformsType}
    */
   public TransformsType createTransformsType() {
@@ -171,7 +171,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link TransformType }
-   * 
+   *
    * @return {@link TransformType}
    */
   public TransformType createTransformType() {
@@ -180,7 +180,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DigestMethodType }
-   * 
+   *
    * @return {@link DigestMethodType}
    */
   public DigestMethodType createDigestMethodType() {
@@ -189,7 +189,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link KeyInfoType }
-   * 
+   *
    * @return {@link KeyInfoType}
    */
   public KeyInfoType createKeyInfoType() {
@@ -198,7 +198,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link KeyValueType }
-   * 
+   *
    * @return {@link KeyValueType}
    */
   public KeyValueType createKeyValueType() {
@@ -207,7 +207,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link RetrievalMethodType }
-   * 
+   *
    * @return {@link RetrievalMethodType}
    */
   public RetrievalMethodType createRetrievalMethodType() {
@@ -216,7 +216,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link X509DataType }
-   * 
+   *
    * @return {@link X509DataType}
    */
   public X509DataType createX509DataType() {
@@ -225,7 +225,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link PGPDataType }
-   * 
+   *
    * @return {@link PGPDataType}
    */
   public PGPDataType createPGPDataType() {
@@ -234,7 +234,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link SPKIDataType }
-   * 
+   *
    * @return {@link SPKIDataType}
    */
   public SPKIDataType createSPKIDataType() {
@@ -243,7 +243,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link ObjectType }
-   * 
+   *
    * @return {@link ObjectType}
    */
   public ObjectType createObjectType() {
@@ -252,7 +252,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link ManifestType }
-   * 
+   *
    * @return {@link ManifestType}
    */
   public ManifestType createManifestType() {
@@ -261,7 +261,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link SignaturePropertiesType }
-   * 
+   *
    * @return {@link SignaturePropertiesType}
    */
   public SignaturePropertiesType createSignaturePropertiesType() {
@@ -270,7 +270,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link SignaturePropertyType }
-   * 
+   *
    * @return {@link SignaturePropertyType}
    */
   public SignaturePropertyType createSignaturePropertyType() {
@@ -279,7 +279,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DSAKeyValueType }
-   * 
+   *
    * @return {@link DSAKeyValueType}
    */
   public DSAKeyValueType createDSAKeyValueType() {
@@ -288,7 +288,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link RSAKeyValueType }
-   * 
+   *
    * @return {@link RSAKeyValueType}
    */
   public RSAKeyValueType createRSAKeyValueType() {
@@ -297,7 +297,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link X509IssuerSerialType }
-   * 
+   *
    * @return {@link X509IssuerSerialType}
    */
   public X509IssuerSerialType createX509IssuerSerialType() {
@@ -306,7 +306,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SignatureType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -317,7 +317,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SignatureValueType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -329,7 +329,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SignedInfoType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -340,7 +340,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link CanonicalizationMethodType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -353,7 +353,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SignatureMethodType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -365,7 +365,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link ReferenceType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -376,7 +376,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link TransformsType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -387,7 +387,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link TransformType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -398,7 +398,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link DigestMethodType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -409,8 +409,8 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-   * 
+   * Create an instance of {@link JAXBElement }{@code <}byte[]{@code >}
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -421,7 +421,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link KeyInfoType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -432,7 +432,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -443,7 +443,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -454,7 +454,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link KeyValueType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -465,9 +465,9 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link RetrievalMethodType }{@code >}
-   * 
+   *
    * @param value value
-   * 
+   *
    * @return {@link JAXBElement}
    */
   @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "RetrievalMethod")
@@ -478,7 +478,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link X509DataType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -489,7 +489,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link PGPDataType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -500,7 +500,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SPKIDataType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -511,7 +511,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link ObjectType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -522,7 +522,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link ManifestType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -533,7 +533,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SignaturePropertiesType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -546,7 +546,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link SignaturePropertyType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -558,7 +558,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link DSAKeyValueType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -570,7 +570,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link RSAKeyValueType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -581,8 +581,8 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-   * 
+   * Create an instance of {@link JAXBElement }{@code <}byte[]{@code >}
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -593,8 +593,8 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-   * 
+   * Create an instance of {@link JAXBElement }{@code <}byte[]{@code >}
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -605,8 +605,8 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-   * 
+   * Create an instance of {@link JAXBElement }{@code <}byte[]{@code >}
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -618,7 +618,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -630,8 +630,8 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-   * 
+   * Create an instance of {@link JAXBElement }{@code <}byte[]{@code >}
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -643,7 +643,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -654,8 +654,8 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-   * 
+   * Create an instance of {@link JAXBElement }{@code <}byte[]{@code >}
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -666,8 +666,8 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-   * 
+   * Create an instance of {@link JAXBElement }{@code <}byte[]{@code >}
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -679,7 +679,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */
@@ -691,7 +691,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}
-   * 
+   *
    * @param value value
    * @return {@link JAXBElement}
    */

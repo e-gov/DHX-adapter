@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns="http://www.riik.ee/schemas/deccontainer/vers_2_1/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.riik.ee/schemas/deccontainer/vers_2_1/">
   <xs:element name="DecContainer">
     <xs:complexType>
@@ -643,7 +644,7 @@
   </xs:simpleType>
   <xs:simpleType name="PhoneType">
     <xs:restriction base="xs:string">
-      <xs:pattern value="[0-9 +()-]*"/>
+      <xs:pattern value="[0-9 +()\-]*"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="PostalCodeType">

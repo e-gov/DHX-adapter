@@ -1,5 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -9,9 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Lob;
 
 /**
  * The persistent class for the staatuse_ajalugu database table.
@@ -27,23 +29,26 @@ public class StatusHistory implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer statusHistoryId;
 
-  @Lob
   @Column(name = "fault_actor")
   private String faultActor;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_code")
   private String faultCode;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_detail")
   private String faultDetail;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "fault_string")
   private String faultString;
 
   @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "meta_xml")
   private String metaxml;
 
