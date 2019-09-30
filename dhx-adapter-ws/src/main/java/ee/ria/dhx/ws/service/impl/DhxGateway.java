@@ -17,7 +17,6 @@ import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.representation.XRoadRepresentedPartyType;
 import ee.ria.dhx.util.StringUtil;
 import ee.ria.dhx.ws.connection.DhxHttpComponentsMessageSender;
-import ee.ria.dhx.ws.config.DhxConfig;
 import ee.ria.dhx.ws.config.SoapConfig;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 
@@ -41,12 +40,12 @@ import org.springframework.ws.soap.SoapMessage;
 import org.springframework.ws.soap.SoapMessageFactory;
 import org.springframework.xml.transform.StringSource;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Iterator;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -63,10 +62,6 @@ import javax.xml.transform.TransformerFactory;
  *
  */
 public class DhxGateway extends WebServiceGatewaySupport {
-
-  @Autowired
-  @Setter
-  private DhxConfig config;
 
   @Autowired
   @Setter
@@ -97,10 +92,6 @@ public class DhxGateway extends WebServiceGatewaySupport {
     DhxHttpComponentsMessageSender messageSender = new DhxHttpComponentsMessageSender(soapHttpClient);
     
     getWebServiceTemplate().setMessageSender(messageSender);
-    /*
-     * MessageFactory messageFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-     * setMessageFactory(new SaajSoapMessageFactory(messageFactory));
-     */
   }
 
   /**

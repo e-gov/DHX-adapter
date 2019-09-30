@@ -365,9 +365,8 @@ public class FileUtil {
    /**
     * Test if a file is a zip file.
     * 
-    * @param f
-    *            the file to test.
-    * @return
+    * @param f the file to test.
+    * @return - true if file is zip file. Otherwise false.
     */
    public static boolean isZipFile(File f) {
    

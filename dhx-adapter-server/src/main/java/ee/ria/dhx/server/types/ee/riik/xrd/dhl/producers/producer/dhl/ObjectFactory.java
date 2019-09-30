@@ -73,7 +73,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded }
-   * 
+   *
+   * @return {@link GetSendingOptionsV3ResponseTypeUnencoded}
    */
   public GetSendingOptionsV3ResponseTypeUnencoded createGetSendingOptionsV3ResponseTypeUnencoded() {
       return new GetSendingOptionsV3ResponseTypeUnencoded();
@@ -81,7 +82,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad }
-   * 
+   *
+   * @return {@link GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad}
    */
   public GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad createGetSendingOptionsV3ResponseTypeUnencodedAmetikohad() {
       return new GetSendingOptionsV3ResponseTypeUnencoded.Ametikohad();
@@ -89,7 +91,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused }
-   * 
+   *
+   * @return {@link GetSendingOptionsV3ResponseTypeUnencoded.Allyksused}
    */
   public GetSendingOptionsV3ResponseTypeUnencoded.Allyksused createGetSendingOptionsV3ResponseTypeUnencodedAllyksused() {
       return new GetSendingOptionsV3ResponseTypeUnencoded.Allyksused();
@@ -97,7 +100,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused }
-   * 
+   *
+   * @return {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused}
    */
   public GetSendingOptionsV3ResponseTypeUnencoded.Asutused createGetSendingOptionsV3ResponseTypeUnencodedAsutused() {
       return new GetSendingOptionsV3ResponseTypeUnencoded.Asutused();
@@ -105,7 +109,8 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus }
-   * 
+   *
+   * @return {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus}
    */
   public GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus createGetSendingOptionsV3ResponseTypeUnencodedAsutusedAsutus() {
       return new GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus();
@@ -113,7 +118,8 @@ public class ObjectFactory {
   
   /**
    * Create an instance of {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine }
-   * 
+   *
+   * @return {@link GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine}
    */
   public GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine createGetSendingOptionsV3ResponseTypeUnencodedAsutusedAsutusSaatmine() {
       return new GetSendingOptionsV3ResponseTypeUnencoded.Asutused.Asutus.Saatmine();

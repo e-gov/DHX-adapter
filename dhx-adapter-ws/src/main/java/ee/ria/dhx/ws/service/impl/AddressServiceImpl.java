@@ -307,6 +307,7 @@ public class AddressServiceImpl implements AddressService {
    * Read global configuration shared parameters from secyrity server.
    * 
    * @return unmarshalled shared parameters Object
+   * @param confURL configuration location URL
    * @throws DhxException throws if error occurs while getting global configuration
    */
   protected SharedParametersType getGlobalConf(String confURL) throws DhxException {

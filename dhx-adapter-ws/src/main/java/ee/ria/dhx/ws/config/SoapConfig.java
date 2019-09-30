@@ -1,5 +1,7 @@
 package ee.ria.dhx.ws.config;
 
+import ee.ria.dhx.exception.DhxException;
+import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.types.InternalXroadMember;
 
 import org.apache.http.HeaderElement;
@@ -8,27 +10,34 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeaderElementIterator;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 
+import java.io.*;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.security.Security;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
 
 import javax.annotation.PostConstruct;
+import javax.net.ssl.SSLContext;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Configuration
@@ -103,19 +112,22 @@ public class SoapConfig {
   String dhxSubsystemPrefix;
 
 
-  @Value("${soap.client-truststore-file}")
+  @Value("${soap.client-truststore-file:#{null}}")
   String clientTruststoreFile;
 
-  @Value("${soap.client-truststore-password}")
+  @Value("${soap.client-truststore-password:#{null}}")
   String clientTruststorePassword;
 
   @Value("${soap.client-truststore-type:JKS}")
   String clientTruststoreType;
 
-  @Value("${soap.client-keystore-file}")
+  @Value("${soap.client-keystore.no-auth:false}")
+  boolean clientKeystoreNoAuth;
+
+  @Value("${soap.client-keystore-file:#{null}}")
   String clientKeystoreFile;
 
-  @Value("${soap.client-keystore-password}")
+  @Value("${soap.client-keystore-password:#{null}}")
   String clientKeystorePassword;
   
   @Value("${soap.client-keystore-type:JKS}")
@@ -131,6 +143,10 @@ public class SoapConfig {
   
   public String getClientTrustStoreType() {
     return clientTruststoreType;
+  }
+
+  public boolean isClientKeystoreNoAuth() {
+    return clientKeystoreNoAuth;
   }
 
   public String getClientKeyStoreFile() {
@@ -183,6 +199,85 @@ public class SoapConfig {
   }
 
   @Bean
+  public KeyStore clientTrustStore() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    KeyStore trustStore = null;
+    if (isHttpsRequired()) {
+      File trustStoreFile = new File(getClientTrustStoreFile());
+      trustStore = KeyStore.getInstance(getClientTrustStoreType());
+      trustStore.load(new FileInputStream(trustStoreFile), getClientTrustStorePassword().toCharArray());
+    }
+    return trustStore;
+  }
+
+  @Bean
+  public KeyStore clientKeyStore() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, DhxException, IOException {
+    KeyStore keyStore = null;
+    String clientKeyStoreFile = getClientKeyStoreFile();
+    if (!isClientKeystoreNoAuth() && isHttpsRequired(clientKeyStoreFile)) {
+        keyStore = KeyStore.getInstance(getClientKeyStoreType());
+        InputStream keystoreIn;
+        try {
+          keystoreIn = new FileInputStream(clientKeyStoreFile);
+        } catch (IOException ex) {
+          String reason = "The client keystore is required but the file does not exist";
+          log.error(reason, ex);
+          throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+                  reason + ": " + ex.getMessage(),
+                  ex);
+        }
+        keyStore.load(keystoreIn, getClientKeyStorePassword().toCharArray());
+    }
+    return keyStore;
+  }
+
+  @Bean
+  public SSLContext sslContext(KeyStore clientTrustStore, KeyStore clientKeyStore) throws KeyStoreException,
+          NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+    SSLContextBuilder sslContextBuilder = SSLContexts.custom();
+    if (isHttpsRequired()) {
+      if (!StringUtils.isEmpty(clientKeyStore)) {
+        sslContextBuilder.loadKeyMaterial(clientKeyStore, getClientTrustStorePassword().toCharArray());
+      }
+      sslContextBuilder.loadTrustMaterial(clientTrustStore, null);
+    }
+    return sslContextBuilder.build();
+  }
+
+  public boolean isHttpsRequired() {
+    return getSecurityServer().toUpperCase().startsWith("HTTPS");
+  }
+
+  public boolean isHttpsRequired(String keystoreFile) {
+    return !StringUtils.isEmpty(keystoreFile) && isHttpsRequired();
+  }
+
+  @Bean
+  public SSLConnectionSocketFactory sslSocketFactory(SSLContext sslContext) {
+    return new SSLConnectionSocketFactory(sslContext, new String[]{"TLSv1.1", "TLSv1.2"}, null,
+            SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+  }
+
+  @Bean
+  public RequestConfig requestConfig() {
+    return RequestConfig.custom()
+            .setConnectionRequestTimeout(getConnectionTimeout())
+            .setSocketTimeout(getReadTimeout())
+            .build();
+  }
+
+  @Bean
+  public HttpClient soapHttpClient(ConnectionKeepAliveStrategy soapHttpClientKeepAliveStrategy,
+                                   SSLConnectionSocketFactory sslSocketFactory,
+                                   RequestConfig defaultRequestConfig) {
+    return HttpClientBuilder
+            .create()
+            .setSSLSocketFactory(sslSocketFactory)
+            .setKeepAliveStrategy(soapHttpClientKeepAliveStrategy)
+            .setDefaultRequestConfig(defaultRequestConfig)
+            .build();
+  }
+
+  @Bean
   public ConnectionKeepAliveStrategy soapHttpClientKeepAliveStrategy() {
     return new ConnectionKeepAliveStrategy() {
 
@@ -215,15 +310,6 @@ public class SoapConfig {
               .setConnectTimeout(getConnectionTimeout())
               .setConnectionRequestTimeout(getReadTimeout())
               .build();
-  }
-
-  @Bean
-  public HttpClient soapHttpClient(ConnectionKeepAliveStrategy soapHttpClientKeepAliveStrategy,
-                                   RequestConfig defaultRequestConfig) {
-    return HttpClientBuilder.create()
-            .setKeepAliveStrategy(soapHttpClientKeepAliveStrategy)
-            .setDefaultRequestConfig(defaultRequestConfig)
-            .build();
   }
 
   /**
@@ -647,33 +733,41 @@ public class SoapConfig {
    */
   @PostConstruct
   public void init() {
-    
+
     log.info("SecurityServer: {}", getSecurityServer());
-    log.info("javax.net.ssl.trustStore: {}", expandEnvVars(getClientTrustStoreFile()));
-    log.info("javax.net.ssl.trustStorePassword: {}", getClientTrustStorePassword());
-    log.info("javax.net.ssl.trustStoreType: {}", getClientTrustStoreType());
 
-    log.info("javax.net.ssl.keyStore: {}", expandEnvVars(getClientKeyStoreFile()));
-    log.info("javax.net.ssl.keyStorePassword: {}", getClientKeyStorePassword());
-    log.info("javax.net.ssl.keyStoreType: {}", getClientKeyStoreType());
+    if (isHttpsRequired(getClientTrustStoreFile())) {
+      log.info("javax.net.ssl.trustStore: {}", expandEnvVars(getClientTrustStoreFile()));
+      log.info("javax.net.ssl.trustStorePassword: {}", getClientTrustStorePassword());
+      log.info("javax.net.ssl.trustStoreType: {}", getClientTrustStoreType());
+    }
 
-    ClassLoader cl = ClassLoader.getSystemClassLoader();
+    if (isHttpsRequired(getClientKeyStoreFile())) {
+      log.info("javax.net.ssl.keyStore: {}", expandEnvVars(getClientKeyStoreFile()));
+      log.info("javax.net.ssl.keyStorePassword: {}", getClientKeyStorePassword());
+      log.info("javax.net.ssl.keyStoreType: {}", getClientKeyStoreType());
+    }
 
-    URL[] urls = ((URLClassLoader)cl).getURLs();
+    String pathSeparator = System.getProperty("path.separator");
+    String[] classPathEntries = System
+            .getProperty("java.class.path")
+            .split(pathSeparator);
 
-    for(URL url: urls){
-      log.info("SoapConfig.url: {}", url.getFile());
+    for(String classPathEntry: classPathEntries){
+      log.info("SoapConfig.url: {}", classPathEntry);
     }
     
     // setup truststore
-    if (getSecurityServer().toLowerCase().startsWith("https")) {
-        System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
-        System.setProperty("javax.net.ssl.trustStorePassword", getClientTrustStorePassword());
-        System.setProperty("javax.net.ssl.trustStoreType", getClientTrustStoreType());
+    if (isHttpsRequired(getClientTrustStoreFile())) {
+      System.setProperty("javax.net.ssl.trustStore", expandEnvVars(getClientTrustStoreFile()));
+      System.setProperty("javax.net.ssl.trustStorePassword", getClientTrustStorePassword());
+      System.setProperty("javax.net.ssl.trustStoreType", getClientTrustStoreType());
+    }
 
-        System.setProperty("javax.net.ssl.keyStore", expandEnvVars(getClientKeyStoreFile()));
-        System.setProperty("javax.net.ssl.keyStorePassword", getClientKeyStorePassword());
-        System.setProperty("javax.net.ssl.keyStoreType", getClientKeyStoreType());
+    if (isHttpsRequired(getClientKeyStoreFile())) {
+      System.setProperty("javax.net.ssl.keyStore", expandEnvVars(getClientKeyStoreFile()));
+      System.setProperty("javax.net.ssl.keyStorePassword", getClientKeyStorePassword());
+      System.setProperty("javax.net.ssl.keyStoreType", getClientKeyStoreType());
     }
   }
   

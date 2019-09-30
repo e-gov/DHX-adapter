@@ -40,7 +40,8 @@ public class DhxEndpointConfig extends WsConfigurationSupport {
    * Injects DefaultMethodEndpointAdapter which supports SOAP message attachments. Sets proper
    * marshaller. That bean might iterfere with another same bean if it is defined(in that case most
    * probably code need to be changed to define single bean which will staisfy both needs).
-   * 
+   *
+   * @param dhxMethodProcessors collection of marshalling payload method processors
    * @return DefaultMethodEndpointAdapter
    */
   @Bean(name = "dhxMethodEndpointAdapter")
