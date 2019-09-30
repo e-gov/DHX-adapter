@@ -4,10 +4,13 @@ addons:
   apt:
     packages:
     - xmlstarlet
-  sonarcloud:
-    organization: e-gov
-jdk:
-- openjdk8
+matrix:
+  include:
+    # 8
+    - jdk: openjdk8
+    # 11
+    - jdk: openjdk11
+      script: mvn clean verify -q -P jdk11
 branches:
   only:
   - master
@@ -16,18 +19,7 @@ before_install:
 - xmlstarlet ed -N x="http://maven.apache.org/POM/4.0.0" -d "//x:dependency[x:groupId[contains(text(),'com.oracle')]]" dhx-adapter-server/pom.xml > dhx-adapter-server/pom_without_oracle.xml
 - mv dhx-adapter-server/pom_without_oracle.xml dhx-adapter-server/pom.xml
 install: true
-script: mvn clean install -q sonar:sonar -Pproduction -Dsonar.projectKey=e-gov_DHX-adapter
-deploy:
-  provider: releases
-  api_key: "$GITHUB_OAUTH_TOKEN"
-  file_glob: true
-  file: 
-  - "/home/travis/.m2/repository/ee/ria/dhx/dhx-adapter-server/*/dhx-adapter-server-*.war"
-  skip_cleanup: true
-  draft: true
-  on:
-   branch: master
-   tags: true 
+script: mvn clean verify -q
 notifications:
   email:
     recipients:
