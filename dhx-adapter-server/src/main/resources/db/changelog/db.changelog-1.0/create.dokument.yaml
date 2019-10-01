@@ -29,7 +29,7 @@ databaseChangeLog:
                   type: int
               - column:
                   name: kapsli_versioon
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: versioon
                   type: int
@@ -38,7 +38,7 @@ databaseChangeLog:
                   type: clob
               - column:
                   name: guid
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: outgoing_document
                   type: boolean

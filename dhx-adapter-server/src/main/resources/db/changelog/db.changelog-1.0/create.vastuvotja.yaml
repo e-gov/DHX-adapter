@@ -29,19 +29,19 @@ databaseChangeLog:
                   type: int
               - column:
                   name: dhx_external_consignment_id
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: dhx_external_receipt_id
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: dhx_internal_consignment_id
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: dok_id_teises_serveris
                   type: int
               - column:
                   name: fault_actor
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: fault_code
                   type: clob
@@ -56,13 +56,13 @@ databaseChangeLog:
                   type: datetime
               - column:
                   name: meta_xml
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: outgoing
                   type: boolean
               - column:
                   name: isikukood
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: vastuvotja_staatus_id
                   type: int
@@ -83,7 +83,7 @@ databaseChangeLog:
                   type: int
               - column:
                   name: allyksus
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: asutus_id
                   type: int

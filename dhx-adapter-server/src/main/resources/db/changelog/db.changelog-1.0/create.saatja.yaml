@@ -29,10 +29,10 @@ databaseChangeLog:
                   type: int
               - column:
                   name: isikukood
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: allyksus
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: asutus_id
                   type: int

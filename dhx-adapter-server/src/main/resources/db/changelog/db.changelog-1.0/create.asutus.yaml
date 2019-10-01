@@ -29,7 +29,7 @@ databaseChangeLog:
                   type: int
               - column:
                   name: kapsel_versioon
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: dhx_asutus
                   type: boolean
@@ -38,19 +38,19 @@ databaseChangeLog:
                   type: boolean
               - column:
                   name: member_class
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: nimetus
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: own_representee
                   type: boolean
               - column:
                   name: reaalne_nimi
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: registrikood
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: representee_end
                   type: datetime
@@ -59,10 +59,10 @@ databaseChangeLog:
                   type: datetime
               - column:
                   name: subsystem
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: xroad_instance
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: vahendaja_asutus_id
                   type: int
@@ -74,5 +74,5 @@ databaseChangeLog:
 
         - addUniqueConstraint:
             columnNames: registrikood, subsystem
-            constraintName: uq_asutus_registrikood_subsystem
+            constraintName: uq_asutus_registrikood_subsys
             tableName: asutus
