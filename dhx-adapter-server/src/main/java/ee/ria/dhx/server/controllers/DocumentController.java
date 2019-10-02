@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("monitoring")
@@ -28,7 +29,7 @@ public class DocumentController {
 
     @Transactional
     @GetMapping(value = "/documents")
-    public String getDocuments(@RequestParam(required = false, defaultValue = "101,103") StatusEnum[] statuses,
+    public String getDocuments(@RequestParam(required = false, defaultValue = "101,103") List<StatusEnum> statuses,
                                @RequestParam(required = false, defaultValue = "") Boolean isOutgoing,
                                @RequestParam(required = false, defaultValue = "") String senderRegCode,
                                @RequestParam(required = false, defaultValue = "") String senderSubsystem,
@@ -40,7 +41,7 @@ public class DocumentController {
                                @PageableDefault(size = 100) Pageable pageable,
                                Model model) {
         model.addAttribute("recipientsPage", recipientRepository.findAllBy(
-                Arrays.asList((StatusEnum[]) ArrayUtils.nullToEmpty(statuses, StatusEnum[].class)),
+                statuses,
                 isOutgoing,
                 senderRegCode,
                 senderSubsystem,
