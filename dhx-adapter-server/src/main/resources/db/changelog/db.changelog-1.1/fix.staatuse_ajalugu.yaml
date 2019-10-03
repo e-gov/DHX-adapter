@@ -55,8 +55,6 @@ databaseChangeLog:
       changes:
         - sql:
             dbms: oracle
-            endDelimiter: \nGO
-            splitStatements: false
             sql: |-
               ALTER TABLE staatuse_ajalugu ADD (
                 nvarchar2_fault_actor NVARCHAR2(2000),
@@ -81,7 +79,6 @@ databaseChangeLog:
               ALTER TABLE staatuse_ajalugu RENAME COLUMN clob_fault_string TO fault_string;
         - sql:
             dbms: postgresql
-            splitStatements: false
             sql: |-
               ALTER TABLE staatuse_ajalugu
                 ADD COLUMN varchar_fault_actor VARCHAR,

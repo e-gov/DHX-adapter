@@ -59,8 +59,11 @@ public class DhxConfig {
   private String acceptedDhxProtocolVersions;
 
   @Value("${dhx.marshall-context:ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1"
-      + ":ee.ria.dhx.types.eu.x_road.dhx.producer:ee.ria.dhx.types.eu.x_road.xsd.identifiers"
-      + ":ee.ria.dhx.types.eu.x_road.xsd.representation:ee.ria.dhx.types.eu.x_road.xsd.xroad}")
+      + ":ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl"
+      + ":ee.ria.dhx.types.eu.x_road.dhx.producer"
+      + ":ee.ria.dhx.types.eu.x_road.xsd.identifiers"
+      + ":ee.ria.dhx.types.eu.x_road.xsd.representation"
+      + ":ee.ria.dhx.types.eu.x_road.xsd.xroad}")
   private String marshallContext;
 
   @Value("${dhx.renew-address-list-on-startup:true}")
