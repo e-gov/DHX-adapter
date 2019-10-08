@@ -9,12 +9,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.Table;
 
 /**
  * The persistent class for the saatja database table.
  * 
  */
+/*// TODO: Make eager loading work
+@NamedEntityGraph(
+        name = "senders[organisation]",
+        includeAllAttributes = true,
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "organisation",
+                        attributeNodes = {
+                                @NamedAttributeNode("name"),
+                                @NamedAttributeNode("xroadInstance"),
+                                @NamedAttributeNode("memberClass"),
+                                @NamedAttributeNode("registrationCode"),
+                                @NamedAttributeNode("subSystem"),
+                                @NamedAttributeNode("isActive")
+                        })
+        }
+)*/
 @Entity
 @Table(name = "saatja")
 public class Sender extends BaseEntity implements Serializable {

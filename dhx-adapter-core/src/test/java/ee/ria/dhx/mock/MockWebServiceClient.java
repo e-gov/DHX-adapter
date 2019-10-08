@@ -5,8 +5,7 @@
 
 package ee.ria.dhx.mock;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.springframework.ws.WebServiceMessage;
@@ -23,8 +22,8 @@ import org.springframework.ws.transport.WebServiceMessageReceiver;
 
 import java.io.IOException;
 
+@Slf4j
 public class MockWebServiceClient {
-    private static final Log logger = LogFactory.getLog(MockWebServiceClient.class);
     private final WebServiceMessageReceiver messageReceiver;
     private final WebServiceMessageFactory messageFactory;
 
@@ -56,7 +55,7 @@ public class MockWebServiceClient {
             this.messageReceiver.receive(messageContext);
             return new MockWebServiceClient.MockWebServiceClientResponseActions(messageContext);
         } catch (Exception var4) {
-            logger.error("Could not send request", var4);
+            log.error("Could not send request", var4);
             AssertionErrors.fail(var4.getMessage());
             return null;
         }
@@ -81,7 +80,7 @@ public class MockWebServiceClient {
                     responseMatcher.match(request, response);
                     return this;
                 } catch (IOException var5) {
-                    MockWebServiceClient.logger.error("Could not match request", var5);
+                    MockWebServiceClient.log.error("Could not match request", var5);
                     AssertionErrors.fail(var5.getMessage());
                     return null;
                 }

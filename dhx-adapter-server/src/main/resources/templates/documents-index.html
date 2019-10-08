@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>DHX Monitooring</title>
+    <th:block th:include="fragments/general :: headerfiles" />
+</head>
+<body>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <span class="title">DHX Monitooring</span>
+        </nav>
+        <section class="content-area">
+            <div class="table-area">
+                <form action="#" th:action="@{''}" method="get">
+                    <table class="responsive-table table">
+                        <colgroup>
+                            <col style="width: 1%" />
+                            <col />
+                            <col />
+                            <col />
+                            <col />
+                            <col />
+                            <col />
+                            <col style="max-width: 220px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 1%">#</th>
+                                <th>Tüüp</th>
+                                <th>Staatus</th>
+                                <th colspan="2" class="text-center">Saatja</th>
+                                <th>Faili nimi</th>
+                                <th>Saabumise aeg</th>
+                                <th>
+                                    <span>...</span>
+                                    <span class="pull-right">
+                                        <span>Tulemusi lehel:</span>
+                                        <input th:name="size"
+                                               th:type="text"
+                                               style="width: 40px"
+                                               class="text-center"
+                                               th:value="${pageable.pageSize}"  />
+                                    </span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <select th:name="isOutgoing" class="form-control">
+                                        <option th:value="''" th:selected="${form[__${'isOutgoing'}__] == null}"> - </option>
+                                        <option th:value="'true'" th:selected="${form[__${'isOutgoing'}__]}">Saadetav</option>
+                                        <option th:value="'false'" th:selected="${form[__${'isOutgoing'}__] == false}">Vastuvõetav</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <div class="checkbox" th:each="status : ${T(ee.ria.dhx.server.persistence.enumeration.StatusEnum).values()}">
+                                        <label>
+                                            <input th:name="statuses"
+                                                   th:type="checkbox"
+                                                   th:value="${status.classificatorId}"
+                                                   th:checked="${#lists.contains(form[__${'statuses'}__], status)}" />
+                                            <span th:text="${status.classificatorName}"></span>
+                                        </label>
+                                    </div>
+                                </th>
+                                <th>
+                                    <input th:name="senderRegCode"
+                                           th:type="text"
+                                           th:placeholder="'Registri number'"
+                                           th:value="${form[__${'senderRegCode'}__]}"
+                                           class="form-control" />
+                                </th>
+                                <th>
+                                    <input th:name="senderSubsystem"
+                                           th:type="text"
+                                           th:placeholder="'Alamsüsteem'"
+                                           th:value="${form[__${'senderSubsystem'}__]}"
+                                           class="form-control" />
+                                </th>
+                                <th>
+                                    <!-- TODO: Uncomment if document title has been introduced -->
+                                    <!--<input th:name="documentTitle"
+                                           th:type="text"
+                                           th:value="${form[__${'documentTitle'}__]}"
+                                           class="form-control" />-->
+                                </th>
+                                <th>
+                                    <dl class="dl-horizontal date-range">
+                                        <dt>Alates:</dt>
+                                        <dd>
+                                            <input th:with="dateCreatedFrom = ${form[__${'dateCreatedFrom'}__]}"
+                                                   th:name="dateCreatedFrom"
+                                                   th:type="date"
+                                                   th:value="${dateCreatedFrom != null} ? ${#dates.format(dateCreatedFrom, 'yyyy-MM-dd')} : ''"
+                                                   class="form-control" />
+                                        </dd>
+                                        <dt>Kuni:</dt>
+                                        <dd>
+                                            <input th:with="dateCreatedTo = ${form[__${'dateCreatedTo'}__]}"
+                                                   th:name="dateCreatedTo"
+                                                   th:type="date"
+                                                   th:value="${dateCreatedTo != null} ? ${#dates.format(dateCreatedTo, 'yyyy-MM-dd')} : ''"
+                                                   class="form-control" />
+                                        </dd>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <button th:type="submit" class="btn btn-secondary btn-sm pull-right">Filtreeri</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody th:switch="${#lists.size(recipientsPage.content)}" >
+
+                            <tr th:case="0">
+                                <td th:colspan="8">
+                                    <h2>Päringu tulemus ei leidnud ühtegi dokumenti!</h2>
+                                </td>
+                            </tr>
+
+                            <th:block th:case="*">
+                                <tr th:each="recipient : ${recipientsPage.content}" th:with="
+                                    sender=${recipient.transport.senders[0].organisation},
+                                    document=${recipient.transport.dokument}
+                                    ">
+                                    <td th:text="${(recipientStat.index + 1) + ((recipientsPage.number) * recipientsPage.size)}" style="max-width: 220px"></td>
+                                    <td th:text="${document.outgoingDocument} ? 'Saadetav' : 'Vastuvõetav'"></td>
+                                    <td th:text="${T(ee.ria.dhx.server.persistence.enumeration.StatusEnum).forClassificatorId(recipient.statusId).classificatorName}"></td>
+                                    <td th:text="${sender.registrationCode}"></td>
+                                    <td th:text="${sender.subSystem}"></td>
+                                    <td th:with="fileName=${T(java.nio.file.Paths).get(document.content).getFileName()}"
+                                        th:text="${fileName}"
+                                        th:title="${fileName}"
+                                        th:class="no-overflow"></td>
+                                    <td th:text="${document.dateCreated}"></td>
+                                    <td th:with="
+                                        document_id=${document.documentId},
+                                        recipient_id=${recipient.recipientId}
+                                        ">
+                                        <a th:href="@{/monitoring/documents/{document_id}/recipient/{recipient_id}/status(document_id=${document_id},recipient_id=${recipient_id})}">Inspekteeri</a>
+                                    </td>
+                                </tr>
+                            </th:block>
+
+                        </tbody>
+                    </table>
+                </form>
+                <div th:if="${recipientsPage.totalPages > 1}" class="pagination pull-right">
+                    <ul class="pagination">
+                        <li th:switch="${recipientsPage.hasPrevious()}">
+                            <a th:case="true"
+                               th:href="@{/monitoring/documents(page=${recipientsPage.number - 1},size=${recipientsPage.size})}"
+                               th:text="'&laquo;'"></a>
+                            <span th:case="false"
+                                  th:text="'&laquo;'"></span>
+                        </li>
+
+                        <li th:each="pageNumber : ${#numbers.sequence(0, recipientsPage.totalPages - 1, 1)}"
+                            th:with="isCurrentPage = ${recipientsPage.number == pageNumber}"
+                            th:classappend="${isCurrentPage} ? 'active'">
+                            <a th:href="${!isCurrentPage} ? @{/monitoring/documents(page=${pageNumber},size=${recipientsPage.size})} : '#'"
+                               th:text="${pageNumber + 1}"></a>
+                        </li>
+
+                        <li th:switch="${recipientsPage.hasNext()}">
+                            <a th:case="true"
+                               th:href="@{/monitoring/documents(page=${recipientsPage.number + 1},size=${recipientsPage.size})}"
+                               th:text="'&raquo;'"></a>
+                            <span th:case="false"
+                                  th:text="'&raquo;'"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+</body>
+</html>

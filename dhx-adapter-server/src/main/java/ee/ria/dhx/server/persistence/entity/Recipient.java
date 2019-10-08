@@ -1,6 +1,7 @@
 package ee.ria.dhx.server.persistence.entity;
 
 import org.hibernate.annotations.Type;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -10,12 +11,17 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -24,8 +30,34 @@ import javax.persistence.Table;
  * The persistent class for the vastuvotja database table.
  * 
  */
+/*// TODO: Make eager loading work
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "recipient[organisation, transport[dokument, senders[organisation]]]",
+                includeAllAttributes = true,
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "organisation",
+                                attributeNodes = {
+                                        @NamedAttributeNode("name"),
+                                        @NamedAttributeNode("xroadInstance"),
+                                        @NamedAttributeNode("memberClass"),
+                                        @NamedAttributeNode("registrationCode"),
+                                        @NamedAttributeNode("subSystem"),
+                                        @NamedAttributeNode("isActive")
+                                }),
+                        @NamedSubgraph(
+                                name = "transport[dokument, senders[organisation]]",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "dokument"),
+                                        @NamedAttributeNode(value = "senders"),
+                                })
+                }
+        )
+})*/
 @Entity
 @Table(name = "vastuvotja")
+@Transactional
 public class Recipient extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 

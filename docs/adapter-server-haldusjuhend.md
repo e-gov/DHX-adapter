@@ -13,7 +13,8 @@ Sisukord
     * [2\. Monitooring](#2-monitooring)
       * [2\.1\. DHX adapterserveri staatus (Health)](#21-dhx-adapterserveri-staatus-health)
       * [2\.2\. DHX adapterserveri mõõdikud (Metrics)](#22-dhx-adapterserveri-m%C3%B5%C3%B5dikud-metrics)
-      * [2\.3\. Tomcat JMX liides](#23-tomcat-jmx-liides)
+      * [2\.3\. DHX adapterserveri dokumentide staatus](#23-dhx-adapterserveri-dokumentide-staatus)
+      * [2\.4\. Tomcat JMX liides](#23-tomcat-jmx-liides)
     * [3\. Logimine](#3-logimine)
     * [4\. Dokumentide edastamise vigade põhjuste analüüsimine](#4-dokumentide-edastamise-vigade-p%C3%B5hjuste-anal%C3%BC%C3%BCsimine)
       * [4\.1\. Andmebaasi mudel](#41-andmebaasi-mudel)
@@ -115,7 +116,21 @@ Vastuse näide:
 ```
 Vaata [Springframework juhendist](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html).
 
-### 2.3. Tomcat JMX liides
+### 2.3. DHX adapterserveri dokumentide staatus
+
+Täpsemaks Java serveri jälgimiseks saab kasutada DHX Monitooring lehte, mis on kättasaadav aadressilt `<serveri aadress>/monitoring/documents`.
+
+**NB!** Kuna antud aadress on vabalt kättesaadav nii DKV kui ka DHX liidese poolelt, siis on mõistlik seadistada Tomcat
+lubama ligipääsu veidi kindlama reegliga kasutajatel. Näiteks IP filter, milleks tuleks sedistada Tomcat'i [Context Container](https://tomcat.apache.org/tomcat-8.0-doc/config/context.html):
+
+```XML
+<Context path="/monitoring/documents" ... >
+    <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+           allow="127\.0\.0\.1" /> <!-- Ainult locahost on lubatud -->
+</Context>
+```
+
+### 2.4. Tomcat JMX liides
 
 Täpsemaks Java serveri jälgimiseks saab kasutada [Java Management Extensions](https://en.wikipedia.org/wiki/Java_Management_Extensions) (JMX) liidest. 
 
