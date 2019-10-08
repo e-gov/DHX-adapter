@@ -20,7 +20,7 @@ databaseChangeLog:
                     primaryKeyName: staatuse_ajalugu_pkey
               - column:
                   name: fault_actor
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: fault_code
                   type: clob

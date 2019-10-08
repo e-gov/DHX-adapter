@@ -29,12 +29,12 @@ databaseChangeLog:
                   type: int
               - column:
                   name: kausta_number
-                  type: nvarchar
+                  type: nvarchar(255)
                   constraints:
                     unique: true
               - column:
                   name: nimi
-                  type: nvarchar
+                  type: nvarchar(255)
               - column:
                   name: ylemkaust_id
                   type: int

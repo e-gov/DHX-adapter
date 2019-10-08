@@ -33,8 +33,6 @@ databaseChangeLog:
       changes:
         - sql:
             dbms: oracle
-            endDelimiter: \nGO
-            splitStatements: false
             sql: |-
               ALTER TABLE dokument ADD (clob_sisu CLOB);
               UPDATE dokument SET clob_sisu = sisu;
@@ -42,6 +40,5 @@ databaseChangeLog:
               ALTER TABLE dokument RENAME COLUMN clob_sisu TO sisu;
         - sql:
             dbms: postgresql
-            splitStatements: false
             sql: |-
               ALTER TABLE dokument ALTER COLUMN sisu TYPE text;
