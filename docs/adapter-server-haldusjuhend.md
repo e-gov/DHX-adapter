@@ -234,8 +234,13 @@ Selles formaadis failid sorteeritakse nime järgi kuupäevalises järjekorras.
 Nende failide sisu on XML formaadis (UTF-8 kodeeringus).
 
 Vea uurimisel saab dokumendi faili seostada andmebaasis DOKUMENT.SISU välja järgi.
+PostgreSQL:
 ```sql
-SELECT d.* FROM DOKUMENT d where d.sisu = 'dhx_2017_01_20_1101256c7e2a4e-f467-4c32-8fa6-52bc140fe17e'
+SELECT d.* FROM DOKUMENT d where convert_from(loread(lo_open(d.sisu::int, x'40000'::int), x'40000'::int),  'UTF8') = 'dhx_2017_01_20_1101256c7e2a4e-f467-4c32-8fa6-52bc140fe17e';
+```
+Oracle:
+```sql
+SELECT d.* FROM DOKUMENT d where d.sisu like 'dhx_2017_01_20_1101256c7e2a4e-f467-4c32-8fa6-52bc140fe17e'
 ```
 
 
