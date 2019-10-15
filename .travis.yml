@@ -20,6 +20,9 @@ matrix:
       - docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml build
       - docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml up --exit-code-from setup-wiremock setup-wiremock
       - TOMCAT_VERSION=8.5-jdk11-openjdk USER_ID=${UID} COMPOSE_HTTP_TIMEOUT=300 docker-compose -f dhx-adapter-e2e-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from test test
+branches:
+  only:
+  - master
 before_install:
 - export TZ=Europe/Helsinki
 - xmlstarlet ed -N x="http://maven.apache.org/POM/4.0.0" -d "//x:dependency[x:groupId[contains(text(),'com.oracle')]]" dhx-adapter-server/pom.xml > dhx-adapter-server/pom_without_oracle.xml
@@ -47,7 +50,6 @@ deploy:
   draft: true
   on:
    branch: master
-   tags: true 
 notifications:
   email:
     recipients:
