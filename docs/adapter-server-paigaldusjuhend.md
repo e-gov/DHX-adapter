@@ -22,7 +22,7 @@ Sisukord
         * [4\.1\.4\. DHX adapterserver WAR](#414-dhx-adapterserver-war)
         * [4\.1\.5\. Muuta dhx\-application\.properties](#415-muuta-dhx-applicationproperties)
         * [4\.1\.6\. Paigaldada Tomcat Windows Servicena või Linux deemonina\.](#416-paigaldada-tomcat-windows-servicena-v%C3%B5i-linux-deemonina)
-      * [4\.2\. Olemasoleva paigalduspaketiga (WAR) \- Tomcat ja Oracle 11g Express edition](#42-olemasoleva-paigalduspaketiga-war---tomcat-ja-oracle-11g-express-edition)
+      * [4\.2\. Tomcat ja Oracle 11g Express edition](#42-tomcat-ja-oracle-11g-express-edition)
         * [4\.2\.1\. Oracle 11g Express Edition](#421-oracle-11g-express-edition)
         * [4\.2\.2\. Java SE](#422-java-se)
         * [4\.2\.2\.1\. Java 8 SE](#4221-java-8-se)
@@ -257,13 +257,14 @@ Näiteks käivitades käsurealt: `service.bat install`
 Vaata täpsemalt [Tomcat Windows service HOW-TO](https://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html).
 
 
-### 4.2. Olemasoleva paigalduspaketiga (WAR) - Tomcat ja Oracle 11g Express edition
+### 4.2. Tomcat ja Oracle 11g Express edition
 
 #### 4.2.1. Oracle 11g Express Edition
+1) NB! Alates 1.0.5 versioonist tuleb Oracle andmebaasi kasutamiseks paigalduspakk [ise ehitada](#43-paigalduspaketi-ise-ehitamine)
 
-1) Laadida alla ja installeerida [Oracle 11g XE](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
+2) Laadida alla ja installeerida [Oracle 11g XE](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
 
-2) Logida oracle andmebaasi SYS kasutaja ja luua uus kasutaja (schema):
+3) Logida oracle andmebaasi SYS kasutaja ja luua uus kasutaja (schema):
 ```sql
 create user dhxadapter
   identified by dhxadapter123
@@ -357,7 +358,7 @@ Vaata [eespoolt](#416-paigaldada-tomcat-windows-servicena-või-linux-deemonina)
 
 ### 4.3. Paigalduspaketi ise ehitamine
 
-Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat) või kasutada muud andmebaasi serverit (mitte PostgreSQL ega Oracle), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
+Kui soovitakse tarkvara paigalda mingisse muuse Java Web serverisse (mitte Tomcat) või kasutada muud andmebaasi serverit (mitte PostgreSQL), siis tuleb WAR fail ise uuesti ehitada, muutes eelnevalt `/DHX-adapter/dhx-adapter-server/pom.xml` failis sõltuvusi.
 
 Kui soovitakse paigaldada Java Servlet spetsifikatsiooni [3.0](http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/) või uuemat versiooni toetavasse Java Web Konteinerisse, mis toetavad annotatsioone, siis piisab Spring-boot-starter'ite häälestamisest [pom.xml](../dhx-adapter-server/pom.xml) sees (vaikimisi on seal `spring-boot-starter-web`, `spring-boot-starter-tomcat`, `spring-boot-starter-data-jpa`).  
 
@@ -521,7 +522,8 @@ dhx.server.failed-document-lifetime | | 30 | Määrab päevade arvu, kui kauaks 
 dhx.resend.timeout| | 1500 | Ajaperiood (minutites, 1500 min=25 tundi), pärast mida proovitakse uuesti "saatmisel" staatusesse jäänud dokumente saata. Peaks olema suurem kui `document-resend-template` parameetris määratud aegade summa. Kasutatakse reaalselt saatmisel ainult erijuhul kui server kukkus maha või serveri töö peatati sunnitult.
 dhx.server-include-xmlns-to-attachments| false | false | Määrab, et SOAP vastuse manuste sees ei tooda ära nimeruumi (vastus näiteks `<keha><dhl_id>59</dhl_id></keha>`). Kui määrata true, siis vastuse manuses tuuakse ära ka nimeruum, näiteks: `<keha xmlns="http://producers.dhl.xrd.riik.ee/producer/dhl" ><dhl_id>59</dhl_id></keha>`
 documents.folder | | `C:\\dhx_docs\\` | Kataloog kuhu salvestatakse vastu võetud (edastamist ootavate) dokumentide kapslid. Linux korral kasutada formaati `/kataloog`. Selle kataloogi failisüsteemis peab olema piisavalt vaba ruumi (10-50Gb). Dokumendid kustutatakse teatud perioodi (30 päeva) järel (parameetrid `dhx.server.received-document-lifetime` ja `dhx.server.failed-document-lifetime`)
-spring.jpa.hibernate.ddl-auto | | update| Määrab, et esimesel serveri käivitamisel (kui andmebaasi ühenduse parameetrid on õigeks muudetud) luuakse andmebaasi tabelid automaatselt.
+soap.dhx.attachment.cache.threshold| 0 | 10 | Määrab faili suuruse megabaitides millest alates DHX puhverdab saatmisel ja vastuvõtmisel päringu kettale. Vaikimisi DHX ei puhverda sõnumeid kettale.
+soap.dhx.attachment.cache.dir| java.io.tmpdir | /tmp | Kataloog kuhu DHX puhverdab faili saatmisel ja vastuvõtmisel sõnumid. Vaikimisi Java TMP kaust. 
 
 
 PostgreSQL korral tuleb muuta järgmiste parameetrite väärtused.
