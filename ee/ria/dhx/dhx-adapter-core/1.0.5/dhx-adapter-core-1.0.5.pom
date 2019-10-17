@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ee.ria.dhx</groupId>
+		<artifactId>DHX-adapter</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<artifactId>dhx-adapter-core</artifactId>
+	<name>dhx-adapter-core</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jcabi</groupId>
+			<artifactId>jcabi-aspects</artifactId>
+			<version>0.22.6</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<configuration>
+					<sources>
+						<source>${project.basedir}/src/main/resources/</source>
+					</sources>
+					<schemaDirectory>${project.basedir}/src/main/resources/</schemaDirectory>
+					<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+					<clearOutputDir>false</clearOutputDir>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
