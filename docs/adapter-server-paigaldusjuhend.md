@@ -221,6 +221,11 @@ Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
 keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
 ```
 
+Juhul kui turvaserveri sertifikaat on self-signed, tuleb see lisada java truststore-i. 
+```
+keytool -import -alias ca -file cert.cer -keystore cacerts -storepass changeit
+```
+
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.   
 
 3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c://logs/dhx-adapter-server.log):
@@ -332,6 +337,11 @@ Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
 keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
 ```
 
+Juhul kui turvaserveri sertifikaat on self-signed, tuleb see lisada java truststore-i. 
+```
+keytool -import -alias ca -file cert.cer -keystore cacerts -storepass changeit
+```
+
 2) Luua ülaltoodud kataloog `C:\dhx_docs\` (Windows) või `/dhs_docs` (Linux/Unix) ja kontrollida kas Tomcat protsessi käivitaval kasutajal on seal kirjutamise õigused.
 
 3) Avada fail `apache-tomcat-7.x.x/webapps/dhx-adapter-server/WEB-INF/classes/log4j2.xml` ja muuta [log4j2.xml](https://github.com/e-gov/DHX-adapter/blob/master/src/main/resources/conf/production/server/log4j2.xml) sees soovi korral ümber logimise kataloog (c://logs/dhx-adapter-server.log):
@@ -441,6 +451,8 @@ Märkus:
 > Väärtus `-Denv=production` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/production/server` alamkataloogist.
 >
 > Väärtus `-Denv=development` määrab, et kataloogi `DHX-adapter/src/main/resources/conf/development/server` alamkataloogist.
+>
+>JDK11 puhul käivitada ehitamine käsuga `mvn clean install -q -P jdk11,production`
 
 
 Selle väljundiks peaks olema SUCCESS:
@@ -579,6 +591,10 @@ Märkus:
 >Seejärel tuleb eksportida sertifikaat, mis tuleb paigutada tuvaserverisse
 >```
 >keytool -export -keystore dhx.jks -alias dhx -file dhx_key.cer
+>```
+>Juhul kui turvaserveri sertifikaat on self-signed, tuleb see lisada java truststore-i. 
+>```
+>keytool -import -alias ca -file cert.cer -keystore cacerts -storepass changeit
 >```
 
 /health ja /metrics rakendusinfole juurdepääsusks tuleb nende liideste turvapiirangud kas väljalülitada:
