@@ -144,6 +144,8 @@ public class Recipient extends BaseEntity implements Serializable {
   @Column(name = "vastuvotja_staatus_id")
   private Integer recipientStatusId;
 
+  @Lob
+  @Type(type = "org.hibernate.type.MaterializedClobType")
   @Column(name = "meta_xml")
   private String metaxml;
 
