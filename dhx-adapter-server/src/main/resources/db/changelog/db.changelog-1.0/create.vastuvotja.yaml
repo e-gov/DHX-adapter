@@ -56,7 +56,7 @@ databaseChangeLog:
                   type: datetime
               - column:
                   name: meta_xml
-                  type: nvarchar(255)
+                  type: clob
               - column:
                   name: outgoing
                   type: boolean

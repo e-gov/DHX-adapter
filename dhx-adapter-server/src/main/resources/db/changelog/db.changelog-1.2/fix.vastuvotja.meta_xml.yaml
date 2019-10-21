@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-12
+      author: Kaarel Raspel
+      comment: Fix 'vastuvotja' field 'meta_xml' by migrating it to CLOB (Oracle) or TEXT (Postgres) type if needed.
+      preConditions:
+        - onFail: MARK_RAN
+        - or:
+          - and:
+            - dbms:
+                  type: oracle
+            - not:
+              - sqlCheck:
+                    expectedResult: 0
+                    sql: |-
+                      SELECT COUNT(*) FROM user_tab_columns
+                      WHERE
+                        LOWER(table_name) = 'vastuvotja'
+                        AND LOWER(column_name) = 'meta_xml'
+                        AND LOWER(data_type) != 'clob'
+          - and:
+            - dbms:
+                  type: postgresql
+            - not:
+              - sqlCheck:
+                    expectedResult: 0
+                    sql: |-
+                      SELECT COUNT(*) FROM information_schema.columns
+                      WHERE
+                        LOWER(table_name) = 'vastuvotja'
+                        AND LOWER(column_name) = 'meta_xml'
+                        AND LOWER(udt_name) != 'text'
+      changes:
+        - sql:
+            dbms: oracle
+            sql: |-
+              ALTER TABLE vastuvotja ADD (clob_meta_xml CLOB);
+              UPDATE vastuvotja SET clob_meta_xml = meta_xml;
+              ALTER TABLE vastuvotja DROP COLUMN meta_xml;
+              ALTER TABLE vastuvotja RENAME COLUMN clob_meta_xml TO meta_xml;
+        - sql:
+            dbms: postgresql
+            sql: |-
+              ALTER TABLE vastuvotja ALTER COLUMN meta_xml TYPE text;
