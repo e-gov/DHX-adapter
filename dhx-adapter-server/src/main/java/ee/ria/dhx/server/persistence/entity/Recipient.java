@@ -1,7 +1,6 @@
 package ee.ria.dhx.server.persistence.entity;
 
 import org.hibernate.annotations.Type;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -57,7 +56,6 @@ import javax.persistence.Table;
 })*/
 @Entity
 @Table(name = "vastuvotja")
-@Transactional
 public class Recipient extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 

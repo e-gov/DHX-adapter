@@ -2,7 +2,6 @@ package ee.ria.dhx.server.controllers;
 
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.RecipientRepository;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +61,7 @@ public class DocumentController {
         return "documents-index";
     }
 
+    @Transactional
     @GetMapping(value = "/documents/{document_id}/recipient/{recipient_id}/status")
     public String getDocumentStatus(@PathVariable("document_id") long documentId,
                                     @PathVariable("recipient_id") long recipientId,
