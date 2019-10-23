@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
@@ -26,7 +25,6 @@ import javax.persistence.LockModeType;
  * @author Aleksei Kokarev
  *
  */
-@Transactional
 public interface RecipientRepository extends JpaRepository<Recipient, Long> {
 
   public List<Recipient> findByStatusId(Integer statusId);
@@ -48,12 +46,10 @@ public interface RecipientRepository extends JpaRepository<Recipient, Long> {
   public Recipient findByTransportDokumentDocumentIdAndTransportDokumentFolderAndOrganisation(
       Integer documentId, Folder folder, Organisation org);
 
-  @Transactional
   //@EntityGraph("recipient[organisation, transport[dokument, senders[organisation]]]") // TODO: Make eager loading work
   @EntityGraph(attributePaths = "statusHistory")                                        // TODO: So far make eager loading work for 'statusHistory'
   public Recipient findByRecipientIdAndTransportDokumentDocumentId(Long recipientId, Long documentId);
 
-  @Transactional
   //@EntityGraph("recipient[organisation, transport[dokument, senders[organisation]]]") // TODO: Make eager loading work
   @Query("SELECT r FROM ee.ria.dhx.server.persistence.entity.Recipient r " +
          "JOIN r.transport t " +
