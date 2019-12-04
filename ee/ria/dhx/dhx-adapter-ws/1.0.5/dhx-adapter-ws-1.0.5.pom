@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
-		<version>${revision}</version>
+		<version>1.0.5</version>
 	</parent>
 	<artifactId>dhx-adapter-ws</artifactId>
 	<name>Web services</name>
