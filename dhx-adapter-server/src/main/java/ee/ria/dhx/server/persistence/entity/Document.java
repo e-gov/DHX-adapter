@@ -55,9 +55,8 @@ public class Document extends BaseEntity implements Serializable {
   private Organisation organisation;
 
   // bi-directional many-to-one association to Kaust
-  @ManyToOne
-  @JoinColumn(name = "kaust_id")
-  private Folder folder;
+  @Column(name = "kaust")
+  private String folder;
 
   // bi-directional many-to-one association to Transport
   @OneToMany(mappedBy = "dokument", cascade = {CascadeType.ALL})
@@ -228,7 +227,7 @@ public class Document extends BaseEntity implements Serializable {
    *
    * @return the folder
    */
-  public Folder getFolder() {
+  public String getFolder() {
     return folder;
   }
 
@@ -237,7 +236,7 @@ public class Document extends BaseEntity implements Serializable {
    *
    * @param folder the folder to set
    */
-  public void setFolder(Folder folder) {
+  public void setFolder(String folder) {
     this.folder = folder;
   }
 

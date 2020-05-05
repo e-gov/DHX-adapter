@@ -1,50 +1,21 @@
 package ee.ria.dhx.server.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
+import ee.ria.dhx.mock.MockWebServiceClient;
 import ee.ria.dhx.server.RepoFactory4Test;
 import ee.ria.dhx.server.TestApp;
 import ee.ria.dhx.server.config.DhxServerConfig;
-import ee.ria.dhx.mock.MockWebServiceClient;
-import ee.ria.dhx.server.persistence.entity.Document;
-import ee.ria.dhx.server.persistence.entity.Organisation;
-import ee.ria.dhx.server.persistence.entity.Recipient;
-import ee.ria.dhx.server.persistence.entity.Sender;
-import ee.ria.dhx.server.persistence.entity.StatusHistory;
-import ee.ria.dhx.server.persistence.entity.Transport;
+import ee.ria.dhx.server.persistence.entity.*;
 import ee.ria.dhx.server.persistence.enumeration.RecipientStatusEnum;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.server.persistence.service.PersistenceService;
 import ee.ria.dhx.server.service.ConvertationService;
 import ee.ria.dhx.server.service.SoapService;
 import ee.ria.dhx.server.types.ee.riik.schemas.dhl.Edastus;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Base64BinaryType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.DocumentRefsArrayType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.DocumentsArrayType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.Dokumendid;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatus;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2RequestType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendStatusV2ResponseTypeUnencoded;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.GetSendingOptionsV3ResponseTypeUnencoded;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.InstitutionArrayType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceived;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.MarkDocumentsReceivedV3RequestType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ObjectFactory;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocuments;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.ReceiveDocumentsV4RequestType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.SendDocuments;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.SendDocumentsV4RequestType;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.SendDocumentsV4ResponseTypeUnencoded;
-import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.TagasisideType;
+import ee.ria.dhx.server.types.ee.riik.xrd.dhl.producers.producer.dhl.*;
 import ee.ria.dhx.types.InternalXroadMember;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.AccessConditionType;
 import ee.ria.dhx.types.ee.riik.schemas.deccontainer.vers_2_1.DecContainer;
@@ -55,25 +26,16 @@ import ee.ria.dhx.types.eu.x_road.dhx.producer.SendDocumentResponse;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
 import ee.ria.dhx.types.eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
 import ee.ria.dhx.util.ConversionUtil;
-import ee.ria.dhx.util.FileUtil;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.DhxMarshallerService;
 import ee.ria.dhx.ws.service.impl.AddressServiceImplSpyProvider;
-
 import lombok.extern.slf4j.Slf4j;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-/*
- * import org.springframework.ws.test.server.MockWebServiceClient; import
- * org.springframework.ws.test.server.RequestCreator; import
- * org.springframework.ws.test.server.RequestCreators;
- */
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -88,33 +50,29 @@ import org.springframework.ws.test.client.RequestMatchers;
 import org.springframework.ws.test.client.ResponseCreators;
 import org.springframework.ws.test.server.RequestCreators;
 import org.springframework.ws.test.server.ResponseMatchers;
-import org.springframework.ws.test.server.ResponseMatcher;
-import org.springframework.ws.WebServiceMessage;
-
-import org.w3c.dom.Element;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.transaction.Transactional;
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.*;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+
+/*
+ * import org.springframework.ws.test.server.MockWebServiceClient; import
+ * org.springframework.ws.test.server.RequestCreator; import
+ * org.springframework.ws.test.server.RequestCreators;
+ */
 
 // import org.springframework.test.context.junit4.SpringRunner;
 
@@ -151,9 +109,6 @@ public class ServerIT {
 
   @Autowired
   OrganisationRepository organisationRepository;
-
-  @Autowired
-  FolderRepository folderRepository;
 
   String resourceFolder = "endpoint/";
 
@@ -242,6 +197,7 @@ public class ServerIT {
     request.getKeha().setDokumendid(new Base64BinaryType());
     request.getKeha().getDokumendid()
         .setHref(getSendDocumentsAttachment(encodeBase64, containers));
+    request.getKeha().setKaust("/");
     return request;
   }
 
@@ -336,7 +292,7 @@ public class ServerIT {
     Long docId = Long.parseLong(keha.getDhlId().get(0));
     Document doc = documentRepository.findOne(docId);
     assertEquals(true, doc.getOutgoingDocument());
-    assertEquals("/", doc.getFolder().getName());
+    assertEquals("/", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
 
     assertEquals(1, doc.getTransports().size());
@@ -484,7 +440,7 @@ public class ServerIT {
     Long docId = Long.parseLong(keha.getDhlId().get(0));
     Document doc = documentRepository.findOne(docId);
     assertEquals(true, doc.getOutgoingDocument());
-    assertEquals("/", doc.getFolder().getName());
+    assertEquals("/", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
 
     assertEquals(1, doc.getTransports().size());
@@ -569,7 +525,7 @@ public class ServerIT {
 
 
     assertEquals(true, doc.getOutgoingDocument());
-    assertEquals("/", doc.getFolder().getName());
+    assertEquals("/", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
 
     assertEquals(1, doc.getTransports().size());
@@ -764,7 +720,7 @@ public class ServerIT {
     Long docId = Long.parseLong(keha.getDhlId().get(0));
     Document doc = documentRepository.findOne(docId);
     assertEquals(true, doc.getOutgoingDocument());
-    assertEquals("folder", doc.getFolder().getName());
+    assertEquals("folder", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
 
     assertEquals(1, doc.getTransports().size());
@@ -1058,7 +1014,7 @@ public class ServerIT {
     Long docId = Long.parseLong(keha.getDhlId().get(0));
     Document doc = documentRepository.findOne(docId);
     assertEquals(true, doc.getOutgoingDocument());
-    assertEquals("folder", doc.getFolder().getName());
+    assertEquals("folder", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
 
     assertEquals(1, doc.getTransports().size());

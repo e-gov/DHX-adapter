@@ -1,7 +1,6 @@
 package ee.ria.dhx.server;
 
-import ee.ria.dhx.server.persistence.entity.Folder;
-
+import ee.ria.dhx.server.persistence.entity.Document;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -31,7 +30,7 @@ public class RepoFactory4Test {
 
     LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
     factory.setJpaVendorAdapter(vendorAdapter);
-    factory.setPackagesToScan(Folder.class.getPackage().getName());
+    factory.setPackagesToScan(Document.class.getPackage().getName());
     factory.setDataSource(dataSource());
     factory.afterPropertiesSet();
 

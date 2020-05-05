@@ -6,14 +6,12 @@ import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.server.persistence.entity.Document;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.StatusHistory;
 import ee.ria.dhx.server.persistence.enumeration.RecipientStatusEnum;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.persistence.service.CapsuleService;
@@ -63,6 +61,7 @@ import ee.ria.dhx.ws.service.DhxPackageProviderService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -116,10 +115,6 @@ public class SoapService {
   @Autowired
   @Setter
   DhxMarshallerService dhxMarshallerService;
-
-  @Autowired
-  @Setter
-  FolderRepository folderRepository;
 
   @Autowired
   @Setter
@@ -342,13 +337,10 @@ public class SoapService {
         organisationRepository.findByRegistrationCodeAndSubSystem(sender.getMemberCode(),
             sender.getSubsystemCode());
     log.debug("receiving document for organisation: {}", senderOrg);
-    Folder folder = null;
-    if (!StringUtil.isNullOrEmpty(request.getKeha().getKaust())) {
-      folder = folderRepository.findByName(request.getKeha().getKaust());
-    }
+    String folderName = request.getKeha().getKaust();
     Integer inprocessStatusId = StatusEnum.IN_PROCESS.getClassificatorId();
     List<Document> docs = null;
-    if (folder == null && StringUtil.isNullOrEmpty(request.getKeha().getKaust())) {
+    if (StringUtil.isNullOrEmpty(folderName)) {
       if (senderOrg != null) {
         log.debug(
             "searching by recipients organisation and status " + senderOrg.getOrganisationId());
@@ -361,7 +353,7 @@ public class SoapService {
       log.debug("searching by recipients organisation, folder and status");
       docs = documentRepository
           .findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
-              false, senderOrg, inprocessStatusId, folder, pageable);
+              false, senderOrg, inprocessStatusId, folderName, pageable);
     }
     if (docs != null) {
       log.debug("found docs: " + docs.size());
@@ -490,10 +482,7 @@ public class SoapService {
             senderMember.getSubsystemCode());
     Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
     Integer successStatusId = StatusEnum.RECEIVED.getClassificatorId();
-    Folder folder = null;
-    if (request.getKaust() != null) {
-      folder = folderRepository.findByName(request.getKaust());
-    }
+    String folderName = request.getKaust();
     if (senderOrg == null) {
       throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
           "Senders organisation not found. organisation:" + senderMember.toString());
@@ -504,15 +493,15 @@ public class SoapService {
     Boolean allFailed = true;
     Boolean found = false;
     for (TagasisideType status : request.getDokumendid().getTagasisided()) {
-      Document doc = documentRepository.findOne(status.getDhlId().longValue());
+      Long documentId = status.getDhlId().longValue();
+      Document doc = StringUtils.isBlank(folderName)
+              ? documentRepository.findByDocumentId(documentId)
+              : documentRepository.findByDocumentIdAndFolder(documentId, folderName);
       if (log.isTraceEnabled()) {
         log.trace("marking document receiverd: {}", doc);
       }
       if (doc == null) {
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR, "Document is not found.");
-      }
-      if (folder != null && !doc.getFolder().getFolderId().equals(folder.getFolderId())) {
-        continue;
       }
       for (Recipient recipient : doc.getTransports().get(0).getRecipients()) {
         if (recipient.getOrganisation().getOrganisationId()
