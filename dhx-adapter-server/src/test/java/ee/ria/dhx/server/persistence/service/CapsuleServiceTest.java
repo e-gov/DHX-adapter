@@ -98,8 +98,8 @@ public class CapsuleServiceTest {
   
   @Rule
   public TemporaryFolder testFolder = new TemporaryFolder(); 
-  String filename = "trying";
-  String folderName = "folder";
+  static final String filename = "trying";
+  static final String folderName = "folder";
   File testFile;
 
   @Before
