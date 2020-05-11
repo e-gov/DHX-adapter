@@ -74,6 +74,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.activation.DataHandler;
 import javax.mail.util.ByteArrayDataSource;
@@ -142,6 +143,7 @@ public class SoapServiceTest {
     soapService.setSoapConfig(config);
     soapService.setResendTimeout(30);
     when(config.getDhxSubsystemPrefix()).thenReturn("DXH");
+    when(recipientRepository.findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(any(), any(), any())).thenReturn(Stream.empty());
   }
 
   @Test
@@ -196,7 +198,7 @@ public class SoapServiceTest {
     recipient.setRecipientId(12L);
     recipients.add(recipient);
     when(recipientRepository.findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
-        StatusEnum.IN_PROCESS.getClassificatorId(), true)).thenReturn(recipients);
+        StatusEnum.IN_PROCESS.getClassificatorId(), true)).thenReturn(recipients.stream());
     // when(recipientRepository.findByRecipientId(any(Long.class))).thenReturn(recipient);
     DecContainer container = new DecContainer();
     when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
@@ -239,7 +241,7 @@ public class SoapServiceTest {
     recipient.setRecipientId(12L);
     recipients.add(recipient);
     when(recipientRepository.findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
-        StatusEnum.IN_PROCESS.getClassificatorId(), true)).thenReturn(recipients);
+        StatusEnum.IN_PROCESS.getClassificatorId(), true)).thenReturn(recipients.stream());
     // when(recipientRepository.findByRecipientId(any(Long.class))).thenReturn(recipient);
     DecContainer container = new DecContainer();
     when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
@@ -376,7 +378,7 @@ public class SoapServiceTest {
     Recipient recipient = new Recipient();
     recipient.setOrganisation(senderOrg);
     doc.getTransports().get(0).addRecipient(recipient);
-    when(documentRepository.findOne(10L)).thenReturn(doc);
+    when(documentRepository.findByDocumentId(10L)).thenReturn(doc);
     recipientMember.setServiceVersion("v3");
     soapService.markDocumentReceived(requestWrapper, senderMember, recipientMember, null);
     verify(documentRepository, times(1)).save(doc);
@@ -423,7 +425,7 @@ public class SoapServiceTest {
     Recipient recipient = new Recipient();
     recipient.setOrganisation(senderOrg);
     doc.getTransports().get(0).addRecipient(recipient);
-    when(documentRepository.findOne(10L)).thenReturn(doc);
+    when(documentRepository.findByDocumentId(10L)).thenReturn(doc);
     recipientMember.setServiceVersion("v3");
     soapService.markDocumentReceived(requestWrapper, senderMember, recipientMember, null);
     verify(recipientRepository, times(1)).save(recipient);
@@ -475,7 +477,7 @@ public class SoapServiceTest {
     Recipient recipient = new Recipient();
     recipient.setOrganisation(recipientOrg);
     doc.getTransports().get(0).addRecipient(recipient);
-    when(documentRepository.findOne(10L)).thenReturn(doc);
+    when(documentRepository.findByDocumentId(10L)).thenReturn(doc);
     expectedEx.expect(DhxException.class);
     expectedEx.expectMessage("That document is not sent to recipient organisation");
     recipientMember.setServiceVersion("v3");
@@ -524,7 +526,7 @@ public class SoapServiceTest {
     Recipient recipient = new Recipient();
     recipient.setOrganisation(senderOrg);
     doc.getTransports().get(0).addRecipient(recipient);
-    when(documentRepository.findOne(10L)).thenReturn(doc);
+    when(documentRepository.findByDocumentId(10L)).thenReturn(doc);
 
     Document doc2 = new Document();
     doc2.addTransport(new Transport());
@@ -538,7 +540,7 @@ public class SoapServiceTest {
     Recipient recipient3 = new Recipient();
     recipient3.setOrganisation(otherOrg);
     doc2.getTransports().get(0).addRecipient(recipient3);
-    when(documentRepository.findOne(11L)).thenReturn(doc2);
+    when(documentRepository.findByDocumentId(11L)).thenReturn(doc2);
     recipientMember.setServiceVersion("v3");
     soapService.markDocumentReceived(requestWrapper, senderMember, recipientMember, null);
     verify(documentRepository, times(1)).save(doc);
