@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.server.persistence.entity.Document;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.enumeration.RecipientStatusEnum;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
@@ -99,7 +98,8 @@ public class CapsuleServiceTest {
   
   @Rule
   public TemporaryFolder testFolder = new TemporaryFolder(); 
-  String filename = "trying";
+  static final String filename = "trying";
+  static final String folderName = "folder";
   File testFile;
 
   @Before
@@ -120,9 +120,6 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getAdresseesFromContainer(any())).thenReturn(addressees);
     adressee = new CapsuleAdressee("400", null, null);
     when(capsuleConfig.getSenderFromContainer(any())).thenReturn(adressee);
-    Folder folder = new Folder();
-    folder.setName("folder");
-    when(persistenceService.getFolderByNameOrDefaultFolder("/")).thenReturn(folder);
     capsuleService.setConfig(config);
     when(config.getCapsuleValidate()).thenReturn(true);
     when(soapConfig.getDhxSubsystemPrefix()).thenReturn("DHX");
@@ -212,18 +209,13 @@ public class CapsuleServiceTest {
     when(organisationRepository.findByRegistrationCodeAndSubSystem(service.getMemberCode(),
         service.getSubsystemCode())).thenReturn(serviceOrg);
 
-    // mock folder
-    Folder folder = new Folder();
-    folder.setName("folder");
-    when(persistenceService.getFolderByNameOrDefaultFolder("/")).thenReturn(folder);
-
     // method call
     Document document =
         capsuleService.getDocumentFromIncomingContainer(pckg, CapsuleVersionEnum.V21);
     verify(persistenceService, times(0)).getOrganisationFromInternalXroadMemberAndSave(
         any(InternalXroadMember.class), any(Boolean.class), any(Boolean.class));
     assertEquals("V21", document.getCapsuleVersion());
-    assertEquals(folder, document.getFolder());
+    assertEquals(folderName, document.getFolder());
     assertNotNull(document.getContent());
     assertEquals(clientOrg, document.getOrganisation());
     assertEquals(false, document.getOutgoingDocument());
@@ -581,11 +573,6 @@ public class CapsuleServiceTest {
     when(capsuleConfig.getSenderFromContainer(container)).thenReturn(adressee);
     when(persistenceService.findOrg("400")).thenReturn(clientOrg);
 
-    // mock folder
-    Folder folder = new Folder();
-    folder.setName("folder");
-    when(persistenceService.getFolderByNameOrDefaultFolder("/")).thenReturn(folder);
-
     // method call
     Document document =
         capsuleService.getDocumentFromOutgoingContainer(client, service, container, "/",
@@ -593,7 +580,7 @@ public class CapsuleServiceTest {
     verify(persistenceService, times(1)).findOrg("401");
     verify(organisationRepository, times(1)).findByRegistrationCodeAndSubSystem("400", "DHX");
     assertEquals("V21", document.getCapsuleVersion());
-    assertEquals(folder, document.getFolder());
+    assertEquals(folderName, document.getFolder());
     assertEquals(filename, document.getContent());
     //test that file contents is OK
    /* FileReader reader = new FileReader(testFile);
@@ -1007,6 +994,7 @@ public class CapsuleServiceTest {
     Document doc = new Document();
     doc.setDocumentId(12L);
     doc.setContent(containerStr);
+    doc.setFolder("/");
     DecContainer containerReturn = new DecContainer();
     when(dhxMarshallerService.unmarshallAndValidate(any(InputStream.class),
         any(InputStream.class)))

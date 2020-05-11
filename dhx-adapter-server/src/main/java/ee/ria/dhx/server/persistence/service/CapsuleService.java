@@ -6,7 +6,6 @@ import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
 import ee.ria.dhx.server.config.DhxServerConfig;
 import ee.ria.dhx.server.persistence.entity.Document;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.Sender;
@@ -36,6 +35,7 @@ import ee.ria.dhx.ws.service.impl.DhxMarshallerServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +67,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @Slf4j
 public class CapsuleService {
 
+  public static final String DEFAULT_FOLDER = "/";
   @Autowired
   @Setter
   CapsuleConfig capsuleConfig;
@@ -166,8 +167,7 @@ public class CapsuleService {
       CapsuleAdressee capsuleSender = capsuleConfig.getSenderFromContainer(container);
       sender.setPersonalCode(capsuleSender.getPersonalCode());
       sender.setStructuralUnit(capsuleSender.getStructuralUnit());
-      Folder folder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
-      document.setFolder(folder);
+      document.setFolder(StringUtils.defaultIfBlank(folderName, DEFAULT_FOLDER));
       document.setOutgoingDocument(false);
       validateAndSetContainerToDocument(container, document);
       Recipient recipient = new Recipient();
@@ -368,8 +368,7 @@ public class CapsuleService {
     }
     sender.setPersonalCode(capsuleSender.getPersonalCode());
     sender.setStructuralUnit(capsuleSender.getStructuralUnit());
-    Folder folder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
-    document.setFolder(folder);
+    document.setFolder(folderName);
     document.setOutgoingDocument(true);
     for (CapsuleAdressee containerRecipient : capsuleConfig
         .getAdresseesFromContainer(container)) {
@@ -594,7 +593,7 @@ public class CapsuleService {
         }
         if (doc.getFolder() != null) {
           log.debug("creating Folder: " + doc.getFolder());
-          container.getDecMetadata().setDecFolder(doc.getFolder().getName());
+          container.getDecMetadata().setDecFolder(doc.getFolder());
         }
         XMLGregorianCalendar date = ConversionUtil.toGregorianCalendar(new Date());
         container.getDecMetadata().setDecReceiptDate(date);

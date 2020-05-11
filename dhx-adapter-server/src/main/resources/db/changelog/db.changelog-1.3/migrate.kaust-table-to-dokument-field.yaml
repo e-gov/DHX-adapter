@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-14
+      author: Marten Rebane
+      comment: Migrate field 'nimi' from table 'kaust' to table 'dokument' field 'kaust'
+      changes:
+        - sql:
+            UPDATE dokument
+              SET kaust = (
+                  SELECT nimi
+                  FROM kaust
+                  WHERE dokument.kaust_id = kaust.kaust_id
+              );

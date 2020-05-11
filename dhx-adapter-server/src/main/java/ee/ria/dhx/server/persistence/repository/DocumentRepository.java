@@ -1,7 +1,6 @@
 package ee.ria.dhx.server.persistence.repository;
 
 import ee.ria.dhx.server.persistence.entity.Document;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 
 import org.springframework.data.domain.Pageable;
@@ -20,7 +19,7 @@ public interface DocumentRepository extends CrudRepository<Document, Long> {
 
   List<Document> findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
       Boolean outgoingDocument, Organisation org,
-      Integer statusId, Folder folder, Pageable pageable);
+      Integer statusId, String folderName, Pageable pageable);
 
   List<Document> findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusId(
       Boolean outgoingDocument, Organisation org,
@@ -32,4 +31,6 @@ public interface DocumentRepository extends CrudRepository<Document, Long> {
       Integer statusId);
 
   Document findByDocumentId(Long id);
+
+  Document findByDocumentIdAndFolder(Long id, String folderName);
 }

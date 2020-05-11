@@ -2,8 +2,6 @@ package ee.ria.dhx.server;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.config.WebMvcConfigurer;
-import ee.ria.dhx.server.persistence.entity.Folder;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.service.ConvertationService;
 import ee.ria.dhx.ws.service.AddressService;
 import ee.ria.dhx.ws.service.impl.AddressServiceImplSpyProvider;
@@ -69,15 +67,6 @@ public class TestApp {
   public AddressService addressServiceSpy(AddressService addressService)
       throws DhxException, IOException {
     return AddressServiceImplSpyProvider.getAddressServiceSpy(addressService);
-  }
-
-  @Bean
-  @Primary
-  public FolderRepository getFodlerRepository(FolderRepository repository) {
-    Folder folder = new Folder();
-    folder.setName("/");
-    repository.save(folder);
-    return repository;
   }
 
   @Bean

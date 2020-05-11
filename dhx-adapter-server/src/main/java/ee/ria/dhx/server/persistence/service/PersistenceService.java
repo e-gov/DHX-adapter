@@ -4,12 +4,10 @@ import com.jcabi.aspects.Loggable;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.exception.DhxExceptionEnum;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.StatusHistory;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.types.DhxOrganisation;
 import ee.ria.dhx.types.InternalXroadMember;
@@ -61,10 +59,6 @@ public class PersistenceService {
   @Autowired
   @Setter
   SoapConfig config;
-
-  @Autowired
-  @Setter
-  FolderRepository folderRepository;
 
   @Autowired
   @Setter
@@ -144,27 +138,6 @@ public class PersistenceService {
               + org.getRegistrationCode());
     }
     return org;
-  }
-
-  /**
-   * Finds folder according to folderName, or by default folder name if folderName in input is NULL.
-   * If Folder is not found in database, new folder will be created.
-   * 
-   * @param folderName - name of the folder to find
-   * @return - Folder object found
-   */
-  @Loggable
-  public Folder getFolderByNameOrDefaultFolder(String folderName) {
-    if (StringUtil.isNullOrEmpty(folderName)) {
-      folderName = DEFAULT_FOLDERNAME;
-    }
-    Folder folder = folderRepository.findByName(folderName);
-    if (folder == null) {
-      folder = new Folder();
-      folder.setName(folderName);
-      folderRepository.save(folder);
-    }
-    return folder;
   }
 
 

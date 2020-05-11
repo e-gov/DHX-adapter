@@ -1,6 +1,5 @@
 package ee.ria.dhx.server.persistence.repository;
 
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 
@@ -42,9 +41,6 @@ public interface RecipientRepository extends JpaRepository<Recipient, Long> {
 
   public Recipient findByTransportDokumentDocumentIdAndOrganisation(Integer documentId,
       Organisation org);
-
-  public Recipient findByTransportDokumentDocumentIdAndTransportDokumentFolderAndOrganisation(
-      Integer documentId, Folder folder, Organisation org);
 
   //@EntityGraph("recipient[organisation, transport[dokument, senders[organisation]]]") // TODO: Make eager loading work
   @EntityGraph(attributePaths = "statusHistory")                                        // TODO: So far make eager loading work for 'statusHistory'

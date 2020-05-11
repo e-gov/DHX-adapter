@@ -10,9 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ee.ria.dhx.exception.DhxException;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.types.DhxRepresentee;
 import ee.ria.dhx.types.InternalXroadMember;
@@ -39,9 +37,6 @@ public class PersistenceServiceTest {
   @Mock
   OrganisationRepository organisationRepository;
 
-  @Mock
-  FolderRepository folderRepository;
-
   PersistenceService persistenceService;
 
   @InjectMocks
@@ -58,11 +53,8 @@ public class PersistenceServiceTest {
     MockitoAnnotations.initMocks(this);
     persistenceService = new PersistenceService();
     persistenceService.setAddressService(addressService);
-    persistenceService.setFolderRepository(folderRepository);
     persistenceService.setOrganisationRepository(organisationRepository);
     persistenceService.setDhxOrganisationFactory(dhxOrganisationFactory);
-    Folder folder = new Folder();
-    folder.setName("folder");
     persistenceService.setSpecialOrganisations("adit,kovtp,rt,eelnoud");
     persistenceService.setConfig(config);
     when(config.getDhxSubsystemPrefix()).thenReturn("DHX");
@@ -238,35 +230,6 @@ public class PersistenceServiceTest {
         Mockito.anyString());
     verify(addressService, times(0)).getClientForMemberCode(Mockito.anyString(),
         Mockito.anyString());
-  }
-
-  @Test
-  public void getFolderByNameOrDefaultFolder() {
-    String folderName = "folder";
-    Folder folder = new Folder();
-    when(folderRepository.findByName(folderName)).thenReturn(folder);
-    Folder foundFolder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
-    verify(folderRepository, times(0)).save(any(Folder.class));
-    assertEquals(folder, foundFolder);
-  }
-
-  @Test
-  public void getFolderByNameOrDefaultFolderNotFound() {
-    String folderName = "folder";
-    when(folderRepository.findByName(folderName)).thenReturn(null);
-    Folder foundFolder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
-    verify(folderRepository, times(1)).save(any(Folder.class));
-    assertNotNull(foundFolder);
-  }
-
-  @Test
-  public void getFolderByNameOrDefaultFolderDefault() {
-    String folderName = null;
-    Folder folder = new Folder();
-    when(folderRepository.findByName("/")).thenReturn(folder);
-    Folder foundFolder = persistenceService.getFolderByNameOrDefaultFolder(folderName);
-    verify(folderRepository, times(0)).save(any(Folder.class));
-    assertEquals(folder, foundFolder);
   }
 
   // new main, new representee, representor only,

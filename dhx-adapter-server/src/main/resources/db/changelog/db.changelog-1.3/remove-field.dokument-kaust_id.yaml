@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1568889143255-15
+      author: Marten Rebane
+      comment: Remove field 'kaust_id' from 'dokument' table.
+      changes:
+        - dropColumn:
+            columnName: kaust_id
+            tableName: dokument

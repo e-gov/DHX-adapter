@@ -4,7 +4,6 @@ import com.jcabi.aspects.Cacheable;
 import ee.ria.dhx.server.config.WebMvcConfigurer;
 import ee.ria.dhx.server.converters.StatusEnumConverter;
 import ee.ria.dhx.server.persistence.entity.Document;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.Sender;
@@ -69,6 +68,7 @@ public class DocumentControllerTest {
     private static final Date dateCreatedTo = Date.valueOf(dateCreatedToStr);
     private static final Integer pageablePage = 2;
     private static final Integer pageableSize = 10;
+    private static final String folderName = "folder";
 
     private Pageable pageable = new PageRequest(pageablePage, pageableSize);
 
@@ -84,8 +84,6 @@ public class DocumentControllerTest {
     Document document;
     @Mock
     Organisation organisation;
-    @Mock
-    Folder folder;
 
     @Autowired
     private MockMvc mockMvc;
@@ -104,7 +102,7 @@ public class DocumentControllerTest {
         when(recipient.getTransport()).thenReturn(transport);
         when(recipient.getStatusId()).thenReturn(StatusEnum.IN_PROCESS.getClassificatorId());
         when(transport.getDokument()).thenReturn(document);
-        when(document.getFolder()).thenReturn(folder);
+        when(document.getFolder()).thenReturn(folderName);
         when(transport.getSenders()).thenReturn(Lists.newArrayList(sender));
         when(sender.getOrganisation()).thenReturn(organisation);
         when(recipient.getOrganisation()).thenReturn(organisation);

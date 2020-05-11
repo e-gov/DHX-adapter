@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 
 import ee.ria.dhx.exception.DhxException;
 import ee.ria.dhx.server.persistence.entity.Document;
-import ee.ria.dhx.server.persistence.entity.Folder;
 import ee.ria.dhx.server.persistence.entity.Organisation;
 import ee.ria.dhx.server.persistence.entity.Recipient;
 import ee.ria.dhx.server.persistence.entity.Sender;
@@ -18,7 +17,6 @@ import ee.ria.dhx.server.persistence.entity.StatusHistory;
 import ee.ria.dhx.server.persistence.entity.Transport;
 import ee.ria.dhx.server.persistence.enumeration.StatusEnum;
 import ee.ria.dhx.server.persistence.repository.DocumentRepository;
-import ee.ria.dhx.server.persistence.repository.FolderRepository;
 import ee.ria.dhx.server.persistence.repository.OrganisationRepository;
 import ee.ria.dhx.server.persistence.repository.RecipientRepository;
 import ee.ria.dhx.server.persistence.service.CapsuleService;
@@ -83,11 +81,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 public class SoapServiceTest {
 
-  @Mock
-  DhxMarshallerService dhxMarshallerService;
+  public static final String FOLDER = "folder";
 
   @Mock
-  FolderRepository folderRepository;
+  DhxMarshallerService dhxMarshallerService;
 
   @Mock
   OrganisationRepository organisationRepository;
@@ -139,7 +136,6 @@ public class SoapServiceTest {
     soapService.setDhxMarshallerService(dhxMarshallerService);
     soapService.setDhxPackageProviderService(dhxPackageProviderService);
     soapService.setDocumentRepository(documentRepository);
-    soapService.setFolderRepository(folderRepository);
     soapService.setOrganisationRepository(organisationRepository);
     soapService.setPersistenceService(persistenceService);
     soapService.setRecipientRepository(recipientRepository);
@@ -314,7 +310,7 @@ public class SoapServiceTest {
     DataHandler handler = Mockito.mock(DataHandler.class);
     ReceiveDocuments request = new ReceiveDocuments();
     request.setKeha(new ReceiveDocumentsV4RequestType());
-    request.getKeha().setKaust("folder");
+    request.getKeha().setKaust(FOLDER);
     InternalXroadMember senderMember = getMember("sender", null);
     InternalXroadMember recipientMember = getMember("recipient", null);
     Organisation senderOrg = new Organisation();
@@ -331,12 +327,10 @@ public class SoapServiceTest {
     doc2.getTransports().get(0).addSender(new Sender());
     doc2.getTransports().get(0).getSenders().get(0).setOrganisation(new Organisation());
     docs.add(doc2);
-    Folder folder = new Folder();
-    when(folderRepository.findByName("folder")).thenReturn(folder);
     when(documentRepository
         .findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
             Mockito.eq(false), Mockito.eq(senderOrg),
-            Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), Mockito.eq(folder),
+            Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), Mockito.eq(FOLDER),
             any(Pageable.class))).thenReturn(docs);
     DecContainer container = new DecContainer();
     when(capsuleService.getContainerFromDocument(doc)).thenReturn(container);
@@ -348,9 +342,8 @@ public class SoapServiceTest {
     verify(documentRepository, times(1))
         .findByOutgoingDocumentAndTransportsRecipientsOrganisationAndTransportsRecipientsStatusIdAndFolder(
             Mockito.eq(false), Mockito.eq(senderOrg),
-            Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), Mockito.eq(folder),
+            Mockito.eq(StatusEnum.IN_PROCESS.getClassificatorId()), Mockito.eq(FOLDER),
             any(Pageable.class));
-    verify(folderRepository, times(1)).findByName("folder");
     assertEquals(handler, resp.getKeha().getHref());
 
   }
