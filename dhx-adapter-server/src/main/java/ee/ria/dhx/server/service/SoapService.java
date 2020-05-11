@@ -85,18 +85,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.MarshalException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 
 /**
@@ -218,87 +215,87 @@ public class SoapService {
    */
   @Loggable
   public void sendDocumentsToDhx() {
-    Integer statusId = StatusEnum.IN_PROCESS.getClassificatorId();
     // not sent documents
-    List<Recipient> recipients = recipientRepository
-        .findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
-            statusId, true);
-    Date date = new Date();
-    date.setTime(date.getTime() - resendTimeout * 1000 * 60);
-    log.debug("date from which documents will be sent again: {}", date);
-    // documents that tried to send, but maybe server were stopped and status stays the same
-    List<Recipient> recipientsSent = recipientRepository
-        .findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
-            statusId, true, date);
-    recipients.addAll(recipientsSent);
-    if (recipients != null) {
-      log.debug("found total recipients to send to DHX: " + recipients.size());
+    Integer statusId = StatusEnum.IN_PROCESS.getClassificatorId();
+
+    List<OutgoingDhxPackage> outgoingDhxPackages;
+    try (Stream<Recipient> recipients =
+                 recipientRepository.findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
+                         statusId, true
+                 )
+    ) {
+      Date date = new Date();
+      date.setTime(date.getTime() - resendTimeout * 1000 * 60);
+      log.debug("date from which documents will be sent again: {}", date);
+      // documents that tried to send, but maybe server were stopped and status stays the same
+      try (Stream<Recipient> recipientsSent =
+                   recipientRepository.findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
+                           statusId, true, date
+                   )
+      ) {
+        outgoingDhxPackages = Stream.concat(recipients, recipientsSent).distinct().map(recipient -> {
+          try {
+            Document document = recipient.getTransport().getDokument();
+            Object container = capsuleService.getContainerFromDocument(document);
+            capsuleService.formatCapsuleRecipientAndSender(container,
+                    recipient.getTransport().getSenders().get(0).getOrganisation(),
+                    recipient.getOrganisation(),
+                    true);
+            File containerFile = dhxMarshallerService.marshall(container);
+            if (recipient.getTransport().getSenders() == null
+                    || recipient.getTransport().getSenders().size() > 1) {
+              throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
+                      "No sender is related to document or more than one sender is related!");
+            }
+            Organisation sendeOrg =
+                    recipient.getTransport().getSenders().get(0).getOrganisation();
+            InternalXroadMember senderMember = null;
+            try {
+              senderMember = addressService.getClientForMemberCode(sendeOrg.getRegistrationCode(),
+                      sendeOrg.getSubSystem());
+            } catch (DhxException ex) {
+              log.debug(
+                      "Erro occured while searching org. ignoring error and continue!" + ex.getMessage(),
+                      ex);
+            }
+            Organisation recipientOrg = recipient.getOrganisation();
+            InternalXroadMember recipientMember = addressService
+                    .getClientForMemberCode(recipientOrg.getRegistrationCode(),
+                            recipientOrg.getSubSystem());
+            log.debug("Found recipient member: {}", recipientMember);
+            OutgoingDhxPackage dhxPackage = null;
+            // if sender org is null, then try sending with sender from
+            // config
+            String recipientIdString = recipient.getRecipientId().toString();
+            dhxPackage = senderMember != null
+                    ? dhxPackageProviderService.getOutgoingPackage(containerFile, recipientIdString, recipientMember, senderMember)
+                    : dhxPackageProviderService.getOutgoingPackage(containerFile, recipientIdString, recipientMember);
+
+            recipient.setDhxInternalConsignmentId(recipientIdString);
+            recipient.setSendingStart(new Timestamp((new Date()).getTime()));
+            saveRecipient(recipient);
+            return dhxPackage;
+          } catch (DhxException ex) {
+            log.error("Error occured while sending document! " + ex.getMessage(), ex);
+            Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
+            recipient.setStatusId(failedStatusId);
+            recipient.setFaultString(ex.getMessage());
+            recipient.setFaultCode(ex.getExceptionCode().toString());
+            recipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
+            recipientRepository.save(recipient);
+            return null;
+          }
+        })
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
+      }
     }
-    Recipient lockedRecipient = null;
-    for (Recipient recipientUnlocked : recipients) {
+
+    for (OutgoingDhxPackage dhxPackage : outgoingDhxPackages) {
       try {
-        // doing query for every recipient to lock it for writing, in order for another thread not
-        // to update it
-        lockedRecipient = recipientUnlocked;
-        // if recipient were updated by another transaction, then skip
-        if (lockedRecipient.getVersion() != null && recipientUnlocked.getVersion() != null
-            && lockedRecipient.getVersion() != recipientUnlocked.getVersion()) {
-          log.info("recipient were updated by another transaction, skiping it. {}",
-              lockedRecipient);
-          continue;
-        }
-        Document document = lockedRecipient.getTransport().getDokument();
-        Object container = capsuleService.getContainerFromDocument(document);
-        capsuleService.formatCapsuleRecipientAndSender(container,
-            lockedRecipient.getTransport().getSenders().get(0).getOrganisation(),
-            lockedRecipient.getOrganisation(),
-            true);
-        File containerFile = dhxMarshallerService.marshall(container);
-        if (lockedRecipient.getTransport().getSenders() == null
-            || lockedRecipient.getTransport().getSenders().size() > 1) {
-          throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
-              "No sender is related to document or more than one sender is related!");
-        }
-        Organisation sendeOrg =
-            lockedRecipient.getTransport().getSenders().get(0).getOrganisation();
-        InternalXroadMember senderMember = null;
-        try {
-          senderMember = addressService.getClientForMemberCode(sendeOrg.getRegistrationCode(),
-              sendeOrg.getSubSystem());
-        } catch (DhxException ex) {
-          log.debug(
-              "Erro occured while searching org. ignoring error and continue!" + ex.getMessage(),
-              ex);
-        }
-        Organisation recipientOrg = lockedRecipient.getOrganisation();
-        InternalXroadMember recipientMember = addressService
-            .getClientForMemberCode(recipientOrg.getRegistrationCode(),
-                recipientOrg.getSubSystem());
-        log.debug("Found recipient member: {}", recipientMember);
-        OutgoingDhxPackage dhxPackage = null;
-        // if sender org is null, then try sending with sender from
-        // config
-        if (senderMember != null) {
-          dhxPackage = dhxPackageProviderService.getOutgoingPackage(containerFile,
-              lockedRecipient.getRecipientId().toString(), recipientMember, senderMember);
-        } else {
-          dhxPackage = dhxPackageProviderService.getOutgoingPackage(containerFile,
-              lockedRecipient.getRecipientId().toString(), recipientMember);
-        }
-        lockedRecipient.setDhxInternalConsignmentId(lockedRecipient.getRecipientId().toString());
-        lockedRecipient.setSendingStart(new Timestamp((new Date()).getTime()));
-        saveRecipient(lockedRecipient);
         asyncDhxPackageService.sendPackage(dhxPackage);
       } catch (DhxException ex) {
-        log.error("Error occured while sending document! " + ex.getMessage(), ex);
-        Integer failedStatusId = StatusEnum.FAILED.getClassificatorId();
-        if (lockedRecipient != null) {
-          lockedRecipient.setStatusId(failedStatusId);
-          lockedRecipient.setFaultString(ex.getMessage());
-          lockedRecipient.setFaultCode(ex.getExceptionCode().toString());
-          lockedRecipient.setRecipientStatusId(RecipientStatusEnum.REJECTED.getClassificatorId());
-          recipientRepository.save(lockedRecipient);
-        }
+        log.error("Should never happen as calling an async method!. Message: " + ex.getMessage(), ex);
       }
     }
   }

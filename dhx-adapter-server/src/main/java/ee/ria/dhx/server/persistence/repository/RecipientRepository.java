@@ -15,6 +15,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.persistence.LockModeType;
 
@@ -29,11 +30,11 @@ public interface RecipientRepository extends JpaRepository<Recipient, Long> {
   public List<Recipient> findByStatusId(Integer statusId);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  public List<Recipient> findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
+  public Stream<Recipient> findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNull(
       Integer statusId, Boolean outgoing);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  public List<Recipient> findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
+  public Stream<Recipient> findByStatusIdAndOutgoingAndDhxInternalConsignmentIdNotNullAndDateModifiedLessThan(
       Integer statusId, Boolean outgoing, Date dateCreated);
 
   public List<Recipient> findByTransport_SendersOrganisationAndDhxExternalConsignmentId(
