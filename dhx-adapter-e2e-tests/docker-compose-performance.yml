@@ -19,7 +19,7 @@ services:
         condition: service_healthy
 
   postgres-hobekuul:
-    image: postgres:9.6
+    image: postgres:12.2
     ports:
     - "0.0.0.0:5432:5432"
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
@@ -38,7 +38,7 @@ services:
     - POSTGRES_DB=dhx_adapter
 
   postgres-test:
-    image: postgres:9.6
+    image: postgres:12.2
     ports:
     - "0.0.0.0:5433:5432"
     command: postgres -c config_file=/etc/postgresql/postgresql.conf

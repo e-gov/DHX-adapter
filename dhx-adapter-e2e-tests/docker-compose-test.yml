@@ -19,7 +19,7 @@ services:
         condition: service_healthy
 
   postgres-hobekuul:
-    image: postgres:9.6
+    image: postgres:12.2
     volumes:
     - data-hobekuul:/var/lib/postgresql/data
     - "./conf/postgres/init_postgres_database.sql:/docker-entrypoint-initdb.d/init_postgres_database.sql"
@@ -34,7 +34,7 @@ services:
     - POSTGRES_DB=dhx_adapter
 
   postgres-test:
-    image: postgres:9.6
+    image: postgres:12.2
     volumes:
     - data-test:/var/lib/postgresql/data
     - "./conf/postgres/init_postgres_database.sql:/docker-entrypoint-initdb.d/init_postgres_database.sql"
