@@ -1,0 +1,7 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue May 12 16:20:26 EEST 2020
+dhx-adapter-core-1.0.6.pom>=
+dhx-adapter-core-1.0.6-tests.jar>=
+dhx-adapter-core-1.0.6-sources.jar>=
+dhx-adapter-core-1.0.6.jar>=
+dhx-adapter-core-1.0.6-javadoc.jar>=

@@ -3,10 +3,10 @@
   <groupId>ee.ria.dhx</groupId>
   <artifactId>dhx-adapter-ws</artifactId>
   <versioning>
-    <release>1.0.5</release>
+    <release>1.0.6</release>
     <versions>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
     </versions>
-    <lastUpdated>20191025111830</lastUpdated>
+    <lastUpdated>20200512132044</lastUpdated>
   </versioning>
 </metadata>

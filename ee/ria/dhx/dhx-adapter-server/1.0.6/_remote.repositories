@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue May 12 16:21:32 EEST 2020
+dhx-adapter-server-1.0.6-javadoc.jar>=
+dhx-adapter-server-1.0.6.pom>=
+dhx-adapter-server-1.0.6.war>=
+dhx-adapter-server-1.0.6-sources.jar>=
