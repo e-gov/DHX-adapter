@@ -3,7 +3,7 @@ package ee.ria.dhx.ws.service.impl;
 import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.ws.test.client.ResponseCreators.withSoapEnvelope;
 
@@ -376,7 +376,7 @@ public class DhxClientIT {
     InputStream stream =
         new FileInputStream(new ClassPathResource("shared-params.xml").getFile());
     AddressServiceImpl addressServiceImpl = (AddressServiceImpl) addressService;
-    Mockito.doReturn(stream).when(addressServiceImpl).getGlobalConfStream(Mockito.any(String.class));
+    Mockito.doReturn(stream).when(addressServiceImpl).getGlobalConfStream(any(String.class));
     ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
     when(specificService.getAdresseeList()).thenReturn(new ArrayList<InternalXroadMember>());
 

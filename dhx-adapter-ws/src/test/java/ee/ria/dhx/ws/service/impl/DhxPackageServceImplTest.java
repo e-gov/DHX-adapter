@@ -2,8 +2,8 @@ package ee.ria.dhx.ws.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -40,7 +40,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.util.ResourceUtils;
 import org.springframework.ws.context.MessageContext;
 
@@ -423,7 +423,7 @@ public class DhxPackageServceImplTest {
     dhxPackageService.receiveDocumentFromEndpoint(REQUEST, CLIENT, SERVICE, null);
     // Verify
     verify(dhxMarshallerService, times(1))
-        .unmarshallAndValidate(any(InputStream.class), Mockito.isNull(InputStream.class));
+        .unmarshallAndValidate(any(InputStream.class), Mockito.isNull());
     verify(dhxImplementationSpecificService, times(1))
         .receiveDocument(any(IncomingDhxPackage.class), any(MessageContext.class));
     verify(dhxImplementationSpecificService, times(1))
@@ -445,7 +445,7 @@ public class DhxPackageServceImplTest {
     verify(dhxMarshallerService, times(0))
         .unmarshallAndValidate(any(InputStream.class), any(InputStream.class));
     verify(dhxMarshallerService, times(0))
-        .validate(any(InputStream.class), Mockito.isNull(InputStream.class));
+        .validate(any(InputStream.class), Mockito.isNull());
     verify(dhxImplementationSpecificService, times(1))
         .receiveDocument(any(IncomingDhxPackage.class), any(MessageContext.class));
     verify(dhxImplementationSpecificService, times(1))

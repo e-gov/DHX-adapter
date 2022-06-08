@@ -38,9 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -70,7 +68,7 @@ public class DocumentControllerTest {
     private static final Integer pageableSize = 10;
     private static final String folderName = "folder";
 
-    private Pageable pageable = new PageRequest(pageablePage, pageableSize);
+    private Pageable pageable = PageRequest.of(pageablePage, pageableSize);
 
     @Mock
     Page page;
@@ -111,15 +109,15 @@ public class DocumentControllerTest {
     @Test
     public void getDocuments() throws Exception {
         // Prepare
-        pageable = new PageRequest(0, 100);
+        pageable = PageRequest.of(0, 100);
         when(recipientRepository.findAllBy(
                 eq(defaultStatuses),
-                isNull(Boolean.class),
+                isNull(),
                 eq(StringUtils.EMPTY),
                 eq(StringUtils.EMPTY),
                 //eq(StringUtils.EMPTY), // TODO: Uncomment if document title has been introduced
-                isNull(Date.class),
-                isNull(Date.class),
+                isNull(),
+                isNull(),
                 eq(pageable)
         )).thenReturn(page);
         // Test
@@ -132,12 +130,12 @@ public class DocumentControllerTest {
         InOrder inOrder = inOrder(recipientRepository);
         inOrder.verify(recipientRepository).findAllBy(
                 eq(defaultStatuses),
-                isNull(Boolean.class),
+                isNull(),
                 eq(StringUtils.EMPTY),
                 eq(StringUtils.EMPTY),
                 //eq(StringUtils.EMPTY), // TODO: Uncomment if document title has been introduced
-                isNull(Date.class),
-                isNull(Date.class),
+                isNull(),
+                isNull(),
                 eq(pageable)
         );
         inOrder.verifyNoMoreInteractions();
