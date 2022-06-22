@@ -54,6 +54,8 @@ DHX adapterserveri haldamine on kirjeldatud [DHX adapterserveri haldusjuhendis](
 
 Minimaalne (kõik komponendid ühes serveris) paigalduse vaade on järgmine
 
+**DHX adapterserver nõuab XTEE turvaserverit (XTEE turvaserveri paremeetrite seadistamine: vt. "4.2.5. Muuta dhx-application.properties")**
+
 ![](dhx-adapter-deployment.png)
 
 ## 2. Tarkvara nõuded (baastarkvara eeldused)
@@ -300,6 +302,9 @@ Vaata [eespoolt](#413-apache-tomcat-7)
 Vaata [eespoolt](#414-dhx-adapterserver-war)
 
 #### 4.2.5. Muuta dhx-application.properties
+
+**Kõige olulisemad on XTEE turvaserveri parameetrid. Nende abil DHX adapterserver küsib käivitamisel XTEE-lt konfiguratsiooni
+ning edaspidi suhtleb XTEE kaudu teiste asutustega.**
 
 1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
