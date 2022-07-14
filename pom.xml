@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.3</version>
+		<version>2.7.1</version>
 	</parent>
 
 	<groupId>ee.ria.dhx</groupId>
@@ -20,7 +20,7 @@
 		<!-- Specifies which configuration resources to use in the build -->
 		<resourceDir>conf/${conf}</resourceDir>
 		<jcabi.aspectj>1.9.2</jcabi.aspectj>
-		<boot.version>2.6.3</boot.version>
+		<boot.version>2.7.1</boot.version>
 		<jaxb.api.version>2.3.0</jaxb.api.version>
 		<jaxws-ri.version>4.0.0-M4</jaxws-ri.version>
 
