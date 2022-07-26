@@ -18,7 +18,7 @@
         <spock.version>1.3-groovy-2.5</spock.version>
         <allure.version>2.12.1</allure.version>
         <surefire-junit47.version>2.22.2</surefire-junit47.version>
-        <postgres.database.version>9.0-801.jdbc4</postgres.database.version>
+        <postgres.database.version>42.4.0</postgres.database.version>
 
         <!-- Plugin versions -->
 

@@ -231,8 +231,10 @@ public class SoapConfig {
   }
 
   @Bean
-  public SSLContext sslContext(KeyStore clientTrustStore, KeyStore clientKeyStore) throws KeyStoreException,
-          NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+  public SSLContext sslContext() throws KeyStoreException,
+          NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException, CertificateException, IOException, DhxException {
+    KeyStore clientTrustStore = clientTrustStore();
+    KeyStore clientKeyStore = clientKeyStore();
     SSLContextBuilder sslContextBuilder = SSLContexts.custom();
     if (isHttpsRequired()) {
       if (!StringUtils.isEmpty(clientKeyStore)) {

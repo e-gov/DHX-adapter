@@ -322,9 +322,9 @@ public class SoapService {
       InternalXroadMember recipient) throws DhxException {
     Pageable pageable = null;
     if (request.getKeha().getArv() != null) {
-      pageable = new PageRequest(0, request.getKeha().getArv().intValue());
+      pageable = PageRequest.of(0, request.getKeha().getArv().intValue());
     } else {
-      pageable = new PageRequest(0, 10);
+      pageable = PageRequest.of(0, 10);
     }
     // set null as subsystem if provided empty string for example
     if (StringUtil.isNullOrEmpty(sender.getSubsystemCode())) {
@@ -1095,12 +1095,12 @@ public class SoapService {
       }
     }
     if (deleteWholeDocument) {
-      documentRepository.delete(documents);
+      documentRepository.deleteAll(documents);
     } else {
       for (Document doc : documents) {
         doc.setContent(null);
       }
-      documentRepository.save(documents);
+      documentRepository.saveAll(documents);
     }
 
     documents = documentRepository.findByDateCreatedLessThanAndTransportsStatusId(
@@ -1114,12 +1114,12 @@ public class SoapService {
       }
     }
     if (deleteWholeDocument) {
-      documentRepository.delete(documents);
+      documentRepository.deleteAll(documents);
     } else {
       for (Document doc : documents) {
         doc.setContent(null);
       }
-      documentRepository.save(documents);
+      documentRepository.saveAll(documents);
     }
 
   }

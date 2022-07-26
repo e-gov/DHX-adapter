@@ -1,6 +1,6 @@
 package ee.ria.dhx.ws.integration;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.ws.test.server.RequestCreators.withSoapEnvelope;
 

@@ -168,7 +168,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       }
     }
     log.debug("saving not representees. " + organisations.size());
-    organisationRepository.save(organisations);
+    organisationRepository.saveAll(organisations);
     organisations = new ArrayList<Organisation>();
     for (InternalXroadMember member : members) {
       if (member.getRepresentee() != null && persistenceService.isRepresenteeValid(member)) {
@@ -176,7 +176,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       }
     }
     log.debug("saving representees. " + organisations.size());
-    organisationRepository.save(organisations);
+    organisationRepository.saveAll(organisations);
 
     this.members = members;
   }
@@ -231,7 +231,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
         changedOrgs.add(org);
       }
     }
-    organisationRepository.save(changedOrgs);
+    organisationRepository.saveAll(changedOrgs);
   }
 
   @Override
@@ -244,7 +244,7 @@ public class PersistenceDhxSpecificService implements DhxImplementationSpecificS
       String recipientIdStr = finalResult.getSentPackage().getInternalConsignmentId();
       Integer recipientId = Integer.parseInt(recipientIdStr);
       log.debug("searching recipient to save send result. " + recipientId);
-      Recipient recipient = recipientRepository.findOne(new Long(recipientId));
+      Recipient recipient = recipientRepository.findById(new Long(recipientId)).orElse(null);
       if (recipient == null) {
         throw new DhxException(DhxExceptionEnum.TECHNICAL_ERROR,
             "Recipient is not found in database. recipientId: " + recipientId);

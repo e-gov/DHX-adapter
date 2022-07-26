@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -143,7 +143,7 @@ public class PersistenceServiceTest {
         Mockito.anyString());
     verify(organisationRepository, times(0)).findByRegistrationCodeAndSubSystem(
         Mockito.anyString(),
-        Mockito.notNull(String.class));
+        Mockito.notNull());
     verify(organisationRepository, times(0)).findBySubSystem(Mockito.anyString());
   }
 

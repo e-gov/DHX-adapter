@@ -66,6 +66,7 @@ import org.springframework.oxm.mime.MimeContainer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.test.client.MockWebServiceServer;
 import org.springframework.ws.test.client.RequestMatchers;
 import org.springframework.ws.test.client.ResponseCreators;
@@ -74,7 +75,6 @@ import org.springframework.ws.test.server.ResponseMatchers;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.transaction.Transactional;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
@@ -96,7 +96,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 
 /*
  * import org.springframework.ws.test.server.MockWebServiceClient; import
@@ -320,7 +320,7 @@ public class ServerIT {
     SendDocumentsV4ResponseTypeUnencoded.Keha keha = argument.getValue();
     assertEquals(1, keha.getDhlId().size());
     Long docId = Long.parseLong(keha.getDhlId().get(0));
-    Document doc = documentRepository.findOne(docId);
+    Document doc = documentRepository.findById(docId).orElse(null);
     assertEquals(true, doc.getOutgoingDocument());
     assertEquals("/", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
@@ -398,7 +398,7 @@ public class ServerIT {
         .andRespond(ResponseCreators.withSoapEnvelope(sendDocumentResponseEnvelope));
     soapService.sendDocumentsToDhx();
     mockServerSendDOcument.verify();
-    doc = documentRepository.findOne(docId);
+    doc = documentRepository.findById(docId).orElse(null);
     assertEquals("receiptId1",
         doc.getTransports().get(0).getRecipients().get(0).getDhxExternalReceiptId());
 
@@ -468,7 +468,7 @@ public class ServerIT {
     SendDocumentsV4ResponseTypeUnencoded.Keha keha = argument.getValue();
     assertEquals(1, keha.getDhlId().size());
     Long docId = Long.parseLong(keha.getDhlId().get(0));
-    Document doc = documentRepository.findOne(docId);
+    Document doc = documentRepository.findById(docId).orElse(null);
     assertEquals(true, doc.getOutgoingDocument());
     assertEquals("/", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
@@ -513,7 +513,7 @@ public class ServerIT {
         .andRespond(ResponseCreators.withSoapEnvelope(sendDocumentResponseEnvelope));
     soapService.sendDocumentsToDhx();
     mockServerSendDOcument.verify();
-    doc = documentRepository.findOne(docId);
+    doc = documentRepository.findById(docId).orElse(null);
     assertEquals("receiptId1",
         doc.getTransports().get(0).getRecipients().get(0).getDhxExternalReceiptId());
     cleanup();
@@ -551,7 +551,7 @@ public class ServerIT {
     SendDocumentsV4ResponseTypeUnencoded.Keha keha = argument.getValue();
     assertEquals(2, keha.getDhlId().size());
     Long docId = Long.parseLong(keha.getDhlId().get(0));
-    Document doc = documentRepository.findOne(docId);
+    Document doc = documentRepository.findById(docId).orElse(null);
 
 
     assertEquals(true, doc.getOutgoingDocument());
@@ -638,7 +638,7 @@ public class ServerIT {
         sendDocumentResponse);
 
     Long docId2 = Long.parseLong(keha.getDhlId().get(1));
-    Document doc2 = documentRepository.findOne(docId2);
+    Document doc2 = documentRepository.findById(docId2).orElse(null);
     mockServerSendDOcument
         .expect(RequestMatchers
             .xpath("//ns9:sendDocument[1]/ns9:consignmentId[1]", getDhxNamespaceMap())
@@ -659,7 +659,7 @@ public class ServerIT {
         .andRespond(ResponseCreators.withSoapEnvelope(sendDocumentResponseEnvelope));
     soapService.sendDocumentsToDhx();
     mockServerSendDOcument.verify();
-    doc = documentRepository.findOne(docId);
+    doc = documentRepository.findById(docId).orElse(null);
     assertEquals("receiptId1",
         doc.getTransports().get(0).getRecipients().get(0).getDhxExternalReceiptId());
 
@@ -748,7 +748,7 @@ public class ServerIT {
     SendDocumentsV4ResponseTypeUnencoded.Keha keha = argument.getValue();
     assertEquals(1, keha.getDhlId().size());
     Long docId = Long.parseLong(keha.getDhlId().get(0));
-    Document doc = documentRepository.findOne(docId);
+    Document doc = documentRepository.findById(docId).orElse(null);
     assertEquals(true, doc.getOutgoingDocument());
     assertEquals("folder", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
@@ -937,7 +937,7 @@ public class ServerIT {
 
     soapService.sendDocumentsToDhx();
     mockServerSendD0cument.verify();
-    doc = documentRepository.findOne(docId);
+    doc = documentRepository.findById(docId).orElse(null);
     assertEquals("receiptId1",
         doc.getTransports().get(0).getRecipients().get(0).getDhxExternalReceiptId());
 
@@ -1042,7 +1042,7 @@ public class ServerIT {
     SendDocumentsV4ResponseTypeUnencoded.Keha keha = argument.getValue();
     assertEquals(1, keha.getDhlId().size());
     Long docId = Long.parseLong(keha.getDhlId().get(0));
-    Document doc = documentRepository.findOne(docId);
+    Document doc = documentRepository.findById(docId).orElse(null);
     assertEquals(true, doc.getOutgoingDocument());
     assertEquals("folder", doc.getFolder());
     assertEquals(client.getMemberCode(), doc.getOrganisation().getRegistrationCode());
@@ -1120,7 +1120,7 @@ public class ServerIT {
 
     soapService.sendDocumentsToDhx();
     mockServerSendD0cument.verify();
-    doc = documentRepository.findOne(docId);
+    doc = documentRepository.findById(docId).orElse(null);
     assertEquals("receiptId1",
         doc.getTransports().get(0).getRecipients().get(0).getDhxExternalReceiptId());
 
@@ -2171,7 +2171,7 @@ public class ServerIT {
 
     soapService.deleteOldDocuments(true);
 
-    Document foundDoc = documentRepository.findOne(docId);
+    Document foundDoc = documentRepository.findById(docId).orElse(null);
     assertNotNull(foundDoc);
 
     document.setDateCreated(calendar.getTime());
@@ -2179,11 +2179,11 @@ public class ServerIT {
     documentRepository.save(document);
 
     soapService.deleteOldDocuments(false);
-    foundDoc = documentRepository.findOne(docId);
+    foundDoc = documentRepository.findById(docId).orElse(null);
     assertNull(foundDoc.getContent());
 
     soapService.deleteOldDocuments(true);
-    foundDoc = documentRepository.findOne(docId);
+    foundDoc = documentRepository.findById(docId).orElse(null);
     assertNull(foundDoc);
 
   }
