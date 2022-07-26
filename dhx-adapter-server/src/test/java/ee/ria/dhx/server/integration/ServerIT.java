@@ -66,6 +66,7 @@ import org.springframework.oxm.mime.MimeContainer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.test.client.MockWebServiceServer;
 import org.springframework.ws.test.client.RequestMatchers;
 import org.springframework.ws.test.client.ResponseCreators;
@@ -74,7 +75,6 @@ import org.springframework.ws.test.server.ResponseMatchers;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.transaction.Transactional;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;

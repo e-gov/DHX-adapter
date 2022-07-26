@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ee.ria.dhx</groupId>
 		<artifactId>DHX-adapter</artifactId>
-		<version>1.0.6</version>
+		<version>1.0.7</version>
 	</parent>
 	<artifactId>dhx-adapter-ws</artifactId>
 	<name>Web services</name>
@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>ee.ria.dhx</groupId>
 			<artifactId>dhx-adapter-core</artifactId>
-			<version>1.0.6</version>
+			<version>1.0.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ws</groupId>
