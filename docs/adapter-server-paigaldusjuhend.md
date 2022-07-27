@@ -188,7 +188,7 @@ Aga kuna WAR fail sisaldab valesid andmebaasi ühenduse parameetreid, siis Tomca
 1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
 ```properites
-soap.security-server=http://10.0.13.198
+soap.security-server=http://TURVASERVERI_AADRESS
 soap.xroad-instance=ee-dev
 soap.member-class=GOV
 soap.member-code=40000001
@@ -309,7 +309,7 @@ ning edaspidi suhtleb XTEE kaudu teiste asutustega.**
 1) Avada fail `webapps/dhx-adapter-server/WEB-INF/classes/dhx-application.properties` ja muuta seal õigeks andmebaasi ühenduse, X-tee turvaserveri ja asutuse registrikoodi parameetrid
 
 ```properites
-soap.security-server=http://10.0.13.198
+soap.security-server=http://TURVASERVERI_AADRESS
 soap.xroad-instance=ee-dev
 soap.member-class=GOV
 soap.member-code=40000001
@@ -566,7 +566,7 @@ Märkus:
 > Enamikel juhtudel piisab kui muuta ainult järgmiste parameetrite väärtused
 >
 >  ```
->  soap.security-server=http://10.0.13.198
+>  soap.security-server=http://TURVASERVERI_AADRESS
 >  soap.xroad-instance=ee
 >  soap.member-class=GOV
 >  soap.member-code=40000001
