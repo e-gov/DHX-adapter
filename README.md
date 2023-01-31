@@ -5,6 +5,7 @@
 ![](docs/DHX.PNG)  ![](docs/X-ROAD.PNG)
 
 #### ET
+**Oluline!** Selle repositooriumi sisu on arhiveeritud ning seeläbi ei saa uuendusi. DHX implementeerimiseks soovitame rakendusele lisada [DHX protokolli](https://www.ria.ee/dhx/) tugi.
 
 Tarkvarakomponendid DHX-i rakendajatele.
 
@@ -21,6 +22,7 @@ DHX adaptertarkvara koosneb kahest osast:
 
 
 #### EN
+**Important!** Please note that this repository has been archived and will not be receiving updates. It is recommended to implement DHX via adding support for the [DHX protocol](https://www.ria.ee/dhx/EN.html).
 
 Software components for DHX implementors.
 
